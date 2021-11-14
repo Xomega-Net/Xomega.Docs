@@ -1,0 +1,94 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  --ifm-color-primary: #800000;
+  --ifm-color-primary-dark: #730000;
+  --ifm-color-primary-darker: #6d0000;
+  --ifm-color-primary-darkest: #5a0000;
+  --ifm-color-primary-light: #8d0000;
+  --ifm-color-primary-lighter: #930000;
+  --ifm-color-primary-lightest: #a60000;
+  --ifm-code-font-size: 95%;
+  --doc-sidebar-width: 320px!important;
+  --ifm-navbar-link-color: rgba(0,0,0,.55);
+  --ifm-footer-padding-vertical: 1rem;
+  --ifm-footer-background-color: unset;
+  --ifm-footer-color: #6c757d;
+}
+
+.docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+html[data-theme='dark'] .docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.navbar {
+  background-image: linear-gradient(lightGray, white);
+  height: 72px;
+}
+
+.navbar__brand {
+  margin-top: 5px;
+}
+
+.navbar__link {
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+.xomega-link svg {
+  display: none;
+}
+
+.footer__copyright {
+  border-top: 1px solid #dee2e6;
+  padding: 1rem 0;
+}
+
+.theme-doc-sidebar-item-category-level-1 {
+  font-size: 17px;
+}
+
+.theme-doc-sidebar-item-link-level-1 {
+  font-size: 17px;
+}
+
+.theme-doc-sidebar-item-category-level-1 > ul {
+  font-size: 16px;
+}
+
+.theme-doc-sidebar-item-category-level-2 > ul {
+  font-size: 15px;
+  border-left: 1px solid;
+}
+
+.markdown img
+{
+	border: 0px solid #C0C0C0;
+}
+
+.markdown img[alt$="-c"]
+{
+  margin: auto;
+	display: block;
+}
+
+.markdown img[alt$="-r"]
+{
+	float: right;
+}
+
+.markdown img[alt$="-l"]
+{
+	float: left;
+}
