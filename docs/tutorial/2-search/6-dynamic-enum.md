@@ -234,7 +234,7 @@ Finally, we will update the labels for the `sales person id` and `sales territor
       </ui:display>
 ```
 
-## Reviewing results
+## Reviewing the results
 
 Now, following an already familiar procedure, we will build the model again to regenerate all the artifacts, and then run the application.
 
@@ -245,6 +245,6 @@ If you open the *Sales Order List* screen, you'll see that *Search Criteria* pan
 
 You can check that the filtering also works for the multi-value criteria when you hit *Search*, and the results grid will look as depicted below.
 
-![image148.png](img6/results-enum.png)
+![Results enum](img6/results-enum.png)
 
 As you see, both Sales Person and Sales Territory now show their display names rather than IDs in both the results list and in the search criteria summary above the grid.

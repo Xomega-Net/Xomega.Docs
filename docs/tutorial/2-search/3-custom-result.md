@@ -79,7 +79,7 @@ For the service implementations you can also configure that in the model in the 
       </config>
 ```
 
-## Reviewing updated result list
+## Reviewing the results
 
 Let's run the application and review the effect of our changes so far. Below is a sample screenshot of what it looks like now.
 

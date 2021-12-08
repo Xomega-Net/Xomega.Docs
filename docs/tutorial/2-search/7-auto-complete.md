@@ -83,7 +83,7 @@ Open it up, and set the `DisplayFormat` of the generated `StatusProperty` in the
     }
 ```
 
-## Reviewing results
+## Reviewing the results
 
 That's all there is to it. If you run the application now, you will see that the status operators have been updated for the multi-value properties.
 

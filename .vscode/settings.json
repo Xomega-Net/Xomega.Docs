@@ -7,9 +7,12 @@
         "localizable",
         "nvarchar",
         "readlist",
+        "rowguid",
         "struct",
+        "structs",
         "submenu",
         "subobjects",
+        "uncategorized",
         "Xomega"
     ]
 }

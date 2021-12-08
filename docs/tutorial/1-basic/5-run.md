@@ -30,7 +30,7 @@ Let's enter some criteria by the Order Date, and click *Search*. The view will v
 
 The generated results grid displays paged results, as well as a summary of applied search criteria above the grid, as shown below.
 
-![image108.png](img5/app-search.png)
+![App search](img5/app-search.png)
 
 :::note
 Since we added default CRUD operations without any modifications, both the results grid and the criteria panel show **all sales order fields**, which makes them too large and not as useful. We will improve this in the later part of this tutorial.
@@ -46,7 +46,7 @@ Notice that the *Sales Order Id* column is hidden, but the first column has a li
 
 The details view will open up as a popup window, which displays all fields of the sales order using responsive layout in several columns, based on the width of the screen. Below the main fields are two tabs for its child lists - sales order details and sales reasons.
 
-![image236.png](img5/app-details.png)
+![App details](img5/app-details.png)
 
 It is worth noting a number of editing features that the details view will provide out of the box, as follows.
 

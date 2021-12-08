@@ -183,7 +183,7 @@ using AdventureWorks.Services.Common.Enumerations;
 // CUSTOM_CODE_END
 ```
 
-## Reviewing screen updates
+## Reviewing the results
 
 Finally, let's build and run the application to review our changes for the static enumerations. After you open the *Sales Order List* screen, you'll notice that the *Status* criteria displays a dropdown list with our enumeration values.
 

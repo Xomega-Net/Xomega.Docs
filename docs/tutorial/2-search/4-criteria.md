@@ -88,7 +88,7 @@ Remember that when we added custom result fields to the output, we had to also a
 Since the custom criteria we just added have exactly the same names as the corresponding result fields (`customer store` and `customer name`), Xomega was able to generate code that simply filters on those results fields, so we don't need to provide any additional custom code.
 :::
 
-## Reviewing criteria updates
+## Reviewing the results
 
 With that, we can just go ahead and build the Model project, and then run the application. You should get a screen that looks like this now.
 
