@@ -1,0 +1,53 @@
+{
+	// Place your Xomega.Docs workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"Titled C# code": {
+		"scope": "markdown",
+		"prefix": "code-titled-cs",
+		"body": ["```cs title=\"${2:File}.cs\"", "$3", "```"],
+	},
+
+	"Titled xom code": {
+		"scope": "markdown",
+		"prefix": "code-titled-xom",
+		"body": ["```xml title=\"${2:File}.xom\"", "$3", "```"],
+	},
+
+	"Titled razor code": {
+		"scope": "markdown",
+		"prefix": "code-titled-razor",
+		"body": ["```razor title=\"${2:File}.razor\"", "$3", "```"],
+	},
+
+	"Highlight line": {
+		"prefix": "highlight-line",
+		"body": [
+			"$LINE_COMMENT highlight-next-line",
+			"$TM_SELECTED_TEXT"
+		],
+		"description": "Highlight line"
+	},
+
+	"Highlight block": {
+		"prefix": "highlight-block",
+		"body": [
+			"$LINE_COMMENT highlight-start",
+			"$TM_SELECTED_TEXT$LINE_COMMENT highlight-end", ""
+		],
+		"description": "Highlight multiple lines"
+	}
+}

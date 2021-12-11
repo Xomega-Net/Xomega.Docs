@@ -28,7 +28,7 @@ If you use a different version of the database, you may see some differences fro
 :::
 
 :::tip
-The complete final code for this tutorial is also available on [GitHub](https://github.com/Xomega-Net/Xomega.Examples), so you can always download and run it, and use it as a reference when walking through the steps.
+The complete final code for this tutorial is also available on [GitHub](https://github.com/Xomega-Net/Xomega.Tutorial), so you can always download and run it, and use it as a reference when walking through the steps.
 :::
 
 Without further ado, let's get started by creating a solution for our application projects, and generating some basic search and details views out of the box.
