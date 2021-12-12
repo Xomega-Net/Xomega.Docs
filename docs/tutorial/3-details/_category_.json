@@ -1,4 +1,8 @@
 {
     "label": "3. Model the details view",
-    "position": 4
+    "position": 4,
+    "link": {
+        "type": "doc",
+        "id": "overview"
+    }
 }

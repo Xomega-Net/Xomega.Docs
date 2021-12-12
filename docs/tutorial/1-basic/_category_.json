@@ -1,4 +1,8 @@
 {
     "label": "1. Basic search/details views",
-    "position": 2
+    "position": 2,
+    "link": {
+        "type": "doc",
+        "id": "overview"
+    }
 }

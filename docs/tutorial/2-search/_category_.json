@@ -1,4 +1,8 @@
 {
     "label": "2. Model the search view",
-    "position": 3
+    "position": 3,
+    "link": {
+        "type": "doc",
+        "id": "overview"
+    }
 }

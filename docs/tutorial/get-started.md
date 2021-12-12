@@ -2,6 +2,7 @@
 sidebar_position: 1
 sidebar_label: Get started
 pagination_prev: null
+slug: /
 ---
 
 # Step-by-step Xomega tutorial
@@ -17,7 +18,7 @@ From there you will generate most of the application code and artifacts right fr
 ## Before you start
 
 To run this tutorial you will need to make sure you have the following installed on your machine:
-1. Visual Studio 2019 Community Edition or higher with TypeScript support and the latest updates.
+1. Visual Studio 2019 Community Edition or higher.
 1. Xomega.Net plug-in for your version of Visual Studio.
 1. Valid Xomega license.
 1. Sample Microsoft database [AdventureWorks](https://github.com/Microsoft/sql-server-samples/releases/tag/adventureworks) installed on your local or network SQL server. See [instructions](https://github.com/Microsoft/sql-server-samples/blob/master/samples/databases/adventure-works/README.md#install-from-a-backup) on how to restore it from a backup.

@@ -25,7 +25,7 @@ const config = {
           routeBasePath: '/',
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
-          editUrl: 'https://github.com/Xomega-Net/Xomega.Docs/',
+          editUrl: 'https://github.com/Xomega-Net/Xomega.Docs/edit/master',
           includeCurrentVersion: true,
           lastVersion: "current",
           versions: {
@@ -44,14 +44,12 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      // announcementBar: {
-      //   id: 'test',
-      //   content:
-      //     'We are looking to revamp our docs, please fill <a target="_blank" rel="noopener noreferrer" href="#">this survey</a>',
-      //   backgroundColor: '#fafbfc',
-      //   textColor: '#091E42',
-      //   isCloseable: true,
-      // },
+      announcementBar: {
+        id: 'initial-doc',
+        content:
+          'This is just initial documentation with complete tutorial in the new format. Stay tuned for additional topics.',
+        isCloseable: true,
+      },
       colorMode: {
         disableSwitch: true,
       },
@@ -62,48 +60,55 @@ const config = {
         },
         items: [
           {
-            href: 'https://localhost:44391/',
+            href: 'https://xomega.net/',
             position: 'left',
             label: 'Home',
             target: null,
             className: 'xomega-link'
           },
           {
-            href: 'https://localhost:44391/System/Download.aspx',
+            href: 'https://xomega.net/System/Download.aspx',
             position: 'left',
             label: 'Download',
             target: null,
             className: 'xomega-link'
           },
           {
-            href: 'https://localhost:44391/System/Order.aspx',
+            href: 'https://xomega.net/System/Order.aspx',
             position: 'left',
             label: 'Order',
             target: null,
             className: 'xomega-link'
           },
           {
+            href: 'https://xomega.net/VS/About.aspx',
+            position: 'left',
+            label: 'Learn',
+            target: null,
+            className: 'xomega-link'
+          },
+          {
             type: 'doc',
-            docId: 'platform/about',
+            docId: 'tutorial/get-started',
             position: 'left',
             label: 'Documentation',
           },
           {
-            href: 'https://localhost:44391/Forum/Forum.aspx',
+            href: 'https://xomega.net/Forum/Forum.aspx',
             position: 'left',
             label: 'Forums',
             target: null,
             className: 'xomega-link'
           },
           {
-            href: 'https://localhost:44391/Blog.aspx',
+            href: 'https://xomega.net/Blog.aspx',
             position: 'left',
             label: 'Blog',
             target: null,
             className: 'xomega-link'
           },
           {
-            href: 'https://localhost:44391/System/ContactUs.aspx',
+            href: 'https://xomega.net/System/ContactUs.aspx',
             position: 'left',
             label: 'Contact Us',
             target: null,
