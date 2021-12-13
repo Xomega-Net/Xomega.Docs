@@ -14,7 +14,7 @@
   --ifm-color-primary-lighter: #930000;
   --ifm-color-primary-lightest: #a60000;
   --ifm-code-font-size: 95%;
-  --doc-sidebar-width: 320px!important;
+  --doc-sidebar-width: 325px!important;
   --ifm-navbar-link-color: rgba(0,0,0,.55);
   --ifm-footer-padding-vertical: 1rem;
   --ifm-footer-background-color: unset;
@@ -67,9 +67,10 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
   font-size: 16px;
 }
 
-.theme-doc-sidebar-item-category-level-2 > ul {
+.theme-doc-sidebar-item-category-level-2 > ul > li {
   font-size: 15px;
   border-left: 1px solid;
+  margin-top: 0px !important;
 }
 
 .markdown img
