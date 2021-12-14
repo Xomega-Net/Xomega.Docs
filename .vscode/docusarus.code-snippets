@@ -15,6 +15,7 @@
 	// 	],
 	// 	"description": "Log output to console"
 	// }
+
 	"Titled C# code": {
 		"scope": "markdown",
 		"prefix": "code-titled-cs",
@@ -36,18 +37,36 @@
 	"Highlight line": {
 		"prefix": "highlight-line",
 		"body": [
+			"$BLOCK_COMMENT_START highlight-next-line $BLOCK_COMMENT_END",
+			"$TM_SELECTED_TEXT"
+		],
+		"description": "Highlight line with a block comment"
+	},
+
+	"Highlight line2": {
+		"prefix": "highlight-line2",
+		"body": [
 			"$LINE_COMMENT highlight-next-line",
 			"$TM_SELECTED_TEXT"
 		],
-		"description": "Highlight line"
+		"description": "Highlight line with line comment"
 	},
 
 	"Highlight block": {
 		"prefix": "highlight-block",
 		"body": [
+			"$BLOCK_COMMENT_START highlight-start $BLOCK_COMMENT_END",
+			"$TM_SELECTED_TEXT$BLOCK_COMMENT_START highlight-end $BLOCK_COMMENT_END", ""
+		],
+		"description": "Highlight multiple lines with block comment"
+	},
+
+	"Highlight block2": {
+		"prefix": "highlight-block2",
+		"body": [
 			"$LINE_COMMENT highlight-start",
 			"$TM_SELECTED_TEXT$LINE_COMMENT highlight-end", ""
 		],
-		"description": "Highlight multiple lines"
+		"description": "Highlight multiple lines with line comment"
 	}
 }
