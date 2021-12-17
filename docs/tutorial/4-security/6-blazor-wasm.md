@@ -203,7 +203,7 @@ If you are planning to have both Blazor Server and WebAssembly projects, it woul
 
 ## Reviewing the results
 
-That's all we need to add Blazor WebAssembly security. In order to run the WebAssembly application, let's set the Client.Blazor.Wasm and Services.Rest projects as the startup up projects in the solution properties as described in the [first chapter](../1-basic/5-run.md#running-webassembly-application).
+That's all we need to add Blazor WebAssembly security. In order to run the WebAssembly application, let's set the Client.Blazor.Wasm and Services.Rest projects as the startup up projects in the solution properties as described in the [first chapter](../1-basic/5-run.md#running-webassembly-application.md).
 
 If we run the application now, we'll see our usual *Login* screen, where we can enter credentials for our customer "amy1@adventure-works.com". Once you hit *Login* and navigate to the *Sales Order List* screen, you should be able to see only your sales orders, and the customer criteria will be hidden, as illustrated in the picture below.
 

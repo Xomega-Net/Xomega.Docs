@@ -106,7 +106,7 @@ The logical types usually inherit such configurations from their base types, but
 ```
 
 :::note
-Standard CRUD and `read list` operations for an object can be easily added automatically to the model by a special Model Enhancement CRUD generator.
+Standard CRUD and `read list` operations for an object can be easily added automatically to the model by a special [model enhancement CRUD generator](../model/crud.md).
 :::
 
 ## Generator outputs
@@ -175,7 +175,9 @@ You can run this generator either for the entire model, or for individual files 
 
 You can rerun the generator when you add or change object operations or structures in the model, which will require re-running other generators that depend on the same model elements, such as generators of UI views, data objects as well as service implementations.
 
+:::note
 Therefore, this generator should be included in the build of the model project in the configuration, in order to allow to easily regenerate all service and data contracts along with other artifacts.
+:::
 
 ### Customizing the output
 

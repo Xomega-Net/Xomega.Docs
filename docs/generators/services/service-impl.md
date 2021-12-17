@@ -96,7 +96,7 @@ An operation to read a list of primary objects will typically have a special `cr
 ```
 
 :::note
-Standard CRUD and `ReadList` operations for an object can be easily added automatically to the model by a special model enhancement CRUD generator.
+Standard CRUD and `ReadList` operations for an object can be easily added automatically to the model by a special [model enhancement CRUD generator](../model/crud.md).
 :::
 
 ## Generator outputs

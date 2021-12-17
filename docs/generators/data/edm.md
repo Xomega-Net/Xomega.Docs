@@ -10,7 +10,7 @@ Generates Entity Data Model `.edmx` file from the Xomega object model with prope
 The generated Entity Data Model is **no longer used by the application** either in runtime or for generation of C# classes from the EDM, and is therefore available only for creation of graphical diagrams of the domain model.
 :::
 
-The application now uses the [EF Domain Objects](entities) generator to create entity classes and their EF configurations, as well as the DB context, which are further used by the generated service implementations.
+The application now uses the [EF Domain Objects](entities.md) generator to create entity classes and their EF configurations, as well as the DB context, which are further used by the generated service implementations.
 
 ## Generator inputs
 
