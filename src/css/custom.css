@@ -16,6 +16,7 @@
   --ifm-code-font-size: 95%;
   --doc-sidebar-width: 325px!important;
   --ifm-navbar-link-color: rgba(0,0,0,.55);
+  --ifm-navbar-item-padding-horizontal: 0.5rem;
   --ifm-footer-padding-vertical: 1rem;
   --ifm-footer-background-color: unset;
   --ifm-footer-color: #6c757d;

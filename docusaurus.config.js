@@ -45,9 +45,9 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       announcementBar: {
-        id: 'initial-doc',
+        id: 'doc-progress',
         content:
-          'This is just initial documentation with complete tutorial in the new format. Stay tuned for additional topics.',
+          'This documentation is still being updated. Follow us on twitter to stay tuned for additional topics.',
         isCloseable: true,
       },
       colorMode: {

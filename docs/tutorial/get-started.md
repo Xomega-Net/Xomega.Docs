@@ -9,9 +9,9 @@ slug: /
 
 The best way to understand the capabilities of our low-code platform, and appreciate the speed of the application development it provides, is to walk through a process of building a fully fledged end-to-end application from scratch.
 
-In this tutorial we will show you how to build rich web and desktop applications from a sample Microsoft database AdventureWorks. This database covers many facets of an enterprise information system for a mid-size company from HR and procurement to production and sales. We will show you how to build a sample application for the Sales module on top of that database.
+In this tutorial we will show you how to build rich Blazor applications from a sample Microsoft database *AdventureWorks*. This database covers many facets of an enterprise information system for a mid-size company from HR and procurement to production and sales. We will show you how to build a sample application for the Sales module on top of that database.
 
-You will see how Xomega.Net helps you get off the ground quickly with its solution template that allows you to create your custom architecture  using industry best practices. In this tutorial we will create a Blazor solution for both WebAssembly and Blazor Server technologies, and then will model our application, tailoring it to our specific requirements.
+You will see how Xomega.Net helps you get off the ground quickly with its solution template that allows you to create your custom architecture using industry best practices. In this tutorial we will create a Blazor solution for both WebAssembly and Blazor Server technologies, and then will model our application, tailoring it to our specific requirements.
 
 From there you will generate most of the application code and artifacts right from the model, and then you will add security, and any necessary customizations for the generated code.
 
