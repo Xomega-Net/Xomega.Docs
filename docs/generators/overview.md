@@ -1,5 +1,6 @@
 ---
 sidebar_position: 1
+sidebar_label: "Overview"
 pagination_prev: null
 ---
 
@@ -79,27 +80,20 @@ These generators allow you to create UI views and any supporting classes for bot
 
 These generators help you use the static enumerations defined in your model both in runtime and design time by generating the necessary artifacts.
 
-- Lookup Cache Loaders allows to quickly generate loaders of the lookup cache, which is used to populate selection lists and to decode values, from a database using the corresponding service operation.
-- Enumeration Constants generates constants for each enumeration item to allow referring to individual items in the code.
-- Enumeration Data XML generates an XML file that can be used for runtime lookups and value lists from the model enumerations.
-- Enumeration Reload SQL generates a SQL script for (re)loading enumerations into the database tables to allow using them in the database layer.
+- [Lookup Cache Loaders](enums/cache-loaders.md) allows to quickly generate loaders of the lookup cache, which is used to populate selection lists and to decode values, from a database using the corresponding service operation.
+- [Enumeration Constants](enums/enum-const.md) generates constants for each enumeration item to allow referring to individual items in the code.
+- [Enumeration Data XML](enums/enum-xml.md) generates an XML file that can be used for runtime lookups and value lists from the model enumerations.
+- [Enumeration Reload SQL](enums/enum-sql.md) generates a SQL script for (re)loading enumerations into the database tables to allow using them in the database layer.
 
 ## Documentation generators
 
 These generators create customizable professional Microsoft Word technical design documents for the system based on your Xomega model.
 
-- Domain Model Design creates a design document that describes domain model architecture and the full structure of each domain object grouped by module.
-- Service Model Design creates a design document that describes service model architecture and the full structure of each service grouped by module.
-- Static Data Design creates a design document that describes static data architecture and the full description of each enumeration grouped by module.
-- SQLXML Report generates a generic custom document using provided template and data returned by a SQLXML query.
+- [Domain Model Design](docs/domain-model.md) creates a design document that describes domain model architecture and the full structure of each domain object grouped by module.
+- [Service Model Design](docs/service-model.md) creates a design document that describes service model architecture and the full structure of each service grouped by module.
+- [Static Data Design](docs/static-data.md) creates a design document that describes static data architecture and the full description of each enumeration grouped by module.
+- [SQLXML Report](docs/sqlxml.md) generates a generic custom document using provided template and data returned by a SQLXML query.
 
 ## Custom generators
 
-In addition to the standard generators, the Full Edition of Xomega.Net allows you to develop your own XSLT-based generators and seamlessly integrate them into your object model project. The list of potential custom generators can possibly include, but is not limited to:
-
-- Support of your choice of the ORM framework for the business layer, e.g. NHibernate.
-- Documentation in a format of your choice, e.g. HTML, PDF, etc.
-- Automated tests support for the object model.
-
-Xomega technology lets you extend the default model structure to support your custom generators. For example, to support your custom documentation generator you can define and use your own format for the model elements documentation, such as an HTML or a wiki format.
-
+In addition to the standard generators, the Full Edition of Xomega.Net allows you to develop your own custom generators, as described [here](custom.md).

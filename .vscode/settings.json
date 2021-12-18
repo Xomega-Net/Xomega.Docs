@@ -13,6 +13,7 @@
         "rowguid",
         "runat",
         "sqlsrv",
+        "SQLXML",
         "struct",
         "structs",
         "submenu",

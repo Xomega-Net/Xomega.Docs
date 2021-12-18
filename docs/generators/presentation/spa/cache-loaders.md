@@ -50,14 +50,16 @@ The following example shows a `special offer product` cache loader, which loads 
 
 The generated class will extend the `LocalCacheLoader` base class from XomegaJS framework, and you will need to make sure that the input parameters for the `readlist` operation are set for the current context before the cache is loaded.
 
-You can either manually subscribe to the changes of the input parameters, and then call the `setParameters` method of the generated cache loader directly with the new values, or you can set that cache loader on the `EnumProperty`, for which it will serve as a local source of possible values, and then set the source property for each input parameter, as follows.
+You can either
+- manually subscribe to the changes of the input parameters, and then call the `setParameters` method of the generated cache loader directly with the new values,
+- or you can set that cache loader on the `EnumProperty`, for which it will serve as a local source of possible values, and then set the source property for each input parameter, as follows.
 
 ```ts
 this.SpecialOfferId.LocalCacheLoader = new SpecialOfferProductReadListCacheLoader();
 this.SpecialOfferId.setCacheLoaderParameters(SpecialOfferProduct.Parameters.ProductId, this.ProductId);
 ```
 
-This will automatically listen for changes in the `ProductId` property, and will reload the local cache loader for the `SpecialOfferId` property whenever the product ID changes, which will in turn update the list of possible values for the special offer selection.
+This will automatically listen for changes in the `ProductIdProperty`, and will reload the local cache loader for the `SpecialOfferIdProperty` whenever the product ID changes, which will in turn update the list of possible values for the special offer selection.
 
 ### Static Loaders
 
@@ -127,7 +129,6 @@ You should never edit generated cache loaders directly. This allows re-running t
 To add your customizations, you should create a subclass of the generated cache loader class, and use the subclass in your code.
 
 ### Cleaning generator’s output
-
 
 This generator supports cleaning either all generated cache loaders, or only the ones from the selected model files using the *Clean* context menu for that generator.
 
