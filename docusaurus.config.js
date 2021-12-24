@@ -89,7 +89,7 @@ const config = {
           },
           {
             type: 'doc',
-            docId: 'tutorial/get-started',
+            docId: 'platform/about',
             position: 'left',
             label: 'Documentation',
           },

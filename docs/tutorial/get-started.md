@@ -2,7 +2,6 @@
 sidebar_position: 1
 sidebar_label: Get started
 pagination_prev: null
-slug: /
 ---
 
 # Step-by-step Xomega tutorial

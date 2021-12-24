@@ -16,7 +16,7 @@ Currently Xomega.Net is geared towards the Microsoft technology stack:
 
 Xomega comes with a set of built-in generators that can help you hit the ground running with Xomega platform. These generators are listed below grouped by the type of output or the layer that they generate.
 
-## Model enhancement generators
+## Model enhancement generators{#model}
 
 This type of generators helps you quickly enrich your XML object model by importing it from a database, or by adding new layers or aspects to the model.
 
@@ -24,7 +24,7 @@ This type of generators helps you quickly enrich your XML object model by import
 - [Full CRUD with Views](model/crud.md) allows you to quickly add configurable `create`, `update`, `read`, `delete` and `read list` operations to any object and its sub-objects in the model, as well as to define and configure any necessary data objects and views in the model for UI generation.
 - [Enumerations from Database](model/enums.md) imports static enumerations and their values into the model from existing database tables.
 
-## Data layer generators
+## Data layer generators{#data}
 
 These generators create an Entity Framework Entities or EDM for ORM, and produce DDL scripts that help you build or update your database from the object model.
 
@@ -33,7 +33,7 @@ These generators create an Entity Framework Entities or EDM for ORM, and produce
 - [Database Schema](data/schema.md) generates a DDL script for your database if you start building your model from scratch.
 - [Database Change Script](data/migration.md) generates a rerunnable DDL update script that will make incremental changes to your existing database to bring it in synch with the object model.
 
-## Service layer generators
+## Service layer generators{#svc}
 
 These generators allow you to rapidly generate service and data contracts, customizable service implementations, as well as artifacts that help you expose your services via WCF or Web API.
 
@@ -43,7 +43,7 @@ These generators allow you to rapidly generate service and data contracts, custo
 - [WCF Service Host Files](services/wcf-host.md) generates service host files (`.svc`) for hosting WCF services in IIS.
 - [Web API Controllers](services/web-api.md) creates RESTful endpoints for the generated services.
 
-## Presentation layer generators
+## Presentation layer generators{#ui}
 
 These generators allow you to create UI views and any supporting classes for both web and desktop clients following MVVM architecture.
 
@@ -60,7 +60,7 @@ These generators allow you to create UI views and any supporting classes for bot
 - [REST Service Clients](presentation/common/rest-clients.md) generates C# service proxies that call REST services, and can be registered with the DI container.
 - [WCF Client Configuration](presentation/common/wcf-config.md) adds WCF endpoint configurations to the client-side config file.
 
-### SPA
+### SPA{#uits}
 
 - [SPA Views](presentation/spa/views.md) generates HTML5 views and TypeScript view models based on the model definitions.
 - [XomegaJS Data Objects](presentation/spa/data-objects.md) generates TypeScript presentation data objects based on XomegaJS framework, which serve as an integral part of the view models.
@@ -76,7 +76,7 @@ These generators allow you to create UI views and any supporting classes for bot
 
 - [WPF Views](presentation/wpf/views.md) generates XAML and C# code for WPF views and the main menu resources.
 
-## Static data generators
+## Static data generators{#static}
 
 These generators help you use the static enumerations defined in your model both in runtime and design time by generating the necessary artifacts.
 
@@ -85,7 +85,7 @@ These generators help you use the static enumerations defined in your model both
 - [Enumeration Data XML](enums/enum-xml.md) generates an XML file that can be used for runtime lookups and value lists from the model enumerations.
 - [Enumeration Reload SQL](enums/enum-sql.md) generates a SQL script for (re)loading enumerations into the database tables to allow using them in the database layer.
 
-## Documentation generators
+## Documentation generators{#doc}
 
 These generators create customizable professional Microsoft Word technical design documents for the system based on your Xomega model.
 
@@ -94,6 +94,6 @@ These generators create customizable professional Microsoft Word technical desig
 - [Static Data Design](docs/static-data.md) creates a design document that describes static data architecture and the full description of each enumeration grouped by module.
 - [SQLXML Report](docs/sqlxml.md) generates a generic custom document using provided template and data returned by a SQLXML query.
 
-## Custom generators
+## Custom generators{#custom}
 
 In addition to the standard generators, the Full Edition of Xomega.Net allows you to develop your own custom generators, as described [here](custom.md).
