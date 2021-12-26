@@ -62,9 +62,9 @@ If you do need to rename the custom parameters or their operation in the model, 
 You can also manually update the marker's text in the comments before renaming to match what it would be after renaming, which will preserve the custom code in between these markers.
 
 :::danger
-Another danger to your custom code could be if you select *Clean* or *Rebuild* on the model project, or *Clean* or *Regenerate* on the corresponding *Service Implementations* generator. Don't use those options, unless you know what you're doing!
+Another danger to your custom code could be if you select a *Clean* command on the model project or on the corresponding *Service Implementations* generator. Don't use those options, unless you know what you're doing!
 
-Any of these options will delete the generated files first, which is okay only if the files have no custom code, and basically make sense only if you have renamed some objects in the model, or plan to change the output path patterns for the generators, and would like to automatically clean up the old generated files and update the projects with new files.
+This option will delete the generated files first, which is okay only if the files have no custom code, and basically make sense only if you have renamed some objects in the model, or plan to change the output path patterns for the generators, and would like to automatically clean up the old generated files and update the projects with new files.
 
 In order to preserve the custom code during clean, please follow the instructions at the top of the generated file, which instruct you to delete a certain line in the header comment.
 :::

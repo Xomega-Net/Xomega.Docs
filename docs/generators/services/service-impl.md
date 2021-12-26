@@ -206,11 +206,11 @@ You can also add your own custom subclass or partial class of the generated serv
 This generator supports cleaning either all generated service implementations, or only the ones from the selected model files using the *Clean* context menu for that generator.
 
 :::tip
-Normally, cleaning the generated files makes sense if you are planning to change the output path for the generator. Also, it can be used as part of *Regenerate* action, which runs the *Clean* and then *Generate* actions, when you have removed some of the services from the model, and want the generated classes deleted.
+Normally, cleaning the generated files makes sense if you are planning to change the output path for the generator, or when you have removed some of the services from the model, and want the generated classes deleted.
 :::
 
 :::danger
-Note that, while custom subclasses and partial classes will not be cleaned during these operations, all of your **inline customizations will be lost** during *Clean*, so you need to be very careful when running either *Clean* or *Regenerate* commands on the generator, or the *Clean* or *Rebuild* commands on the model project.
+Note that, while custom subclasses and partial classes will not be cleaned during these operations, all of your **inline customizations will be lost** during *Clean*, so you need to be very careful when running a *Clean* command on the generator or on the model project.
 :::
 
 If you have a generated file with a service implementation that contains inline custom code that you don't want to lose during *Clean*, then you need to do one of the following things:

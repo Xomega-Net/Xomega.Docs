@@ -81,7 +81,7 @@ const config = {
             className: 'xomega-link'
           },
           {
-            href: 'https://xomega.net/VS/About.aspx',
+            href: 'https://xomega.net/Tutorials/Overview.aspx',
             position: 'left',
             label: 'Learn',
             target: null,

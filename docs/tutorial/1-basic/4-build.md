@@ -17,11 +17,11 @@ In order to build the model you have to manually run the build for the model pro
 This will run the generators and write their output to the respective output paths, as configured for each generator.
 
 :::danger
-**Do not run the *Rebuild*** option, which runs the *Clean* option followed by the *Build*, unless you know what you are doing.
+**Beware of the *Clean*** option, unless you know what you are doing.
 
 The *Clean* option will **delete** all **generated files**, and any **mixed in customizations**.
 
-Cleaning/rebuilding is only useful when you are renaming model entities in such a way, that it affects the names of the generated files, and you need to clean up the old files. Always check in your files to your source control first.
+Cleaning is only useful when you are renaming model entities in such a way, that it affects the names of the generated files, and you need to clean up the old files. Always check in your files to your source control first.
 :::
 
 ## Model build output

@@ -134,7 +134,7 @@ You can also add your own custom subclass of the generated view models in your p
 This generator supports cleaning all generated view models using the *Clean* context menu for that generator.
 
 :::tip
-Normally, cleaning the generated files makes sense if you are planning to change the output path for the generator. Also, it can be used as part of *Regenerate* action, which runs the *Clean* and then *Generate* actions, when you have removed some of the views from the model, and want the generated classes deleted and removed from the target project.
+Normally, cleaning the generated files makes sense if you are planning to change the output path for the generator, or when you have removed some of the views from the model, and want the generated classes deleted and removed from the target project.
 :::
 
 :::caution

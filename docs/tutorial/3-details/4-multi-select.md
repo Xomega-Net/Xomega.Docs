@@ -47,7 +47,7 @@ We will start by removing any elements related to the `reason` sub-object, that 
   </ui:views>
 ```
 
-One way to also clean any previously generated artifacts for those removed elements is to rebuild the *AdventureWorks.Model* project, which runs a model `Clean` command followed by a `Build` command. This will delete those generated files, and will remove them from their projects.
+One way to also clean any previously generated artifacts for those removed elements is to run a `Clean` command on the *AdventureWorks.Model* project before the `Build` command. This will delete those generated files, and will remove them from their projects.
 
 :::warning
 Before you do anything like that though, you want to absolutely make sure that any generated classes containing custom code will be preserved during the *Clean*.
@@ -56,7 +56,7 @@ If you previously set `preserve-on-clean="true"` on the `svc:customize` element 
 :::
 
 :::tip
-It is also a good idea to **check everything in **your version control before you run the *Clean* or *Rebuild* commands on the model. This way you will be able to easily review all the changes made by the generators, and revert any unwanted changes.
+It is also a good idea to **check everything in **your version control before you run a *Clean* command on the model. This way you will be able to easily review all the changes made by the generators, and revert any unwanted changes.
 :::
 
 ## Sales Reason enumeration

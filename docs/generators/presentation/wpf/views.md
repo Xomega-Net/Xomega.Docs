@@ -205,7 +205,7 @@ In this case you may as well delete the view from the model after initial genera
 This generator supports cleaning all generated views using the *Clean* context menu for that generator.
 
 :::tip
-Normally, cleaning the generated files makes sense if you are planning to change the output path for the generator. Also, it can be used as part of *Regenerate* action, which runs the *Clean* and then *Generate* actions, when you have removed some of the views from the model, and want the generated classes and files deleted and removed from the target project.
+Normally, cleaning the generated files makes sense if you are planning to change the output path for the generator, or when you have removed some of the views from the model, and want the generated classes and files deleted and removed from the target project.
 :::
 
 :::caution

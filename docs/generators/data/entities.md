@@ -226,7 +226,5 @@ In your custom context class you can specify your own Entity Framework related b
 This generator supports cleaning either all generated entities, or only the ones from the selected model files using the *Clean* context menu for that generator.
 
 :::tip
-Normally, cleaning the generated files makes sense if you are planning to change the output path for the generator.
-
-Also, it can be used as part of *Regenerate* action, which runs the *Clean* and then *Generate* actions, when you have removed some of the domain objects from the model, and want the generated classes deleted and removed from the target project.
+Normally, cleaning the generated files makes sense if you are planning to change the output path for the generator, or when you have removed some of the domain objects from the model, and want the generated classes deleted and removed from the target project.
 :::
