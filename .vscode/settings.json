@@ -14,6 +14,7 @@
         "rerunnable",
         "rowguid",
         "runat",
+        "Saxonica",
         "Silverlight",
         "sqlsrv",
         "SQLXML",
@@ -25,6 +26,14 @@
         "Syncfusion",
         "tinyint",
         "uncategorized",
+        "XMLMVP",
         "Xomega"
+    ],
+    "cSpell.ignoreWords": [
+        "Durandal",
+        "Owin",
+        "resx",
+        "wwwroot",
+        "xres"
     ]
 }

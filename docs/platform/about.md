@@ -32,5 +32,7 @@ Xomega platform consists of the following components.
 - **Open-source Xomega Framework** powers your application, taking care of common UI or business service logic, and helping you write clean, reusable and maintainable code that follows industry best practices for large multi-tier applications.
 
 :::note
-For **TypeScript** single page applications (SPAs), Xomega uses a separate **XomegaJS** framework for the UI layer, which is based on the `Knockout.js` library. This, however, may limit your UI code reuse with other C#-based clients.
+For **TypeScript** single page applications (SPAs), Xomega uses a separate **[XomegaJS](https://github.com/Xomega-Net/XomegaJS)** framework for the UI layer, which is based on the `Knockout.js` library, as well as the `Durandal` framework.
+
+This, however, may limit your UI code reuse with other C#-based clients.
 :::
