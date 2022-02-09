@@ -36,10 +36,6 @@ If you need to clear the cached license, e.g. for updating to a new license, you
 If you get any errors when clearing the license, try running the Visual Studio under an administrator's account.
 :::
 
-:::warning
-Xomega license file is cached for the current version of Visual Studio. If you update your Visual Studio to a newer version, Xomega.Net may ask you for a license file again.
-:::
-
 ## System Requirements
 
 For building modern Blazor apps, Xomega.Net requires the following components to be installed:

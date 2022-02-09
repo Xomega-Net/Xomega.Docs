@@ -82,42 +82,6 @@ The [documentation](../../generators/overview.md) of each generator typically sp
 
 The global model configuration is defined under the top-level `config` element in the model, and contains configuration that is available to all generators, so that it could be shared between multiple generators, where it cannot be specified as parameters of individual generators.
 
-For example, generators of any classes that use the generated service contracts, such as data objects or service implementations, need to know the namespace for the service contracts, so it cannot be just a parameter of the *Service Contracts* generator. The following snippet illustrates this example.
-
-```xml title="global_config.xom"
-<config xmlns="http://www.xomega.net/omodel"
-        xmlns:svc="http://www.xomega.net/svc">
-  <svc:services-config async="true"
-                       cancellation="true"
-<!-- highlight-next-line -->
-                       namespace="DemoSolution.Services.Common"
-                       implNamespace="DemoSolution.Services.Entities"
-                       tsOutputPath="../DemoSolution.Client.Spa/ServiceContracts/{Module/}{File}"/>
-</config>
-```
-
-:::note
-As you can see from the `tsOutputPath` attribute above, the output path for generated TypeScript objects can also be specified in the global configuration, rather than as individual generator parameters.
-
-This is because the generated TypeScript files that use other generated TypeScript files need to know their exact location, in order to properly include them, unlike C# files that just need to know the namespace.
+:::tip
+You can view detailed documentation on the global configuration [here](../modeling/config.md). To see how it is used by individual generators, you can also check [documentation](../../generators/overview.md) on each specific generator.
 :::
-
-The global model configuration also contains more complex elements that cannot be easily specified as simple generator parameters.
-
-For example, a default configuration for Syncfusion Blazor grids to use in the generated views could look in the global configuration as shown below.
-
-```xml title="global_config.xom"
-<config xmlns="http://www.xomega.net/omodel">
-  <!-- Syncfusion Blazor default controls configuration -->
-  <blazor-controls-config xmlns="http://www.xomega.net/xsf">
-<!-- highlight-start -->
-    <XSfGrid AllowPaging="true" AllowReordering="true" AllowResizing="true"
-             AllowSelection="true" AllowSorting="true" ShowColumnChooser="true" ShowColumnMenu="false">
-      <XSfGridSelectionSettings PersistSelection="true"/>
-      <GridSearchSettings IgnoreCase="true" />
-      <GridPageSettings PageSizes="true" />
-    </XSfGrid>
-<!-- highlight-end -->
-  </blazor-controls-config>
-</config>
-```

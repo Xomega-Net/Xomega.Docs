@@ -1,6 +1,5 @@
 ---
 sidebar_position: 5
-pagination_next: null
 ---
 
 # Browsing Model Entities

@@ -153,13 +153,7 @@ These parameters include whether the service operations are `async`, whether the
 You should make the service operations async and support cancellation tokens where possible, unless you need to support legacy frameworks such as WCF or WebForms.
 :::
 
-The generated service interface and structures will be decorated with WCF attributes for service and data contracts only if WCF configuration is defined in the `wcf:config` element of the global model configuration under the top level `config` element, as illustrated below.
-
-```xml title="global_config.xom"
-<wcf:config xmlns:wcf="http://www.xomega.net/wcf">
-  ...
-</wcf:config>
-```
+The generated service interface and structures will be decorated with WCF attributes for service and data contracts only if WCF configuration is defined in the `wcf:config` element of the global model configuration under the top level `config` element, as  described [here](../../visual-studio/modeling/config.md#wcf-config).
 
 ### Common configurations
 
@@ -187,80 +181,7 @@ You should never edit generated service and data contracts directly. This allows
 
 #### WCF Attributes
 
-If you need to provide additional custom WCF attributes beyond the basic `ServiceContract` and `DataContract` that will be generated if you have a `wcf:config` element in the model configuration, then you can add a `wcf:operation-attributes` element in the model to the `config` element of individual operations, or a `wcf:service-attributes` element to the `config` element of the object, as illustrated below.
-
-```xml
-<objects>
-  <object name="sales order">
-    <operations>
-      <operation name="update" type="update">
-        <input>...</input>
-        <config>
-<!-- highlight-start -->
-          <wcf:operation-attributes>
-            <wcf:OperationBehavior Impersonation="ImpersonationOption.Allowed"/>
-            <wcf:TransactionFlow>
-              <wcf:transactions>TransactionFlowOption.Allowed</wcf:transactions>
-              </wcf:TransactionFlow>
-          </wcf:operation-attributes>
-<!-- highlight-end -->
-        </config>
-      </operation>
-    </operations>
-    <config>
-<!-- highlight-start -->
-      <wcf:service-attributes>
-        <wcf:ServiceContract SessionMode="SessionMode.Allowed"/>
-        <wcf:DeliveryRequirements RequireOrderedDelivery="true"/>
-        <wcf:XmlSerializerFormat Use="OperationFormatUse.Encoded"/>
-      </wcf:service-attributes>
-<!-- highlight-end -->
-    </config>
-  </object>
-</objects>
-```
-
-You can also exclude some operations from being exposed via WCF by adding a `wcf:operation` element to the operation's `config` with a `not-supported="true"` attribute, as follows.
-
-```xml
-<objects>
-  <object name="sales order">
-    <operations>
-      <operation name="update" type="update">
-        <input>...</input>
-        <config>
-<!-- highlight-next-line -->
-          <wcf:operation not-supported="true"/>
-        </config>
-      </operation>
-    </operations>
-  </object>
-</objects>
-```
-
-#### REST Attributes
-
-If you want to expose some services via REST interface, you will need to add `rest:method` element to the `config` of each operation that you need exposed, as follows.
-
-```xml
-<objects>
-  <object name="sales order">
-    <operations>
-      <operation name="update" type="update">
-        <input>
-          <param name="sales order id"/>
-          <struct name="data">...</struct>
-        </input>
-        <config>
-<!-- highlight-next-line -->
-          <rest:method verb="PUT" uri-template="sales-order/{sales order id}"
-                       xmlns:rest="http://www.xomega.net/rest"/>
-        </config>
-      </operation>
-    </operations>
-  </object>
-</objects>
-```
+If you need to provide additional custom WCF attributes beyond the basic `ServiceContract` and `OperationContract` that will be generated if you have a `wcf:config` element in the model configuration, then you can add a `wcf:operation` element in the model to the `config` element of individual operations, or a `wcf:service` element to the `config` element of the object, as described [here](../../visual-studio/modeling/services.md#wcf-configuration).
 
 ### Cleaning generator’s output
 
