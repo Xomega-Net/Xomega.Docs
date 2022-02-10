@@ -50,6 +50,7 @@ const config = {
           'This documentation is still being updated. Follow us on twitter to stay tuned for additional topics.',
         isCloseable: true,
       },
+      autoCollapseSidebarCategories: false,
       colorMode: {
         disableSwitch: true,
       },
@@ -81,17 +82,10 @@ const config = {
             className: 'xomega-link'
           },
           {
-            href: 'https://xomega.net/Tutorials/Overview.aspx',
-            position: 'left',
-            label: 'Learn',
-            target: null,
-            className: 'xomega-link'
-          },
-          {
             type: 'doc',
             docId: 'platform/about',
             position: 'left',
-            label: 'Documentation',
+            label: 'Learn',
           },
           {
             href: 'https://xomega.net/Forum/Forum.aspx',

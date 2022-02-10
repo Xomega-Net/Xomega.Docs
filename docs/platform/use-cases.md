@@ -1,6 +1,6 @@
 ---
 sidebar_position: 2
-sidebar_label: Xomega use cases
+sidebar_label: Xomega Use Cases
 pagination_label: How can I use Xomega
 ---
 
