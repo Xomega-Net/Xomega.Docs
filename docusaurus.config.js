@@ -41,6 +41,10 @@ const config = {
     ],
   ],
 
+  plugins: [
+    '@ionic-internal/docusaurus-plugin-tag-manager'
+  ],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -118,6 +122,9 @@ const config = {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
         additionalLanguages: ['csharp', 'cshtml']
+      },
+      tagManager: {
+        trackingID: 'GTM-M48HDZN'
       },
     }),
 };
