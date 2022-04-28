@@ -397,7 +397,7 @@ Once you generate the SQL script, you can review it and run against your databas
 
 Instead of storing each enumeration in a separate table, it's common within large projects to define some generic dictionary tables that store items and their property values for different types of enumerations in the same tables.
 
-If you database doesn't already have such generic dictionary tables, then Xomega can help you create and configure such tables. All you need to do is to right-click on the *Framework* folder of the model project, select *Add > New Item...*, and pick the *Dictionary Object* item template.
+If your database doesn't already have such generic dictionary tables, then Xomega can help you create and configure such tables. All you need to do is to right-click on the *Framework* folder of the model project, select *Add > New Item...*, and pick the *Dictionary Object* item template.
 
 ### Dictionary items
 
