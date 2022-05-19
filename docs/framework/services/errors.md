@@ -84,7 +84,7 @@ The error list for the current service operation is available in each service im
 The error lists used in the presentation logic are created and accessed differently. You can learn about it in the corresponding sections for the common UI logic.
 :::
 
-### Adding error messages
+### Adding error messages{#adding}
 
 The `ErrorList` class provides a set of convenient methods to easily add messages of various types and severity. You may need to pass an error type and the message code, which is used as the resource key to look up the message text in the current language, as well as the values of any parameters of the message that will be substituted into any message placeholders.
 

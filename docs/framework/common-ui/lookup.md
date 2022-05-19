@@ -1,8 +1,8 @@
 ---
-sidebar_position: 4
+sidebar_position: 1
 ---
 
-# Enum and Lookup Data
+# Lookup Data
 
 import UnderConstruction from  '@site/under-construction.mdx'
 
@@ -11,6 +11,3 @@ import UnderConstruction from  '@site/under-construction.mdx'
 ## Headers
 ## Lookup Cache
 ## Lookup Cache Loaders
-## Enum Property
-## Cascading Selection
-## Dynamic Lists of Values
