@@ -55,7 +55,7 @@ public class SalesOrder_UpdateInput_Data
 
 #### Validation against a lookup table
 
-If you need to validate your model property against a certain list of values defined in a Xomega Framework lookup table, then you should use an `XLookupValue` attribute that you construct with the name of your lookup table, as follows.
+If you need to validate your model property against a certain list of values defined in a [Xomega Framework lookup table](../common-ui/lookup), then you should use an `XLookupValue` attribute that you construct with the name of your lookup table, as follows.
 
 ```cs
 [XRequired]

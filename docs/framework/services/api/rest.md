@@ -249,7 +249,7 @@ As you can see [above](#authentication-controller), the `AuthConfig` is also pas
 
 ## Cached lookup data
 
-If you have your globally cached static lookup data, Xomega Framework provides endpoints to get a lookup table by its type from the global cache, or to refresh it in the global cache, in case when the data for it has changed.
+If you have your globally [cached static lookup data](../../../framework/common-ui/lookup), Xomega Framework provides endpoints to get a lookup table by its type from the global cache, or to refresh it in the global cache, in case when the data for it has changed.
 
 :::note
 Usually .NET-based clients that use Xomega Framework can access the lookup tables directly, and the data for those will be loaded automatically from the corresponding sources.
