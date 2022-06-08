@@ -456,7 +456,7 @@ var addressTable = await cacheLoader.LocalCache.GetLookupTableAsync("business en
 ```
 
 :::info
-Local parameterized lookup cache loaders like this are used to read and cache a list of possible values for an `EnumProperty` based on the value(s) of other data properties.
+Local parameterized lookup cache loaders like this are used to read and cache a list of possible values for an [`EnumProperty`](properties/enum#local-cache) based on the value(s) of other data properties.
 :::
 
 ### Generic dictionary loader
