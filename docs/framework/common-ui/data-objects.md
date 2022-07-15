@@ -226,7 +226,7 @@ Data objects allow you to track their modification state, including [modificatio
 
 The combined modification state of the data object and all of its properties and child objects is returned by the method `IsModified()`. You can also call `SetModified(modState, false)` method with a nullable boolean to set the modification state of the data object, or you can call `SetModified(modState, true)` to also propagate it recursively to all the data properties and child objects.
 
-For example, [data list objects](data-lists) set the modification state non-recursively to `true` during insertion or deletion of their rows, which does not involve modification of any properties. [View models](view-models) set it to `false` recursively after initializing the data, or after the object has been successfully saved.
+For example, [data list objects](data-lists) set the modification state non-recursively to `true` during insertion or deletion of their rows, which does not involve modification of any properties. [View models](vm/view-models) set it to `false` recursively after initializing the data, or after the object has been successfully saved.
 
 Data objects also expose a regular property `Modified` of type `bool` that wraps the `IsModified` and `SetModified` methods. You can listen to the changes of this property using the regular `INotifyPropertyChanged` events, which allows you to use it in [computed properties](properties/base#computed-properties) or [actions](properties/action#enabling-conditions), indicate modified state on the UI view, e.g. via a * next to the view title, or prompt for unsaved changes when the view is being closed.
 
