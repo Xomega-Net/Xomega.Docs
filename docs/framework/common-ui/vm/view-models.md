@@ -6,7 +6,7 @@ sidebar_position: 1
 
 View models are classes that allow you to implement abstract presentation logic for different types of UI views regardless of the specific UI framework that is used for the views. This makes this logic reusable between various .Net-based UI technologies, such as Blazor, WebForms, WPF, etc.
 
-View models for data-driven views typically contain a main [data object](data-objects) or [data list object](data-lists), or possibly a number of data objects, which encapsulate the main logic for working with the view's data. This leaves the view models to enhance this logic with view actions, navigation, error handling and other functions that are not provided by their data objects.
+View models for data-driven views typically contain a main [data object](../data-objects) or [data list object](../data-lists), or possibly a number of data objects, which encapsulate the main logic for working with the view's data. This leaves the view models to enhance this logic with view actions, navigation, error handling and other functions that are not provided by their data objects.
 
 ## UI views
 
@@ -46,13 +46,13 @@ View models store and manage an `ErrorList` of all the errors, warnings and othe
 
 ### View actions
 
-View models typically define [action properties](properties/action) that can be bound to action buttons on your view, which allows you to control the state of the buttons from the view model. They also implement the methods for handling the actions in a platform-agnostic way, which can be attached as handlers to the action buttons, or invoked from the view's action handlers.
+View models typically define [action properties](../properties/action) that can be bound to action buttons on your view, which allows you to control the state of the buttons from the view model. They also implement the methods for handling the actions in a platform-agnostic way, which can be attached as handlers to the action buttons, or invoked from the view's action handlers.
 
 The base class `ViewModel` defines a common `CloseAction`, but more specific view models, such as for search or details views, can define additional actions, e.g. for running the search or saving the details.
 
 ### View title
 
-The base `ViewModel` class has a virtual property `ViewTitle` that can be used to display the title of the view. By default, it returns another virtual property `BaseTitle`, which gets a localized title from the [current resource manager](../services/errors#resources), using a resource key composed from the class name and the "*View_Title*" suffix. For example, if your class name is *SalesOrderViewModel*, then the key will be *SalesOrderView_Title*.
+The base `ViewModel` class has a virtual property `ViewTitle` that can be used to display the title of the view. By default, it returns another virtual property `BaseTitle`, which gets a localized title from the [current resource manager](../../services/errors#resources), using a resource key composed from the class name and the "*View_Title*" suffix. For example, if your class name is *SalesOrderViewModel*, then the key will be *SalesOrderView_Title*.
 
 :::tip
 You can override the `GetResourceKey` method if you want to change the resource key for your view model.
@@ -184,7 +184,7 @@ View models can notify other listeners about both the changes of its properties 
 
 As we mentioned before, view models implement the standard `INotifyPropertyChanged` interface, which means that you can subscribe to its `PropertyChanged` event, and listen to the changes of its properties. You can also manually trigger the `PropertyChanged` event from your view model by calling the `OnPropertyChanged` method.
 
-This also allows you to use view model properties in the expressions for any [computed properties](properties/base#computed-properties). For example, if you have a tab control on your view, then you can bind the active tab's index to a property on your view model, and use it to calculate values/editability of other properties.
+This also allows you to use view model properties in the expressions for any [computed properties](../properties/base#computed-properties). For example, if you have a tab control on your view, then you can bind the active tab's index to a property on your view model, and use it to calculate values/editability of other properties.
 
 ### General view events
 
