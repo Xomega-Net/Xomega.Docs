@@ -54,7 +54,11 @@ const config = {
           'This documentation is still being updated. Follow us on twitter to stay tuned for additional topics.',
         isCloseable: true,
       },
-      autoCollapseSidebarCategories: false,
+      docs: {
+        sidebar: {
+          autoCollapseCategories: false,
+        }
+      },
       colorMode: {
         disableSwitch: true,
       },
