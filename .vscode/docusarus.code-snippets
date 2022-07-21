@@ -68,5 +68,41 @@
 			"$TM_SELECTED_TEXT$LINE_COMMENT highlight-end", ""
 		],
 		"description": "Highlight multiple lines with line comment"
-	}
+	},
+
+	"Added line": {
+		"prefix": "added-line",
+		"body": [
+			"$BLOCK_COMMENT_START added-next-line $BLOCK_COMMENT_END",
+			"$TM_SELECTED_TEXT"
+		],
+		"description": "Added line with a block comment"
+	},
+
+	"Added block": {
+		"prefix": "added-block",
+		"body": [
+			"$BLOCK_COMMENT_START added-lines-start $BLOCK_COMMENT_END",
+			"$TM_SELECTED_TEXT$BLOCK_COMMENT_START added-lines-end $BLOCK_COMMENT_END", ""
+		],
+		"description": "Added multiple lines with block comment"
+	},
+
+	"Removed line": {
+		"prefix": "removed-line",
+		"body": [
+			"$BLOCK_COMMENT_START removed-next-line $BLOCK_COMMENT_END",
+			"$TM_SELECTED_TEXT"
+		],
+		"description": "Removed line with a block comment"
+	},
+
+	"Removed block": {
+		"prefix": "removed-block",
+		"body": [
+			"$BLOCK_COMMENT_START removed-lines-start $BLOCK_COMMENT_END",
+			"$TM_SELECTED_TEXT$BLOCK_COMMENT_START removed-lines-end $BLOCK_COMMENT_END", ""
+		],
+		"description": "Removed multiple lines with block comment"
+	},
 }

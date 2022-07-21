@@ -106,49 +106,58 @@ While we're at it, we will also set the type for the `ship date` parameter to be
 
 Below is a snippet that highlights all these changes.
 
-```diff
+```xml
     <object name="sales order">
       <operations>
-# highlight-next-line
+<!-- highlight-next-line -->
         <operation name="read" type="read">
           <input>[...]
           <output>
             ...
-+           <struct name="customer" ref="customer info"/>
--           <param name="customer id"/>
--           <param name="bill to address id"/>
--           <param name="ship to address id"/>
-# highlight-next-line
+<!-- added-next-line -->
+            <struct name="customer" ref="customer info"/>
+<!-- removed-lines-start -->
+            <param name="customer id"/>
+            <param name="bill to address id"/>
+            <param name="ship to address id"/>
+<!-- removed-lines-end -->
+<!-- highlight-next-line -->
             <param name="ship date" type="date"/>
             ...
           </output>
         </operation>
-# highlight-next-line
+<!-- highlight-next-line -->
         <operation name="create" type="create">
           <input arg="data">
             ...
-+           <struct name="customer" ref="customer update"/>
--           <param name="customer id"/>
--           <param name="bill to address id"/>
--           <param name="ship to address id"/>
-# highlight-next-line
+<!-- added-next-line -->
+            <struct name="customer" ref="customer update"/>
+<!-- removed-lines-start -->
+            <param name="customer id"/>
+            <param name="bill to address id"/>
+            <param name="ship to address id"/>
+<!-- removed-lines-end -->
+<!-- highlight-next-line -->
             <param name="ship date" type="date"/>
             ...
             ...
           </input>
           <output>[...]
         </operation>
-# highlight-next-line
+<!-- highlight-next-line -->
         <operation name="update" type="update">
           <input>
             <param name="sales order id"/>
             <struct name="data">
               ...
-+             <struct name="customer" ref="customer update"/>
--             <param name="customer id"/>
--             <param name="bill to address id"/>
--             <param name="ship to address id"/>
-# highlight-next-line
+<!-- added-next-line -->
+              <struct name="customer" ref="customer update"/>
+<!-- removed-lines-start -->
+              <param name="customer id"/>
+              <param name="bill to address id"/>
+              <param name="ship to address id"/>
+<!-- removed-lines-end -->
+<!-- highlight-next-line -->
               <param name="ship date" type="date"/>
               ...
             </struct>

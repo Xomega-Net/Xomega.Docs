@@ -125,7 +125,25 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
-        additionalLanguages: ['csharp', 'cshtml']
+        additionalLanguages: ['csharp', 'cshtml'],
+        magicComments : [
+          // Remember to extend the default highlight class name as well!
+          {
+            className: 'theme-code-block-highlighted-line',
+            line: 'highlight-next-line',
+            block: {start: 'highlight-start', end: 'highlight-end'},
+          },
+          {
+            className: 'code-block-added-line',
+            line: 'added-next-line',
+            block: { start: 'added-lines-start', end: 'added-lines-end' }
+          },
+          {
+            className: 'code-block-removed-line',
+            line: 'removed-next-line',
+            block: { start: 'removed-lines-start', end: 'removed-lines-end' }
+          }
+        ]
       },
       tagManager: {
         trackingID: 'GTM-M48HDZN'

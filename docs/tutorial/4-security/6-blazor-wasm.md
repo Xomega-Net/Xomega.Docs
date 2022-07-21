@@ -150,14 +150,15 @@ After a successful login, the view redirects you to the URL supplied in the `red
 
 By default the WebAssembly project was set up to get an access token using *anonymous* user in the main `Program.cs`, so we need to remove that code, as shown below.
 
-```diff title="Program.cs"
+```cs title="Program.cs"
 public class Program
 {
     public static async Task Main(string[] args)
     {
         ...
         // TODO: add any custom initialization here
--       await RestServices.Authenticate(host.Services, "anonymous", null);
+/* removed-next-line */
+        await RestServices.Authenticate(host.Services, "anonymous", null);
         ...
     }
 }

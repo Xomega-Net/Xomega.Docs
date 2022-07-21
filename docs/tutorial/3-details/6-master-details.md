@@ -32,16 +32,18 @@ When using a master-details layout with a single child view, it makes sense to o
 
 You can easily configure it in the `ui:display` element of that link by setting the `on-selection="true"` attribute instead of the `on-field` attribute, as follows.
 
-```diff
+```xml
     <xfk:data-object class="SalesOrderList" list="true">
       <ui:display>[...]
-# highlight-next-line
+<!-- highlight-next-line -->
       <ui:link name="details" view="SalesOrderView" child="true" mode="inline">
         <ui:params>
           <ui:param name="sales order id" field="sales order id"/>
         </ui:params>
--       <ui:display on-field="sales order number"/>
-+       <ui:display on-selection="true"/>
+<!-- removed-next-line -->
+        <ui:display on-field="sales order number"/>
+<!-- added-next-line -->
+        <ui:display on-selection="true"/>
       </ui:link>
       <ui:link name="new" view="SalesOrderView" child="true" mode="inline">[...]
     </xfk:data-object>

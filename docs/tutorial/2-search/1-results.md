@@ -8,9 +8,9 @@ We will start with tailoring result columns in the search view by updating the o
 
 For example, the dates on the sales order, such as the `order date` or the `ship date`, are stored as `date/time` in the database, and hence their fields are defined like that on the object as well. But it makes more sense to display them as just dates, without the time component, so we'll override their type on the output parameters to be just `date`.
 
-So let's go ahead and remove unnecessary columns, move `sales order number` to the top, and make other updates to the `read list` output. The diff below shows parameters that we removed or added, and highlights parameters that we updated by setting a specific type.
+So let's go ahead and remove unnecessary columns, move `sales order number` to the top, and make other updates to the `read list` output. The diff below shows parameters that we removed or added, and shows parameters that we updated by setting a specific type.
 
-```diff title="sales_order.xom"
+```xml title="sales_order.xom"
   <object name="sales order">
     ...
     <operations>
@@ -18,36 +18,44 @@ So let's go ahead and remove unnecessary columns, move `sales order number` to t
         <input>[...]
         <output list="true">
           <param name="sales order id"/>
-+         <param name="sales order number"/>
--         <param name="revision number"/>
-          <!-- highlight-start -->
+<!-- added-next-line -->
+          <param name="sales order number"/>
+<!-- removed-next-line -->
+          <param name="revision number"/>
           <param name="order date" type="date"/>
           <param name="due date" type="date"/>
           <param name="ship date" type="date"/>
-          <!-- highlight-end -->
           <param name="status"/>
           <param name="online order flag" type="yesno" required="true"/>
--         <param name="sales order number"/>
--         <param name="purchase order number"/>
--         <param name="account number"/>
--         <param name="customer id"/>
-+         <param name="customer store" type="string"/>
-+         <param name="customer name" type="string"/>
+<!-- removed-lines-start -->
+          <param name="sales order number"/>
+          <param name="purchase order number"/>
+          <param name="account number"/>
+          <param name="customer id"/>
+<!-- removed-lines-end -->
+<!-- added-lines-start -->
+          <param name="customer store" type="string"/>
+          <param name="customer name" type="string"/>
+<!-- added-lines-end -->
           <param name="sales person id"/>
           <param name="territory id"/>
--         <param name="bill to address id"/>
--         <param name="ship to address id"/>
--         <param name="ship method id"/>
--         <param name="credit card id"/>
--         <param name="credit card approval code"/>
--         <param name="currency rate id"/>
--         <param name="sub total"/>
--         <param name="tax amt"/>
--         <param name="freight"/>
+<!-- removed-lines-start -->
+          <param name="bill to address id"/>
+          <param name="ship to address id"/>
+          <param name="ship method id"/>
+          <param name="credit card id"/>
+          <param name="credit card approval code"/>
+          <param name="currency rate id"/>
+          <param name="sub total"/>
+          <param name="tax amt"/>
+          <param name="freight"/>
+<!-- removed-lines-end -->
           <param name="total due"/>
--         <param name="comment"/>
--         <param name="rowguid"/>
--         <param name="modified date"/>
+<!-- removed-lines-start -->
+          <param name="comment"/>
+          <param name="rowguid"/>
+          <param name="modified date"/>
+<!-- removed-lines-end -->
           <config>
             <!-- highlight-next-line -->
             <xfk:add-to-object class="SalesOrderList"/>

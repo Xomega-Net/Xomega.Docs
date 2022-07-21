@@ -20,13 +20,14 @@ We also want it on a separate *Sales* child panel on this screen grouped with ot
 
 We will start by removing any elements related to the `reason` sub-object, that were added for us by the *Full CRUD with Views* generator that we ran initially on the `sales_order.xom` file. Those include operations, data objects and views, as shown below.
 
-```diff title="sales_order.xom"
+```xml title="sales_order.xom"
   <objects>
     <object name="sales order">
       ...
       <subobjects>
         <object name="reason">
--         <operations>[...]
+<!-- removed-next-line -->
+          <operations>[...]
       </subobjects>
     </object>
   </objects>
@@ -34,16 +35,20 @@ We will start by removing any elements related to the `reason` sub-object, that 
     <xfk:data-object class="SalesOrderObject">
       <xfk:add-child name="detail" class="SalesOrderDetailList"/>
       <xfk:add-child name="payment" class="SalesOrderPaymentObject"/>
--     <xfk:add-child name="reason" class="SalesOrderReasonList"/>
+<!-- removed-next-line -->
+      <xfk:add-child name="reason" class="SalesOrderReasonList"/>
       <ui:display>[...]
     </xfk:data-object>
     ...
--   <xfk:data-object class="SalesOrderReasonObject">[...]
--   <xfk:data-object class="SalesOrderReasonList" list="true">[...]
+<!-- removed-lines-start -->
+    <xfk:data-object class="SalesOrderReasonObject">[...]
+    <xfk:data-object class="SalesOrderReasonList" list="true">[...]
+<!-- removed-lines-end -->
   </xfk:data-objects>
   <ui:views>
     ...
--   <ui:view name="SalesOrderReasonView" title="Reason" child="true">[...]
+<!-- removed-next-line -->
+    <ui:view name="SalesOrderReasonView" title="Reason" child="true">[...]
   </ui:views>
 ```
 
@@ -171,46 +176,55 @@ We have also set the `customize="true"` attribute on the data object, in order t
 
 Finally, we will replace the `territory id` and `sales person id` parameters in the output of the `read` operation, and in the input of both `create` and `update` operations, with a reference to the `sales info` structure using `sales` as a name, as outlined below.
 
-```diff
+```xml
     <object name="sales order">
       <operations>
-# highlight-next-line
+<!-- highlight-next-line -->
         <operation name="read" type="read">
           <input>[...]
           <output>
             ...
--           <param name="sales person id"/>
--           <param name="territory id"/>
+<!-- removed-lines-start -->
+            <param name="sales person id"/>
+            <param name="territory id"/>
+<!-- removed-lines-end -->
             ...
             <struct name="payment" ref="payment info"/>
-+           <struct name="sales" ref="sales info"/>
+<!-- added-next-line -->
+            <struct name="sales" ref="sales info"/>
             ...
           </output>
         </operation>
-# highlight-next-line
+<!-- highlight-next-line -->
         <operation name="create" type="create">
           <input arg="data">
             ...
--           <param name="sales person id"/>
--           <param name="territory id"/>
+<!-- removed-lines-start -->
+            <param name="sales person id"/>
+            <param name="territory id"/>
+<!-- removed-lines-end -->
             ...
             <struct name="payment" ref="payment update"/>
-+           <struct name="sales" ref="sales info"/>
+<!-- added-next-line -->
+            <struct name="sales" ref="sales info"/>
             ...
           </input>
           <output>[...]
         </operation>
-# highlight-next-line
+<!-- highlight-next-line -->
         <operation name="update" type="update">
           <input>
             <param name="sales order id"/>
             <struct name="data">
               ...
--             <param name="sales person id"/>
--             <param name="territory id"/>
+<!-- removed-lines-start -->
+              <param name="sales person id"/>
+              <param name="territory id"/>
+<!-- removed-lines-end -->
               ...
               <struct name="payment" ref="payment update"/>
-+             <struct name="sales" ref="sales info"/>
+<!-- added-next-line -->
+              <struct name="sales" ref="sales info"/>
               ...
             </struct>
           </input>

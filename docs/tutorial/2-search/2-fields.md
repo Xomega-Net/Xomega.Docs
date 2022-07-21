@@ -154,16 +154,17 @@ Inside the `details` link you will see that the model displays a validation erro
 
 Go to that attribute in error, press Ctrl+Space to pull up the list of other non-hidden fields on the data object, and select the `sales order number` to display the details link on that column, as shown below.
 
-```diff title="sales_order.xom"
+```xml title="sales_order.xom"
   <xfk:data-object class="SalesOrderList" list="true">
     <ui:display>[...]
     <ui:link name="details" view="SalesOrderView" child="true">
       <ui:params>
         <ui:param name="sales order id" field="sales order id"/>
       </ui:params>
-      <!-- highlight-next-line -->
--     <ui:display on-field="revision number"/>
-+     <ui:display on-field="sales order number"/>
+<!-- removed-next-line -->
+      <ui:display on-field="revision number"/>
+<!-- added-next-line -->
+      <ui:display on-field="sales order number"/>
     </ui:link>
     <ui:link name="new" view="SalesOrderView" child="true">[...]
   </xfk:data-object>

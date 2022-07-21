@@ -26,21 +26,24 @@ Since it is the first structure in the model that is added to the data object `S
 
 Let's remove the `rowguid` parameter, move the `sales order number` to be the first parameter, and move the `revision number` to go right before the `modified date`. We'll also override the type on the `order date` parameter to be just `date`, without the time component, as illustrated in the following snippet.
 
-```diff title="sales_order.xom"
+```xml title="sales_order.xom"
     <object name="sales order">
         ...
         <operation name="read" type="read">
           <input>[...]
           <output>
-+           <param name="sales order number"/>
--           <param name="revision number"/>
-# highlight-next-line
+<!-- added-next-line -->
+            <param name="sales order number"/>
+<!-- removed-next-line -->
+            <param name="revision number"/>
+<!-- highlight-next-line -->
             <param name="order date" type="date"/>
             <param name="due date"/>
             <param name="ship date"/>
             <param name="status"/>
             <param name="online order flag"/>
--           <param name="sales order number"/>
+<!-- removed-next-line -->
+            <param name="sales order number"/>
             <param name="purchase order number"/>
             <param name="account number"/>
             <param name="customer id"/>
@@ -57,8 +60,10 @@ Let's remove the `rowguid` parameter, move the `sales order number` to be the fi
             <param name="freight"/>
             <param name="total due"/>
             <param name="comment"/>
--           <param name="rowguid"/>
-+           <param name="revision number"/>
+<!-- removed-next-line -->
+            <param name="rowguid"/>
+<!-- added-next-line -->
+            <param name="revision number"/>
             <param name="modified date"/>
           </output>
         </operation>
@@ -70,18 +75,21 @@ Let's remove the `rowguid` parameter, move the `sales order number` to be the fi
 
 Next, let's remove the `rowguid` parameter from the input of the `create` operation, and move the other parameters, that are calculated during order creation, from the input to the output of the `create` operation, as shown below.
 
-```diff
+```xml
     <object name="sales order">
         ...
         <operation name="create" type="create">
           <input arg="data">
--           <param name="revision number"/>
--           <param name="order date"/>
+<!-- removed-lines-start -->
+            <param name="revision number"/>
+            <param name="order date"/>
+<!-- removed-lines-end -->
             <param name="due date"/>
             <param name="ship date"/>
             <param name="status"/>
             <param name="online order flag"/>
--           <param name="sales order number"/>
+<!-- removed-next-line -->
+            <param name="sales order number"/>
             <param name="purchase order number"/>
             <param name="account number"/>
             <param name="customer id"/>
@@ -98,18 +106,22 @@ Next, let's remove the `rowguid` parameter from the input of the `create` operat
             <param name="freight"/>
             <param name="total due"/>
             <param name="comment"/>
--           <param name="rowguid"/>
--           <param name="modified date"/>
+<!-- removed-lines-start -->
+            <param name="rowguid"/>
+            <param name="modified date"/>
+<!-- removed-lines-end -->
             <config>
               <xfk:add-to-object class="SalesOrderObject"/>
             </config>
           </input>
           <output>
             <param name="sales order id"/>
-+           <param name="sales order number"/>
-+           <param name="order date" type="date"/>
-+           <param name="revision number"/>
-+           <param name="modified date"/>
+<!-- added-lines-start -->
+            <param name="sales order number"/>
+            <param name="order date" type="date"/>
+            <param name="revision number"/>
+            <param name="modified date"/>
+<!-- added-lines-end -->
             <config>
               <xfk:add-to-object class="SalesOrderObject"/>
             </config>
@@ -127,20 +139,23 @@ Note that we also need to update the type of the `order date` parameter here to 
 
 In a similar manner, we will remove all those parameters (including `rowguid`) from the input of the `update` operation, and will move `revision number` and `modified date` to the output of the operation, since they are changed on each update.
 
-```diff
+```xml
     <object name="sales order">
         ...
         <operation name="update" type="update">
           <input>
             <param name="sales order id"/>
             <struct name="data">
--             <param name="revision number"/>
--             <param name="order date"/>
+<!-- removed-lines-start -->
+              <param name="revision number"/>
+              <param name="order date"/>
+<!-- removed-lines-end -->
               <param name="due date"/>
               <param name="ship date"/>
               <param name="status"/>
               <param name="online order flag"/>
--             <param name="sales order number"/>
+<!-- removed-next-line -->
+              <param name="sales order number"/>
               <param name="purchase order number"/>
               <param name="account number"/>
               <param name="customer id"/>
@@ -157,8 +172,10 @@ In a similar manner, we will remove all those parameters (including `rowguid`) f
               <param name="freight"/>
               <param name="total due"/>
               <param name="comment"/>
--             <param name="rowguid"/>
--             <param name="modified date"/>
+<!-- removed-lines-start -->
+              <param name="rowguid"/>
+              <param name="modified date"/>
+<!-- removed-lines-end -->
               <config>
                 <xfk:add-to-object class="SalesOrderObject"/>
               </config>
@@ -167,13 +184,15 @@ In a similar manner, we will remove all those parameters (including `rowguid`) f
               <xfk:add-to-object class="SalesOrderObject"/>
             </config>
           </input>
-+         <output>
-+           <param name="revision number"/>
-+           <param name="modified date"/>
-+           <config>
-+             <xfk:add-to-object class="SalesOrderObject"/>
-+           </config>
-+         </output>
+<!-- added-lines-start -->
+          <output>
+            <param name="revision number"/>
+            <param name="modified date"/>
+            <config>
+              <xfk:add-to-object class="SalesOrderObject"/>
+            </config>
+          </output>
+<!-- added-lines-end -->
        </operation>
         ...
     </object>

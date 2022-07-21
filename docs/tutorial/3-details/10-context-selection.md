@@ -177,31 +177,38 @@ Now we can configure our data object to make credit card non-key fields read-onl
 
 Next we will move the `credit card id` and `credit card approval code` parameters from the `payment info` and `payment update` structures to a new structure `sales order credit card`, and will update both payment structures to use a reference to this new structure instead, as follows.
 
-```diff
-# highlight-next-line
+```xml
+<!-- highlight-next-line -->
     <struct name="payment info" object="sales order">
       ...
--     <param name="credit card id"/>
--     <param name="credit card approval code"/>
-+     <struct name="credit card" ref="sales order credit card"/>
+<!-- removed-lines-start -->
+      <param name="credit card id"/>
+      <param name="credit card approval code"/>
+<!-- removed-lines-end -->
+<!-- added-next-line -->
+      <struct name="credit card" ref="sales order credit card"/>
       ...
     </struct>
-# highlight-next-line
+<!-- highlight-next-line -->
     <struct name="payment update" object="sales order">
       ...
--     <param name="credit card id"/>
--     <param name="credit card approval code"/>
-+     <struct name="credit card" ref="sales order credit card"/>
+<!-- removed-lines-start -->
+      <param name="credit card id"/>
+      <param name="credit card approval code"/>
+<!-- removed-lines-end -->
+<!-- added-next-line -->
+      <struct name="credit card" ref="sales order credit card"/>
       ...
     </struct>
-# highlight-next-line
-+   <struct name="sales order credit card" object="sales order">
-+     <param name="credit card id" required="true"/>
-+     <param name="credit card approval code"/>
-+     <config>
-+       <xfk:add-to-object class="CreditCardPaymentObject"/>
-+     </config>
-+   </struct>
+<!-- added-lines-start -->
+    <struct name="sales order credit card" object="sales order">
+      <param name="credit card id" required="true"/>
+      <param name="credit card approval code"/>
+      <config>
+        <xfk:add-to-object class="CreditCardPaymentObject"/>
+      </config>
+    </struct>
+<!-- added-lines-end -->
 ```
 
 :::note
@@ -212,27 +219,34 @@ This new structure is different from the `credit card info` structure that we de
 
 Let's build the model project, and refactor our custom service code in the `SalesOrderServiceExtended.cs` to use the new structure, as follows.
 
-```diff title="SalesOrderServiceExtended.cs"
+```cs title="SalesOrderServiceExtended.cs"
 public partial class SalesOrderService
 {
     protected PaymentInfo GetPaymentInfo(SalesOrder obj) => new PaymentInfo()
     {
         ...
-+       CreditCard = new SalesOrderCreditCard {
+/* added-next-line */
+        CreditCard = new SalesOrderCreditCard {
             CreditCardId = obj.CreditCardObject?.CreditCardId ?? 0,
             CreditCardApprovalCode = obj.CreditCardApprovalCode,
-+       },
+/* added-next-line */
+        },
         CurrencyRate = obj.CurrencyRateObject?.RateString
     };
 
     protected async Task UpdatePayment(SalesOrder obj, PaymentUpdate pmt, CancellationToken token)
     {
         ...
--       obj.CreditCardApprovalCode = pmt.CreditCardApprovalCode;
-+       obj.CreditCardApprovalCode = pmt.CreditCard.CreditCardApprovalCode;
--       obj.CreditCardObject = await ctx.FindEntityAsync<CreditCard>(currentErrors, token, pmt.CreditCardId);
-+       obj.CreditCardObject = await ctx.FindEntityAsync<CreditCard>(currentErrors, token,
-+                                                                    pmt.CreditCard.CreditCardId);
+/* removed-next-line */
+        obj.CreditCardApprovalCode = pmt.CreditCardApprovalCode;
+/* added-next-line */
+        obj.CreditCardApprovalCode = pmt.CreditCard.CreditCardApprovalCode;
+/* removed-next-line */
+        obj.CreditCardObject = await ctx.FindEntityAsync<CreditCard>(currentErrors, token, pmt.CreditCardId);
+/* added-lines-start */
+        obj.CreditCardObject = await ctx.FindEntityAsync<CreditCard>(currentErrors, token,
+                                                                     pmt.CreditCard.CreditCardId);
+/* added-lines-end */
     }
     ...
 }

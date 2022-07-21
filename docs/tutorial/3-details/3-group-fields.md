@@ -155,29 +155,33 @@ After you added the structures, you may have noticed the warnings on them, telli
 
 Let's open the output of the `sales order` object's `read` operation, move the `ship date` parameter down, and replace all the payment output parameters with a reference to the `payment info` structure under the `payment` name, as shown below.
 
-```diff
+```xml
     <object name="sales order">
         ...
-# highlight-next-line
+<!-- highlight-next-line -->
         <operation name="read" type="read">
           <input>[...]
           <output>
             ...
--           <param name="due date"/>
--           <param name="ship date"/>
+<!-- removed-lines-start -->
+            <param name="due date"/>
+            <param name="ship date"/>
+<!-- removed-lines-end -->
             ...
--           <param name="ship method id"/>
--           <param name="credit card id"/>
--           <param name="credit card approval code"/>
--           <param name="currency rate id"/>
--           <param name="sub total"/>
--           <param name="tax amt"/>
--           <param name="freight"/>
--           <param name="total due"/>
-# highlight-start
-+           <param name="ship date"/>
-+           <struct name="payment" ref="payment info"/>
-# highlight-end
+<!-- removed-lines-start -->
+            <param name="ship method id"/>
+            <param name="credit card id"/>
+            <param name="credit card approval code"/>
+            <param name="currency rate id"/>
+            <param name="sub total"/>
+            <param name="tax amt"/>
+            <param name="freight"/>
+            <param name="total due"/>
+<!-- removed-lines-end -->
+<!-- added-lines-start -->
+            <param name="ship date"/>
+            <struct name="payment" ref="payment info"/>
+<!-- added-lines-end -->
             <param name="comment"/>
             ...
           </output>
@@ -196,27 +200,31 @@ Otherwise, you would need to do some custom coding to ensure that the child obje
 
 Similarly, we will replace those same payment parameters in the input of the `create` operations, with a reference to the `payment update` structure, using the same name, as follows.
 
-```diff
+```xml
     <object name="sales order">
         ...
-# highlight-next-line
+<!-- highlight-next-line -->
         <operation name="create" type="create">
           <input arg="data">
--           <param name="due date"/>
--           <param name="ship date"/>
+<!-- removed-lines-start -->
+            <param name="due date"/>
+            <param name="ship date"/>
+<!-- removed-lines-end -->
             ...
--           <param name="ship method id"/>
--           <param name="credit card id"/>
--           <param name="credit card approval code"/>
--           <param name="currency rate id"/>
--           <param name="sub total"/>
--           <param name="tax amt"/>
--           <param name="freight"/>
--           <param name="total due"/>
-# highlight-start
-+           <param name="ship date"/>
-+           <struct name="payment" ref="payment update"/>
-# highlight-end
+<!-- removed-lines-start -->
+            <param name="ship method id"/>
+            <param name="credit card id"/>
+            <param name="credit card approval code"/>
+            <param name="currency rate id"/>
+            <param name="sub total"/>
+            <param name="tax amt"/>
+            <param name="freight"/>
+            <param name="total due"/>
+<!-- removed-lines-end -->
+<!-- added-lines-start -->
+            <param name="ship date"/>
+            <struct name="payment" ref="payment update"/>
+<!-- added-lines-end -->
             <param name="comment"/>
             <config>[...]
           </input>
@@ -232,29 +240,33 @@ Similarly, we will replace those same payment parameters in the input of the `cr
 
 Finally, we will perform the same replacements in the input of the `update` operations, as shown below.
 
-```diff
+```xml
     <object name="sales order">
         ...
-# highlight-next-line
+<!-- highlight-next-line -->
         <operation name="update" type="update">
           <input>
             <param name="sales order id"/>
             <struct name="data">
--             <param name="due date"/>
--             <param name="ship date"/>
+<!-- removed-lines-start -->
+              <param name="due date"/>
+              <param name="ship date"/>
+<!-- removed-lines-end -->
               ...
--             <param name="ship method id"/>
--             <param name="credit card id"/>
--             <param name="credit card approval code"/>
--             <param name="currency rate id"/>
--             <param name="sub total"/>
--             <param name="tax amt"/>
--             <param name="freight"/>
--             <param name="total due"/>
-# highlight-start
-+             <param name="ship date"/>
-+             <struct name="payment" ref="payment update"/>
-# highlight-end
+<!-- removed-lines-start -->
+              <param name="ship method id"/>
+              <param name="credit card id"/>
+              <param name="credit card approval code"/>
+              <param name="currency rate id"/>
+              <param name="sub total"/>
+              <param name="tax amt"/>
+              <param name="freight"/>
+              <param name="total due"/>
+<!-- removed-lines-end -->
+<!-- added-lines-start -->
+              <param name="ship date"/>
+              <struct name="payment" ref="payment update"/>
+<!-- added-lines-end -->
               <param name="comment"/>
               <config>[...]
             </struct>

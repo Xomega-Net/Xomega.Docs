@@ -365,23 +365,31 @@ While we were at it, we also set proper labels on some fields and configured the
 
 Next, we will replace the `bill to address id` and `ship to address id` parameters with references to our new `address key` structure in the `customer info` and `customer update` structures, as follows.
 
-```diff title="sales_order.xom"
-# highlight-next-line
+```xml title="sales_order.xom"
+<!-- highlight-next-line -->
     <struct name="customer info" object="customer">
       ...
--     <param name="bill to address id" type="address"/>
--     <param name="ship to address id" type="address"/>
-+     <struct name="billing address" ref="address key"/>
-+     <struct name="shipping address" ref="address key"/>
+<!-- removed-lines-start -->
+      <param name="bill to address id" type="address"/>
+      <param name="ship to address id" type="address"/>
+<!-- removed-lines-end -->
+<!-- added-lines-start -->
+      <struct name="billing address" ref="address key"/>
+      <struct name="shipping address" ref="address key"/>
+<!-- added-lines-end -->
       <config>[...]
     </struct>
-# highlight-next-line
+<!-- highlight-next-line -->
     <struct name="customer update" object="customer">
       <param name="customer id"/>
--     <param name="bill to address id" type="address"/>
--     <param name="ship to address id" type="address"/>
-+     <struct name="billing address" ref="address key"/>
-+     <struct name="shipping address" ref="address key"/>
+<!-- removed-lines-start -->
+      <param name="bill to address id" type="address"/>
+      <param name="ship to address id" type="address"/>
+<!-- removed-lines-end -->
+<!-- added-lines-start -->
+      <struct name="billing address" ref="address key"/>
+      <struct name="shipping address" ref="address key"/>
+<!-- added-lines-end -->
       <config>[...]
     </struct>
 ```
@@ -443,23 +451,31 @@ You can also lay out some or all child panels as tabs using `ui:tabs/ui:tab` ele
 
 Now that we have made all the model updates, let's build the model project, and refactor our custom implementations in the `SalesOrderServiceExtended.cs` file to use the new `AddressKey` structure, as follows.
 
-```diff title="SalesOrderServiceExtended.cs"
+```cs title="SalesOrderServiceExtended.cs"
 protected CustomerInfo GetCustomerInfo(SalesOrder obj) => new CustomerInfo()
 {
     ...
--   BillToAddressId = obj.BillToAddressId,
--   ShipToAddressId = obj.ShipToAddressId,
-+   BillingAddress = new AddressKey { AddressId = obj.BillToAddressId },
-+   ShippingAddress = new AddressKey { AddressId = obj.ShipToAddressId },
+/* removed-lines-start */
+    BillToAddressId = obj.BillToAddressId,
+    ShipToAddressId = obj.ShipToAddressId,
+/* removed-lines-end */
+/* added-lines-start */
+    BillingAddress = new AddressKey { AddressId = obj.BillToAddressId },
+    ShippingAddress = new AddressKey { AddressId = obj.ShipToAddressId },
+/* added-lines-end */
 };
 
 protected async Task UpdateCustomer(SalesOrder obj, CustomerUpdate _data)
 {
     ...
--   obj.BillToAddressObject = await ctx.FindEntityAsync<Address>(currentErrors, _data.BillToAddressId);
--   obj.ShipToAddressObject = await ctx.FindEntityAsync<Address>(currentErrors, _data.ShipToAddressId);
-+   obj.BillToAddressObject = await ctx.FindEntityAsync<Address>(currentErrors, _data.BillingAddress.AddressId);
-+   obj.ShipToAddressObject = await ctx.FindEntityAsync<Address>(currentErrors, _data.ShippingAddress.AddressId);
+/* removed-lines-start */
+    obj.BillToAddressObject = await ctx.FindEntityAsync<Address>(currentErrors, _data.BillToAddressId);
+    obj.ShipToAddressObject = await ctx.FindEntityAsync<Address>(currentErrors, _data.ShipToAddressId);
+/* removed-lines-end */
+/* added-lines-start */
+    obj.BillToAddressObject = await ctx.FindEntityAsync<Address>(currentErrors, _data.BillingAddress.AddressId);
+    obj.ShipToAddressObject = await ctx.FindEntityAsync<Address>(currentErrors, _data.ShippingAddress.AddressId);
+/* added-lines-end */
 }
 ```
 
@@ -467,7 +483,7 @@ protected async Task UpdateCustomer(SalesOrder obj, CustomerUpdate _data)
 
 We also need to update our `SalesOrderCustomerObjectCustomized.cs` to take the `AddressIdProperty` from the corresponding child object as follows.
 
-```diff title="SalesOrderCustomerObjectCustomized.cs"
+```cs title="SalesOrderCustomerObjectCustomized.cs"
 
 public class SalesOrderCustomerObjectCustomized : SalesOrderCustomerObject
 {
@@ -476,26 +492,38 @@ public class SalesOrderCustomerObjectCustomized : SalesOrderCustomerObject
     protected override void OnInitialized()
     {
         ...
--       BillToAddressIdProperty.LocalCacheLoader = AddressLoader;
--       ShipToAddressIdProperty.LocalCacheLoader = AddressLoader;
-+       BillingAddressObject.AddressIdProperty.LocalCacheLoader = AddressLoader;
-+       ShippingAddressObject.AddressIdProperty.LocalCacheLoader = AddressLoader;
+/* removed-lines-start */
+        BillToAddressIdProperty.LocalCacheLoader = AddressLoader;
+        ShipToAddressIdProperty.LocalCacheLoader = AddressLoader;
+/* removed-lines-end */
+/* added-lines-start */
+        BillingAddressObject.AddressIdProperty.LocalCacheLoader = AddressLoader;
+        ShippingAddressObject.AddressIdProperty.LocalCacheLoader = AddressLoader;
+/* added-lines-end */
         ...
     }
 
     private async Task OnCustomerChanged(object sender, PropertyChangeEventArgs e, CancellationToken token)
     {
         ...
--       await BillToAddressIdProperty.ClearInvalidValues();
--       await ShipToAddressIdProperty.ClearInvalidValues();
-+       await BillingAddressObject.AddressIdProperty.ClearInvalidValues();
-+       await ShippingAddressObject.AddressIdProperty.ClearInvalidValues();
+/* removed-lines-start */
+        await BillToAddressIdProperty.ClearInvalidValues();
+        await ShipToAddressIdProperty.ClearInvalidValues();
+/* removed-lines-end */
+/* added-lines-start */
+        await BillingAddressObject.AddressIdProperty.ClearInvalidValues();
+        await ShippingAddressObject.AddressIdProperty.ClearInvalidValues();
+/* added-lines-end */
 
         var args = new PropertyChangeEventArgs(PropertyChange.Items, null, null, e.Row);
--       await BillToAddressIdProperty.FirePropertyChangeAsync(args, token);
--       await ShipToAddressIdProperty.FirePropertyChangeAsync(args, token);
-+       await BillingAddressObject.AddressIdProperty.FirePropertyChangeAsync(args, token);
-+       await ShippingAddressObject.AddressIdProperty.FirePropertyChangeAsync(args, token);
+/* removed-lines-start */
+        await BillToAddressIdProperty.FirePropertyChangeAsync(args, token);
+        await ShipToAddressIdProperty.FirePropertyChangeAsync(args, token);
+/* removed-lines-end */
+/* added-lines-start */
+        await BillingAddressObject.AddressIdProperty.FirePropertyChangeAsync(args, token);
+        await ShippingAddressObject.AddressIdProperty.FirePropertyChangeAsync(args, token);
+/* added-lines-end */
     }
 }
 ```
