@@ -144,9 +144,12 @@ Once you declare your additional properties for the enumeration, you can set the
 <!-- highlight-start -->
     <prop ref="sort order" value="13"/>
     <prop ref="addl props" value="1"/>
-    <prop ref="type" value="IntegerProperty"/>
+    <prop ref="type" value="BigIntegerProperty"/>
     <prop ref="type" value="DecimalProperty"/>
+    <prop ref="exclude type" value="BigIntegerKeyProperty"/>
     <prop ref="exclude type" value="IntegerKeyProperty"/>
+    <prop ref="exclude type" value="SmallIntegerKeyProperty"/>
+    <prop ref="exclude type" value="TinyIntegerKeyProperty"/>
 <!-- highlight-end -->
   </item>
   <item name="Is Less Than Or Equal To" value="LE">[...]

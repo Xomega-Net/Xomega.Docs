@@ -128,9 +128,12 @@ You can load the lookup table for operators configured with all these attributes
     <item name="Is Less Than" value="LT">
       <prop ref="sort order" value="13"/>
       <prop ref="addl props" value="1"/>
-      <prop ref="type" value="IntegerProperty"/>
+      <prop ref="type" value="BigIntegerProperty"/>
       <prop ref="type" value="DecimalProperty"/>
+      <prop ref="exclude type" value="BigIntegerKeyProperty"/>
       <prop ref="exclude type" value="IntegerKeyProperty"/>
+      <prop ref="exclude type" value="SmallIntegerKeyProperty"/>
+      <prop ref="exclude type" value="TinyIntegerKeyProperty"/>
     </item>
 <!-- highlight-next-line -->
     <item name="Last 30 Days" value="[bod-30d,ct]">

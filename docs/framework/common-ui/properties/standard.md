@@ -32,7 +32,15 @@ The `GuidProperty` class stores its value as a `Guid?` to allow storing `null` v
 
 ## Integer properties
 
-All integer properties in Xomega Framework store their value as an `int?`, but provide some restrictions on the minimum and maximum values, as described below.
+All integer properties in Xomega Framework store their value as a `long?`, but provide some restrictions on the minimum and maximum values, as described below.
+
+### BigIntegerProperty
+
+The `BigIntegerProperty` class validates that the stored value is between the `long.MinValue` and `long.MaxValue`. It serves as a base class for all other integer properties.
+
+### PositiveBigIntProperty
+
+The `PositiveBigIntProperty` class validates that the stored value is between `1` and `long.MaxValue`.
 
 ### IntegerProperty
 
@@ -54,12 +62,17 @@ The `PositiveSmallIntProperty` class validates that the stored value is between 
 
 The `TinyIntegerProperty` class validates that the stored value is between the `byte.MinValue` and `byte.MaxValue`.
 
-### IntegerKeyProperty
+### Integer key properties
 
-The `IntegerKeyProperty` is a marker integer property that indicates that its value is used as a key of an entity, as opposed to just a regular properties.
+Xomega Framework defines the following set of marker subclasses of the corresponding integer property that indicate that its value is used as a key of an entity, as opposed to just a regular properties.
+
+- `BigIntegerKeyProperty` - a key property of underlying type `long`.
+- `IntegerKeyProperty` - a key property of underlying type `int`.
+- `SmallIntegerKeyProperty` - a key property of underlying type `short`.
+- `TinyIntegerKeyProperty` - a key property of underlying type `byte`.
 
 :::note
-When adding search criteria by a field that contains integer keys, the corresponding `OperatorProperty` will include only equality operators, but not the comparison operators, such as "Less Than" or "Greater Than". This is determined by the associated criteria value property being an `IntegerKeyProperty`.
+This allows treating such properties differently in certain scenarios. For example, when adding search criteria by a field that contains integer keys, the corresponding `OperatorProperty` will include only equality operators, but not the comparison operators, such as "*Less Than*" or "*Greater Than*".
 :::
 
 ## Decimal properties
