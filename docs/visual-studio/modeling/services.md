@@ -454,7 +454,33 @@ If you do need to have an internal service operation in your model, which should
 Since the operation not exposed via REST is still part of the service interface, it will be visible to the REST clients. However, calling it will from the client will result in a runtime error.
 :::
 
-If you need to create and use a custom subclass of a generated Web API controller or a custom REST client class, then you can add a `rest:controller` or `rest:client` element to the `config` node of the corresponding root object that defines your service, and set the `customize="true"` attribute, as follows.
+#### REST method customization
+
+If you need to customize the code generated for your Web API controller method that exposes your operation over REST, then you can set the `customize="true"` attribute on the `rest:method` element, as follows.
+
+```xml
+<object name="error log">
+  <fields>[...]
+  <operations>
+    <operation name="create" type="create">
+      <input arg="data">[...]
+      <output>[...]
+      <config>
+<!-- highlight-next-line -->
+        <rest:method verb="POST" uri-template="error-log" customize="true"/>
+      </config>
+    </operation>
+  </operations>
+</object>
+```
+
+This will allow you to modify the generated method, and set custom headers or other HTTP-specific parameters for your REST endpoint.
+You can also check the generator docs for additional details on [customizing *Web API Controllers*](../../generators/services/web-api.md#customizing-the-output).
+
+
+#### REST client customization
+
+If you need to create and use a custom REST client class, then you can add `rest:client` element to the `config` node of the corresponding root object that defines your service, and set the `customize="true"` attribute, as follows.
 
 ```xml
 <module xmlns="http://www.xomega.net/omodel"
@@ -465,15 +491,15 @@ If you need to create and use a custom subclass of a generated Web API controlle
       <operations>[...]
       <config>
         <sql:table name="Sales.SalesOrderHeader"/>
-<!-- highlight-start -->
-        <rest:controller customize="true"/>
+<!-- highlight-next-line -->
         <rest:client customize="true"/>
-<!-- highlight-end -->
       </config>
     </object>
   </objects>
 </module>
 ```
+
+Check the generator docs for further details on [customizing *REST Service Clients*](../../generators/presentation/common/rest-clients.md#customizing-the-output).
 
 ### WCF configuration
 
