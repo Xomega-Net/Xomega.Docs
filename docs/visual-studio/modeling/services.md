@@ -672,6 +672,10 @@ To configure a dynamic enumeration, you need to add a `xfk:enum-cache` element t
 - `desc-param` - output parameter that represents the description of the returned object, which can be used for display.
 - `is-active-param` - output boolean parameter that indicates if the returned object is active, which can allow lookups, but can prevent selection of inactive objects.
 
+:::note
+If you need to display localized text to the user, then please check the section on [localizing dynamic enumerations](static-data#localizing-dynamic-items).
+:::
+
 In the following example, the `read list` operation on the `sales person` object returns all salespersons, and allows caching this enumeration under the name `sales person`.
 
 ```xml

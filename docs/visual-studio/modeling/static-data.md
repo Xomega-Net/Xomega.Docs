@@ -5,6 +5,9 @@ toc_max_heading_level: 4
 
 # Static Data Model
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 Most line of business applications have a certain amount of static data that does not change from one release of the application to another, and yet is critical for the functioning of the application.
 
 For example, a list of possible order statuses is usually known at design-time, since the application needs to have the code that handles each status, and therefore adding or changing a status would require a new release. Such a list is typically stored in a separate database table, hardcoded in various application selection lists or defined as a plain enum.
@@ -53,6 +56,10 @@ Xomega also generates C# constants for enumeration items, so the **name must be 
     <text>(In process)</text>
   </item>
 ```
+:::
+
+:::note
+If you need to display localized text to the user, then please check the section on [item text localization](#item-text-localization).
 :::
 
 #### Documenting items
@@ -597,3 +604,315 @@ public partial class DictionaryService : BaseService, IDictionaryService
     }
 }
 ```
+
+## Item text localization
+
+Normally, the default display text for each enumeration item comes either from the item's `name` attribute, or from the `text` child element, where provided. However, for applications running in multiple locales you need to be able to store translations of the text for each item into various supported languages.
+
+Xomega model supports multiple ways to provide the localized text for each item depending on whether the items are defined in the static model or come dynamically from the database, as described in the sections below.
+
+### Localizing static items
+
+When you have the items of your enumerations defined statically in the model, you can provide the localized display text for each item either directly in the model in additional properties, or separately in the standard resource files.
+
+#### Translations in resources
+
+When you provide localized text in the standard resource files, you don't have to change anything in the Xomega model. Instead, for each enumeration item you need to specify a resource entry with a key `Enum_<EnumName>.<ItemValue>` and the localized text as the value. Xomega Framework will use this key automatically to look up the localized text, as described [here](../../framework/common-ui/lookup#localizing-static-data).
+
+The following examples illustrate a sample `error severity` enumeration, the corresponding default resource file, as well as ones for the German and Bulgarian languages.
+
+<Tabs>
+  <TabItem value="xom" label="error_log.xom" default>
+
+```xml
+<enum name="error severity">
+  <item name="Error" value="1"/>
+  <item name="Warning" value="2"/>
+  <item name="Info" value="3"/>
+</enum>
+```
+
+  </TabItem>
+  <TabItem value="en" label="Resources.resx" default>
+
+|Name|Value|Comment|
+|-|-|-|
+|Enum_error severity.1|Error|
+|Enum_error severity.2|Warning|
+|Enum_error severity.3|Info|
+
+  </TabItem>
+  <TabItem value="de" label="Resources.de.resx" default>
+
+|Name|Value|Comment|
+|-|-|-|
+|Enum_error severity.1|Fehler|
+|Enum_error severity.2|Warnung|
+|Enum_error severity.3|Die Info|
+
+  </TabItem>
+  <TabItem value="bg" label="Resources.bg.resx" default>
+
+|Name|Value|Comment|
+|-|-|-|
+|Enum_error severity.1|Грешка|
+|Enum_error severity.2|Внимание|
+|Enum_error severity.3|Информация|
+
+  </TabItem>
+</Tabs>
+
+:::tip
+The default resource file can be generated automatically from your enumerations using the [Labels Resources generator](../../generators/presentation/common/resources#static-enumerations), which you can then hand off for translation into additional languages.
+:::
+
+#### Translations in item properties
+
+Instead of supplying localized resource files, you can also specify localization text for each item in additional properties that are named as `lang-<Culture Name>` for each supported language/culture. You can use either just a language ISO code there, such as `lang-en`for English, or country-specific overrides, e.g. `lang-en-US`, and Xomega Framework will automatically handle such [language properties](../../framework/common-ui/lookup#localizing-dynamic-data).
+
+The following example demonstrates the same `error severity` enumeration with German and Bulgarian localizations specified in the additional properties.
+
+```xml
+<enum name="error severity">
+  <properties>
+<!-- highlight-next-line -->
+    <property name="lang-de"/>
+    <property name="lang-bg"/>
+  </properties>
+  <item name="Error" value="1">
+<!-- highlight-next-line -->
+    <prop ref="lang-de" value="Fehler"/>
+    <prop ref="lang-bg" value="Грешка"/>
+  </item>
+  <item name="Warning" value="2">
+<!-- highlight-next-line -->
+    <prop ref="lang-de" value="Warnung"/>
+    <prop ref="lang-bg" value="Внимание"/>
+  </item>
+  <item name="Info" value="3">
+<!-- highlight-next-line -->
+    <prop ref="lang-de" value="Die Info"/>
+    <prop ref="lang-bg" value="Информация"/>
+  </item>
+</enum>
+```
+
+:::caution
+If your localization process involves sending texts for translation to others, then using **standard resource files may work better** for you, since the translators may not be familiar with the structure of the Xomega static data model.
+:::
+
+### Localizing dynamic items
+
+When your enumeration items are not statically defined in your model, but are sourced from a database, and therefore can be updated dynamically, you can no longer use the static resource files for the localized text. The only option is to provide the text in additional attributes that use the `lang-<Culture Name>` naming convention.
+
+For each item stored in the database, you can either provide translations in a separate column for each supported language, or read them from a child table, where the list of supported languages can be also dynamic.
+
+#### Translations in separate columns
+
+If you store translations for each supported language in a separate column, then you can define those columns on the same object that stores the enumerated items. In the `read list` operation that returns those items you will need to add output parameters for each language using the `lang-<Culture Name>` convention, and make sure they return the localized values for each language.
+
+In the following example, we store a list of address types with their names in a database table, and specify additional German and Spanish translations in the `name-de` and `name-es` fields respectively.
+
+We return those fields as the `lang-de` and `lang-es` parameters in the `read list` operation. However, since these names don't match, we need to map them in the custom code of the generated `AddressTypeService` class.
+
+<Tabs>
+  <TabItem value="xom" label="address_type.xom" default>
+
+```xml
+<object name="address type">
+  <fields>
+    <field name="address type id" type="address type" key="serial" required="true"/>
+    <field name="name" type="name" required="true"/>
+<!-- highlight-start -->
+    <field name="name-de" type="name"/>
+    <field name="name-es" type="name"/>
+<!-- highlight-end -->
+  </fields>
+  <operations>
+<!-- highlight-next-line -->
+    <operation name="read list" type="readlist">
+      <output list="true">
+        <param name="address type id"/>
+        <param name="name"/>
+<!-- highlight-start -->
+        <param name="lang-de" type="name"/>
+        <param name="lang-es" type="name"/>
+<!-- highlight-end -->
+      </output>
+      <config>
+        <xfk:enum-cache enum-name="address type" id-param="address type id" desc-param="name"/>
+      </config>
+    </operation>
+  </operations>
+</object>
+```
+  </TabItem>
+  <TabItem value="svc" label="AddressTypeService.cs" default>
+
+```cs
+public virtual async Task<Output<ICollection<AddressType_ReadListOutput>>>
+// highlight-next-line
+    ReadListAsync(CancellationToken token = default)
+{
+    ...
+    var qry = from obj in ctx.AddressType
+              select new AddressType_ReadListOutput() {
+                  AddressTypeId = obj.AddressTypeId,
+                  Name = obj.Name,
+                  // CUSTOM_CODE_START: set the LangDe output parameter of ReadList operation below
+// highlight-next-line
+                  LangDe = obj.NameDe, // CUSTOM_CODE_END
+                  // CUSTOM_CODE_START: set the LangEs output parameter of ReadList operation below
+// highlight-next-line
+                  LangEs = obj.NameEs, // CUSTOM_CODE_END
+              };
+    var res = await qry.ToListAsync(token);
+    ...
+}
+```
+
+  </TabItem>
+  <TabItem value="cl" label="AddressTypeReadListCacheLoader.cs" default>
+
+```cs
+protected override async Task LoadCacheAsync(string tableType, CacheUpdater updateCache,
+                                             CancellationToken token = default)
+{
+    var data = new Dictionary<string, Dictionary<string, Header>>();
+    var output = await ReadListAsync(token);
+    ...
+    foreach (var row in output.Result)
+    {
+        string type = "address type";
+        if (!data.TryGetValue(type, out Dictionary<string, Header> tbl))
+            data[type] = tbl = new Dictionary<string, Header>();
+
+        string id = "" + row.AddressTypeId;
+        if (!tbl.TryGetValue(id, out Header h))
+            tbl[id] = h = new Header(type, id, row.Name);
+
+// highlight-start
+        h.AddToAttribute("lang-de", row.LangDe);
+        h.AddToAttribute("lang-es", row.LangEs);
+// highlight-end
+    }
+    ...
+}
+```
+
+  </TabItem>
+</Tabs>
+
+As you can see, the generated `AddressTypeReadListCacheLoader` class will add those parameters as additional attributes to the `Header` objects, which will handle them automatically based on their names.
+
+#### Translations in a child table
+
+If you want to support a dynamic list of languages rather than a preset list, then you need to store your translations in a child table, where each row provides the current item's translation into a specific language. You can return them as a list of nested structures in your `read list` operation, and make sure that the language parameter is returned in the proper format `lang-<Culture Name>`.
+
+In order for the generated cache loader to properly add the nested records as additional attributes of the `Header` objects, you need to add the `xfk:properties` child element to the `xfk:enum-cache` definition, where you specify which parameter has the attribute name and which one has the value.
+
+In the following example we added a `translation` subobject of the `address type` that has a `lang` and `text` fields. You can store the value in the `lang` field as just the culture name, such as `en` or `en-US`, but you'll need to convert it in the `AddressTypeService` to the `lang-<Culture Name>` format, when you return it as part of the nested `translations` list in the `read list` operation.
+
+<Tabs>
+  <TabItem value="xom" label="address_type.xom" default>
+
+```xml
+<object name="address type">
+  <fields>
+    <field name="address type id" type="address type" key="serial" required="true"/>
+    <field name="name" type="name" required="true"/>
+  </fields>
+  <operations>
+    <operation name="read list" type="readlist">
+      <output list="true">
+        <param name="address type id"/>
+        <param name="name"/>
+<!-- highlight-start -->
+        <struct name="translations" list="true">
+          <param name="lang" type="string10"/>
+          <param name="text" type="name"/>
+        </struct>
+<!-- highlight-end -->
+      </output>
+      <config>
+        <xfk:enum-cache enum-name="address type" id-param="address type id" desc-param="name">
+<!-- highlight-next-line -->
+          <xfk:properties properties-struct="translations" name-param="lang" value-param="text"/>
+        </xfk:enum-cache>
+      </config>
+    </operation>
+  </operations>
+  <subobjects>
+<!-- highlight-next-line -->
+    <object name="translation">
+      <fields>
+<!-- highlight-start -->
+        <field name="lang" type="string5" key="supplied"/>
+        <field name="text" type="name"/>
+<!-- highlight-end -->
+      </fields>
+    </object>
+  </subobjects>
+</object>
+```
+
+  </TabItem>
+  <TabItem value="svc" label="AddressTypeService.cs" default>
+
+```cs
+public virtual async Task<Output<ICollection<AddressType_ReadListOutput>>>
+// highlight-next-line
+    ReadListAsync(CancellationToken token = default)
+{
+    ...
+    var qry = from obj in ctx.AddressType
+              select new AddressType_ReadListOutput() {
+                  AddressTypeId = obj.AddressTypeId,
+                  Name = obj.Name,
+                  // CUSTOM_CODE_START: set the Translations output parameter of ReadList operation below
+// highlight-start
+                  Translations = obj.TranslationObjectList.Select(tr =>
+                                      new AddressType_ReadListOutput_Translations() {
+                                          Lang = $"lang-{tr.Lang}",
+                                          Text = tr.Text
+                                  }).ToList(), // CUSTOM_CODE_END
+// highlight-end
+              };
+    var res = await qry.ToListAsync(token);
+    ...
+}
+```
+
+  </TabItem>
+  <TabItem value="cl" label="AddressTypeReadListCacheLoader.cs" default>
+
+```cs
+protected override async Task LoadCacheAsync(string tableType, CacheUpdater updateCache,
+                                             CancellationToken token = default)
+{
+    var data = new Dictionary<string, Dictionary<string, Header>>();
+    var output = await ReadListAsync(token);
+    ...
+    foreach (var row in output.Result)
+    {
+        string type = "address type";
+        if (!data.TryGetValue(type, out Dictionary<string, Header> tbl))
+            data[type] = tbl = new Dictionary<string, Header>();
+
+        string id = "" + row.AddressTypeId;
+        if (!tbl.TryGetValue(id, out Header h))
+            tbl[id] = h = new Header(type, id, row.Name);
+
+// highlight-start
+        foreach (AddressType_ReadListOutput_Translations p in row.Translations)
+            h.AddToAttribute(p.Lang, p.Text);
+// highlight-end
+    }
+    ...
+}
+```
+
+  </TabItem>
+</Tabs>
+
+As you can see, the generated `AddressTypeReadListCacheLoader` class will add the rows from the `Translations` list as additional attributes to the `Header` objects, which will handle them automatically based on their names.

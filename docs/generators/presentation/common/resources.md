@@ -118,6 +118,34 @@ The titles for details views, which would be for creating new details objects wh
 You can always override specific resources in your own set of resources using the same key, or you can update the menu options to use a different resource key.
 :::
 
+### Static enumerations
+
+For each item of a static enumeration defined in the model, the generator will create a resource with the default text for the item using the resource key formatted as `Enum_<EnumName>.<ItemValue>`, in order to allow [localization of the static data](../../../framework/common-ui/lookup#localizing-static-data). The default text will be either the content of the `text` child element, if provided, or the item's `name` attribute.
+
+For example, you can define an enumeration `error severity`, and provide a custom `text` value for the *Error* severity as follows.
+
+```xml
+<!-- highlight-next-line -->
+<enum name="error severity">
+  <item name="Error" value="1">
+<!-- highlight-next-line -->
+    <text>Error!</text>
+  </item>
+<!-- highlight-start -->
+  <item name="Warning" value="2"/>
+  <item name="Info" value="3"/>
+<!-- highlight-end -->
+</enum>
+```
+
+In this case, the generator will add the following resources to the output file.
+
+|Name|Value|Comment|
+|-|-|-|
+|Enum_error severity.1|Error!|
+|Enum_error severity.2|Warning|
+|Enum_error severity.3|Info|
+
 ## Generator outputs
 
 This generator creates a single `.resx` XML file with resource keys and values, as well as a corresponding `.resx.cs` class that allows using a resource manager for the generated resources.

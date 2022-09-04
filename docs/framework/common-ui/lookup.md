@@ -4,6 +4,9 @@ sidebar_position: 2
 
 # Lookup Data
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 Most business applications have some enumerated data that is used to populate selection items, as well as to look up the item by ID during validation or for any other purposes. Also, this data is typically fairly static, which lends itself to caching it globally, or at least for the current work session, so as to avoid unnecessary trips to the database or returning the full data for each result row versus just an ID.
 
 For example, suppose that you have an `Order Status` field that can be one of the predefined code values for each status, e.g. *N* for *New*, *C* for *Complete*, etc. When you have a screen for searching orders, the filter field for the status should provide a selection of statuses that shows status descriptions, but store the internal status codes, so you need a way to get a list of statuses with both codes and descriptions.
@@ -66,28 +69,27 @@ hdr.AddToAttribute("attr", "a"); // duplicate, hdr["attr"] -> List<object>() { "
 
 ### Display format
 
-Headers provide a flexible way to create its display string representation by calling the `ToString(format)` method and passing it the desired format, which may contain placeholders for the `Id`, `Text` or any of its additional attributes.
+Headers provide a flexible way to create its display string representation by calling the `ToString(format, resourceManager)` method and passing it the desired format, which may contain placeholders for the `Id`, `Text` or any of its additional attributes. You can also pass a resource manager to [localize the text for static data](#localizing-static-data), or pass `null` to display the `Text` value as is.
 
 The placeholders for the `Id` and `Text` fields are defined by the `Header`'s static constants `FieldId` and `FieldText` respectively. To get a placeholder for any additional attribute you can call `string.Format(Header.AttrPattern, "<attr>")` with the attribute name.
 
-In the following example we create a header for the `New` status, and store some translations in the `lang-*` attributes, which we can use to format the display string for the header.
+In the following example we create a header for the *New Jersey* state, and specify the *country* in an additional attribute, which we can use to format the display string for the header.
 
 ```cs
 /* highlight-next-line */
-Header hdr = new Header("status", "N", "New");
-hdr["lang-de"] = "Neu"
-hdr["lang-es"] = "Nuevo"
+Header hdr = new Header("state", "NJ", "New Jersey");
+hdr["country"] = "USA";
 
 /* highlight-next-line */
-string format = $"{Header.FieldId} - {Header.FieldText}"; // "[i] - [t]"
-string s = hdr.ToString(format); // "N - New"
+string format = $"{Header.FieldId} ({Header.FieldText})"; // "[i] ([t])"
+string s = hdr.ToString(format, null); // "NJ (New Jersey)"
 
 /* highlight-next-line */
-format = $"{Header.FieldId} ({string.Format(Header.AttrPattern, "lang-es")})"; // "[i] ([a:lang-es])"
-s = hdr.ToString(format); // "N (Nuevo)"
+format = $"{Header.FieldId}, {string.Format(Header.AttrPattern, "country")}"; // "[i], [a:country]"
+s = hdr.ToString(format, null); // "NJ, USA"
 ```
 
-The regular parameterless `ToString()` method of the `Header` uses its `DefaultFormat`, which you can set to make it return the data in your custom format. By default, the `DefaultFormat` is set to `Header.FieldText`, which displays the text of the header as a string.
+The regular parameterless `ToString()` method of the `Header` doesn't use localization, and uses the header's `DefaultFormat`, which you can set to make it return the data in your custom format. By default, the `DefaultFormat` is set to `Header.FieldText`, which displays the text of the header as a string.
 
 ### Dynamic object
 
@@ -106,6 +108,108 @@ status.IsCompleted = false; // hdr["IsCompleted"] -> false;
 
 :::caution
 Obviously, the names of the additional attributes must be **valid identifiers** in order to use them as member properties on a dynamic object. Also, these names are **case-sensitive**.
+:::
+
+## Text localization
+
+If your application needs to work in multiple locales, then you may need to display the localized text for the `Header` instead of the default value of the `Text` field. Following are the two ways to provide the localized text for the headers:
+
+1. For static lookup data, you can specify the localized text in the standard application resources.
+1. Alternatively, you can provide the localized text in the language attributes, which allows doing it for dynamic lookup data.
+
+:::tip
+The `Header` class uses its virtual method `GetText` to get the localized text. You can always override it in your custom header subclass, and implement a different strategy for retrieving the localized text for specific types of headers.
+:::
+
+### Localizing static data
+
+If you have static data in your application, such as a fixed list of order statuses that doesn't change without releasing a new version of the application, then you can specify the localized texts for this data in the standard application resources. This allows you to use the **standard tools** for working with resources, as well as **standard processes** for getting those resources localized into various languages.
+
+In order to add the localized text for a header representing a static item, you need to add it to the resource file using the key `Enum_<Type>.<Id>`, where you use the header's `Type` and `Id` values respectively. For example, for various order statuses the default text resources and their translations in German and Spanish may look as follows.
+
+<Tabs groupId="res">
+  <TabItem value="en" label="Resources.resx" default>
+
+|Name|Value|Comment|
+|-|-|-|
+|Enum_order status.N|New|
+|Enum_order status.I|In process|
+|Enum_order status.B|Backordered|
+|Enum_order status.S|Shipped|
+|Enum_order status.C|Cancelled|
+
+  </TabItem>
+  <TabItem value="de" label="Resources.de.resx" default>
+
+|Name|Value|Comment|
+|-|-|-|
+|Enum_order status.N|Neu|
+|Enum_order status.I|In Bearbeitung|
+|Enum_order status.B|Nachbestellt|
+|Enum_order status.S|Versendet|
+|Enum_order status.C|Abgesagt|
+
+  </TabItem>
+  <TabItem value="es" label="Resources.es.resx" default>
+
+|Name|Value|Comment|
+|-|-|-|
+|Enum_order status.N|Nuevo|
+|Enum_order status.I|En proceso|
+|Enum_order status.B|Pedido pendiente|
+|Enum_order status.S|Enviado|
+|Enum_order status.C|Cancelado|
+
+  </TabItem>
+</Tabs>
+
+:::tip
+If you define your enumerations in the [Xomega model for static data](../../visual-studio/modeling/static-data), then you can have the default resources generated from it by the [Label Resources generator](../../generators/presentation/common/resources#static-enumerations), which allows you to just hand those off to the translators for localization.
+:::
+
+When the `CurrentUICulture` in your application is set to the local culture, such as `de-DE`, the resource manager constructed from those resources will provide a localized text, which will be used instead of the default `Text` value, as illustrated below.
+
+```cs
+CultureInfo.CurrentUICulture = new CultureInfo("de-DE");
+ResourceManager resMgr = new ResourceManager("MyProject.Resources", GetType().Assembly));
+
+Header hdr = new Header("order status", "N", "New");
+// highlight-next-line
+string s = hdr.ToString(Header.FieldText, resMgr); // "Neu" -> from the resource file
+```
+
+### Localizing dynamic data
+
+When your lookup data is sourced from the database, and can be changed dynamically, then providing localization text in the static resource files may not be a viable option. In this case, you may need to store translations in the same database - either in separate columns for each supported language, or in a child table, if a list of supported languages is not predefined.
+
+In order to provide the header's localization text for each supported language/culture, you need to specify it in additional attributes with special names `lang-<Culture Name>`, e.g. `lang-es`. You can use the two-letter ISO language code for the general translations, but you can also provide overrides for country-specific languages, such as `lang-es-ES`.
+
+:::caution
+Localization texts from the **additional attributes take precedence** over any texts found in the static application resources.
+:::
+
+The following example illustrates how to set the localization attributes for different languages and cultures, and their effect on the displayed strings.
+
+```cs
+Header hdr = new Header("status", "N", "New");
+// highlight-start
+hdr["lang-de"] = "Neu";
+hdr["lang-es"] = "Nuevo";
+hdr["lang-es-ES"] = "Novato";
+// highlight-end
+
+CultureInfo.CurrentUICulture = new CultureInfo("es");
+string s = hdr.ToString(Header.FieldText, null); // "Nuevo"
+
+CultureInfo.CurrentUICulture = new CultureInfo("es-ES");
+s = hdr.ToString(Header.FieldText, null); // "Novato" -> from the country-specific culture
+
+CultureInfo.CurrentUICulture = new CultureInfo("de-DE");
+s = hdr.ToString(Header.FieldText, null); // "Neu" -> from the parent culture
+```
+
+:::note
+If you define your enumerations in the [Xomega model for static data](../../visual-studio/modeling/static-data), then you can also provide localization texts for each item in the [additional properties](../../visual-studio/modeling/static-data#translations-in-item-properties) there, instead of the application resources.
 :::
 
 ## Lookup table
@@ -159,12 +263,15 @@ For example, to look it up by the text you can use the `Header.FieldText` format
 // look up status by Id
 var h = statusTable.LookupById("P"); // In Progress
 
+// use a resource manager to get localized values for the Text
+ResourceManager resMgr = new ResourceManager("MyProject.Resources", GetType().Assembly));
+
 // look up status by text
-h = statusTable.LookupByFormat(Header.FieldText, "Completed");
+h = statusTable.LookupByFormat(Header.FieldText, "Completed", resMgr);
 
 // look up status by a combination of attributes
 string format = $"{Header.FieldId} - {Header.FieldText}";
-h = statusTable.LookupByFormat(format, "O - Open");
+h = statusTable.LookupByFormat(format, "O - Open", resMgr);
 ```
 
 If you look up by a value of an additional attribute, which is not unique for all headers in the lookup table, then you will get just the first header that matches this attribute value. However, you can access other matching headers from a special attribute of the first header, which is `LookupTable.GroupAttrPrefix + format`, where `format` is the format for that attribute, as shown below.
