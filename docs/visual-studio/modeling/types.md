@@ -288,6 +288,45 @@ In the following example the dynamic enumeration `product` is sourced by the `re
   </objects>
 ```
 
+### Custom enumeration
+
+If you store multiple enumerations in a generic set of tables, such as [dictionary tables](static-data#generic-dictionary-tables), and return them all in the same operation using a [dictionary service](static-data#dictionary-service), then your `xfk:enum-cache` specification will not have an `enum-name` attribute, and the name of your enumerations will not be available in the Xomega model.
+
+However, if you define a logical type that you want to associate with such an enumeration, you would normally get a model validation error, if the `ref` attribute doesn't reference a known enumeration. In order to suppress this error, you will need to set the `custom="true"` attribute on that `enum` element, as follows.
+
+```xml
+<type name="error severity" base="integer enumeration">
+<!-- highlight-next-line -->
+  <enum ref="error severity" custom="true"/>
+</type>
+```
+
+:::note
+Alternatively, you can create a custom Xomega Framework [EnumProperty](../../framework/common-ui/properties/enum) associated with your enumeration as follows.
+
+```cs
+public class ScheduleTypeProperty : EnumIntProperty
+{
+    public ScheduleTypeProperty(DataObject parent, string name) : base(parent, name)
+    {
+// highlight-next-line
+        EnumType = "schedule type";
+    }
+}
+```
+
+Then you can just use that custom enum property on your logical type as shown below.
+
+```xml
+<type name="schedule type" base="integer enumeration">
+  <config>
+<!-- highlight-next-line -->
+    <xfk:property class="ScheduleTypeProperty" namespace="MyProject.Client.Common.DataProperties"/>
+  </config>
+</type>
+```
+:::
+
 ### Base enumeration types
 
 In addition to associating an enumeration with a logical type, you would also typically use one of the predefined enumeration types as a base type, in order to inherit the appropriate configurations, which include selection controls for various technologies, Xomega Framework enum properties, etc.
