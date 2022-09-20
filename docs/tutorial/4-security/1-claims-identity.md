@@ -11,15 +11,18 @@ Let's update our model and add some code that would allow us to construct a clai
 We will start by declaring a type for email in the `email_address.xom` file, which we're planning to use as the user ID. We will also use this type on the `email address` field of the `email address` object, instead of a more generic type `name`, as follows.
 
 ```xml title="email_address.xom"
+<!-- added-lines-start -->
 <types>
-<!-- highlight-next-line -->
   <type name="email" base="name"/>
 </types>
+<!-- added-lines-end -->
 ...
   <object name="email address">
     <fields>
       ...
-<!-- highlight-next-line -->
+<!-- removed-next-line -->
+      <field name="email address" type="name">[...]
+<!-- added-next-line -->
       <field name="email address" type="email">[...]
       ...
     </fields>
@@ -32,14 +35,15 @@ Next, we will create an enumeration `person type` with possible values of the pe
 
 ```xml title="person.xom"
 <types>
-<!-- highlight-start -->
+  <type name="person" base="business entity"/>
+<!-- added-lines-start -->
   <type name="person type" base="enumeration" size="2">
     <enum ref="person type"/>
   </type>
-<!-- highlight-end -->
+<!-- added-lines-end -->
 </types>
+<!-- added-lines-start -->
 <enums>
-<!-- highlight-start -->
   <enum name="person type">
     <item name="Store contact" value="SC"/>
     <item name="Individual customer" value="IN"/>
@@ -48,13 +52,15 @@ Next, we will create an enumeration `person type` with possible values of the pe
     <item name="Vendor contact" value="VC"/>
     <item name="General contact" value="GC"/>
   </enum>
-<!-- highlight-end -->
 </enums>
+<!-- added-lines-end -->
 <objects>
   <object name="person">
     <fields>
       ...
-<!-- highlight-next-line -->
+<!-- removed-next-line -->
+      <field name="person type" type="code2" required="true">
+<!-- added-next-line -->
       <field name="person type" type="person type" required="true">
         <config>[...]
         <doc>
@@ -73,6 +79,7 @@ Next, we will create an enumeration `person type` with possible values of the pe
 With that done, let's declare a structure `person info` that will contain all the necessary information for the security claims, as follows.
 
 ```xml title="person.xom"
+<!-- added-lines-start -->
 <structs>
   <struct name="person info" object="person">
     <param name="business entity id"/>
@@ -84,6 +91,7 @@ With that done, let's declare a structure `person info` that will contain all th
     <param name="vendor" type="vendor"/>
   </struct>
 </structs>
+<!-- added-lines-end -->
 ```
 
 ### Read operation for Person Info
@@ -92,6 +100,8 @@ Finally, let's add an operation `read` to the `person` object, which will accept
 
 ```xml title="person.xom"
 <object name="person">
+  <fields>[...]
+<!-- added-lines-start -->
   <operations>
     <operation name="read" type="read">
       <input>
@@ -109,12 +119,13 @@ Finally, let's add an operation `read` to the `person` object, which will accept
       </doc>
     </operation>
   </operations>
+<!-- added-lines-end -->
 </object>
 ```
 
 Given that the structure for this operation is very custom, Xomega will not be able to generate a meaningful default implementation for this method. Instead of trying to inline any custom code into the generated service file like we did before, we will want to just subclass that generated service, and override the entire method in there.
 
-To enable that, we will add a `svc:customize` element to the `config` section of the person object, and will set the `subclass="true"` attribute, as follows.
+To enable that, we will find the `svc:customize` element in the `config` section of the `person` object, and will set the `subclass="true"` attribute, as follows.
 
 ```xml
 <object name="person">
@@ -122,8 +133,10 @@ To enable that, we will add a `svc:customize` element to the `config` section of
   <config>
     <sql:table name="Person.Person"/>
     <edm:customize extend="true"/>
-<!-- highlight-next-line -->
-    <svc:customize subclass="true"/>
+<!-- removed-next-line -->
+    <svc:customize preserve-on-clean="true"/>
+<!-- added-next-line -->
+    <svc:customize preserve-on-clean="true" subclass="true"/>
   </config>
 </object>
 ```
@@ -141,13 +154,15 @@ As usual, after that you want to run the custom tool on the nested `Messages.tt`
 Now let's build the model, and navigate to the generated `PersonService` class. Nested inside that class will be a file for the custom service implementation `PersonServiceCustomized`. Let's go ahead and implement the `ReadAsync` operation there as follows.
 
 ```cs title="PersonServiceCustomized.cs"
+/* added-lines-start */
 using AdventureWorks.Services.Common;
 using Microsoft.EntityFrameworkCore;
+/* added-lines-end */
 ...
 public class PersonServiceCustomized : PersonService
 {
     ...
-// highlight-next-line
+/* added-lines-start */
     public override async Task<Output<PersonInfo>> ReadAsync(string _email, CancellationToken token = default)
     {
         // lookup and return person info
@@ -177,6 +192,7 @@ public class PersonServiceCustomized : PersonService
 
         return new Output<PersonInfo>(currentErrors, person);
     }
+/* added-lines-end */
 }
 ```
 
@@ -191,8 +207,10 @@ Unlike the way we customized service code before, where we extended the partial 
 In order to encapsulate common security related code that can be shared between different types of projects, we will add a new static class called `SecurityManager` to the `AdventureWorks.Services.Common` project, where we will define a method that creates claims identity from a `PersonInfo` structure as follows.
 
 ```cs title="SecurityManager.cs"
+/* added-next-line */
 using System.Security.Claims;
 ...
+/* added-lines-start */
 public static class SecurityManager
 {
 // highlight-start
@@ -221,6 +239,7 @@ public static class SecurityManager
         return ci;
     }
 }
+/* added-lines-end */
 ```
 
 For most of the fields in the `PersonInfo` structure we used standard claim types. For the `person type` we used the `Role` claim type, which is consistent with how we're using it in the first place.
@@ -236,36 +255,34 @@ To simplify any security checks in the code, we can also define some handy exten
 For example, the following methods will allow us to easily check some user roles, while also leveraging constants that were generated from the `person type` enumeration that we defined in the model.
 
 ```cs
-// highlight-next-line    
+/* added-next-line */
 using AdventureWorks.Services.Common.Enumerations;
 using System.Security.Principal;
 ...
 public static class SecurityManager
 {
     ...
-// highlight-next-line    
+/* added-lines-start */
     public static bool IsStoreContact(this IPrincipal principal)
     {
         return principal.IsInRole(PersonType.StoreContact);
     }
 
-// highlight-next-line    
     public static bool IsIndividualCustomer(this IPrincipal principal)
     {
         return principal.IsInRole(PersonType.IndividualCustomer);
     }
 
-// highlight-next-line    
     public static bool IsSalesPerson(this IPrincipal principal)
     {
         return principal.IsInRole(PersonType.SalesPerson);
     }
 
-// highlight-next-line    
     public static bool IsEmployee(this IPrincipal principal)
     {
         return principal.IsSalesPerson() || principal.IsInRole(PersonType.Employee);
     }
+/* added-lines-end */
 }
 ```
 
@@ -274,12 +291,13 @@ public static class SecurityManager
 Here's another example, where we can easily retrieve typed values of the custom claims, such as the store ID associated with the user.
 
 ```cs
+/* added-next-line */
 using System.Linq;
 ...
 public static class SecurityManager
 {
     ...
-// highlight-next-line    
+/* added-lines-start */
     public static int? GetStoreId(this IPrincipal principal)
     {
         Claim storeIdClaim = null;
@@ -289,7 +307,6 @@ public static class SecurityManager
         return null;
     }
 
-// highlight-next-line    
     public static int? GetPersonId(this IPrincipal principal)
     {
         Claim idClaim = null;
@@ -298,6 +315,7 @@ public static class SecurityManager
             return int.Parse(idClaim.Value);
         return null;
     }
+/* added-lines-end */
 }
 ```
 

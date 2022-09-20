@@ -10,9 +10,9 @@ If the service operation for a cache loader takes some parameters, then the gene
 
 ## Generator inputs
 
-To generate cache loaders, the generator uses `read list` operations in the model that have `xfk:enum-cache` element nested inside their `config` element. This element must have an attribute `enum-name` set, with the name that is unique across all enumerations defined in the model.
+To generate cache loaders, the generator uses `read enum` operations in the model that have `xfk:enum-cache` element nested inside their `config` element. This element must have an attribute `enum-name` set, with the name that is unique across all enumerations defined in the model.
 
-It should also specify `id-param` and `desc-param` attributes that indicate which output parameters of the `read list` operation return the ID and Description of the record respectively. The ID is what is stored internally in the system when you select an item from that list, and also what you typically look up the record by. The Description is what is displayed to the user on the screen instead of (or in combination with) the ID.
+It should also specify `id-param` and `desc-param` attributes that indicate which output parameters of the `read enum` operation return the ID and Description of the record respectively. The ID is what is stored internally in the system when you select an item from that list, and also what you typically look up the record by. The Description is what is displayed to the user on the screen instead of (or in combination with) the ID.
 
 Any other output parameters will be stored as additional named attributes of the cached record.
 
@@ -25,7 +25,7 @@ The following example shows a configuration of the cache loader that reads a lis
 ```xml
 <object name="sales territory">
   <operations>
-    <operation name="read list" type="readlist">
+    <operation name="read enum">
       <output list="true">
         <param name="territory id"/>
         <param name="name"/>
@@ -44,14 +44,14 @@ The following example shows a configuration of the cache loader that reads a lis
 
 ### Contextual Loaders
 
-If the `read list` operation of the cache loader takes any input parameters, then the list of values for the cache will depend on the value(s) of the input parameters in each particular context.
+If the `read enum` operation of the cache loader takes any input parameters, then the list of values for the cache will depend on the value(s) of the input parameters in each particular context.
 
 The following example shows a `special offer product` cache loader, which loads all special offers for a specific product.
 
 ```xml
 <object name="special offer product">
   <operations>
-    <operation name="read list" type="readlist">
+    <operation name="read enum">
       <input>
 <!-- highlight-next-line -->
         <param name="product id" type="product" required="true"/>
@@ -73,7 +73,7 @@ The following example shows a `special offer product` cache loader, which loads 
 </object>
 ```
 
-The generated class will extend the `LocalCacheLoader` base class from Xomega Framework, and you will need to make sure that the input parameters for the `read list` operation are set for the current context before the cache is loaded.
+The generated class will extend the `LocalCacheLoader` base class from Xomega Framework, and you will need to make sure that the input parameters for the `read enum` operation are set for the current context before the cache is loaded.
 
 You can either
 - manually subscribe to the changes of the input parameters, and then call the `SetParameters` method of the generated cache loader directly with the new values,
@@ -142,7 +142,7 @@ The sections below provide some details on how to work with the generator.
 
 You can run this generator either for the entire model, or for individual files by selecting them in the model project, and running the generator from the context menu.
 
-You can rerun the generator when you add or change the `xfk:enum-cache` configuration of `read list` operations, or if you change any parameters on those operations. Normally, the latter will require re-running other generators that depend on the same model elements, such as generators of UI views, data objects, service and data contracts or the service implementations.
+You can rerun the generator when you add or change the `xfk:enum-cache` configuration of `read enum` operations, or if you change any parameters on those operations. Normally, the latter will require re-running other generators that depend on the same model elements, such as generators of UI views, data objects, service and data contracts or the service implementations.
 
 :::note
 Therefore, this generator should be included in the build of the model project in the configuration, in order to allow to easily regenerate all cache loaders along with other artifacts.

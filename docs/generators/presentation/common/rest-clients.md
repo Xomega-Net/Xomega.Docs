@@ -74,7 +74,7 @@ Whether the REST method is missing or not supported, the generated REST service 
 :::
 
 :::note
-This REST configuration for standard CRUD and Read List operations can be added automatically to the model by a special [model enhancement CRUD generator](../../model/crud.md) with the *Generate Rest Methods* parameter set to true.
+This REST configuration for standard CRUD, `read list` and `read enum` operations can be added automatically to the model by a special [model enhancement CRUD generator](../../model/crud.md) with the *Generate Rest Methods* parameter set to true.
 :::
 
 ## Generator outputs

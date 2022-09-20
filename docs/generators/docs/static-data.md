@@ -109,7 +109,7 @@ You can run this generator for the entire model only. For that you need to selec
 After you generate the document, you need to open it and refresh all fields there, such as the table of contents, by selecting all text (Ctrl+A) and pressing F9.
 :::
 
-You can rerun the generator when you add or change enumeration items or properties, or the `xfk:enum-cache` configuration of `read list` operations, or if you change any parameters on those operations.
+You can rerun the generator when you add or change enumeration items or properties, or the `xfk:enum-cache` configuration of `read enum` operations, or if you change any parameters on those operations.
 
 :::tip
 Normally, you need to run it initially, during the design of the system, and then as needed, to generate up-to-date documentation. You don't need to include this generator into the model build process.

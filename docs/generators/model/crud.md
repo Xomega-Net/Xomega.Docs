@@ -162,9 +162,13 @@ The following snippet illustrates such a view setup.
 
 ### Dynamic Enumeration
 
-For objects that represent static data that is stored in the database, but can be cached on the client, it makes sense to add a `read list` operation not so much for a search view, but rather to allow the client to read and cache that static data.
+For objects that represent static data that is stored in the database, but can be cached on the client, it makes sense to add a `read enum` operation to allow the client to read and cache that static data.
 
-This is done by specifying the *Add Read List Enumeration* generator parameter, which will decorate the `read list` operation with a dynamic enumeration specification that tells the Xomega Framework which output parameter is an internal Id, and which one should be used as a user-facing description.
+This is done by specifying the *Generate Read Enum* and/or *Generate Subobject Read Enum* generator parameters, which will add a `read enum` operation decorated with a dynamic enumeration specification that tells the Xomega Framework which output parameter is an internal Id, and which one should be used as a user-facing description.
+
+:::caution
+If the generator cannot find a proper object field to use as the Id or a description, then it will just add those as output parameters, and you'll need to manually provide custom code in the services for those parameters, in order to return proper values.
+:::
 
 You can also set the *Make Key Type Enumerated* parameter to update the key type for the object, and link it to the new enumeration, which would provide a selection control for any field that is using that type, as illustrated below.
 
@@ -178,10 +182,12 @@ You can also set the *Make Key Type Enumerated* parameter to update the key type
 <objects>
   <object name="sales territory">
     <operations>
-      <operation name="read list" type="readlist">
+      <operation name="read enum">
         <output list="true">
+<!-- highlight-start -->
           <param name="territory id"/>
           <param name="name"/>
+<!-- highlight-end -->
           <param name="country region code"/>
           <param name="group"/>
         </output>
@@ -210,15 +216,21 @@ The following table lists configuration parameters that are set as the generator
 |Generator Name|Full CRUD with Views|The name of the current configuration of the generator that will appear in the model project and the build output.|
 |Folder Name|Model Enhancement|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
 |Include In Build|False|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Operations**|
+|**Operations CRUD**|
 |Generate CRUD|True|Whether to generate `Create`, `Read`, `Update` and `Delete` operations.|
+|Generate Subobject CRUD|True|Whether to generate `Create`, `Read`, `Update` and `Delete` operations on sub-objects.|
+|Use Yes/No Substitution|True|Whether to substitute `boolean` type with `yesno` type for non-required parameters of CRUD operations.|
+|**Operation Read List**|
 |Generate Read List|True|Whether to generate `Read List` operation.|
 |Generate Read List Criteria|True|Whether to generate criteria for `Read List` operation.|
 |Generate Read List Operators|True|Whether to generate operators for search criteria.|
-|Generate Subobject CRUD|True|Whether to generate `Create`, `Read`, `Update` and `Delete` operations on sub-objects.|
 |Generate Subobject Read List|True|Whether to generate `Read List` operation on sub-objects.|
+|**Operation Read Enum**|
+|Generate Read Enum|False|Whether to generate `Read Enum` operation.|
+|Generate Subobject Read Enum|False|Whether to generate `Read Enum` operation on sub-objects.|
+|Make Key Type Enumerated|False|Whether to update the key type to reference generated enumeration.|
+|**Rest API**|
 |Generate Rest Methods|True|Whether to generate REST API methods on operations.|
-|Use Yes/No Substitution|True|Whether to substitute `boolean` type with `yesno` type for non-required parameters of CRUD operations.|
 |**Data&nbsp;Objects**|
 |Generate Data Objects|True|Whether to generate Xomega.Framework Data Object definitions for operations.|
 |Generate Links|True|Whether to generate links to corresponding details views on list objects.|
@@ -227,10 +239,6 @@ The following table lists configuration parameters that are set as the generator
 |Generate Search View|True|Whether to generate a search view for list objects.|
 |Generate Details View|True|Whether to generate a details view for CRUD objects.|
 |View Name Postfix|View|Postfix to use for view names.|
-|**Enumeration**|
-|Add Read List Enumeration|False|Whether to add enumeration definition to the Read List operation.|
-|Make Key Type Enumerated|False|Whether to update the key type to reference generated enumeration.|
-|Add Suggest Type|False|Whether to add a separate type linked to the generated enumeration to suggest values, which also accepts other values.|
 
 ### Model configuration
 
@@ -248,9 +256,9 @@ This is a default 'all inclusive' configuration with the values as described abo
 
 If you only need a Search view to browse or look up the objects without editing their details, you can configure this generator to add just the `read list` operation, data objects without links, and a Search View, without selecting the CRUD operations or a Details View.
 
-#### Enumeration Read List
+#### Read Enum Operation
 
-For objects that contain static data that can be cached, you may not even need a search view, but rather a `read list` operation to provide data for the cached enumeration. To configure this, you can select the option to add a `read list` operation, and to decorate it with an enumeration specification. You can also configure it to update the key type of the object to link it to this enumeration, and thereby provide a selection control wherever it is being used on the UI.
+For objects that contain static data that can be cached, you may not even need a search view, but rather a `read enum` operation to provide data for the cached enumeration. To configure this, you can select the option to add a `read enum` operation with an enumeration specification to the aggregate object and/or to its subobjects. You can also configure it to update the key type of the object to link it to this enumeration, and thereby provide a selection control wherever it is being used on the UI.
 
 ## How to use the generator
 

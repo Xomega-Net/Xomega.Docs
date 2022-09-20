@@ -18,21 +18,25 @@ Let's update our model, so that these fields would be displayed in the *Payment*
 
 Before we do that though, we can quickly turn the *Shipment Method* into a dynamic enumeration to allow selecting it from a list of possible shipping methods.
 
-As usual, we will run the *Enumeration Read List* generator on the `ship_method.xom` file, and update the output of the generated `read list` operation to return only the `ship method id` and `name`, as shown below.
+As usual, we will run the *Read Enum Operation* generator on the `ship_method.xom` file, and then we'll update the output of the generated `read enum` operation to return only the `ship method id` and `name`, as shown below.
 
 ```xml title="ship_method.xom"
   <object name="ship method">
       ...
-      <operation name="read list" type="readlist">
+      <operation name="read enum">
         <output list="true">
-          <!-- highlight-start -->
           <param name="ship method id"/>
           <param name="name"/>
-          <!-- highlight-end -->
+<!-- removed-lines-start -->
+          <param name="ship base"/>
+          <param name="ship rate"/>
+          <param name="rowguid"/>
+          <param name="modified date"/>
+<!-- removed-lines-end -->
         </output>
         <config>
-          <rest:method verb="GET" uri-template="ship-method"/>
-          <!-- highlight-next-line -->
+          <rest:method verb="GET" uri-template="ship-method/enum"/>
+<!-- highlight-next-line -->
           <xfk:enum-cache enum-name="ship method" id-param="ship method id" desc-param="name"/>
         </config>
       </operation>
@@ -52,13 +56,13 @@ We will start by declaring a new `xfk:data-object` in the `sales_order.xom` with
   <xfk:data-objects>
     <xfk:data-object class="SalesOrderObject">
       <xfk:add-child name="detail" class="SalesOrderDetailList"/>
-      <!-- highlight-next-line -->
+<!-- added-next-line -->
       <xfk:add-child name="payment" class="SalesOrderPaymentObject"/>
       <xfk:add-child name="reason" class="SalesOrderReasonList"/>
       <ui:display>[...]
     </xfk:data-object>
     ...
-    <!-- highlight-next-line -->
+<!-- added-next-line -->
     <xfk:data-object class="SalesOrderPaymentObject"/>
     <xfk:data-object class="SalesOrderReasonObject">[...]
     ...
@@ -79,26 +83,27 @@ Again, since it has all parameters for our data object, and goes first in the mo
 
 ```xml
   <enums>[...]
+<!-- added-lines-start -->
   <structs>
-    <!-- highlight-next-line -->
     <struct name="payment info" object="sales order">
       <param name="sub total"/>
       <param name="ship method id"/>
       <param name="tax amt"/>
       <param name="freight"/>
       <param name="total due"/>
-      <!-- highlight-next-line -->
+<!-- highlight-start -->
       <param name="due date" type="date"/>
-      <!-- highlight-next-line -->
       <param name="currency rate" type="string"/>
+<!-- highlight-end -->
       <param name="credit card id"/>
       <param name="credit card approval code"/>
       <config>
-        <!-- highlight-next-line -->
+<!-- highlight-next-line -->
         <xfk:add-to-object class="SalesOrderPaymentObject"/>
       </config>
     </struct>
   </structs>
+<!-- added-lines-end -->
   <objects>[...]
 ```
 
@@ -113,18 +118,19 @@ The second structure, `payment update`, will represent a smaller subset of the f
 ```xml
   <structs>
     <struct name="payment info" object="sales order">[...]
-    <!-- highlight-next-line -->
+<!-- added-lines-start -->
     <struct name="payment update" object="sales order">
       <param name="ship method id"/>
-      <!-- highlight-next-line -->
+<!-- highlight-next-line -->
       <param name="due date" type="date"/>
       <param name="credit card id"/>
       <param name="credit card approval code"/>
       <config>
-        <!-- highlight-next-line -->
+<!-- highlight-next-line -->
         <xfk:add-to-object class="SalesOrderPaymentObject"/>
       </config>
     </struct>
+<!-- added-lines-end -->
   </structs>
 ```
 
@@ -138,13 +144,14 @@ Now that we have defined structures for our `SalesOrderPaymentObject`, and there
 
 ```xml
     <xfk:data-object class="SalesOrderPaymentObject">
+<!-- added-lines-start -->
       <ui:display>
         <ui:fields>
-          <!-- highlight-next-line -->
           <ui:field param="ship method id" label="Shipment Method"/>
         </ui:fields>
       </ui:display>
     </xfk:data-object>
+<!-- added-lines-end -->
 ```
 
 ## Refactoring CRUD operations
@@ -296,7 +303,7 @@ The easiest way to do it is to set the `extend="true"` attribute on the `svc:cus
       <operations>[...]
       <config>
         <sql:table name="Sales.SalesOrderHeader"/>
-        <!-- highlight-next-line -->
+<!-- highlight-next-line -->
         <svc:customize extend="true" preserve-on-clean="true"/>
       </config>
       ...
@@ -318,7 +325,7 @@ You can manually add a `CurrencyRateExtended.cs` class next to that entity, or s
       <fields>[...]
       <config>
         <sql:table name="Sales.CurrencyRate"/>
-        <!-- highlight-next-line -->
+<!-- added-next-line -->
         <edm:customize extend="true"/>
       </config>
       ...
@@ -334,7 +341,7 @@ So let's go ahead and add a new property to our entity with the rate display str
 ```cs title="CurrencyRateExtended.cs"
     public partial class CurrencyRate
     {
-        // highlight-next-line
+/* added-next-line */
         public string RateString => $"$1 = {EndOfDayRate} {ToCurrencyCodeObject.CurrencyCode}";
     }
 ```
@@ -346,7 +353,8 @@ Next let's open up the `SalesOrderServiceExtended.cs` file that we created earli
 ```cs title="SalesOrderServiceExtended.cs"
     public partial class SalesOrderService
     {
-        protected PaymentInfo GetPaymentInfo(SalesOrder obj) => new PaymentInfo()
+/* added-lines-start */
+        protected static PaymentInfo GetPaymentInfo(SalesOrder obj) => new()
         {
             DueDate = obj.DueDate,
             SubTotal = obj.SubTotal,
@@ -359,6 +367,7 @@ Next let's open up the `SalesOrderServiceExtended.cs` file that we created earli
             // highlight-next-line
             CurrencyRate = obj.CurrencyRateObject?.RateString
         };
+/* added-lines-end */
     }
 ```
 
@@ -378,7 +387,9 @@ After that you can go ahead and update the custom code for the `Payment` output 
             SalesOrder obj = await ctx.FindEntityAsync<SalesOrder>(currentErrors, token, _salesOrderId);
             ServiceUtil.CopyProperties(obj, res);
             // CUSTOM_CODE_START: populate the Payment output structure of Read operation below
-            // highlight-next-line
+/* removed-next-line */
+            // TODO: res.Payment = ???; // CUSTOM_CODE_END
+/* added-next-line */
             res.Payment = GetPaymentInfo(obj); // CUSTOM_CODE_END
             ...
         }
@@ -389,9 +400,11 @@ After that you can go ahead and update the custom code for the `Payment` output 
 
 In the custom Update method for the payment input structure, we'll want to validate that the provided `Payment` structure parameter is not null, and report an error otherwise. We will add a localizable message for this error to the `Resources.resx` file in the `AdventureWorks.Services.Entities` project, as follows. 
 
-![Validation message](img3/validation-message.png)
+|Name|Value|Comment|
+|-|-|-|
+|PaymentRequired|Payment information is required for order {0}.|{0}=Order ID|
 
-Then we will run the custom tool on the `Messages.tt` T4 template file nested under it to generate the constants, similar to how we did it for the UI validation messages earlier.
+Then we will run the custom tool on the [`Messages.tt`](../../framework/services/errors#message-constants-generator) T4 template file nested under it to generate the constants, similar to how we did it for the [UI validation messages](../search/ui-validation#generating-message-constants) earlier.
 
 Next, we will add a reusable method `UpdatePayment`, which takes input data as a `PaymentUpdate` structure, and updates the `SalesOrder` object provided within the specified context. This method can accept both new and existing `SalesOrder` objects, and therefore can be used from both `create` and `update` operations. The snippet below shows what it would look like.
 
@@ -399,6 +412,7 @@ Next, we will add a reusable method `UpdatePayment`, which takes input data as a
 public partial class SalesOrderService
 {
     ...
+/* added-lines-start */
     protected async Task UpdatePayment(SalesOrder obj, PaymentUpdate pmt, CancellationToken token)
     {
         if (pmt == null)
@@ -412,6 +426,7 @@ public partial class SalesOrderService
         obj.CreditCardApprovalCode = pmt.CreditCardApprovalCode;
         obj.CreditCardObject = await ctx.FindEntityAsync<CreditCard>(currentErrors, token, pmt.CreditCardId);
     }
+/* added-lines-end */
 }
 ```
 
@@ -429,7 +444,9 @@ public partial class SalesOrderService : BaseService, ISalesOrderService
     {
         ...
         // CUSTOM_CODE_START: use the Payment input parameter of Create operation below
-        // highlight-next-line
+/* removed-next-line */
+        // TODO: ??? = _data.Payment; // CUSTOM_CODE_END
+/* added-next-line */
         await UpdatePayment(obj, _data.Payment, token); // CUSTOM_CODE_END
         ...
     }
@@ -439,7 +456,9 @@ public partial class SalesOrderService : BaseService, ISalesOrderService
     {
         ...
         // CUSTOM_CODE_START: use the Payment input parameter of Update operation below
-        // highlight-next-line
+/* removed-next-line */
+        // TODO: ??? = _data.Payment; // CUSTOM_CODE_END
+/* added-next-line */
         await UpdatePayment(obj, _data.Payment, token); // CUSTOM_CODE_END
         ...
     }

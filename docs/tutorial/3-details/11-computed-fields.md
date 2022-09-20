@@ -4,7 +4,7 @@ sidebar_position: 12
 
 # 3.11 Computed fields
 
-In the beginning of this chapter we have updated the list of line items for a sales order to show the relevant information.
+In the beginning of this chapter we have [updated the list of line items](child-list) for a sales order to show the relevant information.
 
 In this section we will add ability to edit line items via a child view using some techniques that we have already learned before, and some new Xomega Framework methods for working with computed fields.
 
@@ -32,7 +32,7 @@ Let's start by updating the CRUD operations for the `details` sub-object of the 
 
 ### Configuring the Read operation
 
-We'll start by making the `read` operation return additional `sales order number` and `subcategory`, as follows.
+We'll start by making the `read` operation return additional output parameters `sales order number` and `subcategory`, and will remove the `rowguid` and `modified date` parameters. In order to set up a proper order of fields on the screen when displayed in two columns, we will also **reorder** some of the **remaining parameters**, as illustrated below.
 
 ```xml title="sales_order.xom"
     <object name="sales order">
@@ -46,17 +46,29 @@ We'll start by making the `read` operation return additional `sales order number
               <input>[...]
               <output>
                 <param name="sales order id" type="sales order header" required="true"/>
-<!-- highlight-start -->
+<!-- added-lines-start -->
                 <param name="sales order number" type="sales order number"/>
                 <param name="subcategory" type="product subcategory"/>
-<!-- highlight-end -->
                 <param name="product id" type="product" required="true"/>
+<!-- added-lines-end -->
+<!-- removed-next-line -->
+                <param name="carrier tracking number"/>
                 <param name="order qty"/>
+<!-- removed-next-line -->
+                <param name="special offer id" type="special offer" required="true"/>
                 <param name="unit price"/>
+<!-- added-next-line -->
                 <param name="special offer id" type="special offer" required="true"/>
                 <param name="unit price discount"/>
+<!-- removed-next-line -->
+                <param name="product id" type="product" required="true"/>
+<!-- added-next-line -->
                 <param name="carrier tracking number"/>
                 <param name="line total"/>
+<!-- removed-lines-start -->
+                <param name="rowguid"/>
+                <param name="modified date"/>
+<!-- removed-lines-end -->
                 <config>
                   <xfk:add-to-object class="SalesOrderDetailObject"/>
                 </config>
@@ -80,12 +92,17 @@ So we will remove any computed values from both the `create` and `update` operat
       <input>
         <param name="sales order id" type="sales order header" required="true"/>
         <struct name="data">
-<!-- highlight-start -->
-          <param name="product id" type="product" required="true"/>
+          <param name="carrier tracking number"/>
           <param name="order qty"/>
           <param name="special offer id" type="special offer" required="true"/>
-          <param name="carrier tracking number"/>
-<!-- highlight-end -->
+          <param name="product id" type="product" required="true"/>
+<!-- removed-lines-start -->
+          <param name="unit price"/>
+          <param name="unit price discount"/>
+          <param name="line total"/>
+          <param name="rowguid"/>
+          <param name="modified date"/>
+<!-- removed-lines-end -->
           <config>[...]
         </struct>
         <config>[...]
@@ -97,12 +114,17 @@ So we will remove any computed values from both the `create` and `update` operat
       <input>
         <param name="sales order detail id"/>
         <struct name="data">
-<!-- highlight-start -->
-          <param name="product id" type="product" required="true"/>
+          <param name="carrier tracking number"/>
           <param name="order qty"/>
           <param name="special offer id" type="special offer" required="true"/>
-          <param name="carrier tracking number"/>
-<!-- highlight-end -->
+          <param name="product id" type="product" required="true"/>
+<!-- removed-lines-start -->
+          <param name="unit price"/>
+          <param name="unit price discount"/>
+          <param name="line total"/>
+          <param name="rowguid"/>
+          <param name="modified date"/>
+<!-- removed-lines-end -->
           <config>[...]
         </struct>
         <config>[...]
@@ -128,10 +150,14 @@ public partial class SalesOrderService : BaseService, ISalesOrderService
     {
         ...
         // CUSTOM_CODE_START: set the SalesOrderNumber output field of Detail_Read operation below
-// highlight-next-line
+/* removed-next-line */
+        // TODO: res.SalesOrderNumber = ???; // CUSTOM_CODE_END
+/* added-next-line */
         res.SalesOrderNumber = obj.SalesOrderObject.SalesOrderNumber; // CUSTOM_CODE_END
         // CUSTOM_CODE_START: set the Subcategory output field of Detail_Read operation below
-// highlight-next-line
+/* removed-next-line */
+        // TODO: res.Subcategory = ???; // CUSTOM_CODE_END
+/* added-next-line */
         res.Subcategory = obj.SpecialOfferProductObject.ProductObject.ProductSubcategoryId; // CUSTOM_CODE_END
         ...
     }
@@ -146,7 +172,7 @@ To make reusable custom code for both the `create` and `update` operations, let'
 public partial class SalesOrderService
 {
     ...
-// highlight-next-line
+/* added-lines-start */
     protected void UpdateOrderDetail(SalesOrderDetail obj)
     {
         currentErrors.AbortIfHasErrors(); // prevent invalid data
@@ -159,6 +185,7 @@ public partial class SalesOrderService
         if (obj.Rowguid == default)
             obj.Rowguid = Guid.NewGuid();
     }
+/* added-lines-end */
 }
 ```
 
@@ -175,7 +202,7 @@ public partial class SalesOrderService : BaseService, ISalesOrderService
     {
         ...
         // CUSTOM_CODE_START: add custom code for Detail_Create operation below
-// highlight-next-line
+/* added-next-line */
         UpdateOrderDetail(obj);
         // CUSTOM_CODE_END
         ...
@@ -187,7 +214,7 @@ public partial class SalesOrderService : BaseService, ISalesOrderService
     {
         ...
         // CUSTOM_CODE_START: add custom code for Detail_Update operation below
-// highlight-next-line
+/* added-next-line */
         UpdateOrderDetail(obj);
         // CUSTOM_CODE_END
         ...
@@ -201,26 +228,29 @@ Before we move to update the UI, let's first configure some dynamic enumerations
 
 ### Adding Subcategory enumeration
 
-To allow selection of a subcategory, we will run the *Enumeration Read List* model enhancement generator on the `product_subcategory.xom` file, and will update the output of the generated `read list` operation, as follows.
+To allow selection of a subcategory, we will configure the *Read Enum Operation* generator to set the *Generate Read Enum* parameter back to `True`, and then will run that generator on the `product_subcategory.xom` file. In the generated `read enum` operation, we will remove the `rowguid` and `modified date` output parameters as follows.
 
 ```xml title="product_subcategory.xom"
 <object name="product subcategory">
   ...
-  <operation name="read list" type="readlist">
+  <operation name="read enum">
     <output list="true">
-<!-- highlight-start -->
       <param name="product subcategory id"/>
       <param name="product category id"/>
       <param name="name"/>
-<!-- highlight-end -->
+<!-- removed-lines-start -->
+      <param name="rowguid"/>
+      <param name="modified date"/>
+<!-- removed-lines-end -->
     </output>
     <config>
-      <rest:method verb="GET" uri-template="product-subcategory"/>
+      <rest:method verb="GET" uri-template="product-subcategory/enum"/>
 <!-- highlight-start -->
       <xfk:enum-cache enum-name="product subcategory" id-param="product subcategory id"
                       desc-param="name"/>
 <!-- highlight-end -->
     </config>
+    <doc>[...]
   </operation>
   ...
 </object>
@@ -228,22 +258,19 @@ To allow selection of a subcategory, we will run the *Enumeration Read List* mod
 
 ### Updating Product enumeration
 
-To enable cascading selection of the product off of the selected subcategory, you need to make sure that the `product` enumeration, which we added earlier, has the `product subcategory id` in the output of the `read list` operation.
-
-Also, since we need to populate the unit price when selecting a product, we'll need to add the `list price` parameter to the output, as follows.
+Since we need to populate the unit price when selecting a product, we need to make sure that the `product` enumeration that we [added earlier](child-list#product-enumeration), has a `list price` in the output of the `read enum` operation. So let's go ahead and add it, as follows.
 
 ```xml title="product.xom"
 <object name="product">
   ...
-  <operation name="read list" type="readlist">
+  <operation name="read enum">
     <output list="true">
       <param name="product id"/>
       <param name="name"/>
       <param name="is active" type="boolean" required="true"/>
-<!-- highlight-next-line -->
       <param name="product subcategory id"/>
       <param name="product model id"/>
-<!-- highlight-next-line -->
+<!-- added-next-line -->
       <param name="list price"/>
     </output>
     <config>[...]
@@ -254,77 +281,101 @@ Also, since we need to populate the unit price when selecting a product, we'll n
 
 ### Special Offer Product enumeration
 
-In order to update a list of special offers for the selected product, we will create a contextual enumeration that returns special offers for a single product.
+In order to update a list of special offers for the selected product, we will create a contextual enumeration that returns special offers for a single product. Let's run the *Read Enum Operation* generator on the `special_offer_product.xom` file, add `product id` as an `input` parameter of the generated `read enum` operation.
 
-Similar to what we did in the previous sections, we'll run the *Enumeration Read List* generator on the `special_offer_product.xom` file, and then will move the `product id` from the `output` to the `input` of the generated `read list` operation.
-
-We will also need to set up the `xfk:enum-cache` element, and add output parameters that we'll need for our computed fields, such as  `discount`, as shown below.
+We will also add some output parameters that we'll need from the special offer for our calculated fields, remove some default output parameters, and update the `rest:method` and `xfk:enum-cache` elements accordingly, as shown below.
 
 ```xml title="special_offer_product.xom"
 <object name="special offer product">
   ...
-  <operation name="read list" type="readlist">
+  <operation name="read enum">
+<!-- added-lines-start -->
     <input>
-<!-- highlight-next-line -->
       <param name="product id" type="product" required="true"/>
     </input>
+<!-- added-lines-end -->
     <output list="true">
+<!-- added-next-line -->
       <param name="special offer id" type="special offer" required="true"/>
-<!-- highlight-start -->
+<!-- removed-next-line -->
+      <param name="id" type="string"/>
       <param name="description" type="string"/>
+<!-- removed-lines-start -->
+      <param name="rowguid"/>
+      <param name="modified date"/>
+<!-- removed-lines-end -->
+<!-- added-lines-start -->
       <param name="discount" type="percent"/>
       <param name="min qty" type="integer"/>
       <param name="max qty" type="integer"/>
       <param name="active" type="boolean"/>
-<!-- highlight-end -->
+<!-- added-lines-end -->
     </output>
     <config>
+<!-- removed-next-line -->
+      <rest:method verb="GET" uri-template="special-offer-product/enum"/>
+<!-- added-next-line -->
       <rest:method verb="GET" uri-template="product/{product id}/special-offer"/>
-<!-- highlight-start -->
+<!-- removed-next-line -->
+      <xfk:enum-cache enum-name="special offer product" id-param="id" desc-param="description"/>
+<!-- added-lines-start -->
       <xfk:enum-cache enum-name="special offer product" id-param="special offer id"
                       desc-param="description" is-active-param="active"/>
-<!-- highlight-end -->
+<!-- added-lines-end -->
     </config>
+    <doc>[...]
   </operation>
   ...
 </object>
 ```
 
 :::note
-Since most of the output parameters are fields of a different object (`special offer`), we have to qualify them with a `type`.
+Normally, we would turn the `special offer product` object into a `product` subobject of the `special offer` object, similar to [what we did before](context-selection#person-credit-card-subobject) with the `person credit card` object. In this case the above operation would be on the `special offer` object, and would look slightly different.
+
+However, the problem is that the `special offer product` object is referenced directly by the `detail` subobject of the `sales order` object. Domain Driven Design principles do not allow referencing subobjects from outside of their aggregate object, and there is no way to set up such a reference in the Xomega model either.
 :::
 
 ### Custom service implementation
 
 With these model updates, let's build the *Model* project to generate the services. We don't need to provide any custom code for the `Subcategory` and `Product` enumerations, since they only return fields from the corresponding object.
 
- We just need to provide custom code for all unknown output parameters in the generated `ReadListAsync` method of the `SpecialOfferProductService`, as follows.
+ We just need to provide custom code for all unknown output parameters in the generated `ReadEnumAsync` method of the `SpecialOfferProductService`, as follows.
 
 ```cs title="SpecialOfferProductService.cs"
 public partial class SpecialOfferProductService : BaseService, ISpecialOfferProductService
 {
     ...
-    public virtual async Task<Output<ICollection<SpecialOfferProduct_ReadListOutput>>> ReadListAsync(
-      int _productId, CancellationToken token = default)
+    public virtual async Task<Output<ICollection<SpecialOfferProduct_ReadEnumOutput>>>
+        ReadEnumAsync(int _productId, CancellationToken token = default)
     {
         ...
         var qry = from obj in src
-                  select new SpecialOfferProduct_ReadListOutput() {
+                  select new SpecialOfferProduct_ReadEnumOutput() {
                       SpecialOfferId = obj.SpecialOfferId,
-                      // CUSTOM_CODE_START: set the Description output parameter of ReadList operation below
-// highlight-next-line
+                      // CUSTOM_CODE_START: set the Description output parameter of ReadEnum operation below
+/* removed-next-line */
+                      // TODO: Description = obj.???, // CUSTOM_CODE_END
+/* added-next-line */
                       Description = obj.SpecialOfferObject.Description, // CUSTOM_CODE_END
-                      // CUSTOM_CODE_START: set the Discount output parameter of ReadList operation below
-// highlight-next-line
+                      // CUSTOM_CODE_START: set the Discount output parameter of ReadEnum operation below
+/* removed-next-line */
+                      // TODO: Discount = obj.???, // CUSTOM_CODE_END
+/* added-next-line */
                       Discount = obj.SpecialOfferObject.DiscountPct, // CUSTOM_CODE_END
-                      // CUSTOM_CODE_START: set the MinQty output parameter of ReadList operation below
-// highlight-next-line
+                      // CUSTOM_CODE_START: set the MinQty output parameter of ReadEnum operation below
+/* removed-next-line */
+                      // TODO: MinQty = obj.???, // CUSTOM_CODE_END
+/* added-next-line */
                       MinQty = obj.SpecialOfferObject.MinQty, // CUSTOM_CODE_END
-                      // CUSTOM_CODE_START: set the MaxQty output parameter of ReadList operation below
-// highlight-next-line
+                      // CUSTOM_CODE_START: set the MaxQty output parameter of ReadEnum operation below
+/* removed-next-line */
+                      // TODO: MaxQty = obj.???, // CUSTOM_CODE_END
+/* added-next-line */
                       MaxQty = obj.SpecialOfferObject.MaxQty, // CUSTOM_CODE_END
-                      // CUSTOM_CODE_START: set the Active output parameter of ReadList operation below
-// highlight-next-line
+                      // CUSTOM_CODE_START: set the Active output parameter of ReadEnum operation below
+/* removed-next-line */
+                      // TODO: Active = obj.???, // CUSTOM_CODE_END
+/* added-next-line */
                       Active = true, // CUSTOM_CODE_END
                   };
         ...
@@ -366,7 +417,7 @@ We have added the `sales order number` to the `read` operation, so it should be 
     <ui:params>
       <ui:param name="_action" value="create"/>
       <ui:param name="sales order id" field="sales order id" data-object=".."/>
-<!-- highlight-next-line -->
+<!-- added-next-line -->
       <ui:param name="sales order number" field="sales order number" data-object=".."/>
     </ui:params>
   </ui:link>
@@ -379,7 +430,7 @@ Now we need to build the *Model* again, and add an override for the `BaseTitle` 
 public class SalesOrderDetailViewModelCustomized : SalesOrderDetailViewModel
 {
     ...
-// highlight-next-line
+/* added-next-line */
     public override string BaseTitle => GetString("View_Title", MainObj.SalesOrderNumberProperty.Value);
 }
 ```
@@ -396,16 +447,18 @@ We will also lay out the fields in two columns by setting `field-cols="2"` here,
 <!-- highlight-next-line -->
     <xfk:data-object class="SalesOrderDetailObject" customize="true">
       <ui:display>
-<!-- highlight-next-line -->
+<!-- removed-next-line -->
+        <ui:fields>
+<!-- added-next-line -->
         <ui:fields field-cols="2">
           <ui:field param="sales order detail id" hidden="true"/>
-<!-- highlight-start -->
+<!-- added-lines-start -->
           <ui:field param="sales order id" hidden="true"/>
           <ui:field param="sales order number" hidden="true"/>
           <ui:field param="subcategory" editable="true"/>
           <ui:field param="product id" label="Product"/>
           <ui:field param="special offer id" label="Special Offer"/>
-<!-- highlight-end -->
+<!-- added-lines-end -->
         </ui:fields>
       </ui:display>
     </xfk:data-object>
@@ -418,8 +471,10 @@ Let's build the *Model* project one more time, and open the generated `SalesOrde
 To configure contextual selection of the special offer based on the selected product, we'll set up a `LocalCacheLoader` using a class generated from our contextual enumeration, and then we will call `SetCacheLoaderParameters` to provide a source property for the `ProductId` parameter of the cache loader, as shown below.
 
 ```cs title="SalesOrderDetailObjectCustomized.cs"
+/* added-lines-start */
 using AdventureWorks.Services.Common;
 using AdventureWorks.Services.Common.Enumerations;
+/* added-lines-end */
 ...
 public class SalesOrderDetailObjectCustomized : SalesOrderDetailObject
 {
@@ -429,15 +484,15 @@ public class SalesOrderDetailObjectCustomized : SalesOrderDetailObject
     {
         base.OnInitialized();
 
-// highlight-start
+/* added-lines-start */
         ProductIdProperty.SetCascadingProperty(Product.Attributes.ProductSubcategoryId, SubcategoryProperty);
         // configure blank subcategory to display products with no categories
         ProductIdProperty.CascadingMatchNulls = true;
 
-        SpecialOfferIdProperty.LocalCacheLoader = new SpecialOfferProductReadListCacheLoader(ServiceProvider);
+        SpecialOfferIdProperty.LocalCacheLoader = new SpecialOfferProductReadEnumCacheLoader(ServiceProvider);
         SpecialOfferIdProperty.SetCacheLoaderParameters(
             SpecialOfferProduct.Parameters.ProductId, ProductIdProperty);
-// highlight-end
+/* added-lines-end */
     }
 }
 ```
@@ -448,8 +503,9 @@ Finally, let's configure computed properties on the UI to have them automaticall
 
 All you have to do is to create an expression that returns the computed value based on the provided arguments, and pass it to the `SetComputedValue` method along with the instances of those arguments. You can pass the entire data object or individual properties as the arguments, or any combination thereof. To make the expression easier to write, you can also define and use helper functions, such as the `GetLineTotal` for calculating the line total from nullable values, as illustrated below.
 
-```cs
+```cs title="SalesOrderDetailObjectCustomized.cs"
 ...
+/* added-next-line */
 using System.Linq.Expressions;
 using Xomega.Framework.Properties;
 ...
@@ -459,32 +515,28 @@ public class SalesOrderDetailObjectCustomized : SalesOrderDetailObject
     protected override void OnInitialized()
     {
         ...
+/* added-lines-start */
         // computed property using the entire object
-    // highlight-start
         Expression<Func<SalesOrderDetailObject, object>> xPrice = sod => sod.ProductIdProperty.IsNull(null) ?
             null : sod.ProductIdProperty.Value[Product.Attributes.ListPrice];
         UnitPriceProperty.SetComputedValue(xPrice, this);
-    // highlight-end
 
         // computed property using individual property
-    // highlight-start
         Expression<Func<EnumProperty, object>> xDiscount = spOf =>
             spOf.IsNull(null) ? null : spOf.Value[SpecialOfferProduct.Attributes.Discount];
         UnitPriceDiscountProperty.SetComputedValue(xDiscount, SpecialOfferIdProperty);
-    // highlight-end
 
         // computed total using a helper function
-    // highlight-start
         Expression<Func<SalesOrderDetailObject, decimal>> xLineTotal = sod => GetLineTotal(
             sod.UnitPriceProperty.Value, sod.UnitPriceDiscountProperty.Value, sod.OrderQtyProperty.Value);
         LineTotalProperty.SetComputedValue(xLineTotal, this);
-    // highlight-end
+/* added-lines-end */
     }
 
-    // highlight-start
-    private decimal GetLineTotal(decimal? price, decimal? discount, int? qty) =>
+/* added-lines-start */
+    private static decimal GetLineTotal(decimal? price, decimal? discount, long? qty) =>
         (price ?? 0) * (1 - (discount ?? 0)) * (qty ?? 0);
-    // highlight-end
+/* added-lines-end */
 }
 ```
 

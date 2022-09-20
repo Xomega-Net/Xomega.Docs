@@ -39,7 +39,7 @@ Xomega makes setting up dynamic view titles pretty easy by letting you override 
 
 ```xml
     <ui:view name="SalesOrderView" title="Sales Order">
-      <!-- highlight-next-line -->
+<!-- highlight-next-line -->
       <ui:view-model data-object="SalesOrderObject" customize="true"/>
     </ui:view>
 ```
@@ -53,15 +53,16 @@ To make the title of our *Sales Order Details* view display the sales order numb
 ```cs title="SalesOrderViewModelCustomized.cs"
     public class SalesOrderViewModelCustomized : SalesOrderViewModel
     {
+/* added-lines-start */
         public override string BaseTitle => base.BaseTitle +
-// highlight-next-line
             (MainObj.IsNew ? "" : " - " + MainObj.SalesOrderNumberProperty.Value);
+/* added-lines-end */
         ...
     }
 
 ```
 
-Notice how we append the `sales order number` to the base title for existing orders using `MainObj` to reference the main data object for the view. The title will be automatically updated when you save the order, which works for us, since the sales order number is only set once when you save a new sales order.
+Notice how we append the value of the `SalesOrderNumberProperty` to the base title for existing orders using `MainObj` to reference the main data object for the view. The title will be automatically updated when you save the order, which works for us, since the sales order number is only set once when you save a new sales order.
 
 :::tip
 If you need to display the value of another data property in the title, then you may need to subscribe to that data property's changes in your view model, and then fire a change of the `ViewTitle` property as a result.
@@ -75,6 +76,6 @@ If you run the application now, you'll see that the title of our details view in
 
 ![Dynamic title](img5/dynamic-title.png)
 
-Notice that after we edited the Comment field, the view title still displayed an asterisk indicating that the view has been modified.
+Notice that after we edited the *Comment* field, the view title still displayed an asterisk indicating that the view has been modified.
 
 This also enabled the *Save* button, and will pop up a confirmation message about unsaved changes, if you try to close a modified view without saving.

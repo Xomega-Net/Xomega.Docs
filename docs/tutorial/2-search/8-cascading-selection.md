@@ -4,7 +4,7 @@ sidebar_position: 9
 
 # 2.8 Cascading selection
 
-In this section we will show you how to configure cascading selection for enumeration properties, where a list of possible values for one property depends on the selected value in another property. This also needs to be done in the custom code for a data object, but Xomega Framework's support makes it extremely easy.
+In this section we will show you how to configure [cascading selection for enumeration properties](../../framework/common-ui/properties/enum#cascading-selection), where a list of possible values for one property depends on the selected value in another property. This also needs to be done in the custom code for a data object, but Xomega Framework's support makes it extremely easy.
 
 ## Setting up cascading selection
 
@@ -13,7 +13,7 @@ We will make the list of sales territories on the `SalesOrderCriteria` cascade o
 Let's open the `SalesOrderCriteriaCustomized` class that we generated in the previous section, and add the following code to its `OnInitialized()` method.
 
 ```cs title="SalesOrderCriteriaCustomized.cs"
-// highlight-next-line
+/* added-next-line */
 using AdventureWorks.Services.Common.Enumerations;
 ...
 public class SalesOrderCriteriaCustomized : SalesOrderCriteria
@@ -24,12 +24,12 @@ public class SalesOrderCriteriaCustomized : SalesOrderCriteria
     {
         base.OnInitialized();
         StatusProperty.DisplayFormat = $"{Header.FieldId} - {Header.FieldText}";
-        // highlight-start
+/* added-lines-start */
         TerritoryIdProperty.SetCascadingProperty(SalesTerritory.Attributes.Group, GlobalRegionProperty);
         SalesPersonIdProperty.SetCascadingProperty(SalesPerson.Attributes.TerritoryId, TerritoryIdProperty);
         SalesPersonIdProperty.NullsMatchAnyCascading = true;
         SalesPersonIdProperty.DisplayListSeparator = "; ";
-        // highlight-end
+/* added-lines-end */
     }
 }
 ```

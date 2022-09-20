@@ -16,24 +16,100 @@ When the user selects a credit card, we'll display additional credit card detail
 
 ## Defining contextual enumeration
 
-We will start by defining a contextual dynamic enumeration that returns a list of credit cards with their details for a specific person.
+We will start by defining a contextual dynamic enumeration that returns a list of credit cards with their details for a specific person. 
+
+### Person Credit Card subobject
+
+The list of credit cards of a specific persons is defined in the `Sales.PersonCreditCard` database table, which should normally be a subobject of the `person` aggregate object.
+
+However that table does not have a *cascade* delete on its foreign key to the parent `Person.Person` table, so it was imported into the model as a separate `person credit card` entity that has a compound key defined by a fieldset with the same name, as follows.
+
+```xml title="person_credit_card.xom"
+  <fieldsets>
+    <fieldset name="person credit card">
+<!-- highlight-start -->
+      <field name="business entity id" type="person" required="true">[...]
+      <field name="credit card id" type="credit card" required="true">[...]
+<!-- highlight-end -->
+    </fieldset>
+  </fieldsets>
+  <objects>
+<!-- removed-lines-start -->
+    <object name="person credit card">
+      <fields>
+<!-- highlight-next-line -->
+        <fieldset ref="person credit card" key="supplied" required="true"/>
+        <field name="modified date" type="date time" required="true">[...]
+      </fields>
+      ...
+    </object>
+<!-- removed-lines-end -->
+  </objects>
+```
+
+In order to make it a subobject of a `person` object, we'll move its `object` element to the `person.xom` file under a `subobjects` element. We will also rename it to be just `credit card`, since it's name is automatically qualified with the parent object's name, and will change the key field to be just the `credit card id` from the above fieldset, since the `business entity id` will be already inherited from the parent `person` object, as shown below.
+
+
+```xml title="person.xom"
+  <types>
+    <type name="person" base="business entity"/>
+  </types>
+  <objects>
+    <object name="person">
+      <fields>
+<!-- highlight-next-line -->
+        <field name="business entity id" type="person" key="supplied" required="true">
+        ...
+      </fields>
+      ...
+<!-- added-lines-start -->
+      <subobjects>
+        <object name="credit card">
+          <fields>
+<!-- highlight-next-line -->
+            <field name="credit card id" type="credit card" key="reference" required="true">[...]
+            <field name="modified date" type="date time" required="true">[...]
+          </fields>
+          <config>
+            <sql:table name="Sales.PersonCreditCard">
+<!-- highlight-next-line -->
+              <sql:parent-foreign-key delete="no action"/>
+            </sql:table>
+          </config>
+          ...
+        </object>
+      </subobjects>
+<!-- added-lines-end -->
+    </object>
+  </objects>
+```
+
+:::note
+Since the `credit card id` field references a separate `credit card` object, we need to set the `key` attribute to `reference`. Also, if we want to keep the `delete` action for the parent foreign key, instead of using the default *cascade* action, then we'll need to set it on the `sql:parent-foreign-key` element.
+:::
+
+At this point we can delete the `person_credit_card.xom` file from the *Sales* folder, since there will be nothing useful left in it. Also, in order to rebuild the entity classes using the new structure, we will run a *Clean* command on the *EF Domain Objects* generator under the *Data Layer* folder, followed by the *Generate* command on that generator.
 
 ### Configuring credit card types
 
-First off, let's define some common credit card related types in the `credit_card.xom` file, and update the corresponding `credit card` object's fields to use these types, as displayed below.
+Before we add our enumeration, let's open the `credit_card.xom` file, and update the `card number` field to use a new logical type `credit card number`, instead of the `string25` that was created by the import process. In order to make credit card a selection, we will also update the key type `credit card` to be based on `integer enumeration`, as illustrated below.
 
 ```xml title="credit_card.xom"
   <types>
-<!-- highlight-start -->
+<!-- removed-next-line -->
+    <type name="credit card" base="integer key"/>
+<!-- added-lines-start -->
     <type name="credit card" base="integer enumeration"/>
     <type name="credit card number" base="string" size="25"/>
-<!-- highlight-end -->
+<!-- added-lines-end -->
   </types>
   <objects>
     <object name="credit card">
       <fields>
         ...
-<!-- highlight-next-line -->
+<!-- removed-next-line -->
+        <field name="card number" type="string25" required="true">
+<!-- added-next-line -->
         <field name="card number" type="credit card number" required="true">
         ...
       </fields>
@@ -41,100 +117,127 @@ First off, let's define some common credit card related types in the `credit_car
   </objects>
 ```
 
-We also changed the base type for the `credit card` type from `integer key` to `integer enumeration` to enable selection.
-
 ### Adding contextual enumeration
 
-Similar to what we did before, we will run the *Enumeration Read List* generator on the `person_credit_card.xom` file, and then we'll update the generated `read list` operation to make the `business entity id` an input parameter, and will add it to the `uri-template` of the REST method.
+Similar to what we did [before](custom-selection#adding-read-enum-on-a-subobject), we will make sure that *Read Enum Operation* generator is configured to generate a `read enum` on subobjects only, and then will run that generator on the `person.xom` file.
 
-We will make the operation return credit card fields using their types from the `credit card` object, and will also define a dynamic enumeration with the `xfk:enum-cache` element, as illustrated below.
+Next, instead of the default `modified date` output parameter, we will add output parameters for a number of `credit card` object's fields that we want to show when selecting a credit card, using their respective types, as illustrated below.
 
-```xml title="person_credit_card.xom"
-<object name="person credit card">
-    ...
-    <operation name="read list" type="readlist">
-      <input>
+```xml title="person.xom"
+<object name="person">
+  ...
+  <subobjects>
+    <object name="credit card">
+      ...
 <!-- highlight-next-line -->
-        <param name="business entity id" type="person" required="true"/>
-      </input>
-      <output list="true">
-        <param name="credit card id" type="credit card" required="true"/>
+        <operation name="read enum">
+          <input>
+            <param name="business entity id" type="person" required="true"/>
+          </input>
+          <output list="true">
+            <param name="credit card id"/>
+            <param name="description" type="string"/>
+<!-- removed-next-line -->
+            <param name="modified date"/>
+<!-- added-lines-start -->
+            <param name="person name" type="name" required="true"/>
+            <param name="card type" type="name" required="true"/>
+            <param name="card number" type="credit card number" required="true"/>
+            <param name="exp month" type="tiny int" required="true"/>
+            <param name="exp year" type="small int" required="true"/>
+<!-- added-lines-end -->
+          </output>
+          <config>
+            <rest:method verb="GET" uri-template="person/{business entity id}/credit-card/enum"/>
 <!-- highlight-start -->
-        <param name="credit card name" type="name" required="true"/>
-        <param name="person name" type="name" required="true"/>
-        <param name="card type" type="name" required="true"/>
-        <param name="card number" type="credit card number" required="true"/>
-        <param name="exp month" type="tiny int" required="true"/>
-        <param name="exp year" type="small int" required="true"/>
+            <xfk:enum-cache enum-name="person credit card" id-param="credit card id"
+                            desc-param="description"/>
 <!-- highlight-end -->
-      </output>
-      <config>
-        <rest:method verb="GET" uri-template="person/{business entity id}/credit-card"/>
-<!-- highlight-start -->
-        <xfk:enum-cache enum-name="person credit card"
-                        id-param="credit card id" desc-param="credit card name"/>
-<!-- highlight-end -->
-      </config>
-    </operation>
-    ...
+          </config>
+          <doc>[...]
+        </operation>
+        ...
+    </object>
+  </subobjects>
 </object>
 ```
 
 ### Custom service implementation
 
-To provide custom service implementation for our output parameters, let's build the model project and open the generated `PersonCreditCardService` class. We'll update our `ReadListAsync` operation to read all the credit card parameters, where we will return the credit card name as the card type, and the last four digits of the card number, as follows.
+To provide custom service implementation for our output parameters, let's build the model project and open the generated `PersonService` class. We'll update our `CreditCard_ReadEnumAsync` operation to read all the credit card parameters, where we will return the credit card description as the card type, and the last four digits of the card number, as follows.
 
-```cs title="PersonCreditCardService.cs"
-public partial class PersonCreditCardService : BaseService, IPersonCreditCardService
+```cs title="PersonService.cs"
+public partial class PersonService : BaseService, IPersonService
 {
     ...
-    public virtual async Task<Output<ICollection<PersonCreditCard_ReadListOutput>>>
-        ReadListAsync(int _businessEntityId, CancellationToken token = default)
+    public virtual async Task<Output<ICollection<PersonCreditCard_ReadEnumOutput>>>
+        CreditCard_ReadEnumAsync(int _businessEntityId, CancellationToken token = default)
     {
         ...
         var qry = from obj in src
-                  select new PersonCreditCard_ReadListOutput() {
-                    CreditCardId = obj.CreditCardId,
-                    // CUSTOM_CODE_START: set the CreditCardName output parameter of ReadList operation below
-// highlight-start
-                    CreditCardName = obj.CreditCardObject.CardType + "-*" +
-                                     obj.CreditCardObject.CardNumber.Substring(
-                                        obj.CreditCardObject.CardNumber.Length - 4), // CUSTOM_CODE_END
-// highlight-end
-                    // CUSTOM_CODE_START: set the PersonName output parameter of ReadList operation below
-// highlight-start
-                    PersonName = obj.BusinessEntityObject.LastName + ", " +
-                                 obj.BusinessEntityObject.FirstName, // CUSTOM_CODE_END
-// highlight-end
-                    // CUSTOM_CODE_START: set the CardType output parameter of ReadList operation below
-// highlight-next-line
-                    CardType = obj.CreditCardObject.CardType, // CUSTOM_CODE_END
-                    // CUSTOM_CODE_START: set the CardNumber output parameter of ReadList operation below
-// highlight-next-line
-                    CardNumber = obj.CreditCardObject.CardNumber, // CUSTOM_CODE_END
-                    // CUSTOM_CODE_START: set the ExpMonth output parameter of ReadList operation below
-// highlight-next-line
-                    ExpMonth = obj.CreditCardObject.ExpMonth, // CUSTOM_CODE_END
-                    // CUSTOM_CODE_START: set the ExpYear output parameter of ReadList operation below
-// highlight-next-line
-                    ExpYear = obj.CreditCardObject.ExpYear, // CUSTOM_CODE_END
-                  };
+        select new PersonCreditCard_ReadEnumOutput() {
+            CreditCardId = obj.CreditCardId,
+            // CUSTOM_CODE_START: set the Description output parameter of CreditCard_ReadEnum operation below
+/* removed-next-line */
+            // TODO: Description = obj.???, // CUSTOM_CODE_END
+/* added-lines-start */
+            Description = obj.CreditCardObject.CardType + "-*" +
+                          obj.CreditCardObject.CardNumber.Substring(
+                              obj.CreditCardObject.CardNumber.Length - 4), // CUSTOM_CODE_END
+/* added-lines-end */
+            // CUSTOM_CODE_START: set the PersonName output parameter of CreditCard_ReadEnum operation below
+/* removed-next-line */
+            // TODO: PersonName = obj.???, // CUSTOM_CODE_END
+/* added-next-line */
+            PersonName = obj.PersonObject.LastName + ", " + obj.PersonObject.FirstName, // CUSTOM_CODE_END
+            // CUSTOM_CODE_START: set the CardType output parameter of CreditCard_ReadEnum operation below
+/* removed-next-line */
+            // TODO: CardType = obj.???, // CUSTOM_CODE_END
+/* added-next-line */
+            CardType = obj.CreditCardObject.CardType, // CUSTOM_CODE_END
+            // CUSTOM_CODE_START: set the CardNumber output parameter of CreditCard_ReadEnum operation below
+/* removed-next-line */
+            // TODO: CardNumber = obj.???, // CUSTOM_CODE_END
+/* added-next-line */
+            CardNumber = obj.CreditCardObject.CardNumber, // CUSTOM_CODE_END
+            // CUSTOM_CODE_START: set the ExpMonth output parameter of CreditCard_ReadEnum operation below
+/* removed-next-line */
+            // TODO: ExpMonth = obj.???, // CUSTOM_CODE_END
+/* added-next-line */
+            ExpMonth = obj.CreditCardObject.ExpMonth, // CUSTOM_CODE_END
+            // CUSTOM_CODE_START: set the ExpYear output parameter of CreditCard_ReadEnum operation below
+/* removed-next-line */
+            // TODO: ExpYear = obj.???, // CUSTOM_CODE_END
+/* added-next-line */
+            ExpYear = obj.CreditCardObject.ExpYear // CUSTOM_CODE_END
+        };
         ...
     }
 }
 ```
 
+In order to make sure that your inline customizations are [preserved if you run the *Clean* command](../search/custom-result#caution-on-mixed-in-customizations) on the model, you can add a  `svc:customize` config element to the `person` object, and set the `preserve-on-clean="true"` attribute, as follows.
+
+```xml title="person.xom"
+    <config>
+      <sql:table name="Person.Person"/>
+      <edm:customize extend="true"/>
+<!-- added-next-line -->
+      <svc:customize preserve-on-clean="true"/>
+    </config>
+```
+
 ## Credit Card grouping object
 
-To group credit card fields into a child panel, let's fiend a data object `CreditCardPaymentObject`, and add it as a child of the `SalesOrderPaymentObject` using `credit card` as the name, as shown below.
+To group credit card fields into a child panel, let's define a new data object `CreditCardPaymentObject`, and add it as a child of the `SalesOrderPaymentObject` using `credit card` as the name, as shown below.
 
 ```xml title="sales_order.xom"
   <xfk:data-objects>
-<!-- highlight-next-line -->
+<!-- added-next-line -->
     <xfk:data-object class="CreditCardPaymentObject"/>
     ...
     <xfk:data-object class="SalesOrderPaymentObject">
-<!-- highlight-next-line -->
+<!-- added-next-line -->
       <xfk:add-child name="credit card" class="CreditCardPaymentObject"/>
       <ui:display>[...]
     </xfk:data-object>
@@ -144,6 +247,7 @@ To group credit card fields into a child panel, let's fiend a data object `Credi
 Next, we will add a generic `credit card info` structure for this object to add fields to it, as shown below.
 
 ```xml
+<!-- added-lines-start -->
   <struct name="credit card info" object="credit card">
     <param name="credit card id"/>
     <param name="card number"/>
@@ -155,22 +259,23 @@ Next, we will add a generic `credit card info` structure for this object to add 
 <!-- highlight-next-line -->
     <usage generic="true"/>
   </struct>
+<!-- added-lines-end -->
 ```
 
 Now we can configure our data object to make credit card non-key fields read-only, and to set a proper label for the `credit card id`, as follows.
 
 ```xml
   <xfk:data-object class="CreditCardPaymentObject">
+<!-- added-lines-start -->
     <ui:display>
       <ui:fields>
-<!-- highlight-start -->
         <ui:field param="credit card id" label="Credit Card"/>
         <ui:field param="card number" editable="false"/>
         <ui:field param="expiration" editable="false"/>
-<!-- highlight-end -->
       </ui:fields>
     </ui:display>
   </xfk:data-object>
+<!-- added-lines-end -->
 ```
 
 ### Updating operation structures
@@ -222,7 +327,7 @@ Let's build the model project, and refactor our custom service code in the `Sale
 ```cs title="SalesOrderServiceExtended.cs"
 public partial class SalesOrderService
 {
-    protected PaymentInfo GetPaymentInfo(SalesOrder obj) => new PaymentInfo()
+    protected static PaymentInfo GetPaymentInfo(SalesOrder obj) => new()
     {
         ...
 /* added-next-line */
@@ -262,15 +367,17 @@ Since the customer and payment are sibling child objects on the sales order data
     <xfk:data-object class="SalesOrderObject" customize="true">[...]
 ```
 
-Let's build the model project and open up the generated `SalesOrderObjectCustomized.cs` file. We'll set up the local lookup cache loader for the `CreditCardIdProperty` using `PersonCreditCardReadListCacheLoader` generated for our enumeration.
+Let's build the model project and open up the generated `SalesOrderObjectCustomized.cs` file. We'll set up the local lookup cache loader for the `CreditCardIdProperty` using `PersonCreditCardReadEnumCacheLoader` generated for our enumeration.
 
 Then, instead of manually listening to the updates of the `PersonIdProperty` and then refreshing the cache loader and updating the `CreditCardIdProperty`, we'll just call the `SetCacheLoaderParameters` method with the generated constant for the input parameter name and the source property, and Xomega Framework will automatically handle all the rest.
 
 The following snippet illustrates this logic.
 
 ```cs title="SalesOrderObjectCustomized.cs"
+/* added-lines-start */
 using AdventureWorks.Services.Common;
 using AdventureWorks.Services.Common.Enumerations;
+/* added-lines-end */
 
 public class SalesOrderObjectCustomized : SalesOrderObject
 {
@@ -279,12 +386,12 @@ public class SalesOrderObjectCustomized : SalesOrderObject
     protected override void OnInitialized()
     {
         base.OnInitialized();
-// highlight-start
+/* added-lines-start */
         var ccProp = PaymentObject.CreditCardObject.CreditCardIdProperty;
-        ccProp.LocalCacheLoader = new PersonCreditCardReadListCacheLoader(ServiceProvider);
+        ccProp.LocalCacheLoader = new PersonCreditCardReadEnumCacheLoader(ServiceProvider);
         ccProp.SetCacheLoaderParameters(PersonCreditCard.Parameters.BusinessEntityId,
                                         CustomerObject.PersonIdProperty);
-// highlight-end
+/* added-lines-end */
     }
 }
 ```
@@ -304,6 +411,7 @@ Now, in order to display the credit card details whenever a credit card is selec
  We'll add a credit card change listener in the `OnInitialized` method, which will populate other properties from the credit card attributes. The expiration property will combine both expiration month and year, as shown below.
 
 ```cs title="CreditCardPaymentObjectCustomized.cs"
+/* added-next-line */
 using AdventureWorks.Services.Common.Enumerations;
 
 public class CreditCardPaymentObjectCustomized : CreditCardPaymentObject
@@ -313,22 +421,22 @@ public class CreditCardPaymentObjectCustomized : CreditCardPaymentObject
     protected override void OnInitialized()
     {
         base.OnInitialized();
-// highlight-next-line
+/* added-next-line */
         CreditCardIdProperty.Change += OnCreditCardChanged;
     }
 
+/* added-lines-start */
     private void OnCreditCardChanged(object sender, PropertyChangeEventArgs e)
     {
         if (e.Change.IncludesValue() && !Equals(e.OldValue, e.NewValue))
         {
-// highlight-start
             Header cc = CreditCardIdProperty.Value;
             CardNumberProperty.SetValue(cc?[PersonCreditCard.Attributes.CardNumber]);
             ExpirationProperty.SetValue(cc == null ? null : cc[PersonCreditCard.Attributes.ExpMonth]
                                                     + "/" + cc[PersonCreditCard.Attributes.ExpYear]);
-// highlight-end
         }
     }
+/* added-lines-end */
 }
 ```
 

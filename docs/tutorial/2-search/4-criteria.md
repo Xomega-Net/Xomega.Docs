@@ -39,7 +39,7 @@ Deciding which criteria to keep may be even more important than picking the resu
 
 ## Search criteria model
 
-This is what our model will look like for these use cases.
+Here is what our model will look like after deleting unnecessary criteria, and adding new criteria for these use cases.
 
 ```xml title="sales_order.xom"
     <operation name="read list" type="readlist">
@@ -50,20 +50,24 @@ This is what our model will look like for these use cases.
           <param name="status operator" type="operator">[...]
           <param name="status" required="false"/>
           <param name="order date operator" type="operator">[...]
+<!-- highlight-start -->
           <param name="order date" type="date" required="false"/>
           <param name="order date2" type="date" required="false">[...]
+<!-- highlight-end -->
           <param name="due date operator" type="operator">[...]
+<!-- highlight-start -->
           <param name="due date" type="date" required="false"/>
           <param name="due date2" type="date" required="false">[...]
+<!-- highlight-end -->
           <param name="total due operator" type="operator">[...]
           <param name="total due" required="false"/>
           <param name="total due2" type="money" required="false">[...]
-            <!-- highlight-start -->
+<!-- added-lines-start -->
           <param name="customer store operator" type="operator">[...]
           <param name="customer store" type="string" required="false"/>
           <param name="customer name operator" type="operator">[...]
           <param name="customer name" type="string" required="false"/>
-            <!-- highlight-end -->
+<!-- added-lines-end -->
           <param name="territory id operator" type="operator">[...]
           <param name="territory id" required="false"/>
           <param name="sales person id operator" type="operator">[...]
@@ -78,7 +82,7 @@ This is what our model will look like for these use cases.
     </operation>
 ```
 
-As with the result fields, we will override the type on the date criteria to be just date without the time component, as well as set the type on the custom criteria `customer store` and `customer name` that don't have a corresponding object field. We have also added operator parameters for our custom criteria, and removed the second values for numeric criteria that don't need a `BETWEEN` operator, such as `status`, `territory id` and `sales person id`.
+As with the result fields, we will override the type on the date criteria to be just date without the time component, as well as set the type on the custom criteria `customer store` and `customer name` that don't have a corresponding object field. We also added operator parameters for our custom criteria, and removed the second value for `status` criteria, which doesn't need a `BETWEEN` operator.
 
 Notice also the highlighted config section, which specifies that all these parameters should be added to the client data object `SalesOrderCriteria` that the search criteria panel will be bound to. This data object is where we will be able to configure criteria labels in the model.
 

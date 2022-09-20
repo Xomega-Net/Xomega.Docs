@@ -662,7 +662,7 @@ For specialized criteria, you can also define your own enumeration with custom o
 
 ### Dynamic enumerations
 
-Another special type of service operations is dynamic enumerations, which represent a `readlist` operation that has no input parameters and therefore returns all objects.
+Another special type of service operations is dynamic enumerations, which represent a `read enum` operation that has no input parameters and therefore returns all objects.
 
 The returned list is expected to be rather limited in size, and the objects in that list are not changed often, which allows the entire list to be globally cached and used for selection, lookup or validation throughout the application, without having to read it every time.
 
@@ -676,14 +676,14 @@ To configure a dynamic enumeration, you need to add a `xfk:enum-cache` element t
 If you need to display localized text to the user, then please check the section on [localizing dynamic enumerations](static-data#localizing-dynamic-items).
 :::
 
-In the following example, the `read list` operation on the `sales person` object returns all salespersons, and allows caching this enumeration under the name `sales person`.
+In the following example, the `read enum` operation on the `sales person` object returns all salespersons, and allows caching this enumeration under the name `sales person`.
 
 ```xml
 <object name="sales person">
   <fields>[...]
   <operations>
 <!-- highlight-next-line -->
-    <operation name="read list" type="readlist">
+    <operation name="read enum">
       <output list="true">
         <param name="business entity id"/>
         <param name="territory id"/>
@@ -710,7 +710,7 @@ You can easily add such an operation to any object using a specially configured 
 
 ### Contextual enumerations
 
-If the full result from a `readlist` operation would be too large to read and cache in its entirety, but you still want to be able to read and locally cache a subset of all such objects for a specific context in your application, then you can also configure it with the same `xfk:enum-cache` config element, but provide some input parameters that would need to be passed from the current context.
+If the full result from a `read enum` operation would be too large to read and cache in its entirety, but you still want to be able to read and locally cache a subset of all such objects for a specific context in your application, then you can also configure it with the same `xfk:enum-cache` config element, but provide some input parameters that would need to be passed from the current context.
 
 This will allow Xomega to generate the necessary cache loader classes for this operation, which you can leverage to set up contextual locally cached enumeration within your application. Xomega Framework makes it pretty easy and straightforward for you.
 
@@ -721,7 +721,7 @@ In the following example, the list of business entity addresses would be too lar
   <fields>[...]
   <operations>
 <!-- highlight-next-line -->
-    <operation name="read list" type="readlist">
+    <operation name="read enum">
       <input>
 <!-- highlight-next-line -->
         <param name="business entity id" type="business entity" required="true"/>

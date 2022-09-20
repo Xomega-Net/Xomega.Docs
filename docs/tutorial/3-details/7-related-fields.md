@@ -25,13 +25,13 @@ Similar to the steps that we did before, we will define a new data object `Sales
 ```xml title="sales_order.xom"
   <xfk:data-objects>
     <xfk:data-object class="SalesOrderObject">
-      <!-- highlight-next-line -->
+<!-- added-next-line -->
       <xfk:add-child name="customer" class="SalesOrderCustomerObject"/>
       <xfk:add-child name="detail" class="SalesOrderDetailList"/>
       ...
     </xfk:data-object>
     ...
-    <!-- highlight-next-line -->
+<!-- added-next-line -->
     <xfk:data-object class="SalesOrderCustomerObject"/>
   </xfk:data-objects>
 ```
@@ -44,7 +44,7 @@ The resulting structure should look as shown below.
 
 ```xml
   <structs>
-    <!-- highlight-next-line -->
+<!-- added-lines-start -->
     <struct name="customer info" object="customer">
       <param name="customer id"/>
       <param name="store id"/>
@@ -60,6 +60,7 @@ The resulting structure should look as shown below.
         <xfk:add-to-object class="SalesOrderCustomerObject"/>
       </config>
     </struct>
+<!-- added-lines-end -->
     ...
   </structs>
 ```
@@ -72,7 +73,7 @@ Similarly, we'll define a `customer update` structure for updating customer info
 
 ```xml
     <struct name="customer info" object="customer">[...]
-    <!-- highlight-next-line -->
+<!-- added-lines-start -->
     <struct name="customer update" object="customer">
       <param name="customer id"/>
       <param name="bill to address id" type="address"/>
@@ -81,12 +82,14 @@ Similarly, we'll define a `customer update` structure for updating customer info
         <xfk:add-to-object class="SalesOrderCustomerObject"/>
       </config>
     </struct>
+<!-- added-lines-end -->
 ```
 
 Now we can configure our `SalesOrderCustomerObject` data object to have those internal ID fields hidden on the screen, and to set a proper label for the `territory id` parameter, as follows.
 
 ```xml
     <xfk:data-object class="SalesOrderCustomerObject">
+<!-- added-lines-start -->
       <ui:display>
         <ui:fields>
           <ui:field param="customer id" hidden="true"/>
@@ -96,6 +99,7 @@ Now we can configure our `SalesOrderCustomerObject` data object to have those in
         </ui:fields>
       </ui:display>
     </xfk:data-object>
+<!-- added-lines-end -->
 ```
 
 ### Refactoring CRUD operations
@@ -187,18 +191,18 @@ As we did before, we can simply set the `extend="true"` attribute on the `edm:cu
       <fields>[...]
       <config>
         <sql:table name="Person.Person"/>
-        <!-- highlight-next-line -->
+<!-- added-next-line -->
         <edm:customize extend="true"/>
       </config>
     </object>
 ```
 
-After you build the model, open up the `PersonExtended.cs` file nested under the `Person.cs` file, and add a new property `FullName`, as follows.
+After you build the model, open up the `PersonExtended.cs` file nested under the `Entities/Person/Person.cs` file of the `AdventureWorks.Services.Entities` project, and add a new property `FullName`, as follows.
 
 ```cs title="PersonExtended.cs"
     public partial class Person
     {
-        // highlight-next-line
+/* added-next-line */
         public string FullName => $"{LastName}, {FirstName}";
     }
 ```
@@ -211,12 +215,13 @@ Now let's open the `SalesOrderServiceExtended.cs` file, and add a `GetCustomerIn
 public partial class SalesOrderService
 {
     ...
-    protected CustomerInfo GetCustomerInfo(SalesOrder obj) => new CustomerInfo()
+/* added-lines-start */
+    protected static CustomerInfo GetCustomerInfo(SalesOrder obj) => new()
     {
         CustomerId = obj.CustomerId,
         AccountNumber = obj.CustomerObject?.AccountNumber,
         PersonId = obj.CustomerObject?.PersonObject?.BusinessEntityId,
-        // highlight-next-line
+// highlight-next-line
         PersonName = obj.CustomerObject?.PersonObject?.FullName,
         StoreId = obj.CustomerObject?.StoreObject?.BusinessEntityId,
         StoreName = obj.CustomerObject?.StoreObject?.Name,
@@ -224,6 +229,7 @@ public partial class SalesOrderService
         BillToAddressId = obj.BillToAddressId,
         ShipToAddressId = obj.ShipToAddressId,
     };
+/* added-lines-end */
 }
 ```
 
@@ -249,7 +255,9 @@ To populate the `customer` structure in the read results, we'll call this method
         {
             ...
             // CUSTOM_CODE_START: populate the Customer output structure of Read operation below
-            // highlight-next-line
+/* removed-next-line */
+            // TODO: res.Customer = ???; // CUSTOM_CODE_END
+/* added-next-line */
             res.Customer = GetCustomerInfo(obj); // CUSTOM_CODE_END
             ...
         }
@@ -258,9 +266,11 @@ To populate the `customer` structure in the read results, we'll call this method
 
 ### Custom Update for the input
 
-Just like we did before, we are going to add a customer validation message to the `Resources.resx` file in the `AdventureWorks.Services.Entities` project, and then run the custom tool on the nested `Messages.tt` to generate message constants.
+Just like we did before, we are going to add a customer validation message to the `Resources.resx` file in the `AdventureWorks.Services.Entities` project, and then run the custom tool on the nested [`Messages.tt`](../../framework/services/errors#message-constants-generator) to generate message constants.
 
-![Validation message](img7/validation-message.png)
+|Name|Value|Comment|
+|-|-|-|
+|CustomerRequired|Customer information is required for order {0}.|{0}=Order ID|
 
 Next, we will add `UpdateCustomer` method to the extended `SalesOrderService` service, in order to update customer and address objects on the `SalesOrder` object from the provided `CustomerUpdate` structure, as follows.
 
@@ -268,6 +278,7 @@ Next, we will add `UpdateCustomer` method to the extended `SalesOrderService` se
 public partial class SalesOrderService
 {
     ...
+/* added-lines-start */
     protected async Task UpdateCustomer(SalesOrder obj, CustomerUpdate _data)
     {
         if (_data == null)
@@ -280,6 +291,7 @@ public partial class SalesOrderService
         obj.BillToAddressObject = await ctx.FindEntityAsync<Address>(currentErrors, _data.BillToAddressId);
         obj.ShipToAddressObject = await ctx.FindEntityAsync<Address>(currentErrors, _data.ShipToAddressId);
     }
+/* added-lines-end */
 }
 ```
 
@@ -297,7 +309,9 @@ public partial class SalesOrderService : BaseService, ISalesOrderService
     {
         ...
         // CUSTOM_CODE_START: use the Customer input parameter of Create operation below
-        // highlight-next-line
+/* removed-next-line */
+        // TODO: ??? = _data.Customer; // CUSTOM_CODE_END
+/* added-next-line */
         await UpdateCustomer(obj, _data.Customer); // CUSTOM_CODE_END
         ...
     }
@@ -307,7 +321,9 @@ public partial class SalesOrderService : BaseService, ISalesOrderService
     {
         ...
         // CUSTOM_CODE_START: use the Customer input parameter of Update operation below
-        // highlight-next-line
+/* removed-next-line */
+        // TODO: ??? = _data.Customer; // CUSTOM_CODE_END
+/* added-next-line */
         await UpdateCustomer(obj, _data.Customer); // CUSTOM_CODE_END
         ...
     }

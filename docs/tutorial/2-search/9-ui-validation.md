@@ -10,13 +10,19 @@ Let's add a validation to our customized `SalesOrderCriteria` class, that will c
 
 ## Adding message resources
 
-In order to make the text of the validation message localizable, we are going to add it to the `Resources.resx` file in the *AdventureWorks.Client.Common* project, and give it a short name `OrderFromToDate`, as follows.
+In order to make the text of the validation message localizable, we are going to add it to the `Resources.resx` file in the *AdventureWorks.Client.Common* project, and give it a short name `OrderFromToDate` and the default message text, as follows.
+
+|Name|Value|
+|-|-|
+|OrderFromToDate|From Order Date should be earlier than To Order Date.|
+
+Here is how it will look in Visual Studio.
 
 ![Resources](img9/resources.png)
 
 ### Generating message constants
 
-Along with the resources files, the Xomega template for this project included a T4 Text Template transformation script `Messages.tt`, which generates `Messages.cs` file with the resource manager for these resources, as well as constants for message keys that you can use instead of the hardcoded names.
+Along with the resources files, the Xomega template for this project included a T4 Text Template transformation script [`Messages.tt`](../../framework/services/errors#message-constants-generator), which generates `Messages.cs` file with the resource manager for these resources, as well as constants for message keys that you can use instead of the hardcoded names.
 
 To regenerate the `Messages.cs` file you need to run the `Messages.tt` generator after adding your message resources, as shown below.
 
@@ -30,15 +36,16 @@ Finally, let's open the `SalesOrderCriteriaCustomized.cs` file, and override the
 public class SalesOrderCriteriaCustomized : SalesOrderCriteria
 {
     ...
+/* added-lines-start */
     public override void Validate(bool force)
     {
         base.Validate(force);
         DateTime? orderDateFrom = OrderDateProperty.Value;
         DateTime? orderDateTo = OrderDate2Property.Value;
         if (orderDateFrom != null && orderDateTo != null && orderDateFrom > orderDateTo)
-            // highlight-next-line
             validationErrorList.AddValidationError(Messages.OrderFromToDate);
     }
+/* added-lines-end */
 }
 ```
 

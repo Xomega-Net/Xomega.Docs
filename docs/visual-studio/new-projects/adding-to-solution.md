@@ -48,10 +48,10 @@ In order to finish setting up the new projects, you'll need to make the followin
 
 - Open properties of the *Service Layer > Web API Controllers* generator, set `Include In Build` parameter to `True`, make sure that the output paths match the name of the new `.Services.Rest` project, and then run the generator.
 - Open properties of the *Presentation Layer > Common > REST Service Clients* generator, set `Include In Build` parameter to `True`, make sure that the output paths match the name of the existing `.Client.Common` project, and then run the generator.
-- Set the `Generate Rest Methods` parameter to `True` on the *Full CRUD with Views* and *Enumeration Read List*, as well as on any other model enhancement generators that have this parameter, for the future runs.
+- Set the `Generate Rest Methods` parameter to `True` on the *Full CRUD with Views* and *Read Enum Operation*, as well as on any other model enhancement generators that have this parameter, for the future runs.
 
 If you have already run the model enhancement generators, and added operations without REST methods, you will need to add `rest:method` configurations to those operations as appropriate.
 
 :::tip
-To easily set up existing operations with a default `rest:method` configuration, you can create a copy of the *Enumeration Read List* generator, set all parameters except for the `Generate Rest Methods` to `False`, and then run that generator on the existing objects with operations.
+To easily set up existing operations with a default `rest:method` configuration, you can create a copy of the *Read Enum Operation* generator, set all parameters except for the `Generate Rest Methods` to `False`, and then run that generator on the existing objects with operations.
 :::

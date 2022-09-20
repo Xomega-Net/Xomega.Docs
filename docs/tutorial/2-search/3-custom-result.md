@@ -12,7 +12,8 @@ Before we can provide the custom code, we first need to build our model, which r
 
 ## Implementing custom result fields
 
-The generated `ReadListAsync` method will have a LINQ query over our entities, where you will see the commented placeholders to implement between the `CUSTOM_CODE_START` and `CUSTOM_CODE_END` marker comments, as highlighted below.
+The generated `ReadListAsync` method will have a LINQ query over our entities, where you will see the commented *TODO* placeholders to implement between the `CUSTOM_CODE_START` and `CUSTOM_CODE_END` marker comments. We will provide a custom implementation for these fields, which reads it from the related `CustomerObject`, as shown below.
+
 
 ```cs title="SalesOrderService.cs"
 public virtual async Task<Output<ICollection<SalesOrder_ReadListOutput>>>
@@ -29,26 +30,22 @@ public virtual async Task<Output<ICollection<SalesOrder_ReadListOutput>>>
                   OnlineOrderFlag = obj.OnlineOrderFlag,
                   SalesOrderNumber = obj.SalesOrderNumber,
                   // CUSTOM_CODE_START: set the CustomerStore output parameter of ReadList operation below
-                  // highlight-next-line
+/* removed-next-line */
                   // TODO: CustomerStore = obj.???, // CUSTOM_CODE_END
+/* added-next-line */
+                  CustomerStore = obj.CustomerObject.StoreObject.Name, // CUSTOM_CODE_END
                   // CUSTOM_CODE_START: set the CustomerName output parameter of ReadList operation below
-                  // highlight-next-line
+/* removed-next-line */
                   // TODO: CustomerName = obj.???, // CUSTOM_CODE_END
+/* added-lines-start */
+                  CustomerName = obj.CustomerObject.PersonObject.LastName + ", " + 
+                                 obj.CustomerObject.PersonObject.FirstName, // CUSTOM_CODE_END
+/* added-lines-end */
                   SalesPersonId = obj.SalesPersonId,
                   TerritoryId = obj.TerritoryId,
                   TotalDue = obj.TotalDue,
               };
     [...]
-```
-
-We will provide the custom implementation for these fields, which reads it from the related `CustomerObject` as shown below.
-
-```cs title="SalesOrderService.cs"
-      // CUSTOM_CODE_START: set the CustomerStore output parameter of ReadList operation below
-      CustomerStore = obj.CustomerObject.StoreObject.Name, // CUSTOM_CODE_END
-      // CUSTOM_CODE_START: set the CustomerName output parameter of ReadList operation below
-      CustomerName = obj.CustomerObject.PersonObject.LastName + ", " + 
-                     obj.CustomerObject.PersonObject.FirstName, // CUSTOM_CODE_END
 ```
 
 This approach allows you to easily provide custom implementations for individual fields without having to rewrite the entire service method.
@@ -74,7 +71,7 @@ For the service implementations you can also configure that in the model in the 
 ```xml title="sales_order.xom"
       <config>
         <sql:table name="Sales.SalesOrderHeader"/>
-        <!-- highlight-next-line -->
+<!-- added-next-line -->
         <svc:customize preserve-on-clean="true"/>
       </config>
 ```

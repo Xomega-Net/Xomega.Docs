@@ -75,7 +75,7 @@ Open it up, and set the `DisplayFormat` of the generated `StatusProperty` in the
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            // highlight-next-line
+/* added-next-line */
             StatusProperty.DisplayFormat = $"{Header.FieldId} - {Header.FieldText}";
         }
 

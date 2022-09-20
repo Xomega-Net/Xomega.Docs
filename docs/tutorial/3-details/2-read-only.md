@@ -114,6 +114,7 @@ Next, let's remove the `rowguid` parameter from the input of the `create` operat
               <xfk:add-to-object class="SalesOrderObject"/>
             </config>
           </input>
+<!-- highlight-next-line -->
           <output>
             <param name="sales order id"/>
 <!-- added-lines-start -->
@@ -216,11 +217,11 @@ public virtual async Task<Output<SalesOrder_CreateOutput>>
 {
     ...
     // CUSTOM_CODE_START: add custom code for Create operation below
-    // highlight-start
+/* added-lines-start */
     obj.OrderDate = DateTime.Now;
     obj.ModifiedDate = DateTime.Now;
     obj.Rowguid = Guid.NewGuid();
-    // highlight-end
+/* added-lines-end */
     // CUSTOM_CODE_END
     ...
 }
@@ -234,9 +235,8 @@ public virtual async Task<Output> UpdateAsync(int _salesOrderId,
 {
     ...
     // CUSTOM_CODE_START: add custom code for Update operation below
-    // highlight-next-line
+/* added-next-line */
     obj.ModifiedDate = DateTime.Now;
-    // CUSTOM_CODE_END
     ...
 }
 ```

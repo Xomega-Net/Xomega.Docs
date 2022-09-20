@@ -66,22 +66,24 @@ It is also a good idea to **check everything in **your version control before yo
 
 ## Sales Reason enumeration
 
-After we rebuild the model, we will want to define a dynamic enumeration for the `sales reason` object by running the *Enumeration Read List* generator on the `sales_reason.xom` file, and trim the output of the generated `read list` operation to keep just the `sales reason id` and `name`, as shown below.
+After we clean and then build the model, we will want to define a dynamic enumeration for the `sales reason` object by running the *Read Enum Operation* generator on the `sales_reason.xom` file, and trim the output of the generated `read enum` operation to keep just the `sales reason id` and `name`, as shown below.
 
 ```xml title="sales_reason.xom"
     <object name="sales reason">
       ...
       <operations>
-        <operation name="read list" type="readlist">
+        <operation name="read enum">
           <output list="true">
-            <!-- highlight-start -->
             <param name="sales reason id"/>
             <param name="name"/>
-            <!-- highlight-end -->
+<!-- removed-lines-start -->
+            <param name="reason type"/>
+            <param name="modified date"/>
+<!-- removed-lines-end -->
           </output>
           <config>
-            <rest:method verb="GET" uri-template="sales-reason"/>
-            <!-- highlight-next-line -->
+            <rest:method verb="GET" uri-template="sales-reason/enum"/>
+<!-- highlight-next-line -->
             <xfk:enum-cache enum-name="sales reason" id-param="sales reason id" desc-param="name"/>
           </config>
         </operation>
@@ -95,12 +97,13 @@ In addition, we will override the Blazor control that is used for multiple selec
 
 ```xml
     <type name="sales reason" base="integer enumeration">
+<!-- added-lines-start -->
       <config>
         <ui:blazor-control multi-value="true">
-          <!-- highlight-next-line -->
           <XPickList/>
         </ui:blazor-control>
       </config>
+<!-- added-lines-end -->
       <enum ref="sales reason"/>
     </type>
 ```
@@ -120,12 +123,12 @@ We will first declare a new data object in the model with a class `SalesOrderSal
     <xfk:data-object class="SalesOrderObject">
       <xfk:add-child name="detail" class="SalesOrderDetailList"/>
       <xfk:add-child name="payment" class="SalesOrderPaymentObject"/>
-      <!-- highlight-next-line -->
+<!-- added-next-line -->
       <xfk:add-child name="sales" class="SalesOrderSalesObject"/>
       <ui:display>[...]
     </xfk:data-object>
     ...
-    <!-- highlight-next-line -->
+<!-- added-next-line -->
     <xfk:data-object class="SalesOrderSalesObject"/>
   </xfk:data-objects>
 ```
@@ -133,6 +136,7 @@ We will first declare a new data object in the model with a class `SalesOrderSal
 Next we will define a new structure `sales info` with our sales fields for the new data object. To allow multiple values for the `sales reason` parameter, we will set its attribute `list="true"`, as follows.
 
 ```xml
+<!-- added-lines-start -->
     <struct name="sales info" object="sales order">
       <param name="territory id"/>
       <param name="sales person id"/>
@@ -143,6 +147,7 @@ Next we will define a new structure `sales info` with our sales fields for the n
         <xfk:add-to-object class="SalesOrderSalesObject"/>
       </config>
     </struct>
+<!-- added-lines-end -->
 ```
 
 :::note
@@ -150,22 +155,24 @@ Since we have dynamic enumerations for all of these fields, which can decode IDs
 :::
 
 Now that we have properties on the `SalesOrderSalesObject` data object, we can configure proper labels for our fields.
-Also, since the `XPickList` control for the *Sales Reasons* selection contains two list boxes and would be pretty wide, we will set the `field-cols="1"` attribute on the `ui:fields` element to stack all our sales fields in a single column.
+Also, since the `XPickList` control for the *Sales Reasons* selection contains two list boxes and would be pretty wide, we will set the [`field-cols="1"`](../../visual-studio/modeling/presentation#ui-panel-layout) attribute on the `ui:fields` element to stack all our sales fields in a single column.
 
 The following snippet demonstrates this configuration.
 
 ```xml
+<!-- removed-next-line -->
+    <xfk:data-object class="SalesOrderSalesObject"/>
+<!-- added-lines-start -->
     <xfk:data-object class="SalesOrderSalesObject" customize="true">
       <ui:display>
-        <!-- highlight-start -->
         <ui:fields field-cols="1">
           <ui:field param="territory id" label="Territory"/>
           <ui:field param="sales person id" label="Sales Person"/>
           <ui:field param="sales reason" label="Sales Reasons"/>
         </ui:fields>
-        <!-- highlight-end -->
       </ui:display>
     </xfk:data-object>
+<!-- added-lines-end -->
 ```
 
 :::note
@@ -248,7 +255,8 @@ First, let's open up the extended `SalesOrderService` class, and  add to it the 
 public partial class SalesOrderService
 {
     ...
-    protected SalesInfo GetSalesInfo(SalesOrder obj) => new SalesInfo()
+/* added-lines-start */
+    protected static SalesInfo GetSalesInfo(SalesOrder obj) => new()
     {
         SalesPersonId = obj.SalesPersonId,
         TerritoryId = obj.TerritoryId,
@@ -256,6 +264,7 @@ public partial class SalesOrderService
         // highlight-next-line
         SalesReason = obj.ReasonObjectList?.Select(r => r.SalesReasonId).ToList()
     };
+/* added-lines-end */
 }
 ```
 
@@ -273,7 +282,9 @@ To populate the `sales` structure in the read results, we'll call this method in
         {
             ...
             // CUSTOM_CODE_START: populate the Sales output structure of Read operation below
-            // highlight-next-line
+/* removed-next-line */
+            // TODO: res.Sales = ???; // CUSTOM_CODE_END
+/* added-next-line */
             res.Sales = GetSalesInfo(obj); // CUSTOM_CODE_END
             ...
         }
@@ -282,9 +293,11 @@ To populate the `sales` structure in the read results, we'll call this method in
 
 ### Custom Update for the input
 
-Similar to what we did in the previous section, we will first add the following validation message to the `Resources.resx` file in the services project, and will run the custom tool on the nested `Messages.tt` to generate the message constants.
+Similar to [what we did in the previous section](group-fields#custom-update-for-the-input-structure), we will first add the following validation message to the `Resources.resx` file in the services project, and will run the custom tool on the nested `Messages.tt` to [generate the message constants](../../framework/services/errors#message-constants-generator).
 
-![Validation message](img4/validation-message.png)
+|Name|Value|Comment|
+|-|-|-|
+|SalesRequired|Sales information is required for order {0}.|{0}=Order ID|
 
 Next let's add a custom `UpdateSalesInfo` method to our extended service, which will update the specified `SalesOrder` with the provided `SalesInfo` structure as follows.
 
@@ -292,6 +305,7 @@ Next let's add a custom `UpdateSalesInfo` method to our extended service, which 
 public partial class SalesOrderService
 {
     ...
+/* added-lines-start */
     protected async Task UpdateSalesInfo(SalesOrder obj, SalesInfo _data)
     {
         if (_data == null)
@@ -322,6 +336,7 @@ public partial class SalesOrderService
                 }));
         }
     }
+/* added-lines-end */
 }
 ```
 
@@ -339,7 +354,9 @@ public partial class SalesOrderService : BaseService, ISalesOrderService
     {
         ...
         // CUSTOM_CODE_START: use the Sales input parameter of Create operation below
-        // highlight-next-line
+/* removed-next-line */
+        // TODO: ??? = _data.Sales; // CUSTOM_CODE_END
+/* added-next-line */
         await UpdateSalesInfo(obj, _data.Sales); // CUSTOM_CODE_END
         ...
     }
@@ -349,7 +366,9 @@ public partial class SalesOrderService : BaseService, ISalesOrderService
     {
         ...
         // CUSTOM_CODE_START: use the Sales input parameter of Update operation below
-        // highlight-next-line
+/* removed-next-line */
+        // TODO: ??? = _data.Sales; // CUSTOM_CODE_END
+/* added-next-line */
         await UpdateSalesInfo(obj, _data.Sales); // CUSTOM_CODE_END
         ...
     }
@@ -358,9 +377,10 @@ public partial class SalesOrderService : BaseService, ISalesOrderService
 
 ## Setting up cascading selection
 
-To set up the cascading selection of the territory and the salesperson, we will add the following code to the `SalesOrderSalesObjectCustomized.cs` class that was generated for us in the `AdventureWorks.Client.Common` project.
+To set up the [cascading selection](../../framework/common-ui/properties/enum#cascading-selection) of the territory and the salesperson, we will add the following code to the `SalesOrderSalesObjectCustomized.cs` class that was generated for us in the `AdventureWorks.Client.Common` project.
 
 ```cs title="SalesOrderSalesObjectCustomized.cs"
+/* added-next-line */
 using AdventureWorks.Services.Common.Enumerations;
 ...
 public class SalesOrderSalesObjectCustomized : SalesOrderSalesObject
@@ -369,13 +389,13 @@ public class SalesOrderSalesObjectCustomized : SalesOrderSalesObject
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        // highlight-next-line
+/* added-next-line */
         SalesPersonIdProperty.SetCascadingProperty(SalesPerson.Attributes.TerritoryId, TerritoryIdProperty);
     }
 }
 ```
 
-Notice how we can use generated constants for the attributes of the sales person dynamic enumeration that we defined earlier.
+Notice how we can use generated constants for the attributes of the *sales person* dynamic enumeration that we defined earlier.
 
 ## Reviewing the results
 

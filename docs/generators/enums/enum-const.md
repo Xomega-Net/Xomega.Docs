@@ -10,7 +10,7 @@ This allows using the generated constants in the code to refer to specific items
 
 ## Generator inputs
 
-For each static enumeration that is declared in the model using `enum` element, or dynamic enumeration that is defined by a `xfk:enum-cache` config element of a `read list` operation, the generator will create a static C# class, which will contain a constant `EnumName` with the enumeration name, a nested class `Attributes` with constants for the names of enumeration properties, and a nested class `Parameters` with constants for the input parameters, as appropriate.
+For each static enumeration that is declared in the model using `enum` element, or dynamic enumeration that is defined by a `xfk:enum-cache` config element of a `read enum` operation, the generator will create a static C# class, which will contain a constant `EnumName` with the enumeration name, a nested class `Attributes` with constants for the names of enumeration properties, and a nested class `Parameters` with constants for the input parameters, as appropriate.
 
 For static enumerations it will also contain string constants for enumeration items, which will be assigned to the item value. If enumeration inherits from another enumeration, the list of items will be merged with the base enumeration.
 
@@ -47,12 +47,12 @@ The following example illustrates how a `person type` enumeration has a single-v
 
 ### Properties of dynamic enumerations
 
-For dynamic enumerations that are based on a `read list` operation, additional properties come from the output parameters that are not marked as `id-param` or `desc-param` on the `xfk:enum-cache` element, as demonstrated below for the output parameters `country region code` and `group`.
+For dynamic enumerations that are based on a `read enum` operation, additional properties come from the output parameters that are not marked as `id-param` or `desc-param` on the `xfk:enum-cache` element, as demonstrated below for the output parameters `country region code` and `group`.
 
 ```xml
 <object name="sales territory">
   <operations>
-    <operation name="read list" type="readlist">
+    <operation name="read enum">
       <output list="true">
         <param name="territory id"/>
         <param name="name"/>
@@ -73,14 +73,14 @@ For dynamic enumerations that are based on a `read list` operation, additional p
 
 ### Parameters of contextual enumerations
 
-For dynamic enumerations based on a `read list` operation that have input parameters, and their list of values is therefore dependent on the values of those parameters, constants for the names of such parameters will be generated in the `Parameters` class, so that they could be used with the local lookup cache loaders.
+For dynamic enumerations based on a `read enum` operation that have input parameters, and their list of values is therefore dependent on the values of those parameters, constants for the names of such parameters will be generated in the `Parameters` class, so that they could be used with the local lookup cache loaders.
 
 The following snippet shows such an enumeration with a `product id` input parameter.
 
 ```xml
 <object name="special offer product">
   <operations>
-    <operation name="read list" type="readlist">
+    <operation name="read enum">
       <input>
 <!-- highlight-next-line -->
         <param name="product id" type="product" required="true"/>
@@ -184,7 +184,7 @@ The sections below provide some details on how to work with the generator.
 
 You can run this generator for the entire model only.
 
-You can rerun the generator when you add or change enumeration items or properties, or the `xfk:enum-cache` configuration of `read list` operations, or if you change any parameters on those operations.
+You can rerun the generator when you add or change enumeration items or properties, or the `xfk:enum-cache` configuration of `read enum` operations, or if you change any parameters on those operations.
 
 :::note
 Normally, the latter will require re-running other generators that depend on the same model elements, such as generators of UI views, data objects, service and data contracts or the service implementations.

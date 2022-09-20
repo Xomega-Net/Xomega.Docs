@@ -254,7 +254,7 @@ This association will not only help you configure selection and validation of th
 
 If the possible values for the type are not static, but are sourced from a service operation that is configured to cache its results as a [dynamic enumeration](services.md#dynamic-enumerations) using `xfk:enum-cache` config, then you can also associate such a dynamic enumeration with your logical type, much the same way you do it with static enumerations. You just need to use the dynamic enumeration name that is configured in the `enum-name` attribute when you set the enum's `ref` attribute on your type.
 
-In the following example the dynamic enumeration `product` is sourced by the `read list` operation of the `product` object, and is associated with the `product` type, as shown below.
+In the following example the dynamic enumeration `product` is sourced by the `read enum` operation of the `product` object, and is associated with the `product` type, as shown below.
 
 ```xml
   <types>
@@ -269,7 +269,7 @@ In the following example the dynamic enumeration `product` is sourced by the `re
       <fields>[...]
       <operations>
 <!-- highlight-next-line -->
-        <operation name="read list" type="readlist">
+        <operation name="read enum">
           <output list="true">
             <param name="product id"/>
             <param name="name"/>

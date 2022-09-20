@@ -709,11 +709,11 @@ For each item stored in the database, you can either provide translations in a s
 
 #### Translations in separate columns
 
-If you store translations for each supported language in a separate column, then you can define those columns on the same object that stores the enumerated items. In the `read list` operation that returns those items you will need to add output parameters for each language using the `lang-<Culture Name>` convention, and make sure they return the localized values for each language.
+If you store translations for each supported language in a separate column, then you can define those columns on the same object that stores the enumerated items. In the `read enum` operation that returns those items you will need to add output parameters for each language using the `lang-<Culture Name>` convention, and make sure they return the localized values for each language.
 
 In the following example, we store a list of address types with their names in a database table, and specify additional German and Spanish translations in the `name-de` and `name-es` fields respectively.
 
-We return those fields as the `lang-de` and `lang-es` parameters in the `read list` operation. However, since these names don't match, we need to map them in the custom code of the generated `AddressTypeService` class.
+We return those fields as the `lang-de` and `lang-es` parameters in the `read enum` operation. However, since these names don't match, we need to map them in the custom code of the generated `AddressTypeService` class.
 
 <Tabs>
   <TabItem value="xom" label="address_type.xom" default>
@@ -730,7 +730,7 @@ We return those fields as the `lang-de` and `lang-es` parameters in the `read li
   </fields>
   <operations>
 <!-- highlight-next-line -->
-    <operation name="read list" type="readlist">
+    <operation name="read enum">
       <output list="true">
         <param name="address type id"/>
         <param name="name"/>
@@ -750,19 +750,19 @@ We return those fields as the `lang-de` and `lang-es` parameters in the `read li
   <TabItem value="svc" label="AddressTypeService.cs" default>
 
 ```cs
-public virtual async Task<Output<ICollection<AddressType_ReadListOutput>>>
+public virtual async Task<Output<ICollection<AddressType_ReadEnumOutput>>>
 // highlight-next-line
-    ReadListAsync(CancellationToken token = default)
+    ReadEnumAsync(CancellationToken token = default)
 {
     ...
     var qry = from obj in ctx.AddressType
-              select new AddressType_ReadListOutput() {
+              select new AddressType_ReadEnumOutput() {
                   AddressTypeId = obj.AddressTypeId,
                   Name = obj.Name,
-                  // CUSTOM_CODE_START: set the LangDe output parameter of ReadList operation below
+                  // CUSTOM_CODE_START: set the LangDe output parameter of ReadEnum operation below
 // highlight-next-line
                   LangDe = obj.NameDe, // CUSTOM_CODE_END
-                  // CUSTOM_CODE_START: set the LangEs output parameter of ReadList operation below
+                  // CUSTOM_CODE_START: set the LangEs output parameter of ReadEnum operation below
 // highlight-next-line
                   LangEs = obj.NameEs, // CUSTOM_CODE_END
               };
@@ -772,14 +772,14 @@ public virtual async Task<Output<ICollection<AddressType_ReadListOutput>>>
 ```
 
   </TabItem>
-  <TabItem value="cl" label="AddressTypeReadListCacheLoader.cs" default>
+  <TabItem value="cl" label="AddressTypeReadEnumCacheLoader.cs" default>
 
 ```cs
 protected override async Task LoadCacheAsync(string tableType, CacheUpdater updateCache,
                                              CancellationToken token = default)
 {
     var data = new Dictionary<string, Dictionary<string, Header>>();
-    var output = await ReadListAsync(token);
+    var output = await ReadEnumAsync(token);
     ...
     foreach (var row in output.Result)
     {
@@ -803,15 +803,15 @@ protected override async Task LoadCacheAsync(string tableType, CacheUpdater upda
   </TabItem>
 </Tabs>
 
-As you can see, the generated `AddressTypeReadListCacheLoader` class will add those parameters as additional attributes to the `Header` objects, which will handle them automatically based on their names.
+As you can see, the generated `AddressTypeReadEnumCacheLoader` class will add those parameters as additional attributes to the `Header` objects, which will handle them automatically based on their names.
 
 #### Translations in a child table
 
-If you want to support a dynamic list of languages rather than a preset list, then you need to store your translations in a child table, where each row provides the current item's translation into a specific language. You can return them as a list of nested structures in your `read list` operation, and make sure that the language parameter is returned in the proper format `lang-<Culture Name>`.
+If you want to support a dynamic list of languages rather than a preset list, then you need to store your translations in a child table, where each row provides the current item's translation into a specific language. You can return them as a list of nested structures in your `read enum` operation, and make sure that the language parameter is returned in the proper format `lang-<Culture Name>`.
 
 In order for the generated cache loader to properly add the nested records as additional attributes of the `Header` objects, you need to add the `xfk:properties` child element to the `xfk:enum-cache` definition, where you specify which parameter has the attribute name and which one has the value.
 
-In the following example we added a `translation` subobject of the `address type` that has a `lang` and `text` fields. You can store the value in the `lang` field as just the culture name, such as `en` or `en-US`, but you'll need to convert it in the `AddressTypeService` to the `lang-<Culture Name>` format, when you return it as part of the nested `translations` list in the `read list` operation.
+In the following example we added a `translation` subobject of the `address type` that has a `lang` and `text` fields. You can store the value in the `lang` field as just the culture name, such as `en` or `en-US`, but you'll need to convert it in the `AddressTypeService` to the `lang-<Culture Name>` format, when you return it as part of the nested `translations` list in the `read enum` operation.
 
 <Tabs>
   <TabItem value="xom" label="address_type.xom" default>
@@ -823,7 +823,7 @@ In the following example we added a `translation` subobject of the `address type
     <field name="name" type="name" required="true"/>
   </fields>
   <operations>
-    <operation name="read list" type="readlist">
+    <operation name="read enum">
       <output list="true">
         <param name="address type id"/>
         <param name="name"/>
@@ -860,19 +860,19 @@ In the following example we added a `translation` subobject of the `address type
   <TabItem value="svc" label="AddressTypeService.cs" default>
 
 ```cs
-public virtual async Task<Output<ICollection<AddressType_ReadListOutput>>>
+public virtual async Task<Output<ICollection<AddressType_ReadEnumOutput>>>
 // highlight-next-line
-    ReadListAsync(CancellationToken token = default)
+    ReadEnumAsync(CancellationToken token = default)
 {
     ...
     var qry = from obj in ctx.AddressType
-              select new AddressType_ReadListOutput() {
+              select new AddressType_ReadEnumOutput() {
                   AddressTypeId = obj.AddressTypeId,
                   Name = obj.Name,
-                  // CUSTOM_CODE_START: set the Translations output parameter of ReadList operation below
+                  // CUSTOM_CODE_START: set the Translations output parameter of ReadEnum operation below
 // highlight-start
                   Translations = obj.TranslationObjectList.Select(tr =>
-                                      new AddressType_ReadListOutput_Translations() {
+                                      new AddressType_ReadEnumOutput_Translations() {
                                           Lang = $"lang-{tr.Lang}",
                                           Text = tr.Text
                                   }).ToList(), // CUSTOM_CODE_END
@@ -884,14 +884,14 @@ public virtual async Task<Output<ICollection<AddressType_ReadListOutput>>>
 ```
 
   </TabItem>
-  <TabItem value="cl" label="AddressTypeReadListCacheLoader.cs" default>
+  <TabItem value="cl" label="AddressTypeReadEnumCacheLoader.cs" default>
 
 ```cs
 protected override async Task LoadCacheAsync(string tableType, CacheUpdater updateCache,
                                              CancellationToken token = default)
 {
     var data = new Dictionary<string, Dictionary<string, Header>>();
-    var output = await ReadListAsync(token);
+    var output = await ReadEnumAsync(token);
     ...
     foreach (var row in output.Result)
     {
@@ -904,7 +904,7 @@ protected override async Task LoadCacheAsync(string tableType, CacheUpdater upda
             tbl[id] = h = new Header(type, id, row.Name);
 
 // highlight-start
-        foreach (AddressType_ReadListOutput_Translations p in row.Translations)
+        foreach (AddressType_ReadEnumOutput_Translations p in row.Translations)
             h.AddToAttribute(p.Lang, p.Text);
 // highlight-end
     }
@@ -915,4 +915,4 @@ protected override async Task LoadCacheAsync(string tableType, CacheUpdater upda
   </TabItem>
 </Tabs>
 
-As you can see, the generated `AddressTypeReadListCacheLoader` class will add the rows from the `Translations` list as additional attributes to the `Header` objects, which will handle them automatically based on their names.
+As you can see, the generated `AddressTypeReadEnumCacheLoader` class will add the rows from the `Translations` list as additional attributes to the `Header` objects, which will handle them automatically based on their names.

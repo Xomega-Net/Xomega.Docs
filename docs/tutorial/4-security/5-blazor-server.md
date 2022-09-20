@@ -8,7 +8,7 @@ So far we've been writing and generating common security code that you can reuse
 
 ## Enabling authentication
 
-First, let's open the main `App.razor` file in the `AdventureWorks.Client.Blazor.Common` project that was installed with the Xomega template, and replace the usage of the standard `RouteView` component with the secured `AuthorizeRouteView` component, as follows.
+First, let's open the main `App.razor` file in the `AdventureWorks.Client.Blazor.Common` project that was installed with the Xomega template, comment out the usage of the standard `RouteView` component, and uncomment the secured `AuthorizeRouteView` component, as follows.
 
 ```razor title="App.razor"
 <Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="@AdditionalAssemblies">
@@ -69,6 +69,7 @@ We want the "/login" route to show our generated `LoginView.razor` from the *Vie
 To implement the actual sign-in logic for our Blazor Server app, we'll need to add a new class `BlazorLoginView` to the `AdventureWorks.Client.Blazor.Server` project, which will extend from our common `LoginView`, have an attribute for the "/login" route, and the code that performs authentication as shown below.
 
 ```cs title="BlazorLoginView.cs"
+/* added-lines-start */
 using AdventureWorks.Client.Blazor.Common.Views;
 using AdventureWorks.Services.Common;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -102,7 +103,8 @@ namespace AdventureWorks.Client.Blazor.Server
                 if (VM?.MainObj?.EmailProperty?.Value != null)
                 {
 // highlight-start  
-                    Output<PersonInfo> output = await personService.ReadAsync(VM.MainObj.EmailProperty.Value);
+                    Output<PersonInfo> output = await personService.ReadAsync(VM.MainObj.EmailProperty.Value,
+                                                                              token);
                     ci = SecurityManager.CreateIdentity(CookieAuthenticationDefaults.AuthenticationScheme,
                                                         output.Result);
 // highlight-end  
@@ -116,6 +118,7 @@ namespace AdventureWorks.Client.Blazor.Server
         }
     }
 }
+/* added-lines-end */
 ```
 
 Essentially, we let the framework validate the user email and password from our `AuthenticationObject`, and let it call our `Authenticate` service operation when the user clicks the *Save* button. If there are any client-side or server-side errors, then they will be displayed on the screen. Otherwise, the view will raise a `Saved` event, which we will handle in our custom method `OnViewEventsAsync`.
@@ -165,10 +168,11 @@ namespace AdventureWorks.Client.Blazor.Common.Views
         protected override void OnInitialized()
         {
             base.OnInitialized();
-// highlight-start
+
+/* added-lines-start */
             Visible = true;
             ActivateFromQuery = true;
-// highlight-end
+/* added-lines-end */
         }
     }
 }
@@ -188,6 +192,10 @@ So, let's open up this resource file, and add an override for the *Save* button 
 ## Reviewing authentication
 
 If we run the Blazor Server application now, we'll be redirected to our *Login* view.
+
+:::tip
+If you run it in Debug mode and get a `Microsoft.AspNetCore.Components.NavigationException`, then you can just click *Continue*, and also configure it to not break on such exceptions.
+:::
 
 ### Client-side validations
 
@@ -240,14 +248,14 @@ public class Startup
     {
         ...
         // TODO: add authorization with any security policies
-// highlight-start
+/* added-lines-start */
         services.AddAuthorization(o => {
             o.AddPolicy("Sales", policy => policy.RequireAssertion(ctx =>
                 ctx.User.IsEmployee() ||
                 ctx.User.IsIndividualCustomer() ||
                 ctx.User.IsStoreContact()));
         });
-// highlight-end
+/* added-lines-end */
         ...
     }
 }
@@ -283,12 +291,14 @@ public class Startup
 
     private void SecureMenu(MenuItem mi)
     {
-// highlight-start
+/* removed-next-line */
+        mi.Policy = null;
+/* added-lines-start */
         if (mi?.Href == null) return;
         if (mi.Href.StartsWith("Sales") || mi.Href.StartsWith("Customer"))
             mi.Policy = "Sales";
         else mi.Policy = ""; // visible for all authorized users
-// highlight-end
+/* added-lines-end */
     }
 }
 ```
@@ -324,6 +334,7 @@ To work around it, we'll add a new file in the same *Views/Sales* project folder
 In that new file we'll declare a partial class for the same page *using the same namespace*, and will add our `Authorize` attribute, as follows.
 
 ```cs title="SalesOrderListViewPageCustomized.cs"
+/* added-lines-start */
 using Microsoft.AspNetCore.Authorization;
 
 // highlight-next-line
@@ -335,6 +346,7 @@ namespace AdventureWorks.Client.Blazor.Common.Views
     {
     }
 }
+/* added-lines-end */
 ```
 
 ### Reviewing page security

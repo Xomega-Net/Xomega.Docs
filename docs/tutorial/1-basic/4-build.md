@@ -19,9 +19,9 @@ This will run the generators and write their output to the respective output pat
 :::danger
 **Beware of the *Clean*** option, unless you know what you are doing.
 
-The *Clean* option will **delete** all **generated files**, and any **mixed in customizations**.
+The *Clean* option will **delete** all **generated files**, and any **mixed-in customizations**.
 
-Cleaning is only useful when you are renaming model entities in such a way, that it affects the names of the generated files, and you need to clean up the old files. Always check in your files to your source control first.
+Cleaning is only useful when you are renaming model entities in such a way, that it affects the names of the generated files, and you need to clean up the old files. Always **check in your files to your source control** first.
 :::
 
 ## Model build output

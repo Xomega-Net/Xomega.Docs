@@ -6,7 +6,7 @@ sidebar_position: 6
 
 In this section you'll learn how to secure a Blazor WebAssembly application, which uses a different authentication mechanism than the Blazor Server application that we secured earlier, since it uses a standalone REST API to call business services.
 
-Nevertheless, make sure you complete the previous section on [Blazor Server security](5-blazor-server.md) first, since we added some common code that applies to both Blazor Server and WebAssembly.
+Nevertheless, make sure you **complete the previous section** on [Blazor Server security](5-blazor-server.md) first, since we added some common code that applies to both Blazor Server and WebAssembly.
 
 ## Adding REST API authentication
 
@@ -17,20 +17,22 @@ This project was also pre-configured with an `AuthenticationController` under th
 First thing that we need to do to implement proper authentication for the REST API is to inject our `PersonService` into the `AuthenticationController` as follows.
 
 ```cs title="AuthenticationController.cs"
+/* added-next-line */
 using AdventureWorks.Services.Common;
 ...
 public class AuthenticationController : TokenAuthController
 {
-// highlight-next-line
+    ...
+/* added-next-line */
     private readonly IPersonService personService;
 
     public AuthenticationController(ErrorList errorList, ErrorParser errorParser,
         IOptionsMonitor<AuthConfig> configOptions,
-// highlight-next-line
+/* added-next-line */
         IPersonService personService)
         : base(errorList, errorParser, configOptions)
     {
-// highlight-next-line
+/* added-next-line */
         this.personService = personService;
     }
 }
@@ -53,16 +55,28 @@ public async Task<ActionResult> AuthenticateAsync([FromBody] Credentials credent
 // highlight-end
         currentErrors.AbortIfHasErrors();
 
-// highlight-start
+        // TODO: validate credentials.UserName and credentials.Password here.
+        // Inject services in the controller for that as needed.
+/* removed-lines-start */
+        await Task.CompletedTask;
+
+        string user = string.IsNullOrEmpty(credentials?.Username) ? "Guest" : credentials.Username;
+/* removed-lines-end */
+
         ClaimsIdentity identity = new ClaimsIdentity();
+/* removed-lines-start */
+        // TODO: add claims for the validated user
+        identity.AddClaim(new Claim(ClaimTypes.Name, user));
+/* removed-lines-end */
+/* added-lines-start */
         await personService.AuthenticateAsync(new Common.Credentials()
         {
             Email = credentials.Username,
             Password = credentials.Password
-        });
-        var info = await personService.ReadAsync(credentials.Username);
+        }, token);
+        var info = await personService.ReadAsync(credentials.Username, token);
         identity = SecurityManager.CreateIdentity(JwtBearerDefaults.AuthenticationScheme, info.Result);
-// highlight-end
+/* added-lines-end */
 
         // generate jwt token
         var jwtTokenHandler = new JwtSecurityTokenHandler();
@@ -81,17 +95,18 @@ This should secure our REST services using the password authentication that we s
 
 ## Implementing the Login view
 
-Next, similarly to what we did for the `AdventureWorks.Client.Blazor.Server` project, we need to add a subclass of the generated `LoginView` to the our project, which will map to the "/login" route, and implement the WebAssembly-specific authentication logic.
+Next, similarly to [what we did](blazor-server#implementing-loginview) for the `AdventureWorks.Client.Blazor.Server` project, we need to add a subclass of the generated `LoginView` to the our project, which will map to the "/login" route, and implement the WebAssembly-specific authentication logic.
 
 Unlike Blazor Server application, instead of calling our custom `authenticate` operation directly, we need to call the `AuthenticationController` that we set up above, which will return a JWT authentication token. Therefore, we'll need to override the entire *Save* button click handler `OnSaveAsync`, and implement custom authentication code.
 
 So let's add a class `BlazorLoginView` to the `AdventureWorks.Client.Blazor.Wasm` project, set the `Route` attribute for the "/login" route, and provide WebAssembly authentication logic, as shown below.
 
 ```cs title="BlazorLoginView.cs"
+/* added-lines-start */
 using AdventureWorks.Client.Blazor.Common.Views;
 using AdventureWorks.Client.Common.DataObjects;
 using AdventureWorks.Services.Common;
-...
+using System.Linq;
 using Xomega.Framework.Views;
 
 namespace AdventureWorks.Client.Blazor.Wasm
@@ -136,6 +151,7 @@ namespace AdventureWorks.Client.Blazor.Wasm
         }
     }
 }
+/* added-lines-end */
 ```
 
 First, we validate the data object properties, and report any client-side errors.
@@ -175,30 +191,36 @@ public class Program
     {
         ...
         // add authorization
-// highlight-start
+/* removed-next-line */
+        services.AddAuthorizationCore(); // TODO: add security policies
+/* added-lines-start */
         services.AddAuthorizationCore(o => {
             o.AddPolicy("Sales", policy => policy.RequireAssertion(ctx =>
                 ctx.User.IsEmployee() ||
                 ctx.User.IsIndividualCustomer() ||
                 ctx.User.IsStoreContact()));
         });
-// highlight-end
+/* added-lines-end */
         ...
     }
 
     private static void SecureMenu(MenuItem mi)
     {
-// highlight-start
+/* removed-lines-start */
+        // TODO: set security policy for navigation menu items here
+        mi.Policy = null;
+/* removed-lines-end */
+/* added-lines-start */
         if (mi?.Href == null) return;
         if (mi.Href.StartsWith("Sales") || mi.Href.StartsWith("Customer"))
             mi.Policy = "Sales";
         else mi.Policy = ""; // visible for all authorized users
-// highlight-end
+/* added-lines-end */
     }
 }
 ```
 
-:::note
+:::tip
 If you are planning to have both Blazor Server and WebAssembly projects, it would be better to add this security code to the shared `AdventureWorks.Client.Blazor.Common` project instead.
 :::
 

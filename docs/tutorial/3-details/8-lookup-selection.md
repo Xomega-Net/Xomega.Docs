@@ -10,13 +10,13 @@ What we really need is a way to look up the customer by some attributes like nam
 
 ## Adding Lookup View generator
 
-First thing we need to do is to create a *Customer Search* view similar to how we've created a search view for sales orders. However, in this particular case, we're interested in only the Search view for customers, without any Details views.
+First thing we need to do is to create a *Customer Search* view similar to how we've created a search view for sales orders. However, in this particular case, we're interested in only a Search view for customers, without any Details views.
 
 So, to enhance the customer object in the model with just a `read list` operation and a search view without the CRUD operations or views, we will configure a new *Lookup View* generator by cloning existing *Full CRUD with Views* generator. You can do it by selecting it, pressing Ctrl+C to clone, and then pressing F2 to rename it in the tree, as illustrated below.
 
 ![Copy CRUD generator](img8/gen-crud-copy.png)
 
-We will give it a name `Lookup View`, and then open its properties, and set the `Generate CRUD` flag to `False` under the *Operations* group as follows.
+We will give it a name `Lookup View`, and then open its properties, and set the `Generate CRUD` and `Generate Subobject CRUD` flags to `False` under the *Operations CRUD* group as follows.
 
 ![Lookup view generator](img8/gen-lookup-view.png)
 
@@ -44,15 +44,29 @@ As for the criteria, we'll just allow filtering by the same parameters using ope
         <operation name="read list" type="readlist">
           <input>
             <struct name="criteria">
+<!-- removed-lines-start -->
+              <param name="person id operator" type="operator">[...]
+              <param name="person id" required="false"/>
+              <param name="store id operator" type="operator">[...]
+              <param name="store id" required="false"/>
+              <param name="territory id operator" type="operator">[...]
+<!-- removed-lines-end -->
               <param name="territory id" required="false"/>
-              <!-- highlight-start -->
+<!-- added-lines-start -->
               <param name="person name operator" type="operator"/>
               <param name="person name" type="string"/>
               <param name="store name operator" type="operator"/>
               <param name="store name" type="string"/>
-              <!-- highlight-end -->
-              <param name="account number operator" type="operator"/>
+<!-- added-lines-end -->
+              <param name="account number operator" type="operator">[...]
               <param name="account number" required="false"/>
+<!-- removed-lines-start -->
+              <param name="rowguid operator" type="operator">[...]
+              <param name="rowguid" required="false"/>
+              <param name="modified date operator" type="operator">[...]
+              <param name="modified date" required="false"/>
+              <param name="modified date2" type="date time" required="false">[...]
+<!-- removed-lines-end -->
               <config>
                 <xfk:add-to-object class="CustomerCriteria"/>
               </config>
@@ -61,13 +75,17 @@ As for the criteria, we'll just allow filtering by the same parameters using ope
           <output list="true">
             <param name="customer id"/>
             <param name="person id"/>
-            <!-- highlight-next-line -->
+<!-- added-next-line -->
             <param name="person name" type="string"/>
             <param name="store id"/>
-            <!-- highlight-next-line -->
+<!-- added-next-line -->
             <param name="store name" type="string"/>
             <param name="territory id"/>
             <param name="account number"/>
+<!-- removed-lines-start -->
+            <param name="rowguid"/>
+            <param name="modified date"/>
+<!-- removed-lines-end -->
             <config>
               <xfk:add-to-object class="CustomerList"/>
             </config>
@@ -83,25 +101,24 @@ To make our customer lookup view look pretty, we will configure the data objects
 
 ```xml title="customer.xom"
   <xfk:data-objects>
-    <!-- highlight-next-line -->
     <xfk:data-object class="CustomerCriteria">
+<!-- added-lines-start -->
       <ui:display>
         <ui:fields>
-          <!-- highlight-next-line -->
           <ui:field param="territory id" label="Territory"/>
         </ui:fields>
       </ui:display>
     </xfk:data-object>
-    <!-- highlight-next-line -->
+<!-- added-lines-end -->
     <xfk:data-object class="CustomerList" list="true">
       <ui:display>
         <ui:fields>
           <ui:field param="customer id" hidden="true"/>
-          <!-- highlight-start -->
+<!-- added-lines-start -->
           <ui:field param="store id" hidden="true"/>
           <ui:field param="person id" hidden="true"/>
           <ui:field param="territory id" label="Territory"/>
-          <!-- highlight-end -->
+<!-- added-lines-end -->
         </ui:fields>
       </ui:display>
     </xfk:data-object>
@@ -125,14 +142,18 @@ public partial class CustomerService : BaseService, ICustomerService
                       CustomerId = obj.CustomerId,
                       PersonId = obj.PersonId,
                       // CUSTOM_CODE_START: set the PersonName output parameter of ReadList operation below
-// highlight-start
+/* removed-next-line */
+                      // TODO: PersonName = obj.???, // CUSTOM_CODE_END
+/* added-lines-start */
                       PersonName = obj.PersonObject == null ? null :
                                    obj.PersonObject.LastName + ", " +
                                    obj.PersonObject.FirstName, // CUSTOM_CODE_END
-// highlight-end
+/* added-lines-end */
                       StoreId = obj.StoreId,
                       // CUSTOM_CODE_START: set the StoreName output parameter of ReadList operation below
-// highlight-next-line
+/* removed-next-line */
+                      // TODO: StoreName = obj.???, // CUSTOM_CODE_END
+/* added-next-line */
                       StoreName = obj.StoreObject.Name, // CUSTOM_CODE_END
                       TerritoryId = obj.TerritoryId,
                       AccountNumber = obj.AccountNumber,
@@ -140,6 +161,16 @@ public partial class CustomerService : BaseService, ICustomerService
         ...
     }
 }
+```
+
+In order to make sure that your inline customizations are [preserved if you run the *Clean* command](../search/custom-result#caution-on-mixed-in-customizations) on the model, you can add a  `svc:customize` config element to the `customer` object, and set the `preserve-on-clean="true"` attribute, as follows.
+
+```xml title="special_offer.xom"
+    <config>
+      <sql:table name="Sales.Customer"/>
+<!-- added-next-line -->
+      <svc:customize preserve-on-clean="true"/>
+    </config>
 ```
 
 ## Adding a Lookup link
@@ -155,16 +186,13 @@ The following snippet shows what this setup will look like.
 ```xml title="sales_order.xom"
     <xfk:data-object class="SalesOrderCustomerObject">
       <ui:display>[...]
-      <!-- highlight-next-line -->
+<!-- added-lines-start -->
       <ui:link name="look up" view="CustomerListView" child="true">
         <ui:params>
-          <!-- highlight-start -->
           <ui:param name="_action" value="select"/>
           <ui:param name="_selection" value="single"/>
-          <!-- highlight-end -->
         </ui:params>
         <ui:result>
-          <!-- highlight-start -->
           <ui:param name="customer id" field="customer id"/>
           <ui:param name="store id" field="store id"/>
           <ui:param name="store name" field="store name"/>
@@ -172,9 +200,9 @@ The following snippet shows what this setup will look like.
           <ui:param name="person name" field="person name"/>
           <ui:param name="account number" field="account number"/>
           <ui:param name="territory id" field="territory id"/>
-          <!-- highlight-end -->
         </ui:result>
       </ui:link>
+<!-- added-lines-end -->
     </xfk:data-object>
 ```
 
@@ -204,18 +232,21 @@ Then we'll move the `look up` link to that new object, and will update the resul
 
 ```xml
     <xfk:data-object class="SalesOrderCustomerObject">
-      <!-- highlight-next-line -->
+<!-- added-next-line -->
       <xfk:add-child name="lookup" class="SalesCustomerLookupObject"/>
       <ui:display>[...]
+<!-- added-lines-start -->
     </xfk:data-object>
-    <!-- highlight-next-line -->
     <xfk:data-object class="SalesCustomerLookupObject">
+<!-- added-lines-end -->
       <ui:link name="look up" view="CustomerListView" child="true">
         <ui:params>
           <ui:param name="_action" value="select"/>
           <ui:param name="_selection" value="single"/>
         </ui:params>
-        <!-- highlight-next-line -->
+<!-- removed-next-line -->
+        <ui:result>
+<!-- added-next-line -->
         <ui:result data-object="..">
           <ui:param name="customer id" field="customer id"/>
           <ui:param name="store id" field="store id"/>
@@ -232,17 +263,18 @@ Then we'll move the `look up` link to that new object, and will update the resul
 To add properties to this data object we will define an auxiliary structure `customer lookup` with `store name` and `person name` parameters added to this data object, as follows.
 
 ```xml
-    <!-- highlight-next-line -->
+<!-- added-lines-start -->
     <struct name="customer lookup">
       <param name="store name" type="string"/>
       <param name="person name" type="string"/>
       <config>
-        <!-- highlight-next-line -->
+<!-- highlight-next-line -->
         <xfk:add-to-object class="SalesCustomerLookupObject"/>
       </config>
-      <!-- highlight-next-line -->
+<!-- highlight-next-line -->
       <usage generic="true"/>
     </struct>
+<!-- added-lines-end -->
 ```
 
 :::note
@@ -257,12 +289,12 @@ Now that we have added the `store name` and `person name` properties to our look
         <ui:params>
           <ui:param name="_action" value="select"/>
           <ui:param name="_selection" value="single"/>
-<!-- highlight-start -->
+<!-- added-lines-start -->
           <ui:param name="store name operator" value="CN"/>
           <ui:param name="store name" field="store name"/>
           <ui:param name="person name operator" value="CN"/>
           <ui:param name="person name" field="person name"/>
-<!-- highlight-end -->
+<!-- added-lines-end -->
         </ui:params>
         <ui:result data-object="..">[...]
       </ui:link>
@@ -290,7 +322,7 @@ Next, we'll need to build the model project, open up the generated `SalesCustome
         protected override void Initialize()
         {
             base.Initialize();
-// highlight-next-line
+/* added-next-line */
             TrackModifications = false;
         }
         ...

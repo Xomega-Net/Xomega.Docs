@@ -20,35 +20,60 @@ We will start improving the *Sales Order* details screen by updating the child t
 
 ## Product enumeration
 
-We will turn the list of products into a dynamic enumeration, since it does not change very often, and is not too large, so it can be cached. Make sure that you set the `Make Key Type Enumerated` property of the *Enumeration Read List* generator to `True`, so that it would automatically configure the key type. Next, open up the `product.xom` file in the model, and run that generator on that file, as shown below.
+We will turn the list of products into a dynamic enumeration, since it does not change very often, and is not too large, so it can be cached. Make sure that you set the `Make Key Type Enumerated` property of the * Read Enum Operation* generator to `True`, so that it would automatically configure the key type. Next, open up the `product.xom` file in the model, and run that generator on that file, as shown below.
 
 ![Product gen enum](img1/product-gen-enum.png)
 
 ### Configuring enumeration fields
 
-Expand the generated `read list` operation on the `product` object, and remove any extraneous parameters, except for the `product id` and `name`, which are used as the enumeration's ID and description parameters respectively, as well as the `product subcategory id` and the `product model id`, which we could use for cascading selection.
+Expand the generated `read enum` operation on the `product` object, and remove any extraneous parameters, except for the `product id` and `name`, which are used as the enumeration's ID and description parameters respectively, as well as the `product subcategory id` and the `product model id`, which we could use for cascading selection.
 
 Also, add a required boolean parameter `is active`, which will indicate if this is a current product that has not been discontinued. We will also set this parameter as such on the enumeration configuration, so that it would not prompt discontinued products in any selection lists, but can still use them to decode a product ID into the corresponding name.
 
-Your `read list` operation will look as follows.
+With these changes your `read enum` operation will look as follows.
 
 ```xml title="product.xom"
     <object name="product">
       ...
       <operations>
-        <operation name="read list" type="readlist">
+        <operation name="read enum">
           <output list="true">
             <param name="product id"/>
             <param name="name"/>
-            <!-- highlight-next-line -->
+<!-- added-next-line -->
             <param name="is active" type="boolean" required="true"/>
+<!-- removed-lines-start -->
+            <param name="product number"/>
+            <param name="make flag"/>
+            <param name="finished goods flag"/>
+            <param name="color"/>
+            <param name="safety stock level"/>
+            <param name="reorder point"/>
+            <param name="standard cost"/>
+            <param name="list price"/>
+            <param name="size"/>
+            <param name="size unit measure code"/>
+            <param name="weight unit measure code"/>
+            <param name="weight"/>
+            <param name="days to manufacture"/>
+            <param name="product line"/>
+            <param name="class"/>
+            <param name="style"/>
+<!-- removed-lines-end -->
             <param name="product subcategory id"/>
             <param name="product model id"/>
+<!-- removed-lines-start -->
+            <param name="sell start date"/>
+            <param name="sell end date"/>
+            <param name="discontinued date"/>
+            <param name="rowguid"/>
+            <param name="modified date"/>
+<!-- removed-lines-end -->
           </output>
           <config>
-            <rest:method verb="GET" uri-template="product"/>
+            <rest:method verb="GET" uri-template="product/enum"/>
             <xfk:enum-cache enum-name="product" id-param="product id" desc-param="name"
-                            <!-- highlight-next-line -->
+<!-- added-next-line -->
                             is-active-param="is active"/>
           </config>
         </operation>
@@ -75,19 +100,21 @@ Since we will display the product name instead of ID, let's configure the typica
 To add implementation for our `is active` parameter, we will regenerate all code by building the model, and then insert the following custom code into the generated `ReadListAsync` method of the `ProductService`.
 
 ```cs title="ProductService.cs"
-public virtual async Task<Output<ICollection<Product_ReadListOutput>>>
-    ReadListAsync(CancellationToken token = default)
+public virtual async Task<Output<ICollection<Product_ReadEnumOutput>>>
+    ReadEnumAsync(CancellationToken token = default)
 {
     ...
     var qry = from obj in src
-              select new Product_ReadListOutput() {
+              select new Product_ReadEnumOutput() {
                   ProductId = obj.ProductId,
                   Name = obj.Name,
-                  // CUSTOM_CODE_START: set the IsActive output parameter of ReadList operation below
-                  // highlight-start
+                  // CUSTOM_CODE_START: set the IsActive output parameter of ReadEnum operation below
+/* removed-next-line */
+                  // TODO: IsActive = obj.???, // CUSTOM_CODE_END
+/* added-lines-start */
                   IsActive = (obj.SellEndDate == null || obj.SellEndDate > DateTime.Today)
                               && obj.DiscontinuedDate == null, // CUSTOM_CODE_END
-                  // highlight-end
+/* added-lines-end */
                   ProductSubcategoryId = obj.ProductSubcategoryId,
                   ProductModelId = obj.ProductModelId,
               };
@@ -95,9 +122,19 @@ public virtual async Task<Output<ICollection<Product_ReadListOutput>>>
 }
 ```
 
+In order to make sure that your inline customizations are [preserved if you run the *Clean* command](../search/custom-result#caution-on-mixed-in-customizations) on the model, you can add a  `svc:customize` config element to the `product` object, and set the `preserve-on-clean="true"` attribute, as follows.
+
+```xml title="product.xom"
+    <config>
+      <sql:table name="Production.Product"/>
+<!-- added-next-line -->
+      <svc:customize preserve-on-clean="true"/>
+    </config>
+```
+
 ## Special offer enumeration
 
-We will do similar steps for the `special offer` object, generating a `read list` operation decorated with an enumeration declaration.
+We will do similar steps for the `special offer` object, generating a `read enum` operation decorated with an enumeration declaration.
 
 ![Special offer gen enum](img1/special-offer-gen-enum.png)
 
@@ -108,19 +145,31 @@ We will strip it off of any extraneous parameters except for the `special offer 
 ```xml title="special_offer.xom"
     <object name="special offer">
       <operations>
-        <operation name="read list" type="readlist">
+        <operation name="read enum">
           <output list="true">
             <param name="special offer id"/>
             <param name="description"/>
-            <!-- highlight-next-line -->
+<!-- added-next-line -->
             <param name="is active" type="boolean" required="true"/>
+<!-- removed-lines-start -->
+            <param name="discount pct"/>
+            <param name="type"/>
+<!-- removed-lines-end -->
             <param name="category"/>
+<!-- removed-lines-start -->
+            <param name="start date"/>
+            <param name="end date"/>
+            <param name="min qty"/>
+            <param name="max qty"/>
+            <param name="rowguid"/>
+            <param name="modified date"/>
+<!-- removed-lines-end -->
           </output>
           <config>
-            <rest:method verb="GET" uri-template="special-offer"/>
-            <xfk:enum-cache enum-name="special offer" id-param="special offer id"
-                            <!-- highlight-next-line -->
-                            desc-param="description" is-active-param="is active"/>
+            <rest:method verb="GET" uri-template="special-offer/enum"/>
+            <xfk:enum-cache enum-name="special offer" id-param="special offer id" desc-param="description"
+<!-- added-next-line -->
+                            is-active-param="is active"/>
           </config>
         </operation>
       </operations>
@@ -146,23 +195,35 @@ Since we will display the special offer description instead of ID, let's configu
 Lastly, we will build the model again, and will provide the custom code for the `is active` parameter implementation, as follows.
 
 ```cs title="SpecialOfferService.cs"
-public virtual async Task<Output<ICollection<SpecialOffer_ReadListOutput>>>
-    ReadListAsync(CancellationToken token = default)
+public virtual async Task<Output<ICollection<SpecialOffer_ReadEnumOutput>>>
+    ReadEnumAsync(CancellationToken token = default)
 {
     ...
     var qry = from obj in src
-              select new SpecialOffer_ReadListOutput() {
+              select new SpecialOffer_ReadEnumOutput() {
                   SpecialOfferId = obj.SpecialOfferId,
                   Description = obj.Description,
-                  // CUSTOM_CODE_START: set the IsActive output parameter of ReadList operation below
-                  // highlight-start
-                  IsActive = (obj.StartDate == null || obj.StartDate < DateTime.Today) &&
-                             (obj.EndDate == null || obj.EndDate > DateTime.Today), // CUSTOM_CODE_END
-                  // highlight-end
+                  // CUSTOM_CODE_START: set the IsActive output parameter of ReadEnum operation below
+/* removed-next-line */
+                  // TODO: IsActive = obj.???, // CUSTOM_CODE_END
+/* added-lines-start */
+                  IsActive = obj.StartDate < DateTime.Today &&
+                             obj.EndDate > DateTime.Today, // CUSTOM_CODE_END
+/* added-lines-end */
                   Category = obj.Category,
               };
     ...
 }
+```
+
+In order to make sure that your inline customizations are [preserved if you run the *Clean* command](../search/custom-result#caution-on-mixed-in-customizations) on the model, you can add a  `svc:customize` config element to the `special offer` object, and set the `preserve-on-clean="true"` attribute, as follows.
+
+```xml title="special_offer.xom"
+    <config>
+      <sql:table name="Sales.SpecialOffer"/>
+<!-- added-next-line -->
+      <svc:customize preserve-on-clean="true"/>
+    </config>
 ```
 
 ## Modeling child list
@@ -188,7 +249,7 @@ We will remove the `rowguid` and the `modified date` output parameters, and reor
                 </config>
               </input>
               <output list="true">
-                <!-- highlight-start -->
+<!-- highlight-start -->
                 <param name="sales order detail id"/>
                 <param name="product id" type="product" required="true"/>
                 <param name="order qty"/>
@@ -197,7 +258,11 @@ We will remove the `rowguid` and the `modified date` output parameters, and reor
                 <param name="special offer id" type="special offer" required="true"/>
                 <param name="line total"/>
                 <param name="carrier tracking number"/>
-                <!-- highlight-end -->
+<!-- highlight-end -->
+<!-- removed-lines-start -->
+                <param name="rowguid"/>
+                <param name="modified date"/>
+<!-- removed-lines-end -->
                 <config>
                   <xfk:add-to-object class="SalesOrderDetailList"/>
                 </config>
@@ -217,11 +282,15 @@ Note that these parameters will be added to the `SalesOrderDetailList` data obje
 For now, let's address the issues with the formatting of the `unit price discount` and `line total` fields. You can see that based on their SQL types the price discount was imported with type `money` and the line total was imported with a generated type `numeric_38_6`, which even has a warning on its definition saying that it extends a deprecated type `numeric`.
 
 ```xml
+<object name="detail">
+    ...
     <field name="unit price" type="money" required="true">[...]
-    <!-- highlight-start -->
+<!-- highlight-start -->
     <field name="unit price discount" type="money" required="true">[...]
     <field name="line total" type="numeric_38_6" required="true">[...]
-    <!-- highlight-end -->
+<!-- highlight-end -->
+    ...
+</object>
 ```
 
 For the `unit price discount` field, we will define a new type `discount` in the `sales_order.xom`, and use it for this field. The `discount` type will inherit from the `percent` base type to format the value as a percent, and also override the data property to use the `PercentFractionProperty`, which validates that the value is a fractional number between 0 and 1, as shown below.
@@ -266,7 +335,7 @@ Next, let's open the `SalesOrderDetailList` data object, and provide some custom
       <ui:display>
         <ui:fields>
           <ui:field param="sales order detail id" hidden="true"/>
-          <!-- highlight-start -->
+<!-- added-lines-start -->
           <ui:field param="product id" label="Product"/>
           <ui:field param="order qty" label="Qty"/>
           <ui:field param="unit price" label="Price"/>
@@ -274,14 +343,17 @@ Next, let's open the `SalesOrderDetailList` data object, and provide some custom
           <ui:field param="line total" label="Total"/>
           <ui:field param="special offer id" label="Special Offer"/>
           <ui:field param="carrier tracking number" label="Tracking #"/>
-          <!-- highlight-end -->
+<!-- added-lines-end -->
         </ui:fields>
       </ui:display>
+<!-- highlight-next-line -->
       <ui:link name="details" view="SalesOrderDetailView" child="true">
         <ui:params>
           <ui:param name="sales order detail id" field="sales order detail id"/>
         </ui:params>
-          <!-- highlight-next-line -->
+<!-- removed-next-line -->
+        <ui:display on-field="carrier tracking number"/>
+<!-- added-next-line -->
         <ui:display on-field="product id"/>
       </ui:link>
       ...

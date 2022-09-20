@@ -15,13 +15,17 @@ After our updates to the output of the `read list` operation in the previous sec
         <output list="true">
           <param name="sales order id"/>
           <param name="sales order number"/>
+<!-- highlight-start -->
           <param name="order date" type="date"/>
           <param name="due date" type="date"/>
           <param name="ship date" type="date"/>
+<!-- highlight-end -->
           <param name="status"/>
+<!-- highlight-start -->
           <param name="online order flag" type="yesno" required="true"/>
           <param name="customer store" type="string"/>
           <param name="customer name" type="string"/>
+<!-- highlight-end -->
           <param name="sales person id"/>
           <param name="territory id"/>
           <param name="total due"/>
@@ -116,6 +120,8 @@ In our case, we will define a `sales order number` type with `size` set to 25, b
 
 ```xml
   <types>
+    ...
+    <!-- highlight-next-line -->
     <type name="sales order number" base="string" size="25">
       <config>
         <!-- highlight-next-line -->

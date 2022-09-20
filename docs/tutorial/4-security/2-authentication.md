@@ -15,9 +15,12 @@ The final implementation of the authentication will depend on the specific techn
 As usual, we will begin with defining the relevant things in our Xomega model. Let's open up the `person.xom` file, and declare a new data object called `AuthenticationObject`, which will serve as a data model for our *Login* view.
 
 ```xml title="person.xom"
-<xfk:data-objects>
-  <xfk:data-object class="AuthenticationObject"/>
-</xfk:data-objects>
+<!-- added-lines-start -->
+  <objects>[...]
+  <xfk:data-objects>
+    <xfk:data-object class="AuthenticationObject"/>
+  </xfk:data-objects>
+<!-- added-lines-end -->
 ```
 
 ### Credentials structure
@@ -25,6 +28,7 @@ As usual, we will begin with defining the relevant things in our Xomega model. L
 Next we will define a new structure `credentials` with two parameters for the `email` and `password`, which will be added to our `AuthenticationObject` as properties.
 
 ```xml
+<!-- added-lines-start -->
 <struct name="credentials">
   <param name="email" type="email" required="true"/>
   <param name="password" type="plain password" required="true"/>
@@ -33,6 +37,7 @@ Next we will define a new structure `credentials` with two parameters for the `e
     <xfk:add-to-object class="AuthenticationObject"/>
   </config>
 </struct>
+<!-- added-lines-end -->
 ```
 
 :::note
@@ -51,15 +56,15 @@ The following snippet illustrates this setup.
 <xfk:data-objects>
 <!-- highlight-next-line -->
   <xfk:data-object class="AuthenticationObject" customize="true">
+<!-- added-lines-start -->
     <ui:display>
-<!-- highlight-start -->
       <ui:fields field-cols="1">
         <ui:field param="email" access-key="m"/>
         <ui:field param="password" access-key="P"/>
       </ui:fields>
-<!-- highlight-end -->
     </ui:display>
   </xfk:data-object>
+<!-- added-lines-end -->
 </xfk:data-objects>
 ```
 
@@ -70,7 +75,7 @@ Next let's add an operation `authenticate` to the `person` object, which will us
 ```xml title="person.xom"
 <object name="person">
   <operations>
-<!-- highlight-next-line -->
+<!-- added-lines-start -->
     <operation name="authenticate" type="update">
       <input arg="credentials" struct="credentials"/>
       <config>
@@ -81,6 +86,7 @@ Next let's add an operation `authenticate` to the `person` object, which will us
         <summary>Authenticates a Person using email and password.</summary>
       </doc>
     </operation>
+<!-- added-lines-end -->
     ...
   </operations>
 </object>
@@ -95,12 +101,15 @@ Even though the operation is not going to update anything in the database, we ma
 So let's go ahead, and add the actual `LoginView` definition in the model as follows.
 
 ```xml title="person.xom"
+<xfk:data-objects>[...]
+<!-- added-lines-start -->
 <ui:views>
   <ui:view name="LoginView" title="Login" customize="true" child="true">
 <!-- highlight-next-line -->
     <ui:view-model data-object="AuthenticationObject"/>
   </ui:view>
 </ui:views>
+<!-- added-lines-end -->
 ```
 
 Let's have a look at some things that we have configured on our *Login View*. We will need to customize the logic for the generated view, so we marked it with the `customize="true"` attribute. We also set the `child="true"` attribute, so that this view would not be added to the main menu by the generator. And, of course, we set our `AuthenticationObject` as the view model for the view.
@@ -121,7 +130,7 @@ Next, let's open the `PersonServiceCustomized.cs` under the generated `PersonSer
 public class PersonServiceCustomized : PersonService
 {
     ...
-// highlight-next-line
+/* added-lines-start */
     public override async Task<Output> AuthenticateAsync(
         Credentials _credentials, CancellationToken token = default)
     {
@@ -144,6 +153,7 @@ public class PersonServiceCustomized : PersonService
         if (!valid) currentErrors.CriticalError(ErrorType.Security, Messages.InvalidCredentials);
         return new Output(currentErrors);
     }
+/* added-lines-end */
     ...
 }
 ```
@@ -156,17 +166,17 @@ If the email address is not found or if the password is not valid, we'll report 
 
 Next, let's open the generated `AuthenticationObjectCustomized.cs` in the `AdventureWorks.Client.Common` project, and set it up to not track modifications, as shown below. We also set the `IsNew` flag to `false`, so that the view title would say just *Login* instead of *New Login*.
 
-```cs title="PersonServiceCustomized.cs"
+```cs title="AuthenticationObjectCustomized.cs"
 public class AuthenticationObjectCustomized : AuthenticationObject
 {
     ...
     protected override void OnInitialized()
     {
         base.OnInitialized();
-// highlight-start
+/* added-lines-start */
         TrackModifications = false;
         IsNew = false;
-// highlight-end
+/* added-lines-end */
     }
 }
 ```

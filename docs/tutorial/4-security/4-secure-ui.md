@@ -19,7 +19,7 @@ However, they don't make much sense for external customer users, since the list 
 In order to hide these fields for external customers, let's open our `SalesOrderCriteriaCustomized` data object, and add the following code to its `OnInitialized` method.
 
 ```cs title="SalesOrderCriteriaCustomized.cs"
-// highlight-next-line
+/* added-next-line */
 using AdventureWorks.Services.Common;
 ...
 public class SalesOrderCriteriaCustomized : SalesOrderCriteria
@@ -35,13 +35,13 @@ public class SalesOrderCriteriaCustomized : SalesOrderCriteria
         SalesPersonIdProperty.NullsMatchAnyCascading = true;
         SalesPersonIdProperty.DisplayListSeparator = "; ";
 
-// highlight-start
+/* added-lines-start */
         if (CurrentPrincipal.IsStoreContact() || CurrentPrincipal.IsIndividualCustomer())
         {
             CustomerStoreOperatorProperty.AccessLevel = AccessLevel.None;
             CustomerNameOperatorProperty.AccessLevel = AccessLevel.None;
         }
-// highlight-end
+/* added-lines-end */
     }
 }
 ```

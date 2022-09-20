@@ -22,9 +22,11 @@ So let's go ahead and remove unnecessary columns, move `sales order number` to t
           <param name="sales order number"/>
 <!-- removed-next-line -->
           <param name="revision number"/>
+<!-- highlight-start -->
           <param name="order date" type="date"/>
           <param name="due date" type="date"/>
           <param name="ship date" type="date"/>
+<!-- highlight-end -->
           <param name="status"/>
           <param name="online order flag" type="yesno" required="true"/>
 <!-- removed-lines-start -->

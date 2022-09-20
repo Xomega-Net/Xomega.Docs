@@ -25,7 +25,7 @@ Now let's open the `ReadListAsync` method of our `SalesOrderService` implementat
 ```cs title="SalesOrderService.cs"
 // CUSTOM_CODE_START: add namespaces for custom code below
 using AdventureWorks.Services.Common.Enumerations;
-// highlight-next-line
+/* added-next-line */
 using Xomega.Framework;
 // CUSTOM_CODE_END
 ...
@@ -38,13 +38,13 @@ public partial class SalesOrderService : BaseService, ISalesOrderService
     {
         ...
         // CUSTOM_CODE_START: add custom security checks for Read operation below
-// highlight-start
+/* added-lines-start */
         if (!CurrentPrincipal.IsEmployee() && !CurrentPrincipal.IsIndividualCustomer() &&
             !CurrentPrincipal.IsStoreContact())
         {
             currentErrors.CriticalError(ErrorType.Security, Messages.OperationNotAllowed);
         }
-// highlight-end
+/* added-lines-end */
         // CUSTOM_CODE_END
         ...
     }
@@ -79,7 +79,7 @@ public partial class SalesOrderService : BaseService, ISalesOrderService
     {
         ...
         // CUSTOM_CODE_START: add custom filter criteria to the source query for ReadList operation below
-// highlight-start
+/* added-lines-start */
         if (CurrentPrincipal.IsStoreContact())
         {
             int? storeId = CurrentPrincipal.GetStoreId();
@@ -90,7 +90,7 @@ public partial class SalesOrderService : BaseService, ISalesOrderService
             int? personId = CurrentPrincipal.GetPersonId();
             src = src.Where(o => o.CustomerObject.PersonObject.BusinessEntityId == personId);
         }
-// highlight-end
+/* added-lines-end */
         // CUSTOM_CODE_END
         ...
     }

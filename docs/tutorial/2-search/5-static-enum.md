@@ -79,7 +79,10 @@ If you open `sales_territory.xom` file, then you will see that sales territories
 ```xml title="sales_territory.xom"
 <object name="sales territory">
   <fields>
+    ...
+<!-- highlight-next-line -->
     <field name="group" type="string50" required="true">[...]
+    ...
   </fields>
 </object>
 ```
@@ -102,6 +105,7 @@ Then we'll declare a type with the same name that references this enumeration. T
 
 ```xml
   <types>
+    ...
     <type name="sales territory group" base="enumeration" size="50">
       <config>
         <!-- highlight-next-line -->
@@ -165,10 +169,12 @@ public virtual async Task<Output<ICollection<SalesOrder_ReadListOutput>>>
     if (_criteria != null)
     {
         // CUSTOM_CODE_START: add code for GlobalRegion criteria of ReadList operation below
-        // highlight-start
+/* removed-next-line */
+        // TODO: src = AddClause(src, "GlobalRegion", o => ???, _criteria.GlobalRegion);
+/* added-lines-start */
         src = AddClause(src, "GlobalRegion", o => o.TerritoryObject.Group,
                         Operators.IsEqualTo, _criteria.GlobalRegion);
-        // highlight-end
+/* added-lines-end */
         // CUSTOM_CODE_END
     }
     ...
@@ -178,7 +184,7 @@ To use the generated constant for the `IsEqualTo` operator, we will add a using 
 
 ```cs title="SalesOrderService.cs"
 // CUSTOM_CODE_START: add namespaces for custom code below
-// highlight-next-line
+/* added-next-line */
 using AdventureWorks.Services.Common.Enumerations;
 // CUSTOM_CODE_END
 ```
