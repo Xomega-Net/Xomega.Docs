@@ -460,6 +460,8 @@ We will also lay out the fields in two columns by setting `field-cols="2"` here,
           <ui:field param="special offer id" label="Special Offer"/>
 <!-- added-lines-end -->
         </ui:fields>
+<!-- removed-next-line -->
+        <ui:tabs/>
       </ui:display>
     </xfk:data-object>
 ```
@@ -534,7 +536,7 @@ public class SalesOrderDetailObjectCustomized : SalesOrderDetailObject
     }
 
 /* added-lines-start */
-    private static decimal GetLineTotal(decimal? price, decimal? discount, long? qty) =>
+    private static decimal GetLineTotal(decimal? price, decimal? discount, short? qty) =>
         (price ?? 0) * (1 - (discount ?? 0)) * (qty ?? 0);
 /* added-lines-end */
 }

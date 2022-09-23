@@ -32,11 +32,11 @@ The `GuidProperty` class stores its value as a `Guid?` to allow storing `null` v
 
 ## Integer properties
 
-All integer properties in Xomega Framework store their value as a `long?`, but provide some restrictions on the minimum and maximum values, as described below.
+All integer properties in Xomega Framework store their value as a nullable of one of the integer types, as described below.
 
 ### BigIntegerProperty
 
-The `BigIntegerProperty` class validates that the stored value is between the `long.MinValue` and `long.MaxValue`. It serves as a base class for all other integer properties.
+The `BigIntegerProperty` class validates that the stored value is a `long?` between the `long.MinValue` and `long.MaxValue`.
 
 ### PositiveBigIntProperty
 
@@ -44,7 +44,7 @@ The `PositiveBigIntProperty` class validates that the stored value is between `1
 
 ### IntegerProperty
 
-The `IntegerProperty` class validates that the stored value is between the `int.MinValue` and `int.MaxValue`.
+The `IntegerProperty` class validates that the stored value is an `int?` between the `int.MinValue` and `int.MaxValue`.
 
 ### PositiveIntegerProperty
 
@@ -52,7 +52,7 @@ The `PositiveIntegerProperty` class validates that the stored value is between `
 
 ### SmallIntegerProperty
 
-The `SmallIntegerProperty` class validates that the stored value is between the `short.MinValue` and `short.MaxValue`.
+The `SmallIntegerProperty` class validates that the stored value is a `short?` between the `short.MinValue` and `short.MaxValue`.
 
 ### PositiveSmallIntProperty
 
@@ -60,7 +60,7 @@ The `PositiveSmallIntProperty` class validates that the stored value is between 
 
 ### TinyIntegerProperty
 
-The `TinyIntegerProperty` class validates that the stored value is between the `byte.MinValue` and `byte.MaxValue`.
+The `TinyIntegerProperty` class validates that the stored value is a `byte?` between the `byte.MinValue` and `byte.MaxValue`.
 
 ### Integer key properties
 
