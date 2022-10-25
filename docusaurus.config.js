@@ -96,13 +96,6 @@ const config = {
             label: 'Learn',
           },
           {
-            href: 'https://xomega.net/Forum/Forum.aspx',
-            position: 'left',
-            label: 'Forums',
-            target: null,
-            className: 'xomega-link'
-          },
-          {
             href: 'https://xomega.net/Blog.aspx',
             position: 'left',
             label: 'Blog',
@@ -112,7 +105,7 @@ const config = {
           {
             href: 'https://xomega.net/System/ContactUs.aspx',
             position: 'left',
-            label: 'Contact Us',
+            label: 'Support',
             target: null,
             className: 'xomega-link'
           },
