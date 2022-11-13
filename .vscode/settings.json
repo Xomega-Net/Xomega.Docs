@@ -42,5 +42,11 @@
         "resx",
         "wwwroot",
         "xres"
+    ],
+    "grammarly.selectors": [
+        {
+            "language": "markdown",
+            "scheme": "file"
+        }
     ]
 }
