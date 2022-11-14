@@ -11,12 +11,12 @@ WCF is a legacy communication framework that is available only on .NET Framework
 :::
 
 :::tip
-Xomega.Net for Visual Studio provides support for exposing business services via WCF, and can create a WCF project for you that is  pre-configured for secure WCF services.
+Xomega.Net for Visual Studio provides support for exposing business services via WCF and can create a WCF project for you that is pre-configured for secure WCF services.
 :::
 
 ## Enabling DI in WCF
 
-By default, WCF framework doesn't provide any built-in support for dependency injection (DI). Given that all business services need to  use the DI, Xomega Framework enhances WCF to add DI support to it. Below is how to enable it for your WCF services.
+By default, the WCF framework doesn't provide any built-in support for dependency injection (DI). Given that all business services need to use the DI, Xomega Framework enhances WCF to add DI support to it. Below is how to enable it for your WCF services.
 
 ### Define AppInitializer
 
@@ -46,7 +46,7 @@ As we mentioned [earlier](../security#wcf), you should register a scoped `Defaul
 
 ### Register AppInitializer
 
-Next, you'll need to register your app initializer class in the `appSettings` section of your WCF project's `Web.config` file. You should register it under the key `xomfwk:AppInitializer`, and use a fully qualified type name with the assembly name, as follows.
+Next, you'll need to register your app initializer class in the `appSettings` section of your WCF project's `Web.config` file. You should register it under the key `xomfwk:AppInitializer` and use a fully qualified type name with the assembly name, as follows.
 
 ```xml title="Web.config"
 <appSettings>
@@ -97,17 +97,17 @@ public class SalesOrder_ReadOutput
 ```
 
 :::tip
-There are tons of WCF attributes that allow you to fine-tune execution of WCF services, such as serialization, transactions, security, specific service behaviors, etc.
+There are tons of WCF attributes that allow you to fine-tune the execution of WCF services, such as serialization, transactions, security, specific service behaviors, etc.
 :::
 
 ### Service model configuration
 
-As required by WCF, you should configure your business service implementations under the `services` section of the `system.serviceModel` configuration. For secure communication you want to use `ws2007FederationHttpBinding`.
+As required by WCF, you should configure your business service implementations under the `services` section of the `system.serviceModel` configuration. For secure communication, you want to use `ws2007FederationHttpBinding`.
 
 If your services will be using transport security (i.e. HTTPS with SSL), then you can define and use a `mixed` binding with `TransportWithMessageCredential` security mode.
 
 :::note
-With WCF you also have an option to use plain HTTP, in which case you'll need to use the `message` binding that encrypts the entire message.
+With WCF you also have the option to use plain HTTP, in which case you'll need to use the `message` binding that encrypts the entire message.
 :::
 
 You can also configure other WCF service behaviors, such as service credentials, authorization, etc. The following snippet demonstrates such a configuration.
@@ -176,7 +176,7 @@ Asynchronous operations in WCF **don't support cancellation tokens**, so you'll 
 
 ## Securing WCF API
 
-Any business services that you expose via WCF should be secured, and allow authenticated users only. WCF uses `System.IdentityModel` as well as the Claims Identity to provide authentication and authorization for the requests.
+Any business services that you expose via WCF should be secured, and allow authenticated users only. WCF uses `System.IdentityModel` as well as the Claims Identity in order to provide authentication and authorization for the requests.
 
 :::caution
 Securing WCF services could be a daunting task, especially if you are not very familiar with the Identity Model.
@@ -186,7 +186,7 @@ To enable authentication using federated security you need to create a custom Se
 
 ### STS Configuration
 
-First of all, you want to create a DI-enabled STS configuration, which accepts an `IServiceProvider`, and stores it to make it available to its STS. In your STS config you should configure the signing credentials by reading a certificate from the local store that is used for signing. You should also set the `SecurityTokenService` to the type of [your STS class](#sts), as follows.
+First of all, you want to create a DI-enabled STS configuration, which accepts an `IServiceProvider`, and stores it to make it available to its STS. In your STS config, you should configure the signing credentials by reading a certificate from the local store that is used for signing. You should also set the `SecurityTokenService` to the type of [your STS class](#sts), as follows.
 
 ```cs
 public class AppStsConfig : SecurityTokenServiceConfiguration
@@ -236,7 +236,7 @@ Next, you should configure the identity model to trust your signing certificate 
 </system.identityModel>
 ```
 
-In order to issue security tokens, you should also expose your STS config in the service host file using the Xomega Framework's `DefaultServiceProviderHostFactory`, as follows.
+To issue security tokens, you should also expose your STS config in the service host file using the Xomega Framework's `DefaultServiceProviderHostFactory`, as follows.
 
 ```xml title="Sts/Issuer.svc"
 <%@ ServiceHost Service="MyProject.Services.Wcf.AppStsConfig" Language="C#"
@@ -246,8 +246,8 @@ In order to issue security tokens, you should also expose your STS config in the
 ### Security token service{#sts}
 
 Now you need to create your STS class that extends from the `SecurityTokenService` class, and implement the following methods:
-- `GetOutputClaimsIdentity` that constructs a claims identity for the authenticated user, using the app-specific claims, and
-- `GetScope` that constructs a scope for the issued token, based on the current WCF app.
+- `GetOutputClaimsIdentity`, which constructs a claims identity for the authenticated user, using the app-specific claims, and
+- `GetScope`, which constructs a scope for the issued token, based on the current WCF app.
 
 :::tip
 You can cast the current STS configuration to your custom class and use its service provider to access any services for constructing the claims identity.
@@ -308,7 +308,7 @@ public class AppSts : SecurityTokenService
 }
 ```
 
-This will configure your STS that is able to issue security tokens (SAML). Now you need to define STS endpoints for each authentication method that your STS accepts in order to issue an access token.
+This will configure your STS which can issue security tokens (SAML). Now you need to define STS endpoints for each authentication method that your STS accepts to issue an access token.
 
 ### Password authentication
 
@@ -358,7 +358,7 @@ If you place your STS service host `Issuer.svc` in a dedicated folder, e.g. *Sts
 
 In order to implement a custom validation of the user name and password, you would need to create a `UserNameValidator` class that extends `UserNameSecurityTokenHandler` and validates the user and password against your database in the `ValidateToken` method.
 
-You can access your business services registered in the DI container by using the static `DI.DefaultServiceProvider` in Xomega Framework. The following example illustrates implementation of such a user name validator without the actual validation logic.
+You can access your business services registered in the DI container by using the static `DI.DefaultServiceProvider` in Xomega Framework. The following example illustrates an implementation of such a user name validator without the actual validation logic.
 
 ```cs
 /* highlight-next-line */
@@ -420,7 +420,7 @@ Once you have a secure WCF app with an STS that allows issuing tokens using pass
 
 If your client app is based on the Xomega Framework, e.g. WPF, then you need to make sure it has DI enabled, and then register WCF client proxies as services with the DI container. Xomega Framework makes it easy based on the client configuration of your service model.
 
-First of all, you need to set up the service model config of your client app with the same `mixed` bindings as you use for the WCF services, and specify client endpoints for the STS and for each exposed business service, as follows.
+First of all, you need to set up the service model config of your client app with the same `mixed` bindings as you use for the WCF services and specify client endpoints for the STS and each exposed business service, as follows.
 
 ```xml title="App.config"
 <configuration>
@@ -496,7 +496,7 @@ public static void ConfigureServices(HostBuilderContext context, IServiceCollect
 
 ### Authentication with WCF API
 
-Now your client app just needs to obtain and set the `IssuedToken` in the `WcfServices` class, in order to call the WCF services. To do that, you can add an `Authenticate` utility method that takes a user name and password, and calls the STS endpoint to get an access token for the current client's audience URI, as follows.
+Now your client app just needs to obtain and set the `IssuedToken` in the `WcfServices` class, to call the WCF services. To do that, you can add an `Authenticate` utility method that takes a username and password, and calls the STS endpoint to get an access token for the current client's audience URI, as follows.
 
 ```cs
 public static class WcfServices
@@ -536,7 +536,7 @@ public static class WcfServices
 ```
 
 :::note
-In order for your WCF service to accept the audience URI of your client app, you should add it to the identity model configuration of the WCF project, as follows.
+For your WCF service to accept the audience URI of your client app, you should add it to the identity model configuration of the WCF project, as follows.
 
 ```xml
 <system.identityModel>
@@ -602,5 +602,5 @@ principalProvider.CurrentPrincipal = WcfServices.Authenticate(user, password);
 This will allow you to check the user's claims on the client side, in order to enable or disable certain functions or UI elements as appropriate.
 
 :::caution
-When the `IssuedToken` expires, any calls to the WCF services will stop working. You may need to provide any code to handle it gracefully, and either pop up the *Login* dialog again, or make the user restart the app.
+When the `IssuedToken` expires, any calls to the WCF services will stop working. You may need to provide any code to handle it gracefully, and either pop up the *Login* dialog again or make the user restart the app.
 :::

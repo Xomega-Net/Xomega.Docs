@@ -4,11 +4,11 @@ sidebar_position: 2
 
 # Error Reporting
 
-Xomega Framework provides a common framework for reporting and handling errors both in the service layer on the backend, and in the presentation layer on the frontend. It defines a common structure for error messages of various types and severities, allows reporting multiple errors at the same time, and supports internationalization of the error message text for the user's locale.
+Xomega Framework provides a common framework for reporting and handling errors both in the service layer on the backend and in the presentation layer on the front end. It defines a common structure for error messages of various types and severities, allows reporting multiple errors at the same time, and supports the internationalization of the error message text for the user's locale.
 
 ## Error messages{#message}
 
-Different types of messages that your app needs to report to the users, are described by the class `ErrorMessage` in the `Xomega.Framework` namespace. The messages have the following attributes.
+Different types of messages that your app needs to report to the users are described by the class `ErrorMessage` in the `Xomega.Framework` namespace. The messages have the following attributes.
 - `Type` - the type of the message from the `ErrorType` enum, e.g. `Validation`, `System`, etc.
 - `Severity` - the message severity from the `ErrorSeverity` enum, e.g. `Error`, `Warning`, etc.
 - `Code` - message code that uniquely identifies the message, and is used as a resource key for translation.
@@ -21,7 +21,7 @@ Error messages are configured to be serializable for returning them either from 
 
 ### Error types{#types}
 
-Error types help you categorize the messages that your application produces. You can handle messages differently within your application or with your logging infrastructure based on the message's type.
+Error types help you categorize the messages that your application produces. You can handle messages differently within your application or with your logging infrastructure based on the message type.
 
 Properly setting the error type can also help you make sure that a proper HTTP status code is returned from a REST API call. The following error types are defined in the Xomega Framework.
 
@@ -42,21 +42,21 @@ Properly setting the error type can also help you make sure that a proper HTTP s
 Each error message has a severity that determines the execution flow of the operation, as well as the HTTP status code of the response. The error severity can be one of the following values.
 
 - `Info` - Information message that can be displayed to the user. An info message does not result in a failure of the operation by itself, and can also be used internally by the system to communicate some information to the calling client without showing it to the user, similar to the HTTP response headers.
-- `Warning` - A warning that may be displayed to the user for the confirmation before proceeding. Normally, if an operation generates any warnings when called initially, it would not succeed, but rather show those warnings to the user. If the user confirms the warnings, the operation should be called again with a flag to ignore warnings, in which case it will succeed.
-- `Error` - An error, that will be displayed to the user with the other errors. It doesn't stop the execution flow, but prevents the operation from successfully completing. An error is generated when a validation failed, but it doesn't prevent the operation from performing other validations, which allows you to report multiple errors at once.
+- `Warning` - A warning that may be displayed to the user for confirmation before proceeding. Normally, if an operation generates any warnings when called initially, it would not succeed, but rather show those warnings to the user. If the user confirms the warnings, the operation should be called again with a flag to ignore warnings, in which case it will succeed.
+- `Error` - An error, that will be displayed to the user with the other errors. It doesn't stop the execution flow but prevents the operation from successfully completing. An error is generated when validation failed, but it doesn't prevent the operation from performing other validations, which allows you to report multiple errors at once.
 - `Critical` - A critical error, which stops the execution immediately and returns a fault to the user. A critical error is typically raised when it prevents any further validations. For example, if the operation needs to look up an entity by the supplied key, an invalid key would result in a critical error, since the operation cannot proceed without that entity.
 
 :::info
-The default HTTP status codes for the message types apply only when the error severity is at least `Error`. For `Info` and `Warning` messages the default HTTP status code is 200 - `HttpStatusCode.OK`.
+The default HTTP status codes for the message types apply only when the error severity is at least `Error`. For `Info` and `Warning` messages, the default HTTP status code is 200 - `HttpStatusCode.OK`.
 :::
 
 ## Error list{#list}
 
-During the execution of an operation the current errors and other messages are added to a collection that is defined by the `ErrorList` class in the `Xomega.Framework` namespace. The `ErrorList` class provides support for adding various types of error messages, translating the message text into the current user's language, as well as other useful functions for working with error messages.
+During the execution of an operation, the current errors and other messages are added to a collection that is defined by the `ErrorList` class in the `Xomega.Framework` namespace. The `ErrorList` class provides support for adding various types of error messages, translating the message text into the current user's language, as well as other useful functions for working with error messages.
 
 ### Accessing current errors
 
-The `ErrorList` for the current operation's errors is not supposed to be created manually, but rather instantiated by the dependency injection container for the current scope. Therefore, you need to make sure that it is registered in the startup class of your application as a scoped service, as shown below.
+The `ErrorList` for the current operation's errors is not supposed to be created manually but rather instantiated by the dependency injection container for the current scope. Therefore, you need to make sure that it is registered in the startup class of your application as a scoped service, as shown below.
 
 ```cs
 public class Startup
@@ -72,7 +72,7 @@ public class Startup
 ```
 
 :::note
-You can also use the extension method `AddErrors` provided by Xomega Framework to register both the `ErrorList` and a default [`ErrorParser`](#errorParser) services, as follows.
+You can also use the extension method `AddErrors` provided by Xomega Framework to register both the `ErrorList` and default [`ErrorParser`](#errorParser) services, as follows.
 ```cs
 services.AddErrors(env.IsDevelopment());
 ```
@@ -88,7 +88,7 @@ The error lists used in the presentation logic are created and accessed differen
 
 The `ErrorList` class provides a set of convenient methods to easily add messages of various types and severity. You may need to pass an error type and the message code, which is used as the resource key to look up the message text in the current language, as well as the values of any parameters of the message that will be substituted into any message placeholders.
 
-Most of them return the error message that was added, so that you could further customize it in the code. The following examples illustrate the usage of these methods using [static constants](#messageCodes) from the `Messages` class as message codes.
+Most of them return the error message that was added so that you could further customize it in the code. The following examples illustrate the usage of these methods using [static constants](#messageCodes) from the `Messages` class as message codes.
 
 ```cs
 // adds an Operator_NotSupported validation error
@@ -124,7 +124,7 @@ currentErrors.Add(msg);
 :::caution
 If the message text cannot be found in the resources by the provided message code, that code will be used as the message text.
 
-This means that you can technically pass the message text directly as the code without any resources. While this may look quick and easy, we still recommend to define proper codes and use them as [resource keys for the messages](#messageCodes), in order to have short message identifiers and support any future [localization](#i18n).
+This means that you can technically pass the message text directly as the code without any resources. While this may look quick and easy, we still recommend defining proper codes and using them as [resource keys for the messages](#messageCodes), in order to have short message identifiers and support any future [localization](#i18n).
 :::
 
 If you have another list of error messages created separately, then you can also merge it with the current error list using the `MergeWith` method, as follows.
@@ -139,13 +139,13 @@ If both lists reference the same errors, or if you merge a list with itself, the
 
 As you perform the service operation, you will be adding errors, warnings or other types of messages to the list of current errors. As mentioned above, adding a critical error using the `CriticalError` method on your error list will immediately throw an exception and abort the execution.
 
-If your operation adds errors, or calls any other functions or services that may add errors to the current error list, then at some point you may want to manually abort the operation, if any errors have been added, which you can do as follows.
+If your operation adds errors or calls any other functions or services that may add errors to the current error list, then at some point you may want to manually abort the operation, if any errors have been added, which you can do as follows.
 
 ```cs
 currentErrors.AbortIfHasErrors();
 ```
 
-Even if there are no errors, you may still want to manually abort the operation, such as when you have some warnings that you need to report to the user for a confirmation, and the operation was not called with a flag to ignore warnings. In this case, you can call the `Abort` method explicitly, and provide a reason for abortion as the argument, as follows.
+Even if there are no errors, you may still want to manually abort the operation, such as when you have some warnings that you need to report to the user for confirmation and the operation was not called with a flag to ignore warnings. In this case, you can call the `Abort` method explicitly, and provide a reason for abortion as the argument, as follows.
 
 ```cs
 currentErrors.Abort(currentErrors.ErrorsText);
@@ -155,9 +155,9 @@ currentErrors.Abort(currentErrors.ErrorsText);
 Notice how the `ErrorList` class provides a property `ErrorsText` to get the combined text of all its messages.
 :::
 
-Aborting an operation like that throws a special `ErrorAbortException` for the current error list. In order to properly report this and any other exceptions to the users, you service operation should perform all its logic within a `try` block. In the corresponding `catch` block you should convert the caught exception to an error list using the `errorParser` member from the base service, and then merge it with the current list of errors.
+Aborting an operation like that throws a special `ErrorAbortException` for the current error list. To properly report this and any other exceptions to the users, your service operation should perform all its logic within a `try` block. In the corresponding `catch` block you should convert the caught exception to an error list using the `errorParser` member from the base service, and then merge it with the current list of errors.
 
-At the end of the method you should construct a new `Output` class from the `currentErrors`, as well as any result structure created by the operation, and return it from the method. The following example demonstrates these error reporting steps within an `Update` service operation of the sales order service.
+At the end of the method, you should construct a new `Output` class from the `currentErrors`, as well as any result structure created by the operation, and return it from the method. The following example demonstrates these error reporting steps within an `Update` service operation of the sales order service.
 
 ```cs
 public virtual async Task<Output<SalesOrder_UpdateOutput>> UpdateAsync(...)
@@ -191,7 +191,7 @@ currentErrors.HttpStatus = HttpStatusCode.MultiStatus;
 
 The `errorParser` member of the base service that is used for constructing an `ErrorList` from an exception, as well as for logging that exception, is an instance of a flexible class `ErrorParser` provided by Xomega Framework.
 
-When you call its method `FromException`, it will recognize the standard `ErrorAbortException` for the error list being aborted, as well as some instances of a standard `WebException` where the error list is returned directly in HTTP response (e.g. when used as a fault contract in WCF).
+When you call its method `FromException`, it will recognize the standard `ErrorAbortException` for the error list being aborted, as well as some instances of a standard `WebException` where the error list is returned directly in the HTTP response (e.g. when used as a fault contract in WCF).
 
 It will also automatically log that exception using either the registered service `ILogger<ErrorParser>` or the `Trace` class from the `System.Diagnostics`. If you want to use a custom logger that is specific to your service, then you can pass it as a second parameter, as follows.
 
@@ -234,11 +234,11 @@ Xomega Framework supports localization using hierarchical resources, which enhan
 
 The standard way to manage and access resources in .Net is through the `ResourceManager` class, which is constructed for a specific set of resources bundled with the assembly. It allows you to retrieve any resource by a string name (key) using a `GetObject` method, or to also get any string resource using a `GetString` method.
 
-The problem with this approach is that some resources may be defined in the framework libraries or in common shared libraries, while others may be in specific projects. So, any place where you need to get a localized string, you may need to look it up in multiple resource sets like those.
+The problem with this approach is that some resources may be defined in the framework libraries or common shared libraries, while others may be in specific projects. So, in any place where you need to get a localized string, you may need to look it up in multiple resource sets like those.
 
 Moreover, if you want to override a common localized string defined in the framework library, your code would need to check a resource set for the more specific project first before checking the common resource sets.
 
-To address these issues Xomega Framework provides a simple class `CompositeResourceManager` that extends the `ResourceManager` class, and is constructed from an *ordered array* of other resource managers. Whenever you look up a resource from such a composite resource manager, it will walk the list of its inner resource managers, and will return the value from the first one that has that resource.
+To address these issues Xomega Framework provides a simple class `CompositeResourceManager` that extends the `ResourceManager` class and is constructed from an *ordered array* of other resource managers. Whenever you look up a resource from such a composite resource manager, it will walk the list of its inner resource managers and will return the value from the first one that has that resource.
 
 If during the construction you pass more specific resource managers first, and the framework resources last, then you will be able to override any common or framework resources in your more specific projects. You can also pass a composite resource manager to another composite resource manager, which would create a hierarchy of resources.
 
@@ -250,7 +250,7 @@ This way, for example, if you call `GetString("SaveButton", "LoginView_")` then 
 
 ### Resource registration
 
-In order to make a composite resource manager available to business services and error lists, you need to register it as a singleton with the DI container in your `Startup` class.
+To make a composite resource manager available to business services and error lists, you need to register it as a singleton with the DI container in your `Startup` class.
 
 In the following example, we register a composite resource manager, where the messages from a common client project add to and override the messages from the services project, which in turn add to and override the standard Xomega Framework messages.
 
@@ -268,7 +268,7 @@ public void ConfigureServices(IServiceCollection services)
 
 ### Message resources{#messageCodes}
 
-In order to define localizable message texts for your application's messages, we recommend adding them to separate `.resx` resource files that use the standard XML resources format. You should set the resource *Name* to your message code, and the *Value* to the localized message text with number-based placeholders for any parameters.
+To define localizable message texts for your application's messages, we recommend adding them to separate `.resx` resource files that use the standard XML resources format. You should set the resource *Name* to your message code, and the *Value* to the localized message text with number-based placeholders for any parameters.
 
 We also recommend that you specify the description of the parameters that are expected by the message at each position using the *Comment* field, as illustrated below.
 
@@ -278,7 +278,7 @@ We also recommend that you specify the description of the parameters that are ex
 |Operator_NotSupported|Unsupported operator {0} for the {1}.|{0}=Operator, {1}=Field name|
 |Validation_NumberMaximum|{0} cannot be greater than {1}.|{0}=Property name, {1}=Maximum value|
 
-By default, resource files added through Visual Studio use a custom tool `ResXFileCodeGenerator`, which generates a nested code file `MyResources.Designer.cs` that gives you access to the `ResourceManager` for those resources, and allows you to get the values of each resource using static access members. The limitation of those generated members is that you won't have programmatic access to the resource names, and they only use resources defined in the current resource set, so you cannot use hierarchical resources.
+By default, resource files added through Visual Studio use a custom tool `ResXFileCodeGenerator`, which generates a nested code file `MyResources.Designer.cs` and a class that gives you access to the `ResourceManager` for those resources, and allows you to get the values of each resource using static access members. The limitation of those generated members is that you won't have programmatic access to the resource names, and they only use resources defined in the current resource set, so you cannot use hierarchical resources.
 
 To avoid hardcoding message codes in your app, we recommend creating a simple static class, where your message codes will be accessible as constant strings, with the message text and description of parameters specified in the `<summary>` comment, as follows.
 
@@ -317,7 +317,7 @@ The generated class will also have a standard accessor to the `ResourceManager` 
 The message resource files included in the initial solution template created by the Xomega.Net extension for Visual Studio will already have this T4 generator enabled.
 :::
 
-If you need to add this T4 generator for your resource file, first make sure you download the [Messsages.t4](https://github.com/Xomega-Net/XomegaFramework/blob/master/src/T4/Messages.t4) template file, and add it to a folder in your solution, e.g. *T4*. Then, for each resource file with messages, you should create a text template file in your project that includes that template, as follows.
+If you need to add this T4 generator for your resource file, first make sure you download the [Messages.t4](https://github.com/Xomega-Net/XomegaFramework/blob/master/src/T4/Messages.t4) template file and add it to a folder in your solution, e.g. *T4*. Then, for each resource file with messages, you should create a text template file in your project that includes that template, as follows.
 
 ```xml title="Messages.tt"
 <#@ include file="../T4/Messages.t4" #>
@@ -340,10 +340,10 @@ Finally, you need to make your text template file nested under your resource fil
   </ItemGroup>
 ```
 
-Now whenever you add or update your message resources in the `Resources.resx`, you can just right-click on the nested `Messages.tt` file in Visual Studio, and select the *Run Custom Tool* menu to regenerate  the message constants.
+Now, whenever you add or update your message resources in the `Resources.resx`, you can just right-click on the nested `Messages.tt` file in Visual Studio, and select the *Run Custom Tool* menu to regenerate the message constants.
 
 :::caution
-For Visual Studio 2022 you need to edit the downloaded `Message.t4` file, and remove the following line.
+For Visual Studio 2022 you need to edit the downloaded `Message.t4` file and remove the following line.
 ```
 <#@ assembly name="EnvDTE" #>
 ```

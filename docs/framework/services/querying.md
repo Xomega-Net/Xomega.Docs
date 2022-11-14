@@ -6,13 +6,13 @@ sidebar_position: 3
 
 You can employ any number of technologies to query the database in your business services - from using direct SQL commands with ADO.NET or calling stored procedures to using LINQ over EF Core entities.
 
-Xomega Framework provides additional support for dynamic construction of LINQ queries using flexible operators with the user-supplied filter criteria, as described below.
+Xomega Framework provides additional support for the dynamic construction of LINQ queries using flexible operators with the user-supplied filter criteria, as described below.
 
 ## Dynamic LINQ criteria
 
-When you have a service operation that needs to return a list of records (DTOs) based on a set of criteria that is supplied as the operation input, and may also contain some operators for those criteria, then you can leverage `AddClause` methods provided by the base service class, in order to dynamically construct a LINQ query over your EF entities.
+When you have a service operation that needs to return a list of records (DTOs) based on a set of criteria that is supplied as the operation input and may also contain some operators for those criteria, then you can leverage `AddClause` methods provided by the base service class, in order to dynamically construct a LINQ query over your EF entities.
 
-For example, imagine that you have a `ReadList` operation that returns a list of sales orders based on the provided `criteria` structure, which has values for filter criteria by certain fields, possibly coupled with a corresponding operator, such as `OrderDate` and `OrderDateOperator`. Some of the criteria fields may be also among the returned sales order fields, while others may be not.
+For example, imagine that you have a `ReadList` operation that returns a list of sales orders based on the provided `criteria` structure, which has values for filter criteria by certain fields, possibly coupled with a corresponding operator, such as `OrderDate` and `OrderDateOperator`. Some of the criteria fields may be also among the returned sales order fields, while others may not be.
 
 If you have a filter by a field that is not in the result list, such as `CreditCard` then you can call `AddClause` on the original `src` query that selects `SalesOrder` entities from the current DB context.
 
@@ -58,7 +58,7 @@ As you can see, the base service provides multiple variants of the `AddClause` m
 
 The `AddClause` methods provided by the base service take the LINQ expression for your query, the field name to be used in any error messages, a LINQ expression to get the value of the field, an optional operator and one or more criteria values, and returns a LINQ expression for updated query, which you can assign to the same variable.
 
-If the operator is passed as `null` or the criteria values are `null` or empty, meaning that no filter by the field is supplied, then it will return an identical query, which saves you from any tedious null checks. Otherwise it will construct a new LINQ expression with a `Where` clause based on the provided criteria, and will return it to the caller.
+If the operator is passed as `null` or the criteria values are `null` or empty, meaning that no filter by the field is supplied, then it will return an identical query, which saves you from any tedious null checks. Otherwise, it will construct a new LINQ expression with a `Where` clause based on the provided criteria, and will return it to the caller.
 
 If you don't provide an operator, a default operator will be used based on the criteria values that you pass. If you pass a collection of values, then the default operator is `One Of` / `In`. If you pass two separate values, then the default operator will be `Between`. Otherwise, the `Equal To` operator will be used.
 
@@ -85,14 +85,14 @@ qry = AddClause(qry, "Customer", r => r.Customer, "SW", "Micro");
 ```
 
 :::caution
-If you provide either an invalid operator or fewer values than the operator expects (e.g. 1 value for the `Between` operator), then the method will not change the query, but will add a corresponding error to the `currentErrors` using the specified property name in the text of the error message.
+If you provide either an invalid operator or fewer values than the operator expects (e.g. 1 value for the `Between` operator), then the method will not change the query but will add a corresponding error to the `currentErrors` using the specified property name in the text of the error message.
 :::
 
 ## Query operators{#operators}
 
 Xomega Framework provides a flexible and extensible framework for defining operators that can be used in conjunction with additional filter values or as filters by themselves without any additional values.
 
-Each operator has one or more names that it can be looked up by in the operators registry, which provides the flexibility to use multiple aliases, e.g. `EQ`, `=`, `==`, `Is`, `Equal`, `Equals`. The same comparison operator may be used by different names for different types of values, e.g. `LessOrEqual` for numbers and `EarlierOrAt` for dates.
+Each operator has one or more names that it can be looked up by in the registry of operators, which provides the flexibility to use multiple aliases, e.g. `EQ`, `=`, `==`, `Is`, `Equal`, `Equals`. The same comparison operator may be used by different names for different types of values, e.g. `LessOrEqual` for numbers and `EarlierOrAt` for dates.
 
 All operators in Xomega Framework inherit from the `Operator` base class, which is constructed with the following parameters.
 - `NumberOfValues` - the number of values the operator takes (0-2). For operators that take an unbounded list of values, such as `In`, this parameter is set to -1.
@@ -118,9 +118,9 @@ Defining custom operators may be useful if your field contains some special valu
 
 ### Registering operators
 
-Xomega Framework provides an `OperatorRegistry` class to allow registering operators and looking them up by a name. By default, the `OperatorRegistry` class registers all [standard operators](#standard-operators) supported by Xomega Framework.
+Xomega Framework provides an `OperatorRegistry` class to allow registering operators and looking them up by name. By default, the `OperatorRegistry` class registers all [standard operators](#standard-operators) supported by Xomega Framework.
 
-In order to make the operator registry accessible to the base service and all other services, you need to register it as a singleton in your `Startup` class using either an extension method or explicitly, as follows.
+To make the operator registry accessible to the base service and all other services, you need to register it as a singleton in your `Startup` class using either an extension method or explicitly, as follows.
 
 ```cs title="Startup.cs"
 public void ConfigureServices(IServiceCollection services)

@@ -4,15 +4,15 @@ sidebar_position: 0
 
 # Data Properties
 
-Central part of the data models for UI views in Xomega Framework are data properties that make up regular data objects and data list objects. Unlike regular object properties in C#, they provide rich functionality for handling the property values, which is used for viewing and editing them on the screens. Here's a quick summary of the features it provides.
+The central part of the data models for UI views in Xomega Framework is data properties that make up regular data objects and data list objects. Unlike regular object properties in C#, they provide rich functionality for handling the property values, which is used for viewing and editing them on the screens. Here's a quick summary of the features it provides.
 
 - **Multi-valued properties** allow storing and handling a list of values in the same property, as opposed to just a scalar value.
-- **Value conversion** allows converting values between multiple formats, such as `Internal`, `DisplayString`, `EditString` or `Transport`. For multi-valued properties this converts each individual value between those formats, and also provides a way to format the display of the entire list of values.
+- **Value conversion** allows converting values between multiple formats, such as `Internal`, `DisplayString`, `EditString` or `Transport`. For multi-valued properties, this converts each individual value between those formats and also provides a way to format the display of the entire list of values.
 - **Property description** stores the internal property name, as well as a localizable user-friendly label that can be used in the UI views and in any error messages, such as validation errors.
 - **Property metadata** handles such things as editability, visibility, security access level and whether or not the property is required. All of that can be reflected in the bound UI control by making it read-only or hidden, or by denoting a required field.
 - **Property change events** - unlike the standard MVVM's `INotifyPropertyChanged`, data properties can automatically notify you about changes in both the value and any of its metadata, or any combination thereof. This is used by the framework for property bindings and computed properties, but you can also leverage it for implementing your presentation logic.
 - **Async support** allows you to handle any property changes asynchronously, e.g. by fetching data from remote business services.
-- **Value validation** checks if the current value is valid and reports validation errors, if it's not. This allows you to store an invalid value while the user edits it, and prevents them from submitting an invalid value to the backend.
+- **Value validation** checks if the current value is valid and reports validation errors if it's not. This allows you to store an invalid value while the user edits it, and prevents them from submitting an invalid value to the backend.
 - **Modification tracking** helps you track when a property value has been modified.
 - **Possible values provider** of the property helps you to associate a list of possible values that can be used by the bound selection controls for selecting the value(s) of the property, as well as to validate the current value(s).
 - **Data list object support** allows you to reuse the same property with all its metadata, change events, value conversion and validation rules in a tabular data list object, where it would serve as one of the columns, without storing the actual value(s) directly.
@@ -21,7 +21,7 @@ Xomega Framework provides the base classes for all data properties, as well as a
 
 ## Initialization and description
 
-Normally, data properties are part of a data object, and have a unique name within that data object. Therefore, constructing a data property requires a parent data object and the property name passed to the constructor. The data object would typically declare the property and a constant for the property name, and then create the property in its `Initialize` method as follows.
+Normally, data properties are part of a data object and have a unique name within that data object. Therefore, constructing a data property requires a parent data object and the property name passed to the constructor. The data object would typically declare the property and a constant for the property name, and then create the property in its `Initialize` method as follows.
 
 ```cs
 public partial class SalesOrderObject : DataObject
@@ -52,35 +52,35 @@ public DateTimeProperty(DataObject parent, string name) : base(parent, name)
 ```
 
 :::warning
-If your initialization code needs to **access other properties** of the parent object, then those may not be created yet when your property is being constructed. Therefore, you will need to override the `Initialize` method of the property, and perform any such initialization in that method.
+If your initialization code needs to **access other properties** of the parent object, then those may not be created yet when your property is being constructed. Therefore, you will need to override the `Initialize` method of the property and perform any such initialization in that method.
 :::
 
 ### Property name
 
-As we mentioned above, the property name should be unique within its parent data object, and is passed to the property constructor. The parent object allows you to look up any property by its name, and the property name can be used to identify the property in the UI control bindings.
+As we mentioned above, the property name should be unique within its parent data object and is passed to the property constructor. The parent object allows you to look up any property by its name, and the property name can be used to identify the property in the UI control bindings.
 
 :::tip
 That's why declaring a constant for the property name will allow you to use that constant in various bindings, without having to hardcode the property name.
 :::
 
-Property name is also used as a resource key to look up the user-friendly localized label for the property, as explained below.
+The property name is also used as a resource key to look up the user-friendly localized label for the property, as explained below.
 
 ### Property label
 
-Property label is a localized user-friendly description of the property, which can be used by the bound UI controls, as well as in any error messages related to that property. By default the `ToString()` method will also return the label.
+The property label is a localized user-friendly description of the property, which can be used by the bound UI controls, as well as in any error messages related to that property. By default, the `ToString`()` method will also return the label.
 
 The property will look up the localized text for the label in the current ([hierarchical](../../services/errors#resources)) resource manager using its name as the resource key and the parent resource key as the prefix.
 
 For example, if you have an `OrderDate` data property on the `SalesOrderObject`, then Xomega Framework will look up the label text under the `SalesOrderObject.OrderDate` key, and then fall back to the default `OrderDate` key, if the former is not defined. If no such resources are found, it will construct the label from the property's `Name`.
 
 :::note
-You can customize which resource manager, resource key and the parent resource key are used by overriding the `ResourceMgr`, `ResourceKey` and `ParentResourceKey` properties respectively.
+You can customize which resource manager, resource key and parent resource key are used by overriding the `ResourceMgr`, `ResourceKey` and `ParentResourceKey` properties respectively.
 :::
 
 In addition to a label, a property can also provide a localizable `AccessKey`, which should be defined in the resources under the same key as the property, but with the *_AccessKey* at the end, e.g. `SalesOrderObject.OrderDate_AccessKey`. The access key would be a single letter, e.g. "D", which the bound UI control can underscore in the displayed label as a mnemonic, and also set up a keyboard shortcut to bring focus to the bound field, e.g. `Alt+D`.
 
 :::note
-You can also manually set the label on the property, which will override any defined resources. For that you can set the `Label` property, or call the `SetLabel` method, which will strip off the trailing colon. This is called by some bound UI controls that already have a label defined directly on the screen to ensure that any error messages also use the same label.
+You can also manually set the label on the property, which will override any defined resources. For that, you can set the `Label` property, or call the `SetLabel` method, which will strip off the trailing colon. This is called by some bound UI controls that already have a label defined directly on the screen to ensure that any error messages also use the same label.
 :::
 
 ## Property values
@@ -91,23 +91,23 @@ The data property's values are stored internally as an `object`, which allows st
 If the property fails to convert the provided value you are setting to the target data type, it will still store that value "as is" in the data property. However, validating the property will result in errors, which won't let you submit the data to the services. This allows the property to capture the user's input as they type it, even if it's not yet valid.
 :::
 
-You can get the data property's value converted to a specific format by calling the `GetValue` method, and passing a specific format. This method would return the value as an object, but Xomega Framework provides a number of other value accessors that can return typed values for each format, as you will see below.
+You can get the data property's value converted to a specific format by calling the `GetValue` method and passing a specific format. This method would return the value as an object, but Xomega Framework provides a number of other value accessors that can return typed values for each format, as you will see below.
 
 ### Value formats
 
-The different formats that data property values can be converted to are represented by the class `ValueFormat`. Xomega Framework defines the following static formats that you can covert values to.
+The different formats that data property values can be converted to are represented by the class `ValueFormat`. Xomega Framework defines the following static formats that you can convert values to.
 
 - `ValueFormat.Internal` - the format in which values are stored internally in data properties. This format is typically typed, that is an integer value would be stored as an `int?`.
 - `ValueFormat.Transport` - the format in which data property values are transported between layers during a service call. The format is typically typed and may or may not be the same as the internal format. For example, we may want to store a resolved `Header` object internally, but send only the ID part in a service call.
 - `ValueFormat.EditString` - the string format in which the user inputs the value. It may or may not be the same as the format in which the value is displayed to the user when it's not editable. For example, a `MoneyProperty` may display the value using a currency format, but have the user input regular decimal numbers.
-- `ValueFormat.DisplayString` - the string format in which the value is displayed to the user when it's not editable. When the internal value is such an object as a `Header`, the display string may be just its text attribute, or a combination of several attributes.
+- `ValueFormat.DisplayString` - the string format in which the value is displayed to the user when it's not editable. When the internal value is such an object as a `Header`, the display string may be just its text attribute or a combination of several attributes.
 
 The `ValueFormat` also provides the following two methods for classifying the value formats.
 - `IsTyped()` - checks if the current format is one of the typed formats, i.e. the first two formats.
 - `IsString()` - checks if the current format is one of the string formats, i.e. the last two formats.
 
 :::tip
-If you need to define your own custom formats, you can subclass the `ValueFormat` class, add static readonly members for your custom formats, and override the `IsTyped` and `IsString` methods accordingly. Then you can use those custom formats in your properties for value conversion.
+If you need to define your custom formats, you can subclass the `ValueFormat` class, add static read-only members for your custom formats, and override the `IsTyped` and `IsString` methods accordingly. Then you can use those custom formats in your properties for value conversion.
 :::
 
 ### Value conversion
@@ -167,7 +167,7 @@ The base `DataProperty` provides the following convenient accessors for its valu
 In order to configure a property that can hold multiple values, you should set the `IsMultiValued` flag to `true`. In this case, calling `ResolveValue` or `ResolveValueAsync` will create an `IList` from the provided value, convert each value to the specified format, and will add them to that list using the following rules.
 - If the value is already an `IList`, then it will convert the values of that list.
 - If the value is a `string`, then it will parse it based on the property's `ParseListSeparators` (by default `","`, `";"` and `"\n"`).
-- Otherwise, it will create a new list, and will add the provided value to it as a single element.
+- Otherwise, it will create a new list and will add the provided value to it as a single element.
 - The list will be created by calling the `IList CreateList(ValueFormat format)` method, which is overridden in concrete data properties to return a typed list, e.g. `new List<int>()`.
 
 The following code block illustrates these rules when setting a value of a multi-valued property.
@@ -203,11 +203,11 @@ dispVal = prop.EditStringValue; // = "1; 2; 3"
 ```
 
 :::tip
-For a total control of how your multi-valued property displays its values as a string, you can override the following method:
+For total control of how your multi-valued property displays its values as a string, you can override the following method:
 ```cs
 string ListToString(IList list, ValueFormat format);
 ```
-For example, if a property may contain a long list of values, you can display them as comma-separated, but with a new line after every 10th value, in order to provide a more readable tabular display with 10 columns.
+For example, if a property may contain a long list of values, you can display them as comma-separated, but with a new line after every 10th value, to provide a more readable tabular display with 10 columns.
 :::
 
 ### Accessing typed values
@@ -240,7 +240,7 @@ List<decimal?> vals = multiProp.Values; // typed list of values
 ```
 
 :::note
-Generic data properties have additional methods `GetValue` and `GetValues` to access typed value(s) respectively. Those also allow you to pass a `DataRow` to extract the value from, when the property is part of a data list object.
+Generic data properties have additional methods `GetValue` and `GetValues` to access typed value(s) respectively. Those also allow you to pass a `DataRow` to extract the value from when the property is part of a data list object.
 :::
 
 :::caution
@@ -251,7 +251,7 @@ If the internal property value is invalid and not of the proper type, then `Valu
 
 Data properties allow tracking modification state of its value(s) using its nullable boolean property `Modified` of type `bool?`. When the property is initially created, the `Modified` state is set to `null`, meaning that it's not initialized.
 
-After you read the data for the parent object, and set the value of that property for the first time, the `Modified` state will be set to `false`, which means that the property has been initialized, but not modified. Setting another (different) value from there on will mark the property as modified.
+After you read the data for the parent object and set the value of that property for the first time, the `Modified` state will be set to `false`, which means that the property has been initialized, but not modified. Setting another (different) value from there on will mark the property as modified.
 
 :::info
 Determining if the new value is the same as the current value is done by the method `ValuesEqual`, which you can override in each property. By default, it uses `Equals` to compare scalar values, and `SequenceEqual` to compare lists, meaning that the order of the values in multi-valued properties matters.
@@ -262,7 +262,7 @@ The modification state of the data properties is used by the framework to determ
 You generally don't need to manually reset the modification state of each property, as they are all reset automatically when the parent data object is successfully saved. When you create a new object, as opposed to reading the data of an existing object, the framework will set the initial `Modified` state to `false` to start tracking modifications right away.
 
 :::note
-Data properties also have methods `GetModified` and `SetModified` that can accept a `DataRow`, which allow you to track modification of the current property in the specific row of the parent data list object.
+Data properties also have methods `GetModified` and `SetModified` that can accept a `DataRow`, which allows you to track modification of the current property in the specific row of the parent data list object.
 :::
 
 
@@ -271,7 +271,7 @@ Data properties also have methods `GetModified` and `SetModified` that can accep
 The validation state of the current value of a data property is tracked by an [`ErrorList`](../../services/errors) of validation errors, which you can get by calling the `GetValidationErrors` method, which returns them as follows.
 - `null` means that the validation has not been performed since the property value last changed.
 - An empty list means that the validation has been performed and the value is valid.
-- Non-empty list means that the value has been validated and is not valid, if the list contains any errors.
+- A non-empty list means that the value has been validated and is not valid if the list contains any errors.
 
 As you see, changing the property value will reset the validation state of the property, but you can also reset it manually by calling the `ResetValidation` method.
 
@@ -281,7 +281,7 @@ The validation is triggered automatically as needed when you stop editing the pr
 Only **editable and visible** data properties will be validated. The validation process will also automatically notify any listeners, such as the bound UI controls, which could refresh their validation state and display any validation errors.
 :::
 
-The actual validation is performed by the `Validator` delegate that is configured by the property. For scalar properties it validates their value, but for multi-valued properties it validates each individual value in the list. You can combine multiple validation functions in the `Validator`, as shown below.
+The actual validation is performed by the `Validator` delegate that is configured by the property. For scalar properties, it validates their value, but for multi-valued properties, it validates each individual value in the list. You can combine multiple validation functions in the `Validator`, as shown below.
 
 ```cs
 public DecimalProperty(DataObject parent, string name) : base(parent, name)
@@ -299,7 +299,7 @@ public DecimalProperty(DataObject parent, string name) : base(parent, name)
 The base `DataProperty` initializes the `Validator` with a default `ValidateRequired` method, so you typically want to add additional validations to it in the subclasses. If you don't want any default validations though, then you can assign and build your `Validator` from scratch.
 :::
 
-Each validation function accepts the data property, and can be declared as static, so that you could reuse them between various properties. The validation function uses configuration of the data property to validate the passed value, and adds localized validation errors to the property by calling its `AddValidationError` method, as illustrated below.
+Each validation function accepts the data property and can be declared as static so that you could reuse them between various properties. The validation function uses a configuration of the data property to validate the passed value and adds localized validation errors to the property by calling its `AddValidationError` method, as illustrated below.
 
 ```cs
 /* highlight-next-line */
@@ -328,31 +328,31 @@ public static void ValidateMinimum(DataProperty dp, object value, DataRow row)
 When adding validation errors you can pass a constant for the message resource key and the message arguments, as described [here](../../services/errors#adding).
 
 :::note
-For data properties in a data list object, you can also pass a `DataRow` to all of the validation methods to track validation state of this property for a specific row.
+For data properties in a data list object, you can also pass a `DataRow` to all of the validation methods to track the validation state of this property for a specific row.
 :::
 
 ## Property metadata
 
 In addition to storing and handling the value, all Xomega Framework properties (i.e. subclasses of the `BaseProperty`) maintain various metadata, such as editability, visibility, security access level and whether or not the property is required.
 
-This metadata is typically reflected in the state of the property-bound UI controls, which gets updated whenever such metadata is changed, and also affects the way the property value(s) are handled or validated.
+This metadata is typically reflected in the state of the property-bound UI controls, which gets updated whenever such metadata is changed and also affects the way the property value(s) are handled or validated.
 
 ### Property editability
 
-The `BaseProperty` class maintains a property `Editable`, which determines whether or not the current data property should be editable by the user. The data property itself does not prevent setting a new property value, when its not editable, but the bound UI control should become un-editable/readonly, and prevent the user from changing the value.
+The `BaseProperty` class maintains a property `Editable`, which determines whether or not the current data property should be editable by the user. The data property itself does not prevent setting a new property value when it's not editable, but the bound UI control should become un-editable/read-only, and prevent the user from changing the value.
 
-You can manually make the property not editable by setting `Editable = false`. However, even if you set `Editable = true` the final editable state of the property is also determined by its [security access level](#access), which should be greater than `ReadOnly`, as well as by calling the parent object's method `IsPropertyEditable` for the current property. The latter makes sure that the all its parent objects are also editable, which allows you to turn off editability of all the data properties when their parent object is not editable.
+You can manually make the property not editable by setting `Editable = false`. However, even if you set `Editable = true` the final editable state of the property is also determined by its [security access level](#access), which should be greater than `ReadOnly`, as well as by calling the parent object's method `IsPropertyEditable` for the current property. The latter makes sure that all its parent objects are also editable, which allows you to turn off the editability of all the data properties when their parent object is not editable.
 
 :::tip
 You can also override the `IsPropertyEditable` method in your parent data object, and implement custom logic that determines when the property should be editable. However, you'd have to make sure to fire the appropriate property change event when your custom editability conditions change.
 :::
 
-In addition to the editable flag, data properties can also maintain an `Editing` flag, which tracks when the user starts and stops editing the property value. It is typically set to `true` by the bound UI control when the value is changed, and then reset to `false` when the user stops editing or leaves the UI control.
+In addition to the editable flag, data properties can also maintain an `Editing` flag, which tracks when the user starts and stops editing the property value. It is typically set to `true` by the bound UI control when the value is changed and then reset to `false` when the user stops editing or leaves the UI control.
 
 Any changes in the `Editing` flag fire a property change event, which allows you to implement UI-independent presentation logic on such events. Xomega Framework, for example, performs a validation of the property value when the user stops editing, which may in turn display validation errors and update the state of the UI control.
 
 :::note
-In addition to the `Editable` and `Editing` properties, the `BaseProperty` provides corresponding methods `GetEditable`, `SetEditable`,  `GetEditing` and `SetEditing` respectively. Each one of them accepts an optional `DataRow` to allow retrieving or setting the editable or editing flags of the current property for the specified row, when the property is part of a data list object.
+In addition to the `Editable` and `Editing` properties, the `BaseProperty` provides corresponding methods `GetEditable`, `SetEditable`,  `GetEditing` and `SetEditing` respectively. Each one of them accepts an optional `DataRow` to allow retrieving or setting the editable or editing flags of the current property for the specified row when the property is part of a data list object.
 :::
 
 ### Property visibility
@@ -363,13 +363,13 @@ You can manually make the property not visible by setting `Visible = false`. How
 
 ### Security access level{#access}
 
-Access to different data properties may be subject to security restrictions based on the claims of the current user. Some users may have read-only access to some data, or no access to other sensitive data. In order to track that for each property, the `BaseProperty` class has an `AccessLevel` property, which can be one of the following values.
+Access to different data properties may be subject to security restrictions based on the claims of the current user. Some users may have read-only access to some data, or no access to other sensitive data. To track that for each property, the `BaseProperty` class has an `AccessLevel` property, which can be one of the following values.
 1. `AccessLevel.None` - the user can neither view nor modify the property.
 1. `AccessLevel.ReadOnly` - the user can view the property, but not modify it.
 1. `AccessLevel.Full` - the user can both view and modify the property.
 
 :::tip
-The `AccessLevel` enum values are ordered in the ascending order, so you can use not only an equality operator, but also comparison operators, e.g. `AccessLevel > AccessLevel.None`.
+The `AccessLevel` enum values are ordered in ascending order, so you can use not only an equality operator but also comparison operators, e.g. `AccessLevel > AccessLevel.None`.
 :::
 
 When the access level of a property is less than `Full`, then the property will be not editable, and when it's less than `ReadOnly`, then the property will be not visible. Therefore, changing the `AccessLevel` on the property will send a [property change event](#property-change-events) for both the `Editable` and `Visible` flags, since it may affect either of them.
@@ -393,18 +393,18 @@ All data properties support advanced and extensible property change events, whic
 - Support for **async notifications**, which allows waiting for all async listeners to complete.
 - Supporting notifications related to **specific `DataRow`**, when the property is part of a data list object.
 
-Property change events are used by various property bindings to keep the bound UI controls in sync with the property, as well as by computed bindings, in order to support computed values. You can also use these notifications to implement your presentation logic independent of any specific UI framework.
+Property change events are used by various property bindings to keep the bound UI controls in sync with the property, as well as by computed bindings, to support computed values. You can also use these notifications to implement your presentation logic independent of any specific UI framework.
 
 ### Property changes
 
-Xomega Framework describes the change(s) that occur in data properties using the `PropertyChange` class. At its core it constitutes a combination of the flags, with each flag representing a specific property change. This class doesn't provide a public constructor, but it has a number of standard property changes exposed as static constants, as listed below.
+Xomega Framework describes the change(s) that occur in data properties using the `PropertyChange` class. At its core, it constitutes a combination of the flags, with each flag representing a specific property change. This class doesn't provide a public constructor, but it has a number of standard property changes exposed as static constants, as listed below.
 
 - `PropertyChange.All` - a combination of all changes. Used to trigger refresh for all property attributes, e.g. during initialization.
 - `PropertyChange.Value` - a change in property value(s).
 - `PropertyChange.Editable` - a change in property editability.
 - `PropertyChange.Editing` - a change in whether or not the property is being edited.
 - `PropertyChange.Required` - a change in whether or not the property is required.
-- `PropertyChange.Items` - a change in property's list of possible items.
+- `PropertyChange.Items` - a change in the property's list of possible items.
 - `PropertyChange.Visible` - a change in property visibility.
 - `PropertyChange.Validation` - a change in property validation status.
 
@@ -414,7 +414,7 @@ You can construct a property change for any combination of the above constants u
 PropertyChange change = PropertyChange.Editable + PropertyChange.Visible;
 ```
 
-You can check whether a change includes any specific attribute by using dedicated methods that return a `bool`, e.g. `change.IncludesValue()` to check if the property change includes a value change. You can also use a generic method `IncludesChanges` to check if the changes includes any of the supplied changes, as follows.
+You can check whether a change includes any specific attribute by using dedicated methods that return a `bool`, e.g. `change.IncludesValue()` to check if the property change includes a value change. You can also use a generic method `IncludesChanges` to check if the changes include any of the supplied changes, as follows.
 
 ```
 change.IncludesChanges(PropertyChange.Editable + PropertyChange.Visible)
@@ -436,7 +436,7 @@ public class MyPropertyChange : PropertyChange
 
 ### Subscribing to change events
 
-In order to listen to property change events, you can add your event handler to the property's `Change` event. The `sender` argument will be the property, and the `PropertyChangeEventArgs` argument will contain the details of the change(s). In order to make sure that your handler executes only on the needed property change(s), you should check the [`Change`](#property-changes) member of the event arguments, as illustrated below.
+To listen to property change events, you can add your event handler to the property's `Change` event. The `sender` argument will be the property, and the `PropertyChangeEventArgs` argument will contain the details of the change(s). To make sure that your handler executes only on the needed property change(s), you should check the [`Change`](#property-changes) member of the event arguments, as illustrated below.
 
 ```cs
 property.Change += OnDataPropertyChange;
@@ -457,7 +457,7 @@ Using property change notifications you can implement some presentation logic, w
 The `PropertyChangeEventArgs` allows you to access the `OldValue` and `NewValue`, where available, as well as the `Row` member, in order to get the `DataRow` that was changed when the property is part of a data list object.
 :::
 
-If your property change handler needs to perform any async operations that should be awaited for, then you should add your async handler to the property's `AsyncChange` event, as follows.
+If your property change handler needs to perform any async operations that should be awaited, then you should add your async handler to the property's `AsyncChange` event, as follows.
 
 ```cs
 property.AsyncChange += OnDataPropertyChangeAsync;
@@ -473,7 +473,7 @@ async Task OnDataPropertyChangeAsync(object sender, PropertyChangeEventArgs e, C
 ```
 
 :::caution
-Only the async listeners for the **value change** will be awaited for, provided that the value was changed via `SetValueAsync`. Any other property changes, such as `Editable`, will also trigger the async listeners, but those will not be awaited.
+Only the async listeners for the **value change** will be awaited, provided that the value was changed via `SetValueAsync`. Any other property changes, such as `Editable`, will also trigger the async listeners, but those will not be awaited.
 :::
 
 ### Firing change events
@@ -485,7 +485,7 @@ prop.FirePropertyChange(new PropertyChangeEventArgs(PropertyChange.Editable, old
 prop.FirePropertyChange(new PropertyChangeEventArgs(PropertyChange.Items, null, null, e.Row));
 ```
 
-This is most common for the `PropertyChange.Items` change notification, when the list of possible values for the property must be refreshed. If you operate within an async method, then you better use the `FirePropertyChangeAsync` method, which will invoke and await for both synchronous and asynchronous listeners, as illustrated below.
+This is most common for the `PropertyChange.Items` change notification when the list of possible values for the property must be refreshed. If you operate within an async method, then you better use the `FirePropertyChangeAsync` method, which will invoke and await for both synchronous and asynchronous listeners, as illustrated below.
 
 ```cs
 await prop.FirePropertyChangeAsync(new PropertyChangeEventArgs(PropertyChange.Items, null, null, e.Row));
@@ -497,9 +497,9 @@ Calling `FirePropertyChange` will also invoke async listeners, but it won't wait
 
 ## Computed properties
 
-Oftentimes, the value or state of a property depends on the values or states of other properties or objects. For example, the value of the *UnitPrice* property may depend on the selected product, and the value of *Line Total* property may be calculated as a formula based on the values of the *Quantity*, *UnitPrice* and *Discount* properties.
+Oftentimes, the value or state of a property depends on the values or states of other properties or objects. For example, the value of the *UnitPrice* property may depend on the selected product, and the value of the *Line Total* property may be calculated as a formula based on the values of the *Quantity*, *UnitPrice* and *Discount* properties.
 
-You can always create a set of listeners that listen to the changes in other properties or objects, and recalculate the value or state of your property accordingly. While this could be the most straightforward way, it’s not the simplest or the most natural one. Adding all these property listeners that recalculate values of other properties can get very tedious.
+You can always create a set of listeners that listen to the changes in other properties or objects and recalculate the value or state of your property accordingly. While this could be the most straightforward way, it’s not the simplest or the most natural one. Adding all these property listeners that recalculate values of other properties can get very tedious.
 
 And even after you add them all, you will have a hard time understanding how each computed property is calculated. You also need to be very careful when changing any of the calculations to make sure you add new listeners for any additional properties that the computed value uses, and remove the listeners for the properties that it no longer depends on.
 
@@ -507,7 +507,7 @@ A more natural way to define computed properties is to just express the formula 
 
 ### Computed value
 
-When the value of your property is computed based on the values of other properties, you can create an `Expression` for a `Func` that  accepts arguments needed to get the dependent values, and returns the calculated value as an `object`. The arguments can be either the dependent properties or their parent objects. Then you can call `SetComputedValue` on your property, and pass that expression and the actual properties or objects for the expression's arguments.
+When the value of your property is computed based on the values of other properties, you can create an `Expression` for a `Func` that accepts arguments needed to get the dependent values, and returns the calculated value as an `object`. The arguments can be either the dependent properties or their parent objects. Then you can call `SetComputedValue` on your property, and pass that expression and the actual properties or objects for the expression's arguments.
 
 :::caution
 Setting computed value will also make the property neither `Editable` nor `Required` to ensure that the user would not be able to set it manually, and to turn off the required validation.
@@ -533,15 +533,15 @@ Expression<Func<EnumProperty, object>> xDiscount = spOf => spOf.IsNull() ? null 
 DiscountProperty.SetComputedValue(xDiscount, SpecialOfferProperty);
 ```
 
-If your computed property is part of a data list object, then your expression can have a `DataRow` as a last argument to allow retrieving values of other properties from the same row, e.g. `Expression<Func<EnumProperty, DataRow, object>>`. You'd still pass the same parameters to the `SetComputedValue` method though, i.e. without passing an instance of the row, as it's provided automatically.
+If your computed property is part of a data list object, then your expression can have a `DataRow` as the last argument to allow retrieving values of other properties from the same row, e.g. `Expression<Func<EnumProperty, DataRow, object>>`. You'd still pass the same parameters to the `SetComputedValue` method though, i.e. without passing an instance of the row, as it's provided automatically.
 
 :::tip
 Your expression can also use regular properties of any objects that implement the standard `INotifyPropertyChanged` interface, and the computed value will be automatically updated when the values of such properties change.
 :::
 
-When the calculation is not trivial, especially with all the handling of possible `null` values, then your expression can become unwieldy. In this case you can create a separate function that calculates the result from the input values, and use that function in your expression.
+When the calculation is not trivial, especially with all the handling of possible `null` values, then your expression can become unwieldy. In this case, you can create a separate function that calculates the result from the input values, and use that function in your expression.
 
-In the following example the value of the `LineTotalProperty` is calculated from the *unit price*, *discount* and the *quantity* using a separate method `GetLineTotal`, so we can just pass the parent data object to the expression, and call that function using its values, as follows.
+In the following example, the value of the `LineTotalProperty` is calculated from the *unit price*, *discount* and *quantity* using a separate method `GetLineTotal`, so we can just pass the parent data object to the expression, and call that function using its values, as follows.
 
 ```cs
 // computed total using a helper function
@@ -557,14 +557,14 @@ LineTotalProperty.SetComputedValue(xLineTotal, this);
 Using helper functions like this will allow you to keep the expressions easy to read and implement, since you will no longer be limited by the expression syntax in the helper functions, and can use the full gamut of C# features there.
 
 :::note
-You can always manually trigger recalculation of the computed property by calling `await prop.UpdateComputedValueAsync()`. You can also pass it a `DataRow` when the property is part of a data list object.
+You can always manually trigger a recalculation of the computed property by calling `await prop.UpdateComputedValueAsync()`. You can also pass it a `DataRow` when the property is part of a data list object.
 :::
 
 ### Computed editability
 
-When editability of your data property depends on the values of other properties, you can create an `Expression` for a `Func` that returns a `bool`, and pass it to the `SetComputedEditable` method along with the instances of the other arguments for the expression.
+When the editability of your data property depends on the values of other properties, you can create an `Expression` for a `Func` that returns a `bool`, and pass it to the `SetComputedEditable` method along with the instances of the other arguments for the expression.
 
-Imagine that you have an enumerated `ReasonProperty` that allows the user to select a reason from a certain list of values. One of such values could be *Other*, selecting which would make the free-text `ReasonDetailsProperty` editable to provide custom details. To set this up you can create a boolean expression, and pass it to the `SetComputedEditable` method, as follows.
+Imagine that you have an enumerated `ReasonProperty` that allows the user to select a reason from a certain list of values. One such value could be *Other*, selecting which would make the free-text `ReasonDetailsProperty` editable to provide custom details. To set this up you can create a boolean expression, and pass it to the `SetComputedEditable` method, as follows.
 
 ```cs
 // computed editable attribute based on the value of the selected reason
@@ -574,14 +574,14 @@ ReasonDetailsProperty.SetComputedEditable(xOtherReason, ReasonProperty);
 ```
 
 :::note
-You can always manually trigger recalculation of the computed `Editable` by calling `prop.UpdateComputedEditable()`. You can also pass it a `DataRow` when the property is part of a data list object.
+You can always manually trigger a recalculation of the computed `Editable` by calling `prop.UpdateComputedEditable()`. You can also pass it a `DataRow` when the property is part of a data list object.
 :::
 
 ### Computed visibility
 
-When visibility of your data property depends on the values of other properties, you can create an `Expression` for a `Func` that returns a `bool`, and pass it to the `SetComputedVisible` method along with the instances of the other arguments for the expression.
+When the visibility of your data property depends on the values of other properties, you can create an `Expression` for a `Func` that returns a `bool`, and pass it to the `SetComputedVisible` method along with the instances of the other arguments for the expression.
 
-In the following example the `UnitPriceDiscountProperty` is configured to be visible only when its (computed) value is greater than 0.
+In the following example, the `UnitPriceDiscountProperty` is configured to be visible only when its (computed) value is greater than 0.
 
 ```cs
 // computed visible attribute based on discount value
@@ -591,7 +591,7 @@ UnitPriceDiscountProperty.SetComputedVisible(xVisible, UnitPriceDiscountProperty
 ```
 
 :::note
-You can always manually trigger recalculation of the computed `Visible` by calling `prop.UpdateComputedVisible()`.
+You can always manually trigger a recalculation of the computed `Visible` by calling `prop.UpdateComputedVisible()`.
 :::
 
 ### Computed required
@@ -613,7 +613,7 @@ You can always manually recalculate the computed `Required` by calling `await pr
 
 ### Custom computed bindings
 
-Xomega Framework provides a base class `ComputedBinding` that allows you to easily create bindings for any custom attributes by extending it and implementing the `Update` method. For example, a computed binding for property's `AccessLevel` could look as follows.
+Xomega Framework provides a base class `ComputedBinding` that allows you to easily create bindings for any custom attributes by extending it and implementing the `Update` method. For example, a computed binding for the property's `AccessLevel` could look as follows.
 
 ```cs
 /* highlight-next-line */
@@ -638,10 +638,10 @@ public class ComputedAccessLevelBinding : ComputedBinding
 }
 ```
 
-With that you can just construct a binding for your property using the desired expression and args, and it will keep its `AccessLevel` computed based on your expression.
+With that, you can just construct a binding for your property using the desired expression and args, and it will keep its `AccessLevel` computed based on your expression.
 
 :::caution
-Make sure to call the `Dispose` method on your computed binding when you no longer need it, in order to remove any listeners and prevent possible memory leaks.
+Make sure to call the `Dispose` method on your computed binding when you no longer need it, to remove any listeners and prevent possible memory leaks.
 :::
 
 ## Property bindings

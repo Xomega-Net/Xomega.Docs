@@ -32,7 +32,7 @@ Details views for some UI technologies, such as WebForms, may later overwrite th
 
 ## Activation
 
-`DetailsViewModel` allow you to activate the details view for both an existing entity and for creating a new entity, as described below.
+`DetailsViewModel` allows you to activate the details view for both an existing entity and for creating a new entity, as described below.
 
 ### Opening existing entity
 
@@ -72,12 +72,12 @@ While the object is being created, the [`IsNew`](../data-objects#isnew-property)
 
 ### Loading data
 
-If you open details for an existing entity, and pass the key(s) as the parameters, the activation process will set the keys to the corresponding data properties, and will call the `LoadDataAsync` or `LoadData` methods respectively, in order to load the entity data for the data object. Those will effectively call the [*Read* operation on your data object](../data-objects#read-operation), but you can override that behavior, as needed.
+If you open details for an existing entity and pass the key(s) as the parameters, the activation process will set the keys to the corresponding data properties and will call the `LoadDataAsync` or `LoadData` methods respectively, to load the entity data for the data object. Those will effectively call the [*Read* operation on your data object](../data-objects#read-operation), but you can override that behavior, as needed.
 
-Any error messages from the *Read* operation will be stored in the [`Errors`](view-models#error-list) property, and would be shown in the bound *Error List* control on the view.
+Any error messages from the *Read* operation will be stored in the [`Errors`](view-models#error-list) property and would be shown in the bound *Error List* control on the view.
 
 :::warning
-You can also manually call the `LoadDataAsync` or `LoadData` methods at any other point, in order to refresh the view's data from the service, but it **will not check or prompt for unsaved changes**, which may be dangerous. You would need to override these methods and implement those checks in your subclass, if this is needed.
+You can also manually call the `LoadDataAsync` or `LoadData` methods at any other point, in order to refresh the view's data from the service, but it **will not check or prompt for unsaved changes**, which may be dangerous. You would need to override these methods and implement those checks in your subclass if this is needed.
 :::
 
 ## Saving changes
@@ -96,7 +96,7 @@ The details view may also have a *Delete* button that allows deleting the curren
 If the *Delete* button is bound to the *DeleteAction* of the main data object, then it will be enabled only when the [`IsNew`](../data-objects#isnew-property) property is `false`, and disabled when you create a new entity.
 :::
 
-Similar to the save actions, the `DetailsViewModel` provides `DeleteAsync` and `Delete` methods that can be called from the *Delete* button's handler, and will in turn call the [*Delete* operation on the data object](../data-objects#delete-operation). If there are any errors during the execution of the service call, they will be stored in the [`Errors`](view-models#error-list) property, and displayed in the bound *Error List* control on the view.
+Similar to the Save actions, the `DetailsViewModel` provides `DeleteAsync` and `Delete` methods that can be called from the *Delete* button's handler, and will in turn call the [*Delete* operation on the data object](../data-objects#delete-operation). If there are any errors during the execution of the service call, they will be stored in the [`Errors`](view-models#error-list) property, and displayed in the bound *Error List* control on the view.
 
 If the delete was successful with no errors, then the view model will [fire a view event](view-models#general-view-events) `ViewEvent.Deleted` that other view models can listen to and handle, as appropriate. After firing the event, the view will be automatically closed.
 
@@ -104,14 +104,14 @@ If the delete was successful with no errors, then the view model will [fire a vi
 
 Your details view may allow opening other child details views from it, editing which may affect the data in your details view.
 
-For example, if you have a *Sales Order* details view that contains a child list of the line items for the sales order, then clicking on an individual line item may open up a separate *Line Item* details view. When the user saves or deletes a line item from the separate view, you may need to reload the data in the parent *Sales Order* view to reflect those changes.
+For example, if you have a *Sales Order* details view that contains a child list of the line items for the sales order, then clicking on an individual line item may open up a separate *Line Item* details view. When the user saves or deletes a line item from a separate view, you may need to reload the data in the parent *Sales Order* view to reflect those changes.
 
  The `DetailsViewModel` class implements some default behavior for handling view events of such child details views, as follows.
  
  When the child view is opened or closed, it uses the `UpdateDetailsSelection` method to find a corresponding row in one of its child data list objects, and then select or deselect that row in order to highlight it for the user, as needed. When the child details view is saved or deleted, it will also call the `LoadDataAsync` or `LoadData` methods to [reload the data](#loading-data) in the view.
 
 :::tip
-You can override the `UpdateDetailsSelection` method in your concrete view model to customize the way it handles selection of the child rows for the open child views. You can also leverage the `UpdateListSelection` method in your overridden implementation, as needed.
+You can override the `UpdateDetailsSelection` method in your concrete view model to customize the way it handles the selection of the child rows for the open child views. You can also leverage the `UpdateListSelection` method in your overridden implementation, as needed.
 
 If you need to customize the way data is reloaded upon saving or deletion of the child views, then you need to override the `OnChildEventAsync` and `OnChildEvent` methods, as appropriate.
 :::

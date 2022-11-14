@@ -14,7 +14,7 @@ Xomega.Net for Visual Studio allows you to **generate the WebAPI controllers** f
 
 ## WebAPI controllers
 
-In order to expose a business service via REST API, you would typically create a corresponding controller that wraps your service, and add methods with HTTP actions for any operations that you want to expose.
+To expose a business service via REST API, you would typically create a corresponding controller that wraps your service and add methods with HTTP actions for any operations that you want to expose.
 
 ### Service controllers
 
@@ -70,7 +70,7 @@ public class Startup
 
 The action methods on your controller for any operations that you want to expose via REST will look similar to the actual methods for the corresponding service operations, but decorated with the WebAPI attributes, such as `Route`, HTTP verb (e.g. `HttpPut`), and any parameter attributes like `FromRoute` or `FromBody`.
 
-The main function of the action is to **call your service method**, and return the result of the operation using the HTTP status code of the result. However, you also want to do the following things in your action.
+The main function of the action is to **call your service method** and return the result of the operation using the HTTP status code of the result. However, you also want to do the following things in your action.
 1. **Check the model validation errors** using `ModelState.IsValid`. The model will be validated by ASP.NET Core, and if it is invalid, then, instead of calling your service method, you will want to add those validation errors to the current error list using an extension method `AddModelErrors` for ASP.NET.
 1. **Wrap your code in the `try/catch`** and handle any exceptions by adding them to the current errors using the `errorParser`. In both cases you will want to return an `Output` with the current errors and no results, using the HTTP status code of the current errors.
 
@@ -110,7 +110,7 @@ While ASP.NET Core does support synchronous methods, make sure that you **use as
 
 ## Unhandled errors
 
-While you can properly report any exceptions in the current error list using a `try/catch` in each action, there maybe still unhandled exceptions raised by the ASP.NET Core middleware. If you also want to report them in the standardized way through an error list, then Xomega Framework provides a special `ErrorController` for that, which you can register as the global exception handler in your startup class, as follows.
+While you can properly report any exceptions in the current error list using a `try/catch` in each action, there may be still unhandled exceptions raised by the ASP.NET Core middleware. If you also want to report them in a standardized way through an error list, then Xomega Framework provides a special `ErrorController` for that, which you can register as the global exception handler in your startup class, as follows.
 
 ```cs
 public void Configure(IApplicationBuilder app)
@@ -130,15 +130,15 @@ You can also rely on this global exception handler instead of adding a `try/catc
 
 When exposing your services via a REST API you want to make sure that your WebAPI is secured and allows access only to authenticated users. The typical authentication mechanism for REST APIs is by providing a *Bearer* token in the *Authorization* header, such as a JWT token.
 
-The token can be created either by a trusted issuer, such as your identity provider, or by the WebAPI application itself, which would be able to populate application-specific claims for the current user. Xomega Framework can help you implement authentication endpoints that can issue access tokens, as described below.
+The token can be created either by a trusted issuer, such as your identity provider or by the WebAPI application itself, which would be able to populate application-specific claims for the current user. Xomega Framework can help you implement authentication endpoints that can issue access tokens, as described below.
 
 :::caution
-For secure production systems we recommend using a certified third-party identity provider, and set up your Web API to trust the tokens issued by that provider, e.g with OAuth or OpenID Connect.
+For secure production systems we recommend using a certified third-party identity provider and setting up your Web API to trust the tokens issued by that provider, e.g with OAuth or OpenID Connect.
 :::
 
 ### Authentication controller
 
-In order to add to your WebAPI an ability to issue access tokens, which would be used to authenticate the users for any subsequent calls, Xomega Framework provides a base class `TokenAuthController`, which you need to subclass in your own authentication controller, as follows.
+To add to your WebAPI an ability to issue access tokens, which would be used to authenticate the users for any subsequent calls, Xomega Framework provides a base class `TokenAuthController`, which you need to subclass in your own authentication controller, as follows.
 
 ```cs
 /* highlight-next-line */
@@ -153,11 +153,11 @@ public class AuthenticationController : TokenAuthController
 }
 ```
 
-In your controller you will need to add one or more endpoints that would return an access token, such as JWT, based on the provided credentials. In the basic case, the credentials could contain the user name and password that the user enters in the *Login* dialog. However, it could also use access tokens from other trusted issuers, such as Microsoft, Active Directory, Google, etc, which enables single sign-on (SSO).
+In your controller, you will need to add one or more endpoints that would return an access token, such as JWT, based on the provided credentials. In the basic case, the credentials could contain the user name and password that the user enters in the *Login* dialog. However, it could also use access tokens from other trusted issuers, such as Microsoft, Active Directory, Google, etc, which enables single sign-on (SSO).
 
-Inside the authentication endpoint you would typically validate the provided credentials, look up the user info related to the current application, construct a claims identity based on that info, and then build an access token for that identity using the `GetSecurityToken` method, which you will then return to the caller using the standard Xomega Framework protocol with [error reporting](../errors).
+Inside the authentication endpoint, you would typically validate the provided credentials, look up the user info related to the current application, construct a claims identity based on that info, and then build an access token for that identity using the `GetSecurityToken` method, which you will then return to the caller using the standard Xomega Framework protocol with [error reporting](../errors).
 
-In the following example, the `authentication` endpoint accepts a user name and password credentials, and returns a JWT token with the claims for the current user.
+In the following example, the `authentication` endpoint accepts a user name and password credentials and returns a JWT token with the claims for the current user.
 
 ```cs
 [AllowAnonymous]
@@ -217,7 +217,7 @@ To configure the parameters for the issued tokens Xomega Framework uses the `app
 }
 ```
 
-In order to enable this configuration you need to register it in your `Startup` class using the `AddAuthConfig` extension method, and then use it to provide the token validation parameters, as follows.
+To enable this configuration you need to register it in your `Startup` class using the `AddAuthConfig` extension method, and then use it to provide the token validation parameters, as follows.
 
 ```cs title="Startup.cs"
 private readonly IConfiguration configuration;
@@ -249,7 +249,7 @@ As you can see [above](#authentication-controller), the `AuthConfig` is also pas
 
 ## Cached lookup data
 
-If you have your globally [cached static lookup data](../../../framework/common-ui/lookup), Xomega Framework provides endpoints to get a lookup table by its type from the global cache, or to refresh it in the global cache, in case when the data for it has changed.
+If you have your globally [cached static lookup data](../../../framework/common-ui/lookup), Xomega Framework provides endpoints to get a lookup table by its type from the global cache, or to refresh it in the global cache, in the case when the data for it has changed.
 
 :::note
 Usually .NET-based clients that use Xomega Framework can access the lookup tables directly, and the data for those will be loaded automatically from the corresponding sources.
@@ -275,7 +275,7 @@ Since the lookup data will be globally cached, you may need to refresh any speci
 DELETE https://localhost/lookup-table/operators
 ```
 
-The lookup table `operators` will be reloaded next time it will be used or requested.
+The lookup table `operators` will be reloaded the next time it will be used or requested.
 
 ## Client REST service proxies
 
@@ -289,9 +289,9 @@ Just like with the WebAPI controllers, Xomega.Net for Visual Studio allows you t
 
 ### Proxy service clients
 
-To help creating service proxies for .NET HTTP clients, Xomega Framework provides a base class `HttpServiceClient` for your service clients, which has a preconfigured instance of the `HttpClient`, and provides some utility methods for making REST calls, such as `ToQueryString`.
+To help create service proxies for .NET HTTP clients, Xomega Framework provides a base class `HttpServiceClient` for your service clients, which has a preconfigured instance of the `HttpClient` and provides some utility methods for making REST calls, such as `ToQueryString`.
 
-For each business service exposed via REST you want to create a corresponding service client class that extends `HttpServiceClient` and implements the service's interface, as follows.
+For each business service exposed via REST, you want to create a corresponding service client class that extends `HttpServiceClient` and implements the service's interface, as follows.
 
 ```cs
 /* highlight-next-line */
@@ -362,7 +362,7 @@ services.AddRestClients();
 
 In order to use the registered `HttpClient` for calling secured REST services, it will need to provide an access token. If you use a third-party identity provider, then you can get the token from that provider using its authorization flow, and set it in the *Authorization* header of the registered `HttpClient`.
 
-If you created a custom authentication controller, such as the one that accepts user name and password described [above](#authentication-controller), then you can create a utility static method `Authenticate` on the client, which would call the `authentication` endpoint with the supplied user name and password, set the resulting JWT token as the default *Authorization* header on the registered `HttpClient`, and return a `ClaimsPrincipal` constructed from that token, as follows.
+If you created a custom authentication controller, such as the one that accepts the user name and password described [above](#authentication-controller), then you can create a utility static method `Authenticate` on the client, which would call the `authentication` endpoint with the supplied user name and password, set the resulting JWT token as the default *Authorization* header on the registered `HttpClient`, and return a `ClaimsPrincipal` constructed from that token, as follows.
 
 ```cs
 public async static Task<ClaimsPrincipal> Authenticate(IServiceProvider serviceProvider,
@@ -398,7 +398,7 @@ public async static Task<ClaimsPrincipal> Authenticate(IServiceProvider serviceP
 }
 ```
 
-This way your *Login* dialog will be able to call this method to authenticate the user with a password, and set the returned value as the `CurrentPrincipal` on the registered `DefaultPrincipalProvider`.
+This way your *Login* dialog will be able to call this method to authenticate the user with a password and set the returned value as the `CurrentPrincipal` on the registered `DefaultPrincipalProvider`.
 
 :::tip
 For Blazor WebAssembly you can set it on a custom `AuthenticationStateProvider` instead, and register `AuthStatePrincipalProvider` as the `IPrincipalProvider` during startup, as described [here](../security#wasm).

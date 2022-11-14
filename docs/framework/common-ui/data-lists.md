@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # Data List Objects
 
-`DataListObject` is a special type of [data object](data-objects), where its data is stored as an **observable collection of rows**, instead of being stored directly within each of its data properties. Data list object represents a data table that is typically bound to a data grid UI component.
+`DataListObject` is a special type of [data object](data-objects), where its data is stored as an **observable collection of rows**, instead of being stored directly within each of its data properties. A data list object represents a data table that is typically bound to a data grid UI component.
 
 Each data property of a data list object can be viewed as a column in that data table, which is responsible for converting, formatting and validating values, maintaining metadata, such as the label, editability and visibility, as well as for any other functions for handling the data in that column.
 
@@ -12,7 +12,7 @@ You should [construct and register](data-objects#construction-and-registration) 
 
 ## Row collection
 
-The collection of rows in a data list object is stored as a special observable collection of `DataRow` classes. You can get a readonly observable collection of rows as an `IList` by calling the `GetData()` method, and also get the number of rows and columns in the data list via the `RowCount` and `ColumnCount` properties respectively, as shown below.
+The collection of rows in a data list object is stored as a special observable collection of `DataRow` classes. You can get a read-only observable collection of rows as an `IList` by calling the `GetData()` method, and also get the number of rows and columns in the data list via the `RowCount` and `ColumnCount` properties respectively, as shown below.
 
 ```cs
 // highlight-next-line
@@ -52,7 +52,7 @@ int salesOrderIdInt = salesOrderList.SalesOrderIdProperty.GetValue(firstRow);
 ```
 
 :::tip
-If you only have a reference to a data row, you can always get its parent data list object using the `List` property. Then, to get the row values, you can access the data list properties either directly (by casting it to a concrete class), or [by the property name](data-objects#data-properties-initialization). Alternatively, you can use the `DataRow`'s static utility methods to access values by the property name, as shown above.
+If you only have a reference to a data row, you can always get its parent data list object using the `List` property. Then, to get the row values, you can access the data list properties either directly (by casting it to a concrete class), or [by the property name](data-objects#data-properties-initialization). Alternatively, you can use `DataRow`'s static utility methods to access values by the property name, as shown above.
 :::
 
 In addition, `DataRow` class extends `DynamicObject`, and implements getting internal values using the property name as follows.
@@ -65,7 +65,7 @@ object salesOrderId = dynamicRow.SalesOrderId; // get value from a dynamic prope
 
 ### Updating row values
 
-Similar to accessing row values, you have to use data property's `SetValueAsync` method to update the value of that property in a specific `DataRow` by passing the row as an extra argument, as follows.
+Similar to accessing row values, you have to use the data property's `SetValueAsync` method to update the value of that property in a specific `DataRow` by passing the row as an extra argument, as follows.
 
 ```cs
 SalesOrderListObject salesOrderList = ServiceProvider.GetService<SalesOrderListObject>();
@@ -78,10 +78,10 @@ await salesOrderList.SalesOrderIdProperty.SetValueAsync(1, row);
 This will use the data property's value conversion logic to convert it to the proper internal format or data type, and possibly look it up in the associated [lookup table](lookup#lookup-table).
 
 :::caution
-While data properties also have a synchronous method `SetValue`, it is important to **set the value with the async method** and await on the result, since [enum properties](properties/enum) may need to initialize their lookup table using a remote call during the conversion. For the same reason, you should avoid setting row values via the `DynamicObject` interface, as it would be synchronous.
+While data properties also have a synchronous method `SetValue`, it is important to **set the value with the async method** and await the result, since [enum properties](properties/enum) may need to initialize their lookup table using a remote call during the conversion. For the same reason, you should avoid setting row values via the `DynamicObject` interface, as it would be synchronous.
 :::
 
-When you set the value of a data property for a specific row like that, it will fire a [property change event](properties/base#property-change-events), and will include that row in the event arguments, which you can access via the `Row` field. This allows the listeners to get or set values of other properties in the same row, such as when using [computed values](properties/base#computed-value) in a data list object.
+When you set the value of a data property for a specific row like that, it will fire a [property change event](properties/base#property-change-events) and will include that row in the event arguments, which you can access via the `Row` field. This allows the listeners to get or set values of other properties in the same row, such as when using [computed values](properties/base#computed-value) in a data list object.
 
 #### Computed values in lists
 
@@ -153,7 +153,7 @@ If you need to call a service operation when inserting or deleting a row to pers
 
 You can also manually trigger a collection changed event by calling the `FireCollectionChange` method to notify the listeners, such as the bound data grid. If any listener code needs to know if a collection change event is currently in progress, they can check the data list object's `CollectionChangeFiring` flag.
 
-Some methods, such as `InsertAsync` and `RemoveRows` allow you to suppress the collection notification, to prevent other listeners from interfering with the caller's logic. In this case they can manually call the `FireCollectionChange` later, if desired.
+Some methods, such as `InsertAsync` and `RemoveRows` allow you to suppress the collection notification, to prevent other listeners from interfering with the caller's logic. In this case, they can manually call the `FireCollectionChange` later, if desired.
 
 ### Modification tracking
 
@@ -234,11 +234,11 @@ public static void ValidateDecimal(DataProperty dp, object value, DataRow row)
 
 ### Row-specific enums
 
-When you have an [`EnumProperty`](properties/enum) in an editable data list object, the cell editor for that property would provide selection from a list of possible values associated with that property, which typically comes from a [`LookupTable`](lookup#lookup-table). When that selection list is the same for all rows, and the lookup table comes from a static global cache, then this works the same as in regular data objects.
+When you have an [`EnumProperty`](properties/enum) in an editable data list object, the cell editor for that property would provide a selection from a list of possible values associated with that property, which typically comes from a [`LookupTable`](lookup#lookup-table). When that selection list is the same for all rows, and the lookup table comes from a static global cache, then this works the same as in regular data objects.
 
 However, sometimes you may need to display different selection lists in each row based on other values in the same row. In this case, you can set up [cascading selection](properties/enum#cascading-selection) from other properties in the data list object the same way as you do for regular objects. As described in the above link, you can do it in one of the following two ways.
 1. Set up [cascading client-side filtering](properties/enum#cascading-by-attributes) of a globally cached static lookup table by a specific attribute using `SetCascadingProperty`.
-1. If the complete list is too large to be cached on the client side, you can [set up a `LocalCacheLoader`](properties/enum#local-cache) for the property, and call the `SetCacheLoaderParameters` to provide values from other data properties in the same row. The local cache loader will then populate a local cache from a remote service, and will store it in the current data row for that property.
+1. If the complete list is too large to be cached on the client side, you can [set up a `LocalCacheLoader`](properties/enum#local-cache) for the property, and call the `SetCacheLoaderParameters` to provide values from other data properties in the same row. The local cache loader will then populate a local cache from a remote service and will store it in the current data row for that property.
 
 ## Populating data
 
@@ -264,7 +264,7 @@ protected override async Task<ErrorList> DoReadAsync(object options, Cancellatio
 ```
 
 :::note
-You can also pass the `FromDataContractAsync` method a `CrudOptions` parameter configured to [preserve the current row selection](#preserving-selection), if desired.
+You can also pass the `FromDataContractAsync` method a `CrudOptions` parameter configured to [preserve the current row selection](#preserving-selection) if desired.
 :::
 
 ### DTO conversion
@@ -299,7 +299,7 @@ Similarly, when you need to send the entire list to a service operation, you can
 
 ### Criteria object
 
-When the data list object is a primary object on your view, rather than a child list, you typically want to provide some filter criteria for the service operation, so that you don't retrieve the entire list, but only the relevant records. Such criteria are also usually specified by the users on the screen, and validated before running the search and retrieving the results.
+When a data list object is a primary object on your view, rather than a child list, you typically want to provide some filter criteria for the service operation, so that you don't retrieve the entire list, but only the relevant records. Such criteria are also usually specified by the users on the screen, and validated before running the search and retrieving the results.
 
 To hold the values for the search criteria, `DataListObject` has a special member `CriteriaObject`, which you can set to your custom data object, as shown below, and then bind its data properties to the fields on your search criteria panel.
 
@@ -307,7 +307,7 @@ To hold the values for the search criteria, `DataListObject` has a special membe
 salesOrderList.CriteriaObject = ServiceProvider.GetService<SalesOrderCriteria>();
 ```
 
-The custom data object needs to inherit from the `CriteriaObject` base class, and [add data properties](data-objects#data-properties-initialization) for each filter criteria as needed. For any field you can use an [`OperatorProperty`](properties/specialty#operatorproperty) to give the users extra flexibility when specifying the criteria. In this case, you will need to define additional properties that hold the actual criteria value(s), as follows.
+The custom data object needs to inherit from the `CriteriaObject` base class and [add data properties](data-objects#data-properties-initialization) for each filter criteria as needed. For any field, you can use an [`OperatorProperty`](properties/specialty#operatorproperty) to give the users extra flexibility when specifying the criteria. In this case, you will need to define additional properties that hold the actual criteria value(s), as follows.
 
 ```cs
 // highlight-next-line
@@ -354,7 +354,7 @@ protected override async Task<ErrorList> DoReadAsync(object options, Cancellatio
 
 Once the search successfully runs, and the data list object is populated with the results, it will extract the actual criteria that were used for the search from the `CriteriaObject`, and will store it in a separate property `AppliedCriteria`, which is a list of structures of type `FieldCriteriaSetting`.
 
-You can use it to display a summary of the actually applied criteria on the screen, and refresh it whenever it changes, since changing `AppliedCriteria` will fire a regular `INotifyPropertyChanged` event. `FieldCriteriaSetting` structure stores the field, operator and the value(s) separately, so that you could style them on the screen individually.
+You can use it to display a summary of the applied criteria on the screen, and refresh it whenever it changes, since changing `AppliedCriteria` will fire a regular `INotifyPropertyChanged` event. `FieldCriteriaSetting` structure stores the field, operator and the value(s) separately, so that you could style them on the screen individually.
 
 :::note
 Even though your `CriteriaObject` may have many properties, the `AppliedCriteria` will have only the criteria that have values, which creates a nice and short summary. You also don't want to generate that summary directly from the `CriteriaObject`, since it will be different when the user has changed the criteria without having applied them yet, which could be misleading.
@@ -365,12 +365,12 @@ Even though your `CriteriaObject` may have many properties, the `AppliedCriteria
 If your data grid bound to your data list object needs to perform additional filtering on the client side by one or more columns, then `DataListObject` provides a handy utility method `PropertyValueMatches`, which checks if the value of a specified data property in a given row matches the specified criteria value using the supplied [operator](../services/querying#operators).
 
 :::tip
-You may need to translate data grid's client-side filter criteria to a number of operator/value clauses, and combine the results of the calls to `PropertyValueMatches` for each clause, in order to determine whether each row matches those filter criteria.
+You may need to translate the data grid's client-side filter criteria to a number of operator/value clauses, and combine the results of the calls to `PropertyValueMatches` for each clause, to determine whether each row matches those filter criteria.
 :::
 
 ### Resetting data
 
-In order to reset the data in your data list object, as well as the `AppliedCriteria`, you can call the `ResetData` method. If you also want to clear the values in the `CriteriaObject`, then you should call `ResetData` on that object too, as follows.
+To reset the data in your data list object, as well as the `AppliedCriteria`, you can call the `ResetData` method. If you also want to clear the values in the `CriteriaObject`, then you should call `ResetData` on that object too, as follows.
 
 ```cs
 myListObject.ResetData();
@@ -394,7 +394,7 @@ myListObject.Sort(compareRows);
 
 To help you sort a data list object, Xomega Framework provides a class `ListSortCriteria`, which is an *ordered* list of `ListSortField` objects. Each of those defines a sort order by a specific data property in the list object, as well as the sort direction.
 
-You can construct it and store in the `SortCriteria` property of your list object, which is intended to keep track of the currently applied sort criteria, and it will be used whenever you call the `Sort` method without parameters, as follows.
+You can construct it and store it in the `SortCriteria` property of your list object, which is intended to keep track of the currently applied sort criteria, and it will be used whenever you call the `Sort` method without parameters, as follows.
 
 ```cs
 var sortField = new ListSortField()
@@ -418,7 +418,7 @@ myListObject.Sort(sortCriteria.Compare);
 If the internal values of your sort properties at each row implement `IComparable`, then it will be used for comparing the rows. This allows you to compare typed properties, such as numeric or date/time, using the underlying data type. In all other cases, it will compare the values converted to the `DisplayString` format, which is how the user sees them on the screen.
 
 :::note
-Null values will be sorted first in the ascending order, and last in the descending order.
+Null values will be sorted first in ascending order, and last in descending order.
 :::
 
 ## Row selection
@@ -428,7 +428,7 @@ Null values will be sorted first in the ascending order, and last in the descend
 - `DataListObject.SelectionModeMultiple` - multiple rows can be selected.
 
 :::note
-Any other value will not be handled by the `DataListObject`, but the bound data grid can interpret it in a custom way. For example, blank value of the `RowSelectionMode` can mean that selection is not allowed, while other values may indicate a more detailed mode, such as contiguous selection only.
+Any other value will not be handled by the `DataListObject`, but the bound data grid can interpret it in a custom way. For example, a blank value of the `RowSelectionMode` can mean that selection is not allowed, while other values may indicate a more detailed mode, such as contiguous selection only.
 :::
 
 The `DataListObject` allows you to get either selected rows or the indexes of the selected rows, as well as to check if the row is selected using an index, as illustrated below.
@@ -449,7 +449,7 @@ List<int> selIndexes = dataListObject.SelectedRowIndexes;
 
 ### Selecting rows
 
-`DataListObject` provides a number of different ways to select (or deselect) a single row or multiple rows, depending on your `RowSelectionMode` setting, as demonstrated by the following examples.
+`DataListObject` provides several different ways to select (or deselect) a single row or multiple rows, depending on your `RowSelectionMode` setting, as demonstrated by the following examples.
 
 ```cs
 IList<DataRow> rows = dataListObject.GetData();
@@ -487,7 +487,7 @@ The bound data grid that allows selection would typically call some of these met
 
 Data list objects provide a standard `SelectionChanged` event, which allows you to listen for any changes in the row selection. The bound data grid may listen to the selection changes to highlight the selected rows.
 
-This event allows you to write platform-independent UI logic based on the selection change. For example, upon selecting a row in a master data grid, you may trigger update of the details object to read and show the details for the selected row.
+This event allows you to write platform-independent UI logic based on the selection change. For example, upon selecting a row in a master data grid, you may trigger an update of the details object to read and show the details for the selected row.
 
 :::tip
 This event also enables using `SelectedRows` or `SelectedRowIndexes` in the expressions for [computed properties](properties/base#computed-properties), such as to set enabling conditions for certain actions when a row is selected (e.g. the [SelectAction](#select-action)), or to show a calculated summary for the selected rows.
@@ -527,7 +527,7 @@ public partial class SalesOrderList : DataListObject
 }
 ```
 
-By default, the `DataListObject` will use the same comparison mechanism for the key values, as is used by the [sort criteria](#sort-criteria), in order to find the new selected rows.
+By default, the `DataListObject` will use the same comparison mechanism for the key values, as is used by the [sort criteria](#sort-criteria) to find the selected rows in the new list.
 
 :::tip
 If that doesn't work for you, you can always override the method `SameEntity` on the `DataListObject` as needed.
@@ -535,7 +535,7 @@ If that doesn't work for you, you can always override the method `SameEntity` on
 
 ### Select action
 
-For search views that that are intended for searching some entities, and then selecting one or more of such entities, `DataListObject` defines a standard `SelectAction`, which is configured to be enabled only when one or more rows are selected, as follows.
+For search views that are intended for searching some entities, and then selecting one or more of such entities, `DataListObject` defines a standard `SelectAction`, which is configured to be enabled only when one or more rows are selected, as follows.
 
 ```cs
 // highlight-next-line

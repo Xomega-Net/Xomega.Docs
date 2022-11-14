@@ -12,13 +12,13 @@ Below are some general data properties included with the Xomega Framework.
 
 ### TextProperty
 
-The `TextProperty` class stores its value as a `string`, and converts any value to a string using the `Convert.ToString` method.
+The `TextProperty` class stores its value as a `string` and converts any value to a string using the `Convert.ToString` method.
 
 If you set the `Size` of your text property to any positive number, then it will validate that the length of the stored string is no longer than the specified size.
 
 ### BooleanProperty
 
-The `BooleanProperty` class stores its value as a `bool?` to allow storing `null` values. It can convert the input string to a boolean using various formats, e.g. "true", "1" or "yes" for the `true` value, and the "false", "0" or "no" for the `false` value.
+The `BooleanProperty` class stores its value as a `bool?` to allow storing `null` values. It can convert the input string to a boolean using various formats, e.g. "true", "1" or "yes" for the `true` value, and "false", "0" or "no" for the `false` value.
 
 :::tip
 You can customize the list of strings that represent `true` or `false` values by setting the corresponding static arrays `BooleanProperty.TrueStrings` and `BooleanProperty.FalseStrings` respectively.
@@ -64,12 +64,12 @@ The `TinyIntegerProperty` class validates that the stored value is a `byte?` bet
 
 ### Integer key properties
 
-Xomega Framework defines the following set of marker subclasses of the corresponding integer property that indicate that its value is used as a key of an entity, as opposed to just a regular properties.
+Xomega Framework defines the following set of marker subclasses of the corresponding integer property that indicate that its value is used as a key of an entity, as opposed to just regular properties.
 
 - `BigIntegerKeyProperty` - a key property of underlying type `long`.
 - `IntegerKeyProperty` - a key property of underlying type `int`.
 - `SmallIntegerKeyProperty` - a key property of underlying type `short`.
-- `TinyIntegerKeyProperty` - a key property of underlying type `byte`.
+- `TinyIntegerKeyProperty` - a key property of the underlying type `byte`.
 
 :::note
 This allows treating such properties differently in certain scenarios. For example, when adding search criteria by a field that contains integer keys, the corresponding `OperatorProperty` will include only equality operators, but not the comparison operators, such as "*Less Than*" or "*Greater Than*".
@@ -77,7 +77,7 @@ This allows treating such properties differently in certain scenarios. For examp
 
 ## Decimal properties
 
-All decimal properties in Xomega Framework store their value as a `decimal?`, but may provide some restrictions on the minimum and maximum values, or format the value in a certain way, as described below.
+All decimal properties in Xomega Framework store their value as a `decimal?` but may provide some restrictions on the minimum and maximum values, or format the value in a certain way, as described below.
 
 ### DecimalProperty
 
@@ -89,7 +89,7 @@ It will use the `ToString` method to show the value as a string, but you can als
 
 ### PositiveDecimalProperty
 
-The `PositiveDecimalProperty` class validates that the stored value is between the `0` and `decimal.MaxValue`. You can also set the `MinimumAllowed` to `false` for truly positive numbers greater than 0.
+The `PositiveDecimalProperty` class validates that the stored value is between `0` and `decimal`.MaxValue`. You can also set the `MinimumAllowed` to `false` for truly positive numbers greater than 0.
 
 ### MoneyProperty
 
@@ -109,7 +109,7 @@ The `PercentFractionProperty` ensures that its value is between 0 and 1, meaning
 
 ## Date/time properties
 
-All date/time properties in Xomega Framework store their value as a `DateTime?`, but may format the value in a certain way, as described below.
+All date/time properties in Xomega Framework store their value as a `DateTime?` but may format the value in a certain way, as described below.
 
 ### DateTimeProperty
 

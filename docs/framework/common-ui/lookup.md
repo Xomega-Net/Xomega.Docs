@@ -7,13 +7,13 @@ sidebar_position: 2
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Most business applications have some enumerated data that is used to populate selection items, as well as to look up the item by ID during validation or for any other purposes. Also, this data is typically fairly static, which lends itself to caching it globally, or at least for the current work session, so as to avoid unnecessary trips to the database or returning the full data for each result row versus just an ID.
+Most business applications have some enumerated data that is used to populate selection items, as well as to look up the item by ID during validation or for any other purposes. Also, this data is typically fairly static, which lends itself to caching it globally, or at least for the current work session, to avoid unnecessary trips to the database or returning the full data for each result row versus just an ID.
 
 For example, suppose that you have an `Order Status` field that can be one of the predefined code values for each status, e.g. *N* for *New*, *C* for *Complete*, etc. When you have a screen for searching orders, the filter field for the status should provide a selection of statuses that shows status descriptions, but store the internal status codes, so you need a way to get a list of statuses with both codes and descriptions.
 
 The backend service will need to validate that each provided status code is one of the valid statuses, especially when the service is called via a remote API, e.g. REST, where you don't want to rely on the UI validations alone. So it will need a way to quickly check if the provided status code is valid.
 
-Similarly, when you display the order status in the results grid, you may want to show the full status description, whereas the backend service would return only the status code to make the result structure more simple and compact. In this case, the UI will need a way to quickly look up the status with its description by the status code, without making external calls.
+Similarly, when you display the order status in the results grid, you may want to show the full status description, whereas the backend service would return only the status code to make the structure of the result more simple and compact. In this case, the UI will need a way to quickly look up the status with its description by the status code, without making external calls.
 
 Xomega Framework defines a flexible common structure for storing, loading and caching the lookup data on the client or on the server side, as described in the following sections.
 
@@ -36,13 +36,13 @@ Header h = new Header("type", "Valid ID", "Display Text"); // h.IsValid is true.
 h = new Header("type", "Invalid ID"); // h.IsValid is false.
 ```
 
-This allows you to store an invalid entered ID as a `Header` in data properties, which makes it easier to work with, when all the property values are of the same type.
+This allows you to store an invalid entered ID as a `Header` in data properties, which makes it easier to work with when all the property values are of the same type.
 
 ### Inactive headers
 
-As your system is used and evolves with time, some of its entities may get retired and should no longer be used, but they may not be physically deleted to maintain integrity of the other entities that use them. For example, when users are deactivated, they should no longer appear in the selection controls for new entities, but you still want to display their full name on the older entities that use them.
+As your system is used and evolves with time, some of its entities may get retired and should no longer be used, but they may not be physically deleted to maintain the integrity of the other entities that use them. For example, when users are deactivated, they should no longer appear in the selection controls for new entities, but you still want to display their full names on the older entities that use them.
 
-In order to support this, the `Header` class also has an `IsActive` flag, which is set to `true` by default for valid headers, but you can manually set it to `false` for inactive values. Inactive headers will not be available for selection, but you can still look them up by ID as needed.
+To support this, the `Header` class also has an `IsActive` flag, which is set to `true` by default for valid headers, but you can manually set it to `false` for inactive values. Inactive headers will not be available for selection, but you can still look them up by ID as needed.
 
 ### Additional attributes
 
@@ -56,7 +56,7 @@ object attr = hdr["my attribute"]; // 4
 // highlight-end
 ```
 
-You can also store multiple values in the attribute using `List<object>`. To add a value to an attribute, you can use the `AddToAttribute` method, which will either set the initial scalar value for the attribute, or add the value to the existing list, if it's not a duplicate (it will construct a new list, if the current value is not an `IList`), as illustrated below.
+You can also store multiple values in the attribute using `List<object>`. To add a value to an attribute, you can use the `AddToAttribute` method, which will either set the initial scalar value for the attribute or add the value to the existing list, if it's not a duplicate (it will construct a new list if the current value is not an `IList`), as illustrated below.
 
 ```cs
 Header hdr = new Header("type", "ID", "Display Text");
@@ -69,11 +69,11 @@ hdr.AddToAttribute("attr", "a"); // duplicate, hdr["attr"] -> List<object>() { "
 
 ### Display format
 
-Headers provide a flexible way to create its display string representation by calling the `ToString(format, resourceManager)` method and passing it the desired format, which may contain placeholders for the `Id`, `Text` or any of its additional attributes. You can also pass a resource manager to [localize the text for static data](#localizing-static-data), or pass `null` to display the `Text` value as is.
+Headers provide a flexible way to create its display string representation by calling the `ToString(format, resourceManager)` method and passing it the desired format, which may contain placeholders for the `Id`, `Text` or any of its additional attributes. You can also pass a resource manager to [localize the text for static data](#localizing-static-data) or pass `null` to display the `Text` value as is.
 
 The placeholders for the `Id` and `Text` fields are defined by the `Header`'s static constants `FieldId` and `FieldText` respectively. To get a placeholder for any additional attribute you can call `string.Format(Header.AttrPattern, "<attr>")` with the attribute name.
 
-In the following example we create a header for the *New Jersey* state, and specify the *country* in an additional attribute, which we can use to format the display string for the header.
+In the following example, we create a header for the *New Jersey* state and specify the *country* in an additional attribute, which we can use to format the display string for the header.
 
 ```cs
 /* highlight-next-line */
@@ -89,7 +89,7 @@ format = $"{Header.FieldId}, {string.Format(Header.AttrPattern, "country")}"; //
 s = hdr.ToString(format, null); // "NJ, USA"
 ```
 
-The regular parameterless `ToString()` method of the `Header` doesn't use localization, and uses the header's `DefaultFormat`, which you can set to make it return the data in your custom format. By default, the `DefaultFormat` is set to `Header.FieldText`, which displays the text of the header as a string.
+The regular parameterless `ToString()` method of the `Header` doesn't use the localization and uses the header's `DefaultFormat`, which you can set to make it return the data in your custom format. By default, the `DefaultFormat` is set to `Header.FieldText`, which displays the text of the header as a string.
 
 ### Dynamic object
 
@@ -123,9 +123,9 @@ The `Header` class uses its virtual method `GetText` to get the localized text. 
 
 ### Localizing static data
 
-If you have static data in your application, such as a fixed list of order statuses that doesn't change without releasing a new version of the application, then you can specify the localized texts for this data in the standard application resources. This allows you to use the **standard tools** for working with resources, as well as **standard processes** for getting those resources localized into various languages.
+If you have static data in your application, such as a fixed list of order statuses that don't change without releasing a new version of the application, then you can specify the localized texts for this data in the standard application resources. This allows you to use the **standard tools** for working with resources, as well as **standard processes** for getting those resources localized into various languages.
 
-In order to add the localized text for a header representing a static item, you need to add it to the resource file using the key `Enum_<Type>.<Id>`, where you use the header's `Type` and `Id` values respectively. For example, for various order statuses the default text resources and their translations in German and Spanish may look as follows.
+To add the localized text for a header representing a static item, you need to add it to the resource file using the key `Enum_<Type>.<Id>`, where you use the header's `Type` and `Id` values respectively. For example, for various order statuses, the default text resources and their translations in German and Spanish may look as follows.
 
 <Tabs groupId="res">
   <TabItem value="en" label="Resources.resx" default>
@@ -180,9 +180,9 @@ string s = hdr.ToString(Header.FieldText, resMgr); // "Neu" -> from the resource
 
 ### Localizing dynamic data
 
-When your lookup data is sourced from the database, and can be changed dynamically, then providing localization text in the static resource files may not be a viable option. In this case, you may need to store translations in the same database - either in separate columns for each supported language, or in a child table, if a list of supported languages is not predefined.
+When your lookup data is sourced from the database and can be changed dynamically, then providing localization text in the static resource files may not be a viable option. In this case, you may need to store translations in the same database - either in separate columns for each supported language or in a child table, if a list of supported languages is not predefined.
 
-In order to provide the header's localization text for each supported language/culture, you need to specify it in additional attributes with special names `lang-<Culture Name>`, e.g. `lang-es`. You can use the two-letter ISO language code for the general translations, but you can also provide overrides for country-specific languages, such as `lang-es-ES`.
+To provide the header's localization text for each supported language/culture, you need to specify it in additional attributes with special names `lang-<Culture Name>`, e.g. `lang-es`. You can use the two-letter ISO language code for the general translations, but you can also provide overrides for country-specific languages, such as `lang-es-ES`.
 
 :::caution
 Localization texts from the **additional attributes take precedence** over any texts found in the static application resources.
@@ -219,9 +219,9 @@ Xomega Framework provides a class `LookupTable` that represents a collection of 
 You can construct a `LookupTable` using the following parameters.
 - `type` - the type of the headers in the lookup tables as a string.
 - `data` - the list of `Header` objects of the specified type that serves as the table's data set.
-- `caseSensitive` - a boolean flag of whether or not to perform case sensitive look-ups.
+- `caseSensitive` - a boolean flag of whether or not to perform case-sensitive look-ups.
 
-The following code snippet illustrates construction of a lookup table.
+The following code snippet illustrates the construction of a lookup table.
 
 ```cs
 var data = new List<Header> {
@@ -239,7 +239,7 @@ If a type of any header in the provided data set is different from the type of t
 
 ### Getting enum data
 
-In order to get enumerated list of values from a lookup table, such as for displaying them in selection lists, you can call the `GetValues()` method. By default it returns all headers in the lookup table, but you can pass it a filter function that returns a `bool` for a specific header (and `DataRow`, where applicable) to get a subset of all values, as follows.
+In order to get an enumerated list of values from a lookup table, such as for displaying them in selection lists, you can call the `GetValues()` method. By default, it returns all headers in the lookup table, but you can pass it a filter function that returns a `bool` for a specific header (and `DataRow`, where applicable) to get a subset of all values, as follows.
 
 ```cs
 IEnumerable<Header> statuses = statusTable.GetValues(); // get a copy of all values
@@ -250,7 +250,7 @@ statuses = statusTable.GetValues((hdr, row) => hdr.IsActive, null); // get a cop
 :::caution
 Since lookup tables are often cached globally, it **returns copies** of the stored headers here to prevent the calling code from accidentally changing any of their attributes for everybody.
 
-Therefore, if you need a filtered list, you should pass the filter function to the `GetValues` method instead of filtering the result afterwards. This will minimize the amount of cloning for each header, which should make your code more performant.
+Therefore, if you need a filtered list, you should pass the filter function to the `GetValues` method instead of filtering the result afterward. This will minimize the amount of cloning for each header, which should make your code more performant.
 :::
 
 ### Looking up data
@@ -274,7 +274,7 @@ string format = $"{Header.FieldId} - {Header.FieldText}";
 h = statusTable.LookupByFormat(format, "O - Open", resMgr);
 ```
 
-If you look up by a value of an additional attribute, which is not unique for all headers in the lookup table, then you will get just the first header that matches this attribute value. However, you can access other matching headers from a special attribute of the first header, which is `LookupTable.GroupAttrPrefix + format`, where `format` is the format for that attribute, as shown below.
+If you look up headers by a value of an additional attribute, which is not unique for all headers in the lookup table, then you will get just the first header that matches this attribute value. However, you can access other matching headers from a special attribute of the first header, which is `LookupTable.GroupAttrPrefix + format`, where `format` is the format for that attribute, as shown below.
 
 ```cs
 var data = new List<Header> {
@@ -299,7 +299,7 @@ var otherNonClosed = open[LookupTable.GroupAttrPrefix + fmt]; // In Progress
 
 The first time you look up a header in a lookup table by any format (including by `Id`), it will build an index by that format, which it will use for any subsequent lookups. This self-indexing makes such lookups very flexible and efficient.
 
-A small downside of self-indexing is increased memory footprint, especially when you need to look up data by a variety of formats. If you need to look up by a one-off format that you are not planning to reuse later, then you can call the `ClearIndex` method after the lookup, in order to reduce the amount memory that the lookup table takes, as follows.
+A small downside of self-indexing is an increased memory footprint, especially when you need to look up data by a variety of formats. If you need to look up by a one-off format that you are not planning to reuse later, then you can call the `ClearIndex` method after the lookup, to reduce the amount of memory that the lookup table takes, as follows.
 
 ```cs
 statusTable.ClearIndex(Header.FieldText); // clear index by text
@@ -394,7 +394,7 @@ The `LookupCache` class also provides a synchronous method `GetLookupTable`. It 
 LookupTable statusTable = globalCache.GetLookupTable("status", true); // don't load, if not in cache
 ```
 
-If the cached data for a lookup table has changed, and you want to refresh it in the lookup cache, then you can call the `RemoveLookupTable`, and that lookup table will be reloaded next time you try to access it, as shown below.
+If the cached data for a lookup table has changed, and you want to refresh it in the lookup cache, then you can call the `RemoveLookupTable`, and that lookup table will be reloaded the next time you try to access it, as shown below.
 
 ```cs
 globalCache.RemoveLookupTable("status"); // clear cached lookup table to be reloaded next time
@@ -402,7 +402,7 @@ globalCache.RemoveLookupTable("status"); // clear cached lookup table to be relo
 
 ## Lookup cache loaders
 
-The `LookupCache` loads its lookup tables using a number of lookup cache loader classes that implement the `ILookupCacheLoader` interface. Each lookup cache loader is able to load lookup tables of one or more types.
+The `LookupCache` loads its lookup tables using a number of lookup cache loader classes that implement the `ILookupCacheLoader` interface. Each lookup cache loader can load lookup tables of one or more types.
 
 You can pass a specific list of cache loaders to the constructor of the `LookupCache`, or you can pass `null` and it will use the cache loaders that you registered with the service provider in your `Startup` class. You can use an extension method for brevity, as follows.
 
@@ -436,7 +436,7 @@ However, Xomega Framework provides some base classes like `LookupCacheLoader` or
 
 If you have a specific list of objects that is fairly static and not too large, which you want to load into a lookup cache, and if you have a service operation that returns the entire list, then you can create and register a cache loader class that extends from the `LookupCacheLoader` and loads those objects into your cache using that service operation.
 
-For example, if you want to cache a list of products that is returned by the `IProductService.ReadListAsync` operation, then you can define a `ProductCacheLoader` class, as follows.
+For example, if you want to cache a list of products that are returned by the `IProductService.ReadListAsync` operation, then you can define a `ProductCacheLoader` class, as follows.
 
 ```cs title="ProductCacheLoader.cs"
 /* highlight-next-line */
@@ -452,7 +452,7 @@ public partial class ProductCacheLoader : LookupCacheLoader
 ```
 
 :::note
-You construct the base class with a specific cache type, a case sensitive flag, and one or more supported lookup table types.
+You construct the base class with a specific cache type, a case-sensitive flag, and one or more supported lookup table types.
 :::
 
 Next, you need to override the `LoadCacheAsync` method to call your service operation, construct a `LookupTable` from the results, and update the cache with it, as illustrated below.
@@ -605,7 +605,7 @@ public DictionaryCacheLoader(IServiceProvider serviceProvider)
 ```
 
 :::note
-Since the list of supported types is initially unknown, the first time the global cache will try to load any table, it will ask the `DictionaryCacheLoader` to load all the data. After that the dictionary loader will know which tables it can load based on the actual data, and will reload the data only for one of those lookup tables.
+Since the list of supported types is initially unknown, the first time the global cache will try to load any table, it will ask the `DictionaryCacheLoader` to load all the data. After that, the dictionary loader will know which tables it can load based on the actual data and will reload the data only for one of those lookup tables.
 :::
 
 The implementation of the `LoadCacheAsync` method will use the `ItemType` of each returned item to place it in the proper lookup table, as illustrated by the following code snippet.

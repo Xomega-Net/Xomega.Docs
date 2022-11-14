@@ -4,11 +4,11 @@ sidebar_position: 1
 
 # Services Framework
 
-Xomega Framework encourages you to use a layered structure for your applications, where you develop your business logic in a set of business services. This will allow you to keep the business services platform-independent, and reuse them in a number of various multi-tier architectures.
+Xomega Framework encourages you to use a layered structure for your applications, where you develop your business logic in a set of business services. This will allow you to keep the business services platform independent and reuse them in various multi-tier architectures.
 
 ## Services architecture{#architecture}
 
-To describe your business services you want to define a set of *Service Interfaces* with your service operations, as well as Data Transfer Objects (*DTOs*), that are used for the input and output of those operations. Then you would provide implementations of those interfaces in a set of stateless service classes, where you implement the business logic for your app.
+To describe the business services you want to define a set of *Service Interfaces* with your service operations, as well as Data Transfer Objects (*DTOs*), that are used for the input and output of those operations. Then you would provide implementations of those interfaces in a set of stateless service classes, where you implement the business logic for your app.
 
 Defining your services as interfaces allows you to decouple the client logic from the business logic, and use Dependency Injection (DI) to provide the *Service Implementations*. It also allows you to expose your services via REST API, WCF or another communication protocol, and have your clients call your services remotely through the same interfaces using a set of client proxies, as illustrated below.
 
@@ -28,15 +28,15 @@ When defining service operations for Xomega Framework, you need to follow certai
 
 ### Asynchronous methods
 
-First of all, you want to make your operations asynchronous in most of the cases, in order to enable using them for remote calls. This means that the method for the operation should return a `Task`, and should usually accept a `CancellationToken` as the last argument to allow cancellations.
+First of all, you want to make your operations asynchronous in most of the cases to enable using them for remote calls. This means that the method for the operation should return a `Task`, and should usually accept a `CancellationToken` as the last argument to allow cancellations.
 
 :::caution
-If you plan to expose your service via the legacy WCF framework, then you should drop the cancellation token argument, since WCF doesn't support those.
+If you plan to expose your service via the legacy WCF framework, then you should drop the cancellation token argument since WCF doesn't support those.
 :::
 
 ### Operation output
 
-The async methods for Xomega Framework service operations should return the `Output` class that is defined in the `Xomega.Framework.Service` namespace. The `Output` class contains a list of standard error or warning messages from the operation, and the HTTP status code for the REST API.
+The async methods for Xomega Framework service operations should return the `Output` class that is defined in the `Xomega.Framework.Service` namespace. The `Output` class contains a list of standard error or warning messages from the operation and the HTTP status code for the REST API.
 
 If your operation returns some data, then you should define a class for that data structure, and use that class as a parameter of the `Output` class. The actual output data will be available in the `Result` field of the `Output` class.
 
@@ -122,7 +122,7 @@ You can use the same approach to register *REST Proxies* implementations on the 
 
 ### Base service class
 
-To help you develop implementation of your business service, Xomega Framework provides a base class `BaseService` that your service implementation classes can extend from. The base service class provides you with support for querying data, error reporting, security and other services that are common to most business service implementations.
+To help you develop the implementation of your business service, Xomega Framework provides a base class `BaseService` that your service implementation classes can extend. The base service class provides you with support for querying data, error reporting, security and other services that are common to most business service implementations.
 
 The base service class requires the current `IServiceProvider` to be passed to its constructor, so your service will need to accept that in the constructor as well. This allows the base class to access all the necessary services it needs from the DI container, and you won't have to change your service implementation classes if you upgrade to a newer version of the Xomega Framework, where the base service requires additional services.
 
@@ -145,4 +145,4 @@ public class SalesOrderService : BaseService, ISalesOrderService
 }
 ```
 
-In the next sections you'll learn the details about specific common aspects of the service implementations that are provided by the `BaseService` class and by the Xomega Framework in general.
+In the next sections, you'll learn the details about specific common aspects of the service implementations that are provided by the `BaseService` class and by the Xomega Framework in general.

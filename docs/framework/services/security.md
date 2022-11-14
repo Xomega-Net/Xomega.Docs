@@ -21,7 +21,7 @@ Using `Thread.CurrentPrincipal` to get the current principal may not work well i
 
 ### Securing operation access
 
-In order to verify that the current user is authorized to perform any of the business functions that the service operation performs, including calling the operation in general, you should use the claims from the `CurrentPrincipal` to perform the security check, and report a critical error of type `ErrorType.Security`, if security check fails.
+To verify that the current user is authorized to perform any of the business functions that the service operation performs, including calling the operation in general, you should use the claims from the `CurrentPrincipal` to perform the security check, and report a critical error of type `ErrorType.Security`, if security check fails.
 
 For example, if an operation is only allowed to be called by users that have an `Employee` role, then you should add that security check at the top of the implementation method, as follows.
 
@@ -42,10 +42,10 @@ public virtual async Task<Output<ICollection<SalesOrder_ReadListOutput>>> ReadLi
 ```
 
 :::note
-Using `ErrorType.Security` will result in the HTTP status code 403 (Forbidden), when the service is called via REST API.
+Using `ErrorType.Security` will result in the HTTP status code 403 (Forbidden) when the service is called via REST API.
 :::
 
-You can use as generic or as specific error message as your security requirements allow. In the example above we used an error code as a resource key for a generic message, following the [message localization](errors#messageCodes) best practices.
+You can use as generic or as specific an error message as your security requirements allow. In the example above we used an error code as a resource key for a generic message, following the [message localization](errors#messageCodes) best practices.
 
 :::tip
 Alternatively, you can throw a custom exception instead, e.g. `SecurityCheckException`, and implement a [custom error parser](errors#errorParser), which would add a security message to the error list for this exception. This will allow you to output a more detailed message in a test environment, and a generic message in the production environment.
@@ -57,7 +57,7 @@ In addition to making sure that the user can perform only authorized functions, 
 
 To restrict access to your data to authorized users only, you would typically get the ID associated with the user from the `CurrentPrincipal`'s claims, such as the user ID or a customer ID, and use it to restrict the results to only the data that the user is allowed to access.
 
-In the following example, when reading a list of sales orders, we get the `personId` from the current users's claims, and add it as a filter to return only the sales orders associated with the current user.
+In the following example, when reading a list of sales orders, we get the `personId` from the current user's claims and add it as a filter to return only the sales orders associated with the current user.
 
 ```cs
 public virtual async Task<Output<ICollection<SalesOrder_ReadListOutput>>> ReadListAsync(
@@ -88,7 +88,7 @@ int? personId = CurrentPrincipal.GetPersonId();
 
 ## Principal providers
 
-As you saw above, in order for the services to access the current principal, your `Startup` class needs to register with the DI container either a method to get an instance of the current `IPrincipal`, or an implementation of the `IPrincipalProvider` interface that is defined in the `Xomega.Framework` namespace.
+As you saw above, for the services to access the current principal, your `Startup` class needs to register with the DI container either a method to get an instance of the current `IPrincipal`, or an implementation of the `IPrincipalProvider` interface that is defined in the `Xomega.Framework` namespace.
 
 Xomega Framework provides a default implementation class called `DefaultPrincipalProvider`, which exposes the `CurrentPrincipal` property. You can register this provider with the DI container for the current context, and use it to set the current principal in your code based on the specific technology you are using.
 
@@ -139,7 +139,7 @@ public static async Task Main(string[] args)
 
 Just like with the Blazor Wasm, multi-tier WPF apps would not run any business services, which would be running separately, and accessed by the WPF client via REST API or WCF. The only instance when WPF apps would have embedded business services is with two-tier client-server applications.
 
-Be default, WPF apps don't have dependency injection enabled, so you'll need to set it up manually in your app. Since WPF apps are single-user applications, you would register the `DefaultPrincipalProvider` as a singleton with your DI container, as follows.
+By default, WPF apps don't have dependency injection enabled, so you'll need to set it up manually in your app. Since WPF apps are single-user applications, you would register the `DefaultPrincipalProvider` as a singleton with your DI container, as follows.
 
 ```cs
 public void ConfigureServices(IServiceCollection services)
@@ -150,4 +150,4 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-Once your app authenticates the current user, it will need to get the current `IPrincipalProvider` service from the service provider, and set the `CurrentPrincipal` to the authenticated user.
+Once your app authenticates the current user, it will need to get the current `IPrincipalProvider` service from the service provider and set the `CurrentPrincipal` to the authenticated user.

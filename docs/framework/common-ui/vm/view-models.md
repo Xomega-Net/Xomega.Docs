@@ -6,7 +6,7 @@ sidebar_position: 1
 
 View models are classes that allow you to implement abstract presentation logic for different types of UI views regardless of the specific UI framework that is used for the views. This makes this logic reusable between various .Net-based UI technologies, such as Blazor, WebForms, WPF, etc.
 
-View models for data-driven views typically contain a main [data object](../data-objects) or [data list object](../data-lists), or possibly a number of data objects, which encapsulate the main logic for working with the view's data. This leaves the view models to enhance this logic with view actions, navigation, error handling and other functions that are not provided by their data objects.
+View models for data-driven views typically contain the main [data object](../data-objects)](../data-objects) or [data list object](../data-lists), or possibly a number of data objects, which encapsulate the main logic for working with the view's data. This leaves the view models to enhance this logic with view actions, navigation, error handling and other functions that are not provided by their data objects.
 
 ## UI views
 
@@ -52,13 +52,13 @@ The base class `ViewModel` defines a common `CloseAction`, but more specific vie
 
 ### View title
 
-The base `ViewModel` class has a virtual property `ViewTitle` that can be used to display the title of the view. By default, it returns another virtual property `BaseTitle`, which gets a localized title from the [current resource manager](../../services/errors#resources), using a resource key composed from the class name and the "*View_Title*" suffix. For example, if your class name is *SalesOrderViewModel*, then the key will be *SalesOrderView_Title*.
+The base `ViewModel` class has a virtual property `ViewTitle` that can be used to display the title of the view. By default, it returns another virtual property `BaseTitle`, which gets a localized title from the [current resource manager](../../services/errors#resources), using a resource key composed of the class name and the "*View_Title*" suffix. For example, if your class name is *SalesOrderViewModel*, then the key will be *SalesOrderView_Title*.
 
 :::tip
 You can override the `GetResourceKey` method if you want to change the resource key for your view model.
 :::
 
-Specific view model subclasses can override the `ViewTitle` property as needed, and use the `BaseTitle` to construct the final title. For example, details view model adds an asterisk to indicate that the view has been modified, and adds "*New* " to the title when creating a new entity, e.g. "*New Sales Order*".
+Specific view model subclasses can override the `ViewTitle` property as needed, and use the `BaseTitle` to construct the final title. For example, the details view model adds an asterisk to indicate that the view has been modified, and adds "*New* " to the title when creating a new entity, e.g. "*New Sales Order*".
 
 :::tip
 If you want to customize the view title, then you can override the `BaseTitle`, in order to reuse the logic of the `ViewTitle` property, such as the `*` for modified views. For example, if you want to display the sales order number in the title for existing sales orders, e.g. "*Sales Order - SO123*", then you can override it as follows.
@@ -103,12 +103,12 @@ public class SalesOrderViewModel : DetailsViewModel
 ```
 
 :::note
-The base class will create a new scope within the service provider for each view model. This way, any scoped services instantiated by the view model will be cleaned up when the view model is disposed.
+The base class will create a new scope within the service provider for each view model. This way, any scoped services instantiated by the view model will be cleaned up when the view model is disposed of.
 :::
 
 ### DI registration
 
-To register your view models with the DI service collection, we recommend you to create a static class `ViewModels` with an extension method `AddViewModels` that adds transient view models of each type, as follows.
+To register your view models with the DI service collection, we recommend you create a static class `ViewModels` with an extension method `AddViewModels` that adds transient view models of each type, as follows.
 
 ```cs title="ViewModels.cs"
 public static IServiceCollection AddViewModels(this IServiceCollection services)
@@ -133,19 +133,19 @@ public void ConfigureServices(IServiceCollection services)
 
 ### Activation
 
-Opening a view in Xomega Framework allows you to pass it a number of named parameters as a `NameValueCollection`, which can be either manually created and populated, or constructed from from a query string, for example. This allows you to initialize your view model with some data, pass various modes to the view, or have the view perform a certain action during activation.
+Opening a view in Xomega Framework allows you to pass it a number of named parameters as a `NameValueCollection`, which can be either manually created and populated, or constructed from a query string, for example. This allows you to initialize your view model with some data, pass various modes to the view, or have the view perform a certain action during activation.
 
-After the view model is constructed, you need to activate it by calling the `ActivateAsync` method, and pass it a collection of named parameters for the activation. During activation the view model will store those parameters in its `Params` property, which you'll be able to access at any point thereafter.
+After the view model is constructed, you need to activate it by calling the `ActivateAsync` method and passing it a collection of named parameters for the activation. During activation, the view model will store those parameters in its `Params` property, which you'll be able to access at any point thereafter.
 
 :::caution
 There is also a synchronous method `Activate` to activate the view, but we recommend using the `ActivateAsync`, which would allow you to read data using remote service calls.
 :::
 
-During the activation, the view model may initialize the values of its data objects from the passed parameters, configure its actions, read the data for the view and run some actions, as needed. Xomega Framework has a static class `ViewParams` that defines a number of common parameters and their potential values using inner classes and string constants, so that you won't have to hardcode those.
+During the activation, the view model may initialize the values of its data objects from the passed parameters, configure its actions, read the data for the view and run some actions, as needed. Xomega Framework has a static class `ViewParams` that defines a number of common parameters and their potential values using inner classes and string constants so that you won't have to hardcode those.
 
-The `ActivateAsync` method returns a `bool`, which indicates whether or not you need to bind and show the actual view after activating the view model. In some cases, based on the passed action, the activation logic will perform all the necessary action, so that showing the view would not be needed.
+The `ActivateAsync` method returns a `bool`, which indicates whether or not you need to bind and show the actual view after activating the view model. In some cases, based on the passed action, the activation logic will perform all the necessary actions, so that showing the view would not be needed.
 
-For example, when invoking a search view, in order to select a single entity, and passing some initial criteria to it, if that criteria results in a single record, the search view model may auto-select that record and notify the parent view model, so that displaying the actual search view would not be necessary, as illustrated by the following code block.
+For example, when invoking a search view, to select a single entity, and passing some initial criteria to it, if that criteria results in a single record, the search view model may auto-select that record and notify the parent view model, so that displaying the actual search view would not be necessary, as illustrated by the following code block.
 
 ```cs title="SalesOrderViewModel.cs"
 NameValueCollection query = new NameValueCollection()
@@ -173,29 +173,29 @@ Note how you can pass a view mode using the `ViewParams.Mode.Param`, which can b
 :::
 
 :::tip
-Usually you don't need to call `ActivateAsync` directly, but use the [view model navigation](#view-model-navigation) instead, in order to open a view.
+Usually, you don't need to call `ActivateAsync` directly, but use the [view [model [navigation](#view-model-navigation) instead to open a view.
 :::
 
 ## View events
 
-View models can notify other listeners about both the changes of its properties and the general view events, such as when the view is opened, closed, saved, etc.
+View models can notify other listeners about both the changes in its properties and the general view events, such as when the view is opened, closed, saved, etc.
 
 ### View property events
 
-As we mentioned before, view models implement the standard `INotifyPropertyChanged` interface, which means that you can subscribe to its `PropertyChanged` event, and listen to the changes of its properties. You can also manually trigger the `PropertyChanged` event from your view model by calling the `OnPropertyChanged` method.
+As we mentioned before, view models implement the standard `INotifyPropertyChanged` interface, which means that you can subscribe to its `PropertyChanged` event and listen to the changes in its properties. You can also manually trigger the `PropertyChanged` event from your view model by calling the `OnPropertyChanged` method.
 
-This also allows you to use view model properties in the expressions for any [computed properties](../properties/base#computed-properties). For example, if you have a tab control on your view, then you can bind the active tab's index to a property on your view model, and use it to calculate values/editability of other properties.
+This also allows you to use view model properties in the expressions for any [computed properties](../properties/base#computed-properties). For example, if you have a tab control on your view, you can bind the active tab's index to a property on your view model and use it to calculate the values/editability of other properties.
 
 ### General view events
 
-In addition to property changes, view models provide general events `ViewEvents` and `AsyncViewEvents` that use a `ViewEvent` class, in order to notify outside listeners about major changes in the view's state, such as when the view is opened/closed, saved, deleted, etc. Your can fire a view event from your view model using the `FireEventAsync` and `FireEvent` methods, as follows.
+In addition to property changes, view models provide general events `ViewEvents` and `AsyncViewEvents` that use a `ViewEvent` class to notify outside listeners about major changes in the view's state, such as when the view is opened/closed, saved, deleted, etc. You can fire a view event from your view model using the `FireEventAsync` and `FireEvent` methods, as follows.
 
 ```cs
 await FireEventAsync(ViewEvent.Saved, token); // fire a view event asynchronously
 FireEvent(ViewEvent.Saved); // fire a view event synchronously
 ```
 
-The `ViewEvent` class provides a number of static events that you can use out of the box. When subscribing to the view events from another view model, you can check the type of event using standard methods, such as `IsSaved` or `IsDeleted` as follows.
+The `ViewEvent` class provides several static events that you can use out of the box. When subscribing to the view events from another view model, you can check the type of event using standard methods, such as `IsSaved` or `IsDeleted` as follows.
 
 ```cs
 myViewModel.AsyncViewEvents += OnMyViewEventAsync;
@@ -213,7 +213,7 @@ private async Task OnMyViewEventAsync(object myViewModel, ViewEvent e, Cancellat
 
 ### Child view events
 
-`ViewModel` class has a method `SubscribeToChildEvents` that allows it to subscribe to any view events raised by the child views that are opened from the current view. By default the view model just re-publishes that view event, but adds a `ViewEvent.Child` flag to it, as follows.
+`ViewModel` class has a method `SubscribeToChildEvents` that allows it to subscribe to any view events raised by the child views that are opened from the current view. By default, the view model just re-publishes that view event but adds a `ViewEvent.Child` flag to it, as follows.
 
 ```cs
 protected async Task OnChildEventAsync(object childViewModel, ViewEvent e, CancellationToken token = default)
@@ -223,9 +223,9 @@ protected async Task OnChildEventAsync(object childViewModel, ViewEvent e, Cance
 }
 ```
 
-When listening to such events, and checking `IsSaved` or `IsDeleted` on the them, you can pass a boolean to indicate whether the save or delete should come directly from the child view (`true`), or if it may come from any of of its own children (`false`).
+When listening to such events and checking `IsSaved` or `IsDeleted` on them, you can pass a boolean to indicate whether the save or delete should come directly from the child view (`true`), or if it may come from any of its children (`false`).
 
-The subclasses of view models may override the `OnChildEventAsync` or `OnChildEvent` methods to refresh their data, when their child view fires a *Saved* or *Deleted* events, as illustrated below.
+The subclasses of view models may override the `OnChildEventAsync` or `OnChildEvent` methods to refresh their data when their child view fires *Saved* or *Deleted* events, as illustrated below.
 
 ```cs
 protected override async Task OnChildEventAsync(object childViewModel, ViewEvent e,
@@ -247,9 +247,9 @@ As an example of handling child view events, the Blazor views bound to the view 
 
 ## View model navigation
 
-View models provide a couple of static utility methods `NavigateToAsync` and `NavigateTo` that help you to open a new view or populate an existing view with new data. You need to pass it both the current view and view model, as well as the target view, target view model and activation parameters.
+View models provide a couple of static utility methods `NavigateToAsync` and `NavigateTo` that help you to open a new view or populate an existing view with new data. You need to pass to it both the current view and view model, as well as the target view, target view model, and activation parameters.
 
-These methods will check if the current view can be closed (e.g. by asking the user about discarding unsaved changes), and then will subscribe the current view model to listen to any [view events](#general-view-events) from the target view model, and will activate the target view model and bind it to the target view.
+These methods will check if the current view can be closed (e.g. by asking the user about discarding unsaved changes), and then will subscribe the current view model to listen to any [view events](#general-view-events) from the target view model and will activate the target view model and bind it to the target view.
 
 If the target view is different from the current view, it will close the current view. Next, it will bind the target view to the target view model, show the target view, and fire the `ViewEvent.Opened` view event.
 
@@ -272,5 +272,5 @@ bool success = await NavigateToAsync(customerListVM, customerListView, query,
 ```
 
 :::note
-Just like the activation functions, the `NavigateToAsync` and `NavigateTo` methods return a `bool` that indicates whether or not the view was opened successfully. It may return `false` if the user decided not to discard unsaved changes, or if the `ActivateAsync` method returned `false`.
+Just like the activation functions, the `NavigateToAsync` and `NavigateTo` methods return a `bool` that indicates whether or not the view was opened successfully. It may return `false` if the user decides not to discard unsaved changes or if the `ActivateAsync` method returned `false`.
 :::
