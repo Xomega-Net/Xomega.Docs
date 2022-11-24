@@ -7,7 +7,7 @@ sidebar_position: 2
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Xomega Framework provides a simple, yet quite powerful, Blazor component `XGrid` for showing the data from your [`DataListObject`](../common-ui/data-lists) in a tabular Bootstrap-styled grid. It provides some basic features such as paging, multi-column sorting, row selection and formatting the values in each cell. 
+Xomega Framework provides a simple, yet quite powerful, Blazor component `XGrid` for showing the data from your [`DataListObject`](../common-ui/data-lists) in a tabular Bootstrap-styled grid. It provides some basic features such as paging, multi-column sorting, row selection, and formatting of the values in each cell. 
 
 The following picture illustrates the results grid for a *Sales Order List* view, as well as the Blazor markup that is used to configure it.
 
@@ -44,12 +44,12 @@ The following picture illustrates the results grid for a *Sales Order List* view
 </Tabs>
 
 :::caution
-Currently, the basic `XGrid` component doesn't support resizing, hiding or reordering columns, nor in-grid editing of the values. For those and other advanced features please check the [Syncfusion Data Grid](syncfusion/grid).
+Currently, the basic `XGrid` component doesn't support resizing, hiding, or reordering columns, nor in-grid editing of the values. For those and other advanced features, please check the [Syncfusion Data Grid](syncfusion/grid).
 :::
 
 ## Data binding
 
-To bind an `XGrid` component to a `DataListObject` you need to assign the `List` attribute to the corresponding data list object in your view model, which will set it as a data source for your grid. Next, for each grid column that is bound to a property of your data list object, you need to set that data property to the `Property` attribute on the `XGridColumn` element, as follows.
+To bind an `XGrid` component to a `DataListObject`, you need to assign the `List` attribute to the corresponding data list object in your view model, which will set it as a data source for your grid. Next, for each grid column that is bound to a property of your data list object, you need to set that data property to the `Property` attribute on the `XGridColumn` element, as follows.
 
 ```razor
 <!-- highlight-next-line -->
@@ -62,7 +62,7 @@ To bind an `XGrid` component to a `DataListObject` you need to assign the `List`
 </XGrid>
 ```
 
-When a grid column is bound to a data property, it will use it to configure the default header label, text alignment and formatting for the data values. It will also use the visibility of the property to show or hide the column dynamically. All of this minimizes any additional configuration that you need for each column, which you can still customize as described below.
+When a grid column is bound to a data property, it will use it to configure the default header label, text alignment, and formatting for the data values. It will also use the visibility of the property to show or hide the column dynamically. All of this minimizes any additional configuration that you need for each column, which you can still customize as described below.
 
 ## Grid columns
 
@@ -71,7 +71,7 @@ Column configuration for the `XGrid` component is done within the nested `GridCo
 For example, if your column needs to display a combination of the first and last name properties, then you can set it up with a custom template that will format the values from those properties.
 
 :::tip
-For such scenarios we recommend adding a new [`ComboProperty`](../common-ui/properties/specialty#comboproperty) or a [computed property](../common-ui/properties/base#computed-properties) to your list object and binding it to your column. This will allow you to sort by this column, control its visibility from the data object, format it properly when both values are `null`, and overall minimize the column configuration in the UI layer.
+For such scenarios, we recommend adding a new [`ComboProperty`](../common-ui/properties/specialty#comboproperty) or a [computed property](../common-ui/properties/base#computed-properties) to your list object and binding it to your column. This will allow you to sort by this column, control its visibility from the data object, format it properly when both values are `null`, and minimize the column configuration in the UI layer.
 :::
 
 ### Header text
@@ -84,7 +84,7 @@ By default, when your `XGridColumn` is bound to a data property, it will use the
              HeaderText="Online"></XGridColumn>
 ```
 
-Note that the `HeaderText` value that you specify will be used as is, and not translated to the current language. If you need to localize that text then you can do it manually by injecting a `ResourceManager` and using it to resolve the label, as shown below.
+Note that the `HeaderText` value you specify will be used as is and not translated to the current language. If you need to localize that text, you can do it manually by injecting a `ResourceManager` and using it to resolve the label, as shown below.
 
 ```razor
 <!-- highlight-next-line -->
@@ -97,7 +97,7 @@ Note that the `HeaderText` value that you specify will be used as is, and not tr
 
 ### Column widths
 
-`XGrid` is rendered as an HTML table, which means that if you don't specify the widths of the columns then it will be determined automatically based on the current data in each column. You can explicitly set the width of each column in the `Width` attribute using either percentage or absolute width in pixels, as illustrated below.
+`XGrid` is rendered as an HTML table, meaning that if you don't specify the widths of the columns, it will be determined automatically based on the current data in each column. You can explicitly set the width of each column in the `Width` attribute using either percentage or absolute width in pixels, as illustrated below.
 
 ```razor
 <XGridColumn Property="@VM?.ListObj?.StatusProperty"
@@ -110,7 +110,7 @@ Note that the `HeaderText` value that you specify will be used as is, and not tr
 
 ### Text alignment
 
-When you don't set a specific alignment for the column data, and your column is bound to a data property, then it will use the default alignment (at the start of the cell), unless the property is one of the [integer properties](../common-ui/properties/standard#integer-properties), [decimal properties](../common-ui/properties/standard#decimal-properties) or [date/time properties](../common-ui/properties/standard#datetime-properties), which will use the alignment at the end of the cell.
+When you don't set a specific alignment for the column data, and your column is bound to a data property, then it will use the default alignment (at the start of the cell) unless the property is one of the [integer properties](../common-ui/properties/standard#integer-properties), [decimal properties](../common-ui/properties/standard#decimal-properties) or [date/time properties](../common-ui/properties/standard#datetime-properties), which will use the alignment at the end of the cell.
 
 You can always manually set the alignment by assigning the `TextAlign` parameter to a value of the `Alignment` enumeration from the `Xomega.Framework.Blazor.Components` namespace, as follows.
 
@@ -127,7 +127,7 @@ The `Alignment` enumeration contains one of the following values:
 
 ### Wrapping
 
-By default, the values in each cell do not wrap to a new line and get truncated with an ellipsis, if the value is longer than the width of the column. You can customize this behavior for each column by setting the `AllowWrap` parameter to `true` as follows.
+By default, the values in each cell do not wrap to a new line and get truncated with an ellipsis if the value is longer than the width of the column. You can customize this behavior for each column by setting the `AllowWrap` parameter to `true` as follows.
 
 ```razor
 <XGridColumn Property="@VM?.ListObj?.CustomerStoreProperty"
@@ -140,9 +140,24 @@ By default, the values in each cell do not wrap to a new line and get truncated 
 If you want to specify a custom display template for the value of any `XGridColumn`, then you can do it in the nested `Template` element. To display a value of any list object's data property in a certain format, you can call their `GetStringValue` method and pass a `context` parameter of type [`DataRow`](../common-ui/data-lists#row-collection) and the desired [`ValueFormat`](../common-ui/properties/base#value-formats), as follows.
 
 ```razor
-<XGridColumn HeaderText="SO Id" Property="@VM?.ListObj?.SalesOrderIdProperty">
+<XGridColumn HeaderText="SO Id" Property="@VM.ListObj.SalesOrderIdProperty">
 <!-- highlight-next-line -->
   <Template>@VM.ListObj.SalesOrderIdProperty.GetStringValue(ValueFormat.DisplayString, context)</Template>
+</XGridColumn>
+```
+
+Alternatively, you can use a property-bound control, such as [`XDataText`](controls#xdatatext), in the custom template to display the value as follows.
+
+```razor
+<XGridColumn Property="@VM.MainObj.DetailList.ProductIdProperty">
+<!-- highlight-start -->
+  <Template>
+    <a role="button" @onclick="async () => await LinkDetailDetails_ClickAsync(context)"
+       class="btn-link @(DisabledIfNot(VM.LinkDetailDetails_Enabled(context)))">
+      <XDataText Property="@VM.MainObj.DetailList.ProductIdProperty"></XDataText>
+    </a>
+  </Template>
+<!-- highlight-end -->
 </XGridColumn>
 ```
 
@@ -182,10 +197,10 @@ To **remove sorting** by a specific column, you can click on the column's header
 
 ### Sorting by multiple columns
 
-If you want to sort the grid by multiple columns, you can click on the header of the first column, and then single-click on the header of any additional column while holding the `Ctrl` key down. You can then change the sort direction on any of such columns by clicking on the header again without the `Ctrl` key.
+If you want to sort the grid by multiple columns, you can click on the header of the first column and then single-click on the header of any additional column while holding the `Ctrl` key down. You can then change the sort direction on any of such columns by clicking on the header again without the `Ctrl` key.
 
 :::caution
-If you click on any column that is not sorted **without** holding the `Ctrl` key, the grid will **remove the multi-column sorting**, and will sort just by that new column.
+If you click on any column that is not sorted **without** holding the `Ctrl` key, the grid will **remove the multi-column sorting** and will sort just by that new column.
 :::
 
 In addition to the sort direction, the sort indicator will include a number that shows the order of that column in the multi-column sort, as illustrated below.
@@ -196,7 +211,7 @@ You can remove sorting by any specific column from the multi-column sort by clic
 
 ### Disabling sorting
 
-By default, the grid allows sorting by any column that is bound to a data property. You can disallow sorting by specific columns in the grid by setting their `Sortable` parameter to `false` as follows.
+By default, the grid allows sorting by any column bound to a data property. You can disallow sorting by specific columns in the grid by setting their `Sortable` parameter to `false` as follows.
 
 ```razor
 <XGridColumn Property="@VM?.ListObj?.SalesOrderNumberProperty"
@@ -216,7 +231,7 @@ You can also disable sorting for the entire grid by setting its `AllowSorting` p
 
 ## Paging
 
-The `XGrid` uses a [`Pager`](components#pager) component in the footer of the grid to allow the user to control the grid paging.
+The `XGrid` uses a [`Pager`](components#pager) component in the grid's footer to allow the user to control the grid paging.
 
 ### Controlling current page
 
@@ -234,9 +249,9 @@ For example, if you have a results grid in a search view, then you should bind i
 
 ### Customizing page sizes
 
-The user can change the number of rows to display on each page using a dropdown list with the page sizes at the bottom right. By default, the list of page sizes is set to the following values: 7, 14, 25, 50 and 100. You can explicitly set the `PageSize` parameter to indicate the initial page size to use. Otherwise, the grid will default to the second option (e.g. 14), when available.
+The user can change the number of rows to display on each page using a dropdown list with the page sizes at the bottom right. By default, the list of page sizes is set to the following values: 7, 14, 25, 50, and 100. You can explicitly set the `PageSize` parameter to indicate the initial page size to use. Otherwise, when available, the grid will default to the second option (e.g. 14).
 
-You can customize the list of page sizes that the user can select from by setting the `PageSizes` attribute to an array of integers, as illustrated below.
+You can customize the list of page sizes from which the user can select by setting the `PageSizes` attribute to an array of integers, as illustrated below.
 
 ```razor
 <XGrid List="@VM?.ListObj"
@@ -258,11 +273,11 @@ If you need to have access to (or control) the page size that is currently selec
 
 ### Customizing page navigation
 
-To allow the user to switch from one page to another in the grid, the pager shows a navigation panel at the bottom center of the grid. That panel allows you to jump to the first or the last pages, turn to the next or previous pages, or pick some pages around the current page, as shown below.
+The pager shows a navigation panel at the bottom center of the grid to allow the user to switch from one page to another in the grid. That panel will enable you to jump to the first or the last pages, turn to the next or previous pages, or pick some pages around the current page, as shown below.
 
 ![Page navigation](img/page-navigation.png)
 
-The number of pages around the current page that you can jump to is determined by the `PagesToShow` parameter, which is defaulted to 7. If you want to show more pages, or if your grid doesn't have enough space and you want to show fewer pages, then you can customize this parameter in your grid as follows.
+The number of pages around the current page you can jump to is determined by the `PagesToShow` parameter, which is defaulted to 7. If you want to show more pages, or if your grid doesn't have enough space and you want to show fewer pages, then you can customize this parameter in your grid as follows.
 
 ```razor
 <XGrid List="@VM?.ListObj"
@@ -274,12 +289,12 @@ The number of pages around the current page that you can jump to is determined b
 ```
 
 :::tip
-You may want to **pick an odd number** for the `PagesToShow` value so that the current page would be in the middle when there are more pages to the left and to the right.
+You may want to **pick an odd number** for the `PagesToShow` value so that the current page would be in the middle when there are more pages to the left and the right.
 :::
 
 ### Localizing pager texts
 
-The strings that `Pager` component uses to display on the screen or as a tooltip of the navigation buttons are retrieved from the current resources using the following keys.
+The strings that the `Pager` component uses to display on the screen or as a tooltip of the navigation buttons are retrieved from the current resources using the following keys.
 
 |Name|Value|Comment|
 |-|-|-|
