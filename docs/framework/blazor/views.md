@@ -7,7 +7,7 @@ sidebar_position: 1
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Blazor views in Xomega Framework are high-level components that can be bound to [View Models](../common-ui/vm/view-models.md), and represent independent parts of the user workflow within your application. To make them reusable, you can design your views to allow either navigating to them directly via a browser URL or opening them as child views that are embedded into a parent view.
+Blazor views in Xomega Framework are high-level components that can be bound to [View Models](../common-ui/vm/view-models.md) and represent independent parts of the user workflow within your application. To make them reusable, you can design your views to allow either navigating to them directly via a browser URL or opening them as child views that are embedded into a parent view.
 
 :::tip
 Blazor views can be reused in both Blazor Server and WebAssembly architectures. Therefore, we recommend that you define them, as well as other Blazor components, in a separate project that is referenced from either the *Blazor.Server* or *Blazor.Wasm* projects.
@@ -98,21 +98,21 @@ To activate the view model from the query parameters of the URL, you also want t
 
 For example, navigating to `/SalesOrderView?SalesOrderId=45305` can open details of the specified sales order, while going to the URL `/SalesOrderListView?OrderDate=2012-01-01&OrderDateOperator=EQ&_action=search` will automatically run the search for sales orders made on *01/01/2012*.
 
-Normally, top-level views do not have a *Close* button, and the base view model sets its `CloseAction` property as not visible to hide any bound *Close* buttons, in cases when you need those to allow opening and closing the view as a child.
+Normally, top-level views do not have a *Close* button, and the base view model sets its `CloseAction` property as not visible to hide any bound *Close* buttons in cases when you need those to allow opening and closing the view as a child.
 
 :::caution
 When you navigate to another top-level view, the current view **will not prompt for unsaved changes**.
 
-*Note: [Preventing Blazor navigation](https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-7.0#handleprevent-location-changes) has been added in ASP.NET Core 7, so you'll be able to implement the unsaved changes prompt in your top-level views, if you use .NET 7.*
+*Note: [Preventing Blazor navigation](https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-7.0#handleprevent-location-changes) has been added in ASP.NET Core 7, so you'll be able to implement the unsaved changes prompt in your top-level views if you use .NET 7.*
 :::
 
 ### Child views
 
-Child views are embedded in their parent view, and can be open either inline or as a modal popup dialog. Normally, the mode for how the child view must be opened is passed to the view model using the `ViewParams.Mode.Param` [activation parameter](../common-ui/vm/view-models.md#activation), and the view just opens in the specified mode.
+Child views are embedded in their parent view and can be opened either inline or as a modal popup dialog. Normally, the mode for how the child view must be opened is passed to the view model using the `ViewParams.Mode.Param` [activation parameter](../common-ui/vm/view-models.md#activation) and the view just opens in the specified mode.
 
 #### Inline child views
 
-To allow showing a child view inline with the view's main content, the parent view needs to add them both to a container that will adjust accordingly when the child view is open. The base class `BlazorView` provides support for **responsive Bootstrap layout system**, where you can place both the main content and the child view in a `d-flex` container to open the child on the side as follows.
+To allow showing a child view inline with the view's main content, the parent view needs to add them both to a container that will adjust accordingly when the child view is open. The base class `BlazorView` provides support for a **responsive Bootstrap layout system**, where you can place both the main content and the child view in a `d-flex` container to open the child on the side as follows.
 
 ```razor title="SalesOrderListView.razor"
 <div @ref="MainPanel" class="@UpperClass">
@@ -147,7 +147,7 @@ To let the base `BlazorView` class know about the child views for your view, you
 ```
 
 :::note
-When you open your child view inline as a master-details view and then click on another record, it will just bind the view model for the new record to the already open view, instead of closing that child view and reopening it. It will still ask you for any unsaved changes, though, and will cancel the action, if you opt not to discard the unsaved changes.
+When you open your child view inline as a master-details view and then click on another record, it will just bind the view model for the new record to the already open view instead of closing that child view and reopening it. It will still ask you for any unsaved changes, though, and will cancel the action, if you opt not to discard the unsaved changes.
 :::
 
 #### Popup child views
@@ -328,7 +328,7 @@ To use Bootstrap grid layout for the panels, you want to set the `row` class on 
 
 The method will return a set of classes for each breakpoint to lay out the panels in an optimal number of columns to honor the preferred width of the fields.
 
-For example, to lay out a panel in no more than 2 columns, whose fields are laid out in up to 3 columns and have a preferred width of 100px, you would call `GetPanelCol(2, 3, 100)`, which may return something like `col-12 col-md-6 col-lg-12 col-xl-6`, as illustrated by the following markup.
+For example, to lay out a panel in no more than two columns, whose fields are laid out in up to 3 columns and have a preferred width of 100px, you would call `GetPanelCol(2, 3, 100)`, which may return something like `col-12 col-md-6 col-lg-12 col-xl-6`, as illustrated by the following markup.
 
 ```razor
 <!-- highlight-start -->
@@ -346,9 +346,9 @@ For example, to lay out a panel in no more than 2 columns, whose fields are laid
 
 ### Laying out child views
 
-If you use the above methods to set the column classes on your fields and panels, then you need to call the `GetViewCol(null)` to set the column class on the container for your view's main content. If your view also has any inline child views that you want to display side-by-side with the main content, then you should set their column classes by passing the child view to this method, e.g. `GetViewCol(cvSalesOrderView)`.
+If you use the above methods to set the column classes on your fields and panels, then you need to call the `GetViewCol(null)` to set the column class on the container for your view's main content. If your view also has any inline child views that you want to display side-by-side with the main content, then you should set their column classes by passing the child view to this method, e.g., `GetViewCol(cvSalesOrderView)`.
 
-This method will use the number of currently open inline child views to determine how much horizontal space each view should take for each screen size and whether or not to hide any of the parent views when there is not enough room to show the child view(s), e.g. `col-lg-6 d-none d-lg-flex` and `col-lg-6 col-12`.
+This method will use the number of currently open inline child views to determine how much horizontal space each view should take for each screen size and whether or not to hide any of the parent views when there is not enough room to show the child view(s), e.g., `col-lg-6 d-none d-lg-flex` and `col-lg-6 col-12`.
 
 For example, when you open a child view on a wide-screen desktop, it may open up on the right side as a master-details view. However, if you reduce the browser size or open it on a tablet, the child view may take up the entire screen, hiding the content of the parent view. Closing the child view will recalculate the column classes to accommodate the remaining open views.
 
@@ -369,11 +369,11 @@ Below is a markup that illustrates the usage of this method.
 
 ## Search views
 
-Search views are used to display a list of records in a tabular view based on the user-specified or preset criteria. You should subclass your search view from the `BlazorSearchView` base class, and the corresponding view model for your view should inherit from the [`SearchViewModel`](../common-ui/vm/search-view) class.
+Search views are used to display a list of records in a tabular view based on user-specified or preset criteria. You should subclass your search view from the `BlazorSearchView` base class, and the corresponding view model for your view should inherit from the [`SearchViewModel`](../common-ui/vm/search-view) class.
 
-For user-specified criteria you can create a special panel with the criteria fields bound to data properties of the view model's [`CriteriaObject`](../common-ui/data-lists#criteria-object), as well as the *Search* and *Reset* buttons bound to the corresponding view model actions. You can bind the panel's `Collapsed` state to the [`CriteriaCollapsed`](../common-ui/vm/search-view#collapsing-criteria) property to let the framework hide the criteria panel when the search is successful or to show it as appropriate.
+For user-specified criteria, you can create a special panel with the criteria fields bound to data properties of the view model's [`CriteriaObject`](../common-ui/data-lists#criteria-object), as well as the *Search* and *Reset* buttons bound to the corresponding view model actions. You can bind the panel's `Collapsed` state to the [`CriteriaCollapsed`](../common-ui/vm/search-view#collapsing-criteria) property to let the framework hide the criteria panel when the search is successful or to show it as appropriate.
 
-To display the list of current validation or service errors you can add the [`Errors`](components#errors) component and bind it to the view model's [`ErrorList`](../common-ui/vm/view-models#error-list). In addition to the main results grid, you can also show a summary of the currently applied criteria using the [`CriteriaBar`](components#criteriabar) component. The following example illustrates a common structure of the search views with the criteria panel on the left side of the results grid.
+To display the list of current validation or service errors, you can add the [`Errors`](components#errors) component and bind it to the view model's [`ErrorList`](../common-ui/vm/view-models#error-list). In addition to the main results grid, you can also show a summary of the currently applied criteria using the [`CriteriaBar`](components#criteriabar) component. The following example illustrates a common structure of the search views with the criteria panel on the left side of the results grid.
 
 ```razor title="SalesOrderListView.razor"
 <div class="modal-body row g-0">
@@ -468,7 +468,7 @@ If you do want to auto-run the search on that URL and save the user from clickin
 }
 ```
 
-Finally, you can offer the users both options on the screen, e.g. via a dropdown menu, and let them decide whether or not they want to save a search that will auto-run when open.
+Finally, you can offer the users both options on the screen, e.g., via a dropdown menu, and let them decide whether or not they want to save a search that will auto-run when open.
 
 ## Details views
 

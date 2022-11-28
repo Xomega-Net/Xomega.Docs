@@ -249,7 +249,7 @@ For example, if you have a results grid in a search view, then you should bind i
 
 ### Customizing page sizes
 
-The user can change the number of rows to display on each page using a dropdown list with the page sizes at the bottom right. By default, the list of page sizes is set to the following values: 7, 14, 25, 50, and 100. You can explicitly set the `PageSize` parameter to indicate the initial page size to use. Otherwise, when available, the grid will default to the second option (e.g. 14).
+The user can change the number of rows to display on each page using a dropdown list with the page sizes at the bottom right. By default, the list of page sizes is set to the following values: 7, 14, 25, 50, and 100. You can explicitly set the `PageSize` parameter to indicate the initial page size to use. Otherwise, when available, the grid will default to the second option (e.g., 14).
 
 You can customize the list of page sizes from which the user can select by setting the `PageSizes` attribute to an array of integers, as illustrated below.
 
