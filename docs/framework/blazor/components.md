@@ -4,15 +4,19 @@ sidebar_position: 4
 
 # Blazor View Components
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 Xomega Framework provides a number of components that are dependent on or used by the framework's classes, which help you build your Blazor views and applications. Below you can find a list of such Blazor components.
 
 ## NavMenu
 
-Xomega Framework provides a Bootstrap-styled, **security-enabled** `NavMenu` component for sidebar navigation with hierarchical grouping to let you navigate to [top-level views](views#top-level-views), as illustrated below.
+Xomega Framework provides a Bootstrap-styled, **security-enabled** `NavMenu` component with hierarchical grouping to let you navigate to [top-level views](views#top-level-views). Typically, you would use it within a layout component, where you can add the `NavMenu` menu component to your sidebar or top-level header for a dropdown menu, as described below.
 
-![Nav menu](img/nav-menu.png)
+<Tabs>
+  <TabItem value="sidebar" label="Sidebar collapsible menu" default>
 
-Typically, you would use it within a layout component, where you can add the `NavMenu` menu component to your sidebar and set its `Items` parameter to a list of your top-level menu items, as follows.
+For using `NavMenu` in a sidebar, you need to set its `Items` parameter to the list of your top-level [menu items](#menuitem-class).
 
 ```razor title="MainLayout.razor"
 <div class="sidebar bg-dark navbar-dark"
@@ -22,36 +26,56 @@ Typically, you would use it within a layout component, where you can add the `Na
 </div>
 ```
 
-The `NavMenu` component is used recursively for any nested groupings within the navigation menu. 
+The menu will display as a hierarchical collapsible tree view, as shown below.
 
-<details>
+![Nav menu](img/navmenu-sidebar.png)
 
-<summary>To align the toggle for the nested groups on the right-hand side and configure the spacing within menu items, you can set up appropriate CSS rules as follows.</summary>
+  </TabItem>
+  <TabItem value="dropdown" label="Dropdown menu (start)" default>
 
-```css
-.sidebar a[data-bs-toggle="collapse"] {
-  position: relative;
-}
+When adding your `NavMenu` to the top-level header to be displayed as a dropdown menu, you need to set the `IsDropdown="true"` parameter. If you use a dark-themed header, you may also want to set the `dropdown-menu-dark` CSS class in the `DropdownClass` parameter as follows.
 
-/* right-align the toggle on collapsible sidebar menus */
-.sidebar .dropdown-toggle::after {
-  display: block;
-  position: absolute;
-  top: 50%;
-  right: 1rem;
-  transform: translateY(-50%);
-}
-
-.sidebar ul {
-  padding-left: 1rem;
-}
-
-.sidebar i {
-  margin-right: 10px;
-}
+```razor title="MainLayout.razor"
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <nav class="navbar-expand">
+        <NavMenu Class="navbar-nav" Items="MainMenu.Items"
+<!-- highlight-next-line -->
+                 IsDropdown="true" DropdownClass="dropdown-menu-dark" />
+    </nav>
+</header>
 ```
 
-</details>
+The menu will display as a hierarchical dropdown menu with sub-menus opening up on hovering over the corresponding menu item, as shown below.
+
+![Nav menu dropdown](img/navmenu-dropdown-start.png)
+
+  </TabItem>
+  <TabItem value="dropdown-end" label="Dropdown menu (end)" default>
+
+When your `NavMenu` is at the end of your top header bar, you may want to make the dropdown menus open up to the left by setting the `dropdown-menu-end dropdown-submenu-left` additional styles in the `DropdownClass` parameter.
+
+```razor title="MainLayout.razor"
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <nav class="navbar-expand">
+        <NavMenu Class="navbar-nav" Items="MainMenu.Items"
+<!-- highlight-start -->
+                 IsDropdown="true"
+                 DropdownClass="dropdown-menu-dark dropdown-menu-end dropdown-submenu-left" />
+<!-- highlight-end -->
+    </nav>
+</header>
+```
+
+In this case, the dropdown menus will be right-aligned, and the sub-menus will open to the left, as shown below.
+
+![Nav menu dropdown](img/navmenu-dropdown-end.png)
+
+  </TabItem>
+</Tabs>
+
+:::note
+The `NavMenu` component is used recursively for any nested groupings within the navigation menu. 
+:::
 
 ### MenuItem class
 
@@ -66,20 +90,25 @@ public class MainMenu
     {
         new MenuItem()
         {
+/* highlight-start */
             ResourceKey = "HomeView_NavMenu",
             IconClass = "bi bi-house-door",
+/* highlight-end */
             Href = "/"
         }
         new MenuItem()
         {
             ResourceKey = "Module_Sales_NavMenu",
             IconClass = "bi bi-columns",
+/* highlight-next-line */
             Items = new List<MenuItem>()
             {
                 new MenuItem()
                 {
-                    ResourceKey = "CustomerListView_NavMenu",
-                    IconClass = "bi bi-card-list",
+/* highlight-next-line */
+                    Text = "Customer List",
+                    IconClass = "bi bi-person-lines-fill",
+/* highlight-next-line */
                     Href = "CustomerListView"
                 },
                 ...
@@ -91,8 +120,8 @@ public class MainMenu
 
 For any `MenuItem` that opens a specific top-level view, you need to set the `Href` property to the relative path of that view's page. `NavMenu` will highlight the menu item for the currently open view. Alternatively, you can provide a list of child menu items in the `Items` property, and the current menu item will serve as a grouping item.
 
-:::caution
-If you set **both** `Href` and `Items` properties for a grouping item, the child items **will not be collapsible**. Clicking on the grouping item will open up the associated view instead of expanding the child items.
+:::note
+If you set **both** `Href` and `Items` properties for a grouping item, that item will be displayed as a **split-menu**. Clicking on the grouping item's text will open up the associated view, while clicking on the toggle next to it will expand/collapse the child items.
 :::
 
 To specify the localized text of the menu item, you can set the `ResourceKey` property for the corresponding resource. You can also set the `Text` property directly if you don't need localization. If you want to display an additional icon before the text, you can also set the `IconClass` property for that item.
@@ -104,7 +133,7 @@ The `NavMenu` component allows you to set up security for each menu item and wil
 To configure security for any individual menu item, you can either set its `Policy` property or assign an array of `Roles` that the current user should have to be able to access it. If the user's authorization changes in the app, such as after login/logout, the `NavMenu` will be **automatically updated** to reflect the new permissions.
 
 :::tip
-To remove security from a menu item, you need to set both the `Policy` and `Roles` properties to `null`. You can also set the `Policy` to an empty string to restrict it to authorized users only, regardless of their privileges.
+To remove security from a menu item, you need to set both the `Policy` and `Roles` properties to `null`. You can also set the `Policy` to an empty string to restrict it only to authorized users, regardless of their privileges.
 :::
 
 For example, let's say that you define a *Sales* policy in your app configuration as follows.
@@ -117,7 +146,7 @@ services.AddAuthorization(o => {
 });
 ```
 
-To apply it to your menu items, you can either assign it directly on each item using the `Policy` property or call a recursive function `ForEachItem` on each top-level item, where you can configure your security based on `Href`, as illustrated below.
+To apply it to your menu items, you can either assign it directly on each item using the `Policy` property or call a recursive function `ForEachItem` on each top-level item, where you can configure your security based on the `Href` value, as illustrated below.
 
 ```cs
 foreach (var mi in MainMenu.Items)
