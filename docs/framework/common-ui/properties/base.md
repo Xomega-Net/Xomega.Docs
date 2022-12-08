@@ -414,7 +414,7 @@ You can construct a property change for any combination of the above constants u
 PropertyChange change = PropertyChange.Editable + PropertyChange.Visible;
 ```
 
-You can check whether a change includes any specific attribute by using dedicated methods that return a `bool`, e.g., `change.IncludesValue()` to check if the property change includes a value change. You can also use a generic method `IncludesChanges` to check if the changes include any of the supplied changes, as follows.
+You can check whether a change includes any specific attribute by using dedicated methods that return a `bool`, e.g., `change.IncludesValue()` to check if the property change includes a value change. You can also use a generic method `IncludesChanges`, to check if the changes include any of the supplied changes, as follows.
 
 ```
 change.IncludesChanges(PropertyChange.Editable + PropertyChange.Visible)
@@ -533,7 +533,18 @@ Expression<Func<EnumProperty, object>> xDiscount = spOf => spOf.IsNull() ? null 
 DiscountProperty.SetComputedValue(xDiscount, SpecialOfferProperty);
 ```
 
-If your computed property is part of a data list object, then your expression can have a `DataRow` as the last argument to allow retrieving values of other properties from the same row, e.g., `Expression<Func<EnumProperty, DataRow, object>>`. You'd still pass the same parameters to the `SetComputedValue` method though, i.e., without passing an instance of the row, as it's provided automatically.
+If your computed property is part of a [data list object](../data-lists), then your expression can have a `DataRow` as the last argument to allow retrieving values of other properties from the same row, as follows.
+
+```cs
+// computed property in a data list object
+/* highlight-start */
+Expression<Func<EnumProperty, DataRow, object>> xDiscount = (spOf, row) =>
+    spOf.IsNull(row) ? null : spOf.GetValue(row)["discount"];
+/* highlight-end */
+DiscountProperty.SetComputedValue(xDiscount, SpecialOfferProperty);
+```
+
+You'd still pass the same parameters to the `SetComputedValue` method, though, i.e., without passing an instance of the row, as it's provided automatically.
 
 :::tip
 Your expression can also use regular properties of any objects that implement the standard `INotifyPropertyChanged` interface, and the computed value will be automatically updated when the values of such properties change.
@@ -598,7 +609,7 @@ You can always manually trigger a recalculation of the computed `Visible` by cal
 
 When your data property must be required based on the values of other properties, you can create an `Expression` for a `Func` that returns a `bool` and pass it to the `SetComputedRequired` method along with the instances of the other arguments for the expression.
 
-Imagine that the `ReasonDetailsProperty` from [above](#computed-editability) is configured to be always editable instead but should be required only when the selected value of the `ReasonProperty` is *Other*. To set this up, you can create a boolean expression and pass it to the `SetComputedRequired` method, as follows.
+Imagine that the `ReasonDetailsProperty` from [above](#computed-editability) is configured to be always editable instead, yet should be required only when the selected value of the `ReasonProperty` is *Other*. To set this up, you can create a boolean expression and pass it to the `SetComputedRequired` method, as follows.
 
 ```cs
 // computed required attribute based on the value of the selected reason

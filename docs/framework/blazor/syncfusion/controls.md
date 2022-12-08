@@ -1,6 +1,5 @@
 ---
 sidebar_position: 2
-sidebar_label: Data Controls
 ---
 
 # Syncfusion Data Controls
