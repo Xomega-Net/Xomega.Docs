@@ -33,7 +33,7 @@ The base view has a `Visible` parameter, which is set to `false` by default and 
 ```
 
 :::note
-You should also initialize the top-level element to the base `MainPanel` member, as shown above. That would allow the base class to popup your view as a [modal dialog](#popup-child-views).
+You should also initialize the top-level element to the base `MainPanel` member, as shown above. That would allow the base class to pop up your view as a [modal dialog](#popup-child-views).
 :::
 
 ### Binding to view models
@@ -64,7 +64,7 @@ The base view stores the [`ViewModel`](../common-ui/vm/view-models) it's current
 }
 ```
 :::tip
-Using the concrete view model class and a short member name, such as `VM`, allows your Blazor components to easily access specific members of your view model from the markup without having to cast it, e.g. `@VM?.OrderList?.OrderDateProperty`.
+Using the concrete view model class and a short member name, such as `VM`, allows your Blazor components to easily access specific members of your view model from the markup without having to cast it, e.g., `@VM?.OrderList?.OrderDateProperty`.
 :::
 
 :::note
@@ -96,7 +96,7 @@ If you define your view as a shared component that can be used both as a top-lev
 
 To activate the view model from the query parameters of the URL, you also want to set the `ActivateFromQuery="true"` parameter, as shown above. This will allow you to pass values in the query string to pre-populate the view data or criteria and invoke some actions upon opening the view.
 
-For example, navigating to `/SalesOrderView?SalesOrderId=45305` can open details of the specified sales order, while going to the URL `/SalesOrderListView?OrderDate=2012-01-01&OrderDateOperator=EQ&_action=search` will automatically run the search for sales orders made on *01/01/2012*.
+For example, navigating to `/SalesOrderView?SalesOrderId=45305` can open details of the specified sales order while going to the URL `/SalesOrderListView?OrderDate=2012-01-01&OrderDateOperator=EQ&_action=search` will automatically run the search for sales orders made on *01/01/2012*.
 
 Normally, top-level views do not have a *Close* button, and the base view model sets its `CloseAction` property as not visible to hide any bound *Close* buttons in cases when you need those to allow opening and closing the view as a child.
 
@@ -108,7 +108,7 @@ When you navigate to another top-level view, the current view **will not prompt 
 
 ### Child views
 
-Child views are embedded in their parent view and can be opened either inline or as a modal popup dialog. Normally, the mode for how the child view must be opened is passed to the view model using the `ViewParams.Mode.Param` [activation parameter](../common-ui/vm/view-models.md#activation) and the view just opens in the specified mode.
+Child views are embedded in their parent view and can be opened either inline or as a modal popup dialog. Normally, the mode for how the child view must be opened is passed to the view model using the `ViewParams.Mode.Param` [activation parameter](../common-ui/vm/view-models.md#activation) and the view just open in the specified mode.
 
 #### Inline child views
 
@@ -163,7 +163,7 @@ When you need to open a child view in response to clicking a hyperlink in your v
 [Writing navigation code in the view model](../common-ui/vm/view-models#view-model-navigation) makes it reusable for other types of views bound to that model. The following snippets illustrate this approach.
 
 <Tabs>
-  <TabItem value="view" label="SalesOrderView.razor" default>
+  <TabItem value="view" label="SalesOrderView.razor">
 
 ```razor
 ...
@@ -195,7 +195,7 @@ When you need to open a child view in response to clicking a hyperlink in your v
 ```
 
   </TabItem>
-  <TabItem value="vm" label="SalesOrderViewModel.cs" default>
+  <TabItem value="vm" label="SalesOrderViewModel.cs">
 
 ```cs
 public bool LineItem_Enabled(DataRow row)
@@ -240,9 +240,9 @@ protected void NewWorkflow_Click()
 
 ## General view structure
 
-A typical structure for a view may contain a header section with a [`ViewTitle`](components#viewtitle) (and an `X` as a *Close* button, if it's a child view), followed by the view body and an optional footer. The latter may also contain an explicit *Close* button, if it's a child view, as well as a number of other actions or navigation buttons.
+A typical structure for a view may contain a header section with a [`ViewTitle`](components#viewtitle) (and an `X` as a *Close* button if it's a child view), followed by the view body and an optional footer. The latter may also contain an explicit *Close* button if it's a child view, as well as a number of other actions or navigation buttons.
 
-The view content can be wrapped in other containers, which may also include its child views, in order to allow opening it in different modes. The following markup demonstrates a generic view structure that allows you to display it either as a top-level view, as an [inline child view](#inline-child-views) or as a [modal popup view](#popup-child-views).
+The view content can be wrapped in other containers, which may also include its child views, in order to allow opening it in different modes. The following markup demonstrates a generic view structure that allows you to display it either as a top-level view, as an [inline child view](#inline-child-views), or as a [modal popup view](#popup-child-views).
 
 ```razor title="SalesOrderView.razor"
 @if (Visible)
@@ -293,9 +293,9 @@ The view content can be wrapped in other containers, which may also include its 
 
 Blazor views in Xomega Framework support responsive layout using the [Bootstrap grid layout system](https://getbootstrap.com/docs/5.2/layout/grid/#responsive-classes), which allows you to arrange your elements in several columns in each row depending on the size of your screen. However, the problem with this approach arises when you have inline child views that can be dynamically opened or closed.
 
-If you provide static Bootstrap classes for elements of a certain view that allow laying them out in a specific way based on the browser screen size, then it may work fine if your view takes up the whole screen. If, however, you open that view as an inline child view, then it may take only half the width of your screen, and the layout won't work since the screen size for the classes will remain the same.
+If you provide static Bootstrap classes for elements of a certain view that allow laying them out in a specific way based on the browser screen size, then it may work fine if your view takes up the whole screen. However, if you open that view as an inline child view, it may take only half the width of your screen, and the layout won't work since the screen size for the classes will remain the same.
 
-To overcome this issue, the base `BlazorView` class provides methods to dynamically generate your Bootstrap classes based on the currently open views. All you have to do is to specify the maximum number of columns to lay out your elements in and, optionally, the desired width of the fields, as described below.
+To overcome this issue, the base `BlazorView` class provides methods to dynamically generate your Bootstrap classes based on the currently open views. All you have to do is specify the maximum number of columns to lay out your elements and, optionally, the desired width of the fields, as described below.
 
 ### Laying out fields in a panel
 

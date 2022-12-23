@@ -143,7 +143,7 @@ You can set the additional `Type` parameter on the `XInputText` control for spec
 
 This will mask the input characters, as shown below.
 
-![Input text](img/input-password.png)
+![Password text](img/input-password.png)
 
 :::tip
 For date/time editing, you should use an `XDatePicker` control instead of setting a `Type` on the `XInputText` component.
@@ -160,21 +160,21 @@ The `XDatePicker` control is designed to be bound to a [`DateTimeProperty`](../c
 The `XDatePicker` control will render differently based on the specific type of data property it is bound to, as well as whether or not the property is multi-valued, as described under each tab below.
 
 <Tabs>
-  <TabItem value="date" label="DateProperty" default>
+  <TabItem value="date" label="DateProperty">
 
 If the bound data property is an instance of a [`DateProperty`](../common-ui/properties/standard#dateproperty), the control will allow only a date selection.
 
 ![Date picker](img/date-picker.png)
 
   </TabItem>
-  <TabItem value="datetime" label="DateTimeProperty" default>
+  <TabItem value="datetime" label="DateTimeProperty">
 
 If the bound data property is a `DateTimeProperty` and not a `DateProperty`, the control will support both date and time selection.
 
 ![Date time](img/date-time.png)
 
   </TabItem>
-  <TabItem value="multi" label="Multi-valued" default>
+  <TabItem value="multi" label="Multi-valued">
 
 If the data property is multi-valued (or is not a `DateTimeProperty`), then the control will render as a regular text box, where you will need to enter comma-separated dates and times in the proper format, as illustrated below.
 
@@ -237,7 +237,7 @@ For example, let's consider that we bind our `XAutoComplete` to a multi-valued d
 
 Suppose we set the property's `KeyFormat` to `Header.FieldText` to make it show the entire text in the box. Then our `XAutoComplete` control will look as shown below.
 
-![Dropdown](img/auto-complete.png)
+![Auto complete](img/auto-complete.png)
 
 #### Custom item template
 
@@ -258,7 +258,7 @@ For example, let's say that we want to show the country of each sales territory 
 
 As a result, the control will show the flag of each sales territory's country, as illustrated below.
 
-![Dropdown](img/auto-complete-template.png)
+![Auto complete template](img/auto-complete-template.png)
 
 ### XSelect
 
@@ -271,14 +271,14 @@ As a result, the control will show the flag of each sales territory's country, a
 The `XSelect` control may look different based on the configuration of the bound data property, as described below.
 
 <Tabs>
-  <TabItem value="dropdown" label="Single select (dropdown)" default>
+  <TabItem value="dropdown" label="Single select (dropdown)">
 
 For required data properties that are not multi-valued, the control will show a `Select [Label]...` prompt when the [value is null](../common-ui/properties/base#null-values), which will be removed as soon as you select any value.
 
 ![Dropdown](img/select-single.png)
 
   </TabItem>
-  <TabItem value="optional" label="Non-required (blank option)" default>
+  <TabItem value="optional" label="Non-required (blank option)">
 
 For non-required data properties that are not multi-valued, the control will show an additional blank option, which allows you to blank out the value, as shown below.
 
@@ -289,7 +289,7 @@ If you want to show specific text instead of an empty string there, you can set 
 :::
 
   </TabItem>
-  <TabItem value="listbox" label="Multi-valued (list box)" default>
+  <TabItem value="listbox" label="Multi-valued (list box)">
 
 When the bound data property is multi-valued, the `XSelect` control will show a multi-select list box, as shown below.
 
@@ -314,7 +314,7 @@ The `XOptions` control is best suited for binding to data properties that provid
 The control displays all options at once without any scrolling, which is why this list should be reasonably small. The options are displayed as radio buttons, check boxes, or switches depending on the property and control configuration, as described below.
 
 <Tabs>
-  <TabItem value="radio" label="Radio options" default>
+  <TabItem value="radio" label="Radio options">
 
 When bound to a single-valued data property, the `XOptions` control will show a radio button group, as illustrated below.
 
@@ -325,7 +325,7 @@ The name of the group will be based on the property name. If it conflicts with t
 :::
 
   </TabItem>
-  <TabItem value="blank" label="Blank option" default>
+  <TabItem value="blank" label="Blank option">
 
 If your single-value data property is not required, and you want to allow the users to clear the selection, then you can set the [`NullString`](../common-ui/properties/base#null-values) parameter of the property to a non-empty value (e.g., `[Not set]`). This will add a new blank option to the selection, allowing the user to set the property to null, as shown below.
 
@@ -336,21 +336,21 @@ If you don't want the control to add a blank option in such a case, you can expl
 :::
 
   </TabItem>
-  <TabItem value="check" label="Checkbox options" default>
+  <TabItem value="check" label="Checkbox options">
 
 If your bound data property is multi-valued, the `XOptions` control will be rendered as a group of checkboxes where you can select multiple values, as shown below.
 
 ![Check options](img/options-multi.png)
 
   </TabItem>
-  <TabItem value="inline" label="Inline options" default>
+  <TabItem value="inline" label="Inline options">
 
 By default, the selection options displayed are stacked vertically, as you can see from other examples. If you would like them displayed inline in one row, then you can specify the `Inline="true"` parameter. Depending on the number of options and the available horizontal space, the options may wrap in multiple rows, as illustrated below.
 
 ![Inline options](img/options-inline.png)
 
   </TabItem>
-  <TabItem value="switch" label="Switch options" default>
+  <TabItem value="switch" label="Switch options">
 
 You can also display your options as a group of switches by setting the `Switches="true"` parameter on the control, which will look as shown below.
 
@@ -407,10 +407,11 @@ The `XActionButton` control represents a Bootstrap-styled button that you can bi
 ```razor
 <XActionButton OnClick="OnCloseAsync"
 <!-- highlight-next-line -->
-               Action="@VM?.CloseAction"></XActionButton>
+               Action="@VM.CloseAction"></XActionButton>
 ```
 
-#### Primary buttons
+<Tabs>
+  <TabItem value="primary" label="Primary buttons">
 
 For a primary action on the view, you can set the `IsPrimary="true"` parameter on the button as follows.
 
@@ -424,7 +425,8 @@ The button will be displayed as shown below.
 
 ![Primary button](img/button-primary.png)
 
-#### Secondary buttons
+  </TabItem>
+  <TabItem value="secondary" label="Secondary buttons">
 
 Non-primary actions don't need any special parameters set on the button as follows.
 
@@ -436,7 +438,8 @@ This will render it as a secondary button, as shown below.
 
 ![Secondary button](img/button-secondary.png)
 
-#### Outline buttons
+  </TabItem>
+  <TabItem value="outline" label="Outline buttons">
 
 For auxiliary actions, you can set the `Outline="true"` parameter on the button.
 
@@ -450,7 +453,8 @@ This will show them using only the button outline like this.
 
 ![Outline button](img/button-outline.png)
 
-#### No text buttons
+  </TabItem>
+  <TabItem value="no text" label="No text buttons">
 
 If you don't want the button to display the action's text but rather show an icon from the provided CSS class, then you can set the `NoText="true"` parameter.
 
@@ -465,3 +469,6 @@ For example, the *Close* button at the upper right corner of the view uses the `
 Here is how it will look on the screen.
 
 ![No text button](img/button-icon.png)
+
+  </TabItem>
+</Tabs>

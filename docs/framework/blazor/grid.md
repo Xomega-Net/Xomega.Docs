@@ -12,30 +12,30 @@ Xomega Framework provides a simple, yet quite powerful, Blazor component `XGrid`
 The following picture illustrates the results grid for a *Sales Order List* view, as well as the Blazor markup that is used to configure it.
 
 <Tabs>
-  <TabItem value="pic" label="Sales Orders Grid" default>
+  <TabItem value="pic" label="Sales Orders Grid">
 
 ![Blazor Data Grid](img/data-grid.png)
 
   </TabItem>
-  <TabItem value="markup" label="SalesOrderListView.razor" default>
+  <TabItem value="markup" label="SalesOrderListView.razor">
 
 ```razor
-<XGrid List="@VM?.ListObj" ResourceKey="@Model?.GetResourceKey()"
+<XGrid List="@VM.ListObj" ResourceKey="@Model.GetResourceKey()"
         @bind-CurrentPage="CurrentPage"
         AllowSelection="true"
         RowSelected="async (arg) => await LinkDetails_ClickAsync(arg)">
   <GridColumns>
-    <XGridColumn Property="@VM?.ListObj?.SalesOrderNumberProperty" Width="10%"></XGridColumn>
-    <XGridColumn Property="@VM?.ListObj?.OrderDateProperty" Width="8%"></XGridColumn>
-    <XGridColumn Property="@VM?.ListObj?.DueDateProperty" Width="8%"></XGridColumn>
-    <XGridColumn Property="@VM?.ListObj?.ShipDateProperty" Width="8%"></XGridColumn>
-    <XGridColumn Property="@VM?.ListObj?.StatusProperty" Width="8%"></XGridColumn>
-    <XGridColumn Property="@VM?.ListObj?.OnlineOrderFlagProperty" Width="40px"
+    <XGridColumn Property="@VM.ListObj.SalesOrderNumberProperty" Width="10%"></XGridColumn>
+    <XGridColumn Property="@VM.ListObj.OrderDateProperty" Width="8%"></XGridColumn>
+    <XGridColumn Property="@VM.ListObj.DueDateProperty" Width="8%"></XGridColumn>
+    <XGridColumn Property="@VM.ListObj.ShipDateProperty" Width="8%"></XGridColumn>
+    <XGridColumn Property="@VM.ListObj.StatusProperty" Width="8%"></XGridColumn>
+    <XGridColumn Property="@VM.ListObj.OnlineOrderFlagProperty" Width="40px"
                   TextAlign="Alignment.Center"></XGridColumn>
-    <XGridColumn Property="@VM?.ListObj?.CustomerStoreProperty" Width="16%"></XGridColumn>
-    <XGridColumn Property="@VM?.ListObj?.CustomerNameProperty" Width="16%"></XGridColumn>
-    <XGridColumn Property="@VM?.ListObj?.SalesPersonIdProperty" Width="16%"></XGridColumn>
-    <XGridColumn Property="@VM?.ListObj?.TotalDueProperty" Width="9%"></XGridColumn>
+    <XGridColumn Property="@VM.ListObj.CustomerStoreProperty" Width="16%"></XGridColumn>
+    <XGridColumn Property="@VM.ListObj.CustomerNameProperty" Width="16%"></XGridColumn>
+    <XGridColumn Property="@VM.ListObj.SalesPersonIdProperty" Width="16%"></XGridColumn>
+    <XGridColumn Property="@VM.ListObj.TotalDueProperty" Width="9%"></XGridColumn>
   </GridColumns>
 </XGrid>
 ```
@@ -53,10 +53,10 @@ To bind an `XGrid` component to a `DataListObject`, you need to assign the `List
 
 ```razor
 <!-- highlight-next-line -->
-<XGrid List="@VM?.ListObj">
+<XGrid List="@VM.ListObj">
   <GridColumns>
 <!-- highlight-next-line -->
-    <XGridColumn Property="@VM?.ListObj?.SalesOrderNumberProperty"></XGridColumn>
+    <XGridColumn Property="@VM.ListObj.SalesOrderNumberProperty"></XGridColumn>
     ...
   </GridColumns>
 </XGrid>
@@ -79,7 +79,7 @@ For such scenarios, we recommend adding a new [`ComboProperty`](../common-ui/pro
 By default, when your `XGridColumn` is bound to a data property, it will use the [localized label](../common-ui/properties/base#property-label) for that property as the header text for the column. If your column is not bound to a data property or you cannot use the property label as the header, you can specify custom text for the header in the `HeaderText` attribute, as follows.
 
 ```razor
-<XGridColumn Property="@VM?.ListObj?.OnlineOrderFlagProperty"
+<XGridColumn Property="@VM.ListObj.OnlineOrderFlagProperty"
 <!-- highlight-next-line -->
              HeaderText="Online"></XGridColumn>
 ```
@@ -90,7 +90,7 @@ Note that the `HeaderText` value you specify will be used as is and not translat
 <!-- highlight-next-line -->
 @inject ResourceManager resMgr
 ...
-<XGridColumn Property="@VM?.ListObj?.OnlineOrderFlagProperty"
+<XGridColumn Property="@VM.ListObj.OnlineOrderFlagProperty"
 <!-- highlight-next-line -->
              HeaderText="@resMgr.GetString("Online")"></XGridColumn>
 ```
@@ -100,10 +100,10 @@ Note that the `HeaderText` value you specify will be used as is and not translat
 `XGrid` is rendered as an HTML table, meaning that if you don't specify the widths of the columns, it will be determined automatically based on the current data in each column. You can explicitly set the width of each column in the `Width` attribute using either percentage or absolute width in pixels, as illustrated below.
 
 ```razor
-<XGridColumn Property="@VM?.ListObj?.StatusProperty"
+<XGridColumn Property="@VM.ListObj.StatusProperty"
 <!-- highlight-next-line -->
              Width="8%"></XGridColumn>
-<XGridColumn Property="@VM?.ListObj?.OnlineOrderFlagProperty"
+<XGridColumn Property="@VM.ListObj.OnlineOrderFlagProperty"
 <!-- highlight-next-line -->
              Width="30px"></XGridColumn>
 ```
@@ -115,7 +115,7 @@ When you don't set a specific alignment for the column data, and your column is 
 You can always manually set the alignment by assigning the `TextAlign` parameter to a value of the `Alignment` enumeration from the `Xomega.Framework.Blazor.Components` namespace, as follows.
 
 ```razor
-<XGridColumn Property="@VM?.ListObj?.OnlineOrderFlagProperty"
+<XGridColumn Property="@VM.ListObj.OnlineOrderFlagProperty"
 <!-- highlight-next-line -->
              TextAlign="Alignment.Center"></XGridColumn>
 ```
@@ -130,7 +130,7 @@ The `Alignment` enumeration contains one of the following values:
 By default, the values in each cell do not wrap to a new line and get truncated with an ellipsis if the value is longer than the width of the column. You can customize this behavior for each column by setting the `AllowWrap` parameter to `true` as follows.
 
 ```razor
-<XGridColumn Property="@VM?.ListObj?.CustomerStoreProperty"
+<XGridColumn Property="@VM.ListObj.CustomerStoreProperty"
 <!-- highlight-next-line -->
              AllowWrap="true"></XGridColumn>
 ```
@@ -186,7 +186,7 @@ If you want to customize the icon for the sort indicator, then you can set the `
 you can configure these parameters as follows.
 
 ```razor
-<XGridColumn Property="@VM?.ListObj?.CustomerNameProperty"
+<XGridColumn Property="@VM.ListObj.CustomerNameProperty"
 <!-- highlight-next-line -->
              AscendingClass="bi-caret-up-fill" DescendingClass="bi-caret-down-fill"></XGridColumn>
 ```
@@ -214,7 +214,7 @@ You can remove sorting by any specific column from the multi-column sort by clic
 By default, the grid allows sorting by any column bound to a data property. You can disallow sorting by specific columns in the grid by setting their `Sortable` parameter to `false` as follows.
 
 ```razor
-<XGridColumn Property="@VM?.ListObj?.SalesOrderNumberProperty"
+<XGridColumn Property="@VM.ListObj.SalesOrderNumberProperty"
 <!-- highlight-next-line -->
              Sortable="false"></XGridColumn>
 ```
@@ -222,7 +222,7 @@ By default, the grid allows sorting by any column bound to a data property. You 
 You can also disable sorting for the entire grid by setting its `AllowSorting` parameter to `false` as follows.
 
 ```razor
-<XGrid List="@VM?.ListObj"
+<XGrid List="@VM.ListObj"
 <!-- highlight-next-line -->
        AllowSorting="false">
 ...
@@ -238,7 +238,7 @@ The `XGrid` uses a [`Pager`](components#pager) component in the grid's footer to
 If you would like to control or have access to the currently displayed page of your `XGrid`, then you need to bind its `CurrentPage` parameter to a property on your view, as shown below.
 
 ```razor
-<XGrid List="@VM?.ListObj"
+<XGrid List="@VM.ListObj"
 <!-- highlight-next-line -->
        @bind-CurrentPage="CurrentPage">
 ...
@@ -254,7 +254,7 @@ The user can change the number of rows to display on each page using a dropdown 
 You can customize the list of page sizes from which the user can select by setting the `PageSizes` attribute to an array of integers, as illustrated below.
 
 ```razor
-<XGrid List="@VM?.ListObj"
+<XGrid List="@VM.ListObj"
 <!-- highlight-start -->
        PageSizes="new [] { 10, 25, 50, 100}"
        PageSize="10">
@@ -268,7 +268,7 @@ The above example will result in the following selection of page sizes, with the
 ![Page sizes](img/page-sizes.png)
 
 :::tip
-If you need to have access to (or control) the page size that is currently selected by the user, then you can also bind it to your own property on the view, e.g. `@bind-PageSize="CurrentPageSize"`.
+If you need to have access to (or control) the page size that is currently selected by the user, then you can also bind it to your own property on the view, e.g., `@bind-PageSize="CurrentPageSize"`.
 :::
 
 ### Customizing page navigation
@@ -280,7 +280,7 @@ The pager shows a navigation panel at the bottom center of the grid to allow the
 The number of pages around the current page you can jump to is determined by the `PagesToShow` parameter, which is defaulted to 7. If you want to show more pages, or if your grid doesn't have enough space and you want to show fewer pages, then you can customize this parameter in your grid as follows.
 
 ```razor
-<XGrid List="@VM?.ListObj"
+<XGrid List="@VM.ListObj"
 <!-- highlight-start -->
        PagesToShow="5">
 <!-- highlight-end -->
@@ -310,9 +310,9 @@ You can create localized resources for these texts that are translated into the 
 If you want to override these labels for a specific grid or view, then you can set the `ResourceKey` parameter on the grid. For example, the following code sets the `ResourceKey` parameter to the base name of the view model's class (*SalesOrderList*).
 
 ```razor title="SalesOrderListView.razor"
-<XGrid List="@VM?.ListObj"
+<XGrid List="@VM.ListObj"
 <!-- highlight-start -->
-       ResourceKey="@Model?.GetResourceKey()">
+       ResourceKey="@Model.GetResourceKey()">
 <!-- highlight-end -->
 ...
 </XGrid>
@@ -330,7 +330,7 @@ This will allow you to set the text of the labels specifically for that view, sa
 Paging is enabled on the `XGrid` component by default, but you can disable it by setting the `AllowPaging` parameter to `false` as follows.
 
 ```razor
-<XGrid List="@VM?.ListObj"
+<XGrid List="@VM.ListObj"
 <!-- highlight-next-line -->
        AllowPaging="false">
 ...
@@ -356,7 +356,7 @@ This way, for example, you can have a grid that doesn't support selection, but a
 Row selection is not enabled on the `XGrid` component by default. To enable it you need to set the `AllowSelection` parameter to `true` as follows.
 
 ```razor
-<XGrid List="@VM?.ListObj"
+<XGrid List="@VM.ListObj"
 <!-- highlight-next-line -->
        AllowSelection="true">
 ...
@@ -370,7 +370,7 @@ If you use your grid to allow selecting one or several rows that you can later r
 If, however, you need to perform an action **while the row is being selected** with the ability to cancel it, such as opening a details view, then you will need to provide a custom selection handler in the `RowSelected` callback as follows.
 
 ```razor
-<XGrid List="@VM?.ListObj"
+<XGrid List="@VM.ListObj"
        AllowSelection="true"
 <!-- highlight-next-line -->
        RowSelected="async (arg) => await LinkDetails_ClickAsync(arg)">

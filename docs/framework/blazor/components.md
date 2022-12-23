@@ -14,7 +14,7 @@ Xomega Framework provides a number of components that are dependent on or used b
 Xomega Framework provides a Bootstrap-styled, **security-enabled** `NavMenu` component with hierarchical grouping to let you navigate to [top-level views](views#top-level-views). Typically, you would use it within a layout component, where you can add the `NavMenu` menu component to your sidebar or top-level header for a dropdown menu, as described below.
 
 <Tabs>
-  <TabItem value="sidebar" label="Sidebar collapsible menu" default>
+  <TabItem value="sidebar" label="Sidebar collapsible menu">
 
 For using `NavMenu` in a sidebar, you need to set its `Items` parameter to the list of your top-level [menu items](#menuitem-class).
 
@@ -31,7 +31,7 @@ The menu will display as a hierarchical collapsible tree view, as shown below.
 ![Nav menu](img/navmenu-sidebar.png)
 
   </TabItem>
-  <TabItem value="dropdown" label="Dropdown menu (start)" default>
+  <TabItem value="dropdown" label="Dropdown menu (start)">
 
 When adding your `NavMenu` to the top-level header to be displayed as a dropdown menu, you need to set the `IsDropdown="true"` parameter. If you use a dark-themed header, you may also want to set the `dropdown-menu-dark` CSS class in the `DropdownClass` parameter as follows.
 
@@ -50,7 +50,7 @@ The menu will display as a hierarchical dropdown menu with sub-menus opening up 
 ![Nav menu dropdown](img/navmenu-dropdown-start.png)
 
   </TabItem>
-  <TabItem value="dropdown-end" label="Dropdown menu (end)" default>
+  <TabItem value="dropdown-end" label="Dropdown menu (end)">
 
 When your `NavMenu` is at the end of your top header bar, you may want to make the dropdown menus open up to the left by setting the `dropdown-menu-end dropdown-submenu-left` additional styles in the `DropdownClass` parameter.
 

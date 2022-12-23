@@ -622,7 +622,7 @@ When you provide localized text in the standard resource files, you don't have t
 The following examples illustrate a sample `error severity` enumeration, the corresponding default resource file, as well as ones for the German and Bulgarian languages.
 
 <Tabs>
-  <TabItem value="xom" label="error_log.xom" default>
+  <TabItem value="xom" label="error_log.xom">
 
 ```xml
 <enum name="error severity">
@@ -633,7 +633,7 @@ The following examples illustrate a sample `error severity` enumeration, the cor
 ```
 
   </TabItem>
-  <TabItem value="en" label="Resources.resx" default>
+  <TabItem value="en" label="Resources.resx">
 
 |Name|Value|Comment|
 |-|-|-|
@@ -642,7 +642,7 @@ The following examples illustrate a sample `error severity` enumeration, the cor
 |Enum_error severity.3|Info|
 
   </TabItem>
-  <TabItem value="de" label="Resources.de.resx" default>
+  <TabItem value="de" label="Resources.de.resx">
 
 |Name|Value|Comment|
 |-|-|-|
@@ -651,7 +651,7 @@ The following examples illustrate a sample `error severity` enumeration, the cor
 |Enum_error severity.3|Die Info|
 
   </TabItem>
-  <TabItem value="bg" label="Resources.bg.resx" default>
+  <TabItem value="bg" label="Resources.bg.resx">
 
 |Name|Value|Comment|
 |-|-|-|
@@ -716,7 +716,7 @@ In the following example, we store a list of address types with their names in a
 We return those fields as the `lang-de` and `lang-es` parameters in the `read enum` operation. However, since these names don't match, we need to map them in the custom code of the generated `AddressTypeService` class.
 
 <Tabs>
-  <TabItem value="xom" label="address_type.xom" default>
+  <TabItem value="xom" label="address_type.xom">
 
 ```xml
 <object name="address type">
@@ -747,7 +747,7 @@ We return those fields as the `lang-de` and `lang-es` parameters in the `read en
 </object>
 ```
   </TabItem>
-  <TabItem value="svc" label="AddressTypeService.cs" default>
+  <TabItem value="svc" label="AddressTypeService.cs">
 
 ```cs
 public virtual async Task<Output<ICollection<AddressType_ReadEnumOutput>>>
@@ -772,7 +772,7 @@ public virtual async Task<Output<ICollection<AddressType_ReadEnumOutput>>>
 ```
 
   </TabItem>
-  <TabItem value="cl" label="AddressTypeReadEnumCacheLoader.cs" default>
+  <TabItem value="cl" label="AddressTypeReadEnumCacheLoader.cs">
 
 ```cs
 protected override async Task LoadCacheAsync(string tableType, CacheUpdater updateCache,
@@ -814,7 +814,7 @@ In order for the generated cache loader to properly add the nested records as ad
 In the following example we added a `translation` subobject of the `address type` that has a `lang` and `text` fields. You can store the value in the `lang` field as just the culture name, such as `en` or `en-US`, but you'll need to convert it in the `AddressTypeService` to the `lang-<Culture Name>` format, when you return it as part of the nested `translations` list in the `read enum` operation.
 
 <Tabs>
-  <TabItem value="xom" label="address_type.xom" default>
+  <TabItem value="xom" label="address_type.xom">
 
 ```xml
 <object name="address type">
@@ -857,7 +857,7 @@ In the following example we added a `translation` subobject of the `address type
 ```
 
   </TabItem>
-  <TabItem value="svc" label="AddressTypeService.cs" default>
+  <TabItem value="svc" label="AddressTypeService.cs">
 
 ```cs
 public virtual async Task<Output<ICollection<AddressType_ReadEnumOutput>>>
@@ -884,7 +884,7 @@ public virtual async Task<Output<ICollection<AddressType_ReadEnumOutput>>>
 ```
 
   </TabItem>
-  <TabItem value="cl" label="AddressTypeReadEnumCacheLoader.cs" default>
+  <TabItem value="cl" label="AddressTypeReadEnumCacheLoader.cs">
 
 ```cs
 protected override async Task LoadCacheAsync(string tableType, CacheUpdater updateCache,

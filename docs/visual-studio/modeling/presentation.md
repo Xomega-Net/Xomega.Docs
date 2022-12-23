@@ -263,7 +263,7 @@ The UI controls to display or edit a data property for each specific UI framewor
 If the data property allows multiple values, then Xomega will try to use a control with a `multi-value="true"` attribute, if one is available. The following examples demonstrate [split configurations](types.md#split-configurations) of UI controls for the logical type `selection` for various UI frameworks.
 
 <Tabs>
-  <TabItem value="blazor-control" label="Xomega Blazor" default>
+  <TabItem value="blazor-control" label="Xomega Blazor">
 
 ```xml
 <type-config type="selection">
@@ -279,7 +279,7 @@ If the data property allows multiple values, then Xomega will try to use a contr
 ```
 
   </TabItem>
-  <TabItem value="sf-blazor-control" label="Syncfusion Blazor" default>
+  <TabItem value="sf-blazor-control" label="Syncfusion Blazor">
 
 ```xml
 <type-config type="selection">
@@ -295,7 +295,7 @@ If the data property allows multiple values, then Xomega will try to use a contr
 ```
 
   </TabItem>
-  <TabItem value="web-control" label="Web Forms" default>
+  <TabItem value="web-control" label="Web Forms">
 
 ```xml
 <type-config type="selection" xmlns:asp="clr-namespace:System.Web.UI.WebControls;assembly=System.Web">
@@ -311,7 +311,7 @@ If the data property allows multiple values, then Xomega will try to use a contr
 ```
 
   </TabItem>
-  <TabItem value="wpf-control" label="WPF" default>
+  <TabItem value="wpf-control" label="WPF">
 
 ```xml
 <type-config type="selection">
@@ -331,7 +331,7 @@ If the data property allows multiple values, then Xomega will try to use a contr
 ```
 
   </TabItem>
-  <TabItem value="html-control" label="HTML SPA" default>
+  <TabItem value="html-control" label="HTML SPA">
 
 ```xml
 <type-config type="selection">
@@ -354,7 +354,7 @@ If you want to configure certain UI controls for the entire data object, rather 
 The following example illustrates a custom grid configuration for a `SalesOrderList` object for some Blazor UI frameworks.
 
 <Tabs>
-  <TabItem value="blazor-control" label="Xomega Blazor" default>
+  <TabItem value="blazor-control" label="Xomega Blazor">
 
 ```xml
 <xfk:data-object class="SalesOrderList" list="true">
@@ -369,7 +369,7 @@ The following example illustrates a custom grid configuration for a `SalesOrderL
 ```
 
   </TabItem>
-  <TabItem value="sf-blazor-control" label="Syncfusion Blazor" default>
+  <TabItem value="sf-blazor-control" label="Syncfusion Blazor">
 
 ```xml
 <xfk:data-object class="SalesOrderList" list="true">

@@ -37,7 +37,7 @@ The following picture illustrates the results grid for a *Sales Order List* view
   <TabItem value="markup" label="SalesOrderListView.razor">
 
 ```razor
-<XSfGrid List="@VM?.ListObj"
+<XSfGrid List="@VM.ListObj"
          AllowPaging="true"
          AllowReordering="true"
          AllowResizing="true"
@@ -76,7 +76,7 @@ For each grid column bound to a property of your data list object, you need to a
 
 ```razor
 <!-- highlight-start -->
-<XSfGrid List="@VM?.ListObj">
+<XSfGrid List="@VM.ListObj">
   <XSfDataManager></XSfDataManager>
 <!-- highlight-end -->
   <GridColumns>
@@ -135,7 +135,7 @@ You can stack columns in column groups by nesting them inside the `GridColumns` 
 In the following example, we group the *Customer Store* and *Customer Name* columns under a *Customer Info* group.
 
 ```razor
-<XSfGrid List="@VM?.ListObj" AllowReordering="true" AllowResizing="true">
+<XSfGrid List="@VM.ListObj" AllowReordering="true" AllowResizing="true">
   <XSfDataManager></XSfDataManager>
   <GridColumns>
     <XSfGridColumn Field="@SalesOrderList.SalesOrderNumber"></XSfGridColumn>
@@ -170,7 +170,7 @@ To auto-fit the width of the column to the currently displayed content, you can 
 The following example illustrates various parameters you can use to control the column widths and resizing behavior.
 
 ```razor
-<XSfGrid List="@VM?.ListObj"
+<XSfGrid List="@VM.ListObj"
 <!-- highlight-next-line -->
           AllowResizing="true">
   <GridColumns>
@@ -223,7 +223,7 @@ To display the value, you can also use property-bound controls, such as [`XDataT
     <CascadingValue Value="context as DataRow">
       <a role="button"
          @onclick="async () => await LinkDetailDetails_ClickAsync(context as DataRow)"
-         class="btn-link @(DisabledIfNot(VM?.LinkDetailDetails_Enabled(context as DataRow)))">
+         class="btn-link @(DisabledIfNot(VM.LinkDetailDetails_Enabled(context as DataRow)))">
 <!-- highlight-next-line -->
         <XDataText Property="@VM.MainObj.DetailList.ProductIdProperty"></XDataText>
       </a>
@@ -242,7 +242,7 @@ You can allow the users to choose which columns to show or hide via a dedicated 
 To show a column chooser on a toolbar, you need to set the `ShowColumnChooser="true"` parameter on the grid and add the *ColumnChooser* option to your grid's `Toolbar` as follows.
 
 ```razor
-<XSfGrid List="@VM?.ListObj"
+<XSfGrid List="@VM.ListObj"
 <!-- highlight-start -->
          ShowColumnChooser="true"
          Toolbar="@(new [] { "ColumnChooser" })">
@@ -261,7 +261,7 @@ The toolbar menu and the column chooser dialog will look as shown below.
 To show a column chooser on the menu of each column, you need to set the `ShowColumnMenu="true"` parameter on the grid and add the *ColumnChooser* option to your grid's `ColumnMenuItems` as follows.
 
 ```razor
-<XSfGrid List="@VM?.ListObj"
+<XSfGrid List="@VM.ListObj"
 <!-- highlight-start -->
          ShowColumnMenu="true"
          ColumnMenuItems="@(new [] { "ColumnChooser" })">
@@ -299,7 +299,7 @@ Syncfusion data grid implements several types of in-grid filtering, as described
 The filter bar is the default filter type, where you specify the filter criteria in a top bar for each column. All you have to do to turn it on is to set the `AllowFiltering` parameter as follows.
 
 ```razor
-<XSfGrid List="@VM?.ListObj"
+<XSfGrid List="@VM.ListObj"
 <!-- highlight-next-line -->
          AllowFiltering="true">
   ...
@@ -316,7 +316,7 @@ Depending on the default operator for each column, you can filter text columns b
 The *Menu* filter type is invoked from a column menu by clicking on a funnel icon in the column header. The icon will be highlighted for the columns that have any filtering applied. To set up this type for the grid or a specific column, you need to set the `Type` parameter on the corresponding filter settings to the `FilterType.Menu` value, as illustrated below.
 
 ```razor
-<XSfGrid List="@VM?.ListObj"
+<XSfGrid List="@VM.ListObj"
 <!-- highlight-start -->
          AllowFiltering="true">
   <GridFilterSettings Type="FilterType.Menu"></GridFilterSettings>
@@ -335,7 +335,7 @@ Clicking on the filter icon will pop up a dialog for that column, where you can 
 The *CheckBox* filter type is invoked from a column menu by clicking on a funnel icon in the column header. The icon will be highlighted for the columns that have any filtering applied. To set up this type for the grid or a specific column, you need to set the `Type` parameter on the corresponding filter settings to the `FilterType.CheckBox` value, as illustrated below.
 
 ```razor
-<XSfGrid List="@VM?.ListObj"
+<XSfGrid List="@VM.ListObj"
 <!-- highlight-start -->
          AllowFiltering="true">
   <GridFilterSettings Type="FilterType.CheckBox"></GridFilterSettings>
@@ -354,7 +354,7 @@ Clicking on the filter icon will pop up a dialog for that column, where you can 
 The *Excel* filter type is invoked from a column menu by clicking on a funnel icon in the column header. The icon will be highlighted for the columns that have any filtering applied. To set up this type for the grid or a specific column, you need to set the `Type` parameter on the corresponding filter settings to the `FilterType.Excel` value, as illustrated below.
 
 ```razor
-<XSfGrid List="@VM?.ListObj"
+<XSfGrid List="@VM.ListObj"
 <!-- highlight-start -->
          AllowFiltering="true">
   <GridFilterSettings Type="FilterType.Excel"></GridFilterSettings>
@@ -379,7 +379,7 @@ Filtering the grid will use internal values to apply the specified criteria. For
 The `XSfGrid` component allows you to enable searching for a specific text across all or several columns. To enable search, you need to add a *Search* toolbar item and, optionally, configure the `GridSearchSettings`, as illustrated below.
 
 ```razor
-<XSfGrid List="@VM?.ListObj"
+<XSfGrid List="@VM.ListObj"
 <!-- highlight-start -->
          Toolbar="@(new [] { "Search" })">
   <GridSearchSettings IgnoreCase="true" Operator="Operator.Contains"></GridSearchSettings>
@@ -409,7 +409,7 @@ You can set up your grid to update the row selection of the bound data list obje
 This behavior is enabled by default when you set the grid's `AllowSelection` parameter to `true` and **use the `XSfGridEvents`** element **without a `RowSelected` handler**, as follows.
 
 ```razor
-<XSfGrid List="@VM?.ListObj"
+<XSfGrid List="@VM.ListObj"
 <!-- highlight-next-line -->
          AllowSelection="true">
   <XSfDataManager></XSfDataManager>
@@ -442,7 +442,7 @@ If you want to set up your grid to always reflect the currently selected rows in
 Alternatively, you can specify a custom `RowSelected` handler on your `XSfGridEvents`, as follows.
 
 ```razor
-<XSfGrid List="@VM?.ListObj"
+<XSfGrid List="@VM.ListObj"
 <!-- highlight-next-line -->
          AllowSelection="true">
   <XSfDataManager></XSfDataManager>
@@ -476,7 +476,7 @@ Syncfusion grid provides a ton of other configuration parameters to fine-tune th
 The following snippet illustrates this configuration.
 
 ```razor
-<XSfGrid List="@VM?.MainObj?.DetailList"
+<XSfGrid List="@VM.MainObj.DetailList"
 <!-- highlight-start -->
           AllowSelection="true"
           Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Cancel", "Update" })"

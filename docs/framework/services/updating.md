@@ -31,7 +31,7 @@ Attributes `XRequired` and `XMaxLength` use the hierarchical resources for defau
 
 #### Validation of collections
 
-If your property has a collection of values, which will be saved as rows in a database table, then you may need to make sure that each individual value in the collection is valid, e.g. doesn't exceed the maximum length for that DB column. The standard validation attributes don't validate individual values in a collection, requiring you to create a custom validation attribute.
+If your property has a collection of values, which will be saved as rows in a database table, then you may need to make sure that each individual value in the collection is valid, e.g., doesn't exceed the maximum length for that DB column. The standard validation attributes don't validate individual values in a collection, requiring you to create a custom validation attribute.
 
 The `XMaxLength` attribute can be applied to a collection of strings and will check the length of each value. The error message will include the specific values that exceed the maximum length to help the user identify them in a long list.
 
@@ -101,7 +101,7 @@ If you don't want to proceed with further validations when the model data is inv
 
 ## Updating with Entity Framework
 
-A common way to implement the update logic in your business service is to use an ORM, such as EF Core. Xomega Framework doesn't have a package with a direct dependency on EF Core or EF 6.x but you can easily add some helper extension methods to integrate EF with Xomega Framework, as you will see below.
+A common way to implement the update logic in your business service is to use an ORM, such as EF Core. Xomega Framework doesn't have a package with a direct dependency on EF Core or EF 6.x, but you can easily add some helper extension methods to integrate EF with Xomega Framework, as you will see below.
 
 The following code snippet illustrates the typical steps involved in the update operations using the `UpdateAsync` method for sales orders.
 
@@ -154,7 +154,7 @@ If you create your solution using a Xomega.Net for Visual Studio template, then 
 When looking up an entity by its key(s), you typically want to check if it is not null and throw an appropriate critical error otherwise. This would allow you to safely use that entity further in your code without having to check for nulls. You can implement this behavior in a static extension method for the DB context, as follows.
 
 <Tabs groupId="ef">
-  <TabItem value="ef-core" label="Entity Framework Core" default>
+  <TabItem value="ef-core" label="Entity Framework Core">
 
 ```cs
 public static async Task<T> FindEntityAsync<T>(this DbContext ctx,
@@ -171,7 +171,7 @@ public static async Task<T> FindEntityAsync<T>(this DbContext ctx,
 }
 ```
   </TabItem>
-  <TabItem value="ef-6" label="Entity Framework 6.x" default>
+  <TabItem value="ef-6" label="Entity Framework 6.x">
 
 ```cs
 public static async Task<T> FindEntityAsync<T>(this DbContext ctx,
@@ -197,7 +197,7 @@ SalesOrder obj = await ctx.FindEntityAsync<SalesOrder>(currentErrors, token, _sa
 ```
 
 :::note
-Note that using the `ErrorType.Data` error type will automatically ensure that your REST API would return a 401 (NotFound) HTTP status code, as per the REST best practices.
+Note that using the `ErrorType.Data` error type will automatically ensure that your REST API returns a 401 (NotFound) HTTP status code, as per the REST best practices.
 :::
 
 ### Validate an entity key
@@ -205,13 +205,13 @@ Note that using the `ErrorType.Data` error type will automatically ensure that y
 If your input data includes reference keys to other entities, such as a `CustomerId` on the sales order data, then you may want to validate that the referenced entity exists before saving it, even if you don't need to look up the entire referenced entity for anything else.
 
 :::note
-If your database table has a foreign key relationship to another table, then you would get a DB error during the save if you provide an invalid key. However, this error would not be user-friendly and may expose your DB structure, so the best practice is to manually validate the key in the code.
+If your database table has a foreign key relationship to another table, then you will get a DB error during the save if you provide an invalid key. However, this error would not be user-friendly and may expose your DB structure, so the best practice is to manually validate the key in the code.
 :::
 
 To help you easily validate reference keys in the code, you can add the following extension method for the DB context.
 
 <Tabs groupId="ef">
-  <TabItem value="ef-core" label="Entity Framework Core" default>
+  <TabItem value="ef-core" label="Entity Framework Core">
 
 ```cs
 public static async Task ValidateKeyAsync<T>(this DbContext ctx,
@@ -228,7 +228,7 @@ public static async Task ValidateKeyAsync<T>(this DbContext ctx,
 }
 ```
   </TabItem>
-  <TabItem value="ef-6" label="Entity Framework 6.x" default>
+  <TabItem value="ef-6" label="Entity Framework 6.x">
 
 ```cs
 public static async Task ValidateKeyAsync<T>(this DbContext ctx,
@@ -247,7 +247,7 @@ public static async Task ValidateKeyAsync<T>(this DbContext ctx,
   </TabItem>
 </Tabs>
 
-Since the method doesn't return the actual entity, and there is no danger of your calling code throwing an error if it doesn't exist, it is possible to add a regular validation error here, rather than a critical error. This allows you to catch multiple such validation errors and report them to the user all at once.
+Since the method doesn't return the actual entity, and there is no danger of your calling code throwing an error if it doesn't exist, it is possible to add a regular validation error here rather than a critical error. This allows you to catch multiple such validation errors and report them to the user all at once.
 
 With this extension method, you'll be able to validate any foreign keys in your code, as follows.
 
@@ -263,10 +263,10 @@ The `"CustomerId"` parameter that you pass to the method is used to indicate the
 
 When creating new entities with user-supplied keys that are not auto-generated by the DB, you need to ensure that an entity with this key does not yet exist. Otherwise, you'll get a primary key violation error from the database, which would not be user-friendly and may expose your DB structure.
 
-To help manually validate the uniqueness of a simple or composite key, and to throw a custom user-friendly message, you can add the following extension method for the DB context.
+To help manually validate the uniqueness of a simple or composite key and to throw a user-friendly message, you can add the following extension method for the DB context.
 
 <Tabs groupId="ef">
-  <TabItem value="ef-core" label="Entity Framework Core" default>
+  <TabItem value="ef-core" label="Entity Framework Core">
 
 ```cs
 public static async Task ValidateUniqueKeyAsync<T>(this DbContext ctx,
@@ -283,7 +283,7 @@ public static async Task ValidateUniqueKeyAsync<T>(this DbContext ctx,
 }
 ```
   </TabItem>
-  <TabItem value="ef-6" label="Entity Framework 6.x" default>
+  <TabItem value="ef-6" label="Entity Framework 6.x">
 
 ```cs
 public static async Task ValidateUniqueKeyAsync<T>(this DbContext ctx,
@@ -319,7 +319,7 @@ public async Task<Output> Reason_CreateAsync(int _salesOrderId, int _salesReason
 
 ### Auto-map properties
 
-You can use any choice of auto-mapping frameworks to copy data from the DTOs to the entity properties and vice versa. We already showed you how you can call `ctx.Entry(obj).CurrentValues.SetValues(_data)` to set the entity properties with the values from the specified DTO.
+You can use any choice of auto-mapping frameworks to copy data from the DTOs to the entity properties and vice versa. We already showed you how you could call `ctx.Entry(obj).CurrentValues.SetValues(_data)` to set the entity properties with the values from the specified DTO.
 
 Conversely, to set the values on the output structure from the properties of an entity, Xomega Framework provides a simple utility method `ServiceUtil.CopyProperties`, which copies properties with the same name and type from the source object to the target object.
 
