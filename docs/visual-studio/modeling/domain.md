@@ -6,11 +6,11 @@ sidebar_position: 3
 
 Xomega allows you to model your business domain following Domain Driven Design principles. The main elements of a Xomega domain model are domain objects with their fields, which map to Entity Framework entities with their properties and to database tables with their columns.
 
-It also includes reusable field-sets that you can define only in the Xomega model to help you create a domain model, but they don't have direct representation in any generated code.
+It also includes reusable field sets that you can define only in the Xomega model to help you create a domain model, but they don't have a direct representation in any generated code.
 
 ## Field-sets and fields
 
-Fieldsets are named groups of fields that you can define in the Xomega model under the `fieldsets` element nested within the `module`  element, which you can then reference in the definitions of your domain objects. This allows you to easily add certain facets to your domain objects in an aspect-oriented way that would be consistent across your domain.
+Fieldsets are named groups of fields that you can define in the Xomega model under the `fieldsets` element nested within the `module` element, which you can then reference in the definitions of your domain objects. This allows you to easily add certain facets to your domain objects in an aspect-oriented way that would be consistent across your domain.
 
 For example, if all or most of your domain objects must have a set of standard audit fields, such as the user who created or last modified it, as well as the creation and last modification time stamps, then you can just define such a fieldset in your model, as follows.
 
@@ -28,28 +28,28 @@ For example, if all or most of your domain objects must have a set of standard a
 </module>
 ```
 
-When you add this fieldset to individual objects, they will automatically have those audit fields. If later on you will need to include any additional fields to the audit, e.g. the ID of a program or application that created or updated the object, then you'll be able to add them to that fieldset, and they will be automatically included in your domain objects.
+When you add this field set to individual objects, they will automatically have those audit fields. If later on, you will need to include any additional fields to the audit, e.g., the ID of a program or application that created or updated the object, then you'll be able to add them to that field set, and they will be automatically included in your domain objects.
 
 :::tip
-Oftentimes, you also have some domain objects that cannot be modified, since they are only created or deleted. To support such objects you may want to define a separate fieldset with only the *create* audit fields.
+Oftentimes, you also have some domain objects that cannot be modified since they are only created or deleted. To support such objects, you may want to define a separate field set with only the *create* audit fields.
 :::
 
 Another usage for fieldsets is to allow defining composite object keys, as you will see later.
 
 ### Field configurations
 
-In addition to the name, you can specify the logical type for the field and whether or not it's required right on the `field` element in the `type` and `required` attributes respectively.
+In addition to the name, you can specify the logical type for the field and whether or not it's required right on the `field` element in the `type` and `required` attributes, respectively.
 
 You can also supply a description and detailed documentation for the field in the standard nested `doc` element. In addition to the field's `doc`, Xomega may also use documentation on the field's type when generating documentation for the field.
 
 Any additional field configuration is specified under the nested `config` element in a separate namespace.
 
 For example, you can configure some properties of the corresponding SQL Server column for any field by setting the following attributes on its `sql:column` element:
-- `name` - the name of the database column for the field, when not derived from the field's name.
+- `name` - the name of the database column for the field when not derived from the field's name.
 - `mode` - field persistence mode. Set to `none` to indicate the field is not persisted in the database.
-- `default` - the default value or expression for the database column, for generating a DB script.
-- `serial` - identity specification for the column, for generating a DB script.
-- `computed` - computed specification for the column, for generating a DB script.
+- `default` - the default value or expression for the database column for generating a DB script.
+- `serial` - identity specification for the column for generating a DB script.
+- `computed` - computed specification for the column for generating a DB script.
 
 The snippet below demonstrates how to set the DB column configuration.
 
@@ -87,9 +87,9 @@ Similarly, you can set an EDM concurrency mode for a field as follows.
 
 ## Domain objects
 
-You can define domain objects in the Xomega model with an `object` element either under the `objects` node of the top-level `module` element, or within the `subobjects` element of its parent aggregate object. The object's `name` should be unique either globally or within its parent object.
+You can define domain objects in the Xomega model with an `object` element either under the `objects` node of the top-level `module` element or within the `subobjects` element of its parent aggregate object. The object's `name` should be unique either globally or within its parent object.
 
-The following snippet shows object's possible elements in the order they must be listed, when present, provided that you cannot have more than one element of each kind.
+The following snippet shows the object's possible elements in the order they must be listed when present, provided that you cannot have more than one element of each kind.
 
 ```xml
 <module xmlns="http://www.xomega.net/omodel"
@@ -134,7 +134,7 @@ As illustrated in the previous snippet, for domain objects with a simple primary
 - `reference` - the key is just a reference to another object's primary key.
 
 :::note
-For most of the domain objects the key is typically auto-generated and set to `serial`. You may have some objects that have user-supplied keys, but those tend to be smaller subobjects of an aggregate object, since changing a key is usually non-trivial. The `reference` type of keys are typically used on subobjects that reference other aggregate root objects.
+For most of the domain objects, the key is typically auto-generated and set to `serial`. You may have some objects that have user-supplied keys, but those tend to be smaller subobjects of an aggregate object since changing a key is usually non-trivial. The `reference` type of keys is typically used on subobjects that reference other aggregate root objects.
 :::
 
 Xomega model requires you to use a **dedicated logical type** for your key fields. More specifically, it validates that the logical type of a `serial` or `supplied` key field cannot be used on more than one object, which allows Xomega to uniquely identify the object by just the logical type of its key.
@@ -147,11 +147,11 @@ You cannot have more than one field marked with a `key` attribute. If your objec
 
 ### Composite primary key{#pk2}
 
-For domain objects with a composite primary key that consists of more than one field, you must define a **dedicated fieldset** with those fields, and add it to the object with a `key` attribute set to one of the following values:
+For domain objects with a composite primary key that consists of more than one field, you must define a **dedicated fieldset** with those fields and add it to the object with a `key` attribute set to one of the following values:
 - `supplied` - the key is supplied by the user when creating new objects.
 - `reference` - the key is a reference to another object's composite primary key.
 
-In the following example we define a fieldset `email address`, which we then use as a key on the `email address` object.
+In the following example, we define a fieldset `email address`, which we then use as a key on the `email address` object.
 
 ```xml title="email_address.xom"
 <module xmlns="http://www.xomega.net/omodel"
@@ -180,7 +180,7 @@ In the following example we define a fieldset `email address`, which we then use
 </module>
 ```
 
-Just like with the simple primary keys, Xomega requires that any `supplied` key fieldset is only used on one object, which allows Xomega to uniquely identify that object by that fieldset alone. So, in order to add a reference to your object from any other object, you just need to add its key fieldset to the other object's fields, and this will establish an implicit relationship between them.
+Just like with the simple primary keys, Xomega requires that any `supplied` key fieldset is only used on one object, which allows Xomega to uniquely identify that object by that fieldset alone. So, in order to add a reference to your object from any other object, you just need to add its key field set to the other object's fields, and this will establish an implicit relationship between them.
 
 :::tip
 A lot of domain objects with composite keys typically represent sub-objects of another aggregate object in your domain model. If you define such objects as **subobjects** in the Xomega model, then they'll automatically include the parent's object key, which could minimize the need to use composite keys in your domain objects.
@@ -188,9 +188,9 @@ A lot of domain objects with composite keys typically represent sub-objects of a
 
 ### Object fieldsets
 
-When you add a fieldset to your domain object, you basically include all the fields defined in the fieldset to the object's fields. If you need to add the same fieldset more than once, then you'll have to specify the `name` attribute on the added fieldset, and their included fields will be prefixed with that name.
+When you add a field set to your domain object, you basically include all the fields defined in the field set to the object's fields. If you need to add the same field set more than once, then you'll have to specify the `name` attribute on the added field set, and their included fields will be prefixed with that name.
 
-For example, in the following `sales order` object we include the `address` fieldset under both `bill to` and `ship to` names, which will effectively include its `address id` field as `bill to address id` and `ship to address id` on our object.
+For example, in the following `sales order` object, we include the `address` field set under both `bill to` and `ship to` names, which will effectively include its `address id` field as `bill to address id` and `ship to address id` on our object.
 
 ```xml
   <fieldsets>
@@ -212,11 +212,11 @@ For example, in the following `sales order` object we include the `address` fiel
     </object>
 ```
 
-Notice how we can set the `required="false"` attribute on the `ship to` fieldset above, which will override the default `required` setting on all the fields of the fieldset.
+Notice how we can set the `required="false"` attribute on the `ship to` the field set above, which will override the default `required` setting on all the fields of the field set.
 
-If you need even more fine-grained control of the included fieldset fields, then you can add any included field to the added fieldset and override any settings, such as the `type`, `required` flag or any of the field configs.
+If you need even more fine-grained control of the included fieldset fields, then you can add any included field to the added fieldset and override any settings, such as the `type`, `required` flag, or any of the field configs.
 
-In the following example we override the type of the included `modified date` field from the `audit fields` fieldset, in order to use a `date time offset` type rather than just `date time`.
+In the following example, we override the type of the included `modified date` field from the `audit fields` field set in order to use a `date time offset` type rather than just `date time`.
 
 ```xml
   <fieldsets>
@@ -238,7 +238,7 @@ In the following example we override the type of the included `modified date` fi
 
 ### Object configuration
 
-Additional object configurations are defined in separate namespaces and listed under its standard `config` element.
+Additional object configurations are defined in separate namespaces and listed under their standard `config` element.
 
 You can add configuration of the associated database table under the `sql:table` element, which allows the following attributes.
 - `name` - custom table name including any schemas, if not derived from the current object and module names.
@@ -276,7 +276,7 @@ Xomega domain model is structured in such a way that you don't need to explicitl
 
 ### Simple associations
 
-As we discussed [above](#pk1), the logical type on a simple key field of a domain object cannot be used on a key field of any other domain object, which allows Xomega to uniquely identify an object by just the logical type, and establish an implicit association to it from another object whenever you use that type, or its subtype, on one of its fields.
+As we discussed [above](#pk1), the logical type on a simple key field of a domain object cannot be used on a key field of any other domain object, which allows Xomega to uniquely identify an object by just the logical type and establish an implicit association to it from another object whenever you use that type, or its subtype, on one of its fields.
 
 The following example illustrates how the key field `customer id` of the `customer` object uses a dedicated type, also named `customer`, while the `customer id` field of the `sales order` object below it also uses this type, thereby referencing the `customer` object.
 
@@ -306,7 +306,7 @@ The following example illustrates how the key field `customer id` of the `custom
 ```
 
 :::note
-If you define a subtype of the `customer` type, e.g. `internal customer`, and use that subtype on the `customer id` field, then Xomega will still define an association to the `customer` object, unless, of course, that subtype is also used on a key field of another object.
+If you define a subtype of the `customer` type, e.g., `internal customer`, and use that subtype on the `customer id` field, then Xomega will still define an association to the `customer` object unless, of course, that subtype is also used on a key field of another object.
 :::
 
 If you need to configure the properties of the underlying foreign key, you can do it in the `sql:foreign-key` config element of the field, as follows.
@@ -329,12 +329,12 @@ If you need to configure the properties of the underlying foreign key, you can d
 The `sql:foreign-key` element allows you to specify the following attributes.
 - `name` - custom foreign key name, if not derived from the names of the field and related objects.
 - `mode` - set to `none` to suppress the foreign key constraint.
-- `update` - specifies the "on update" action: `no action`, `cascade`, `set null` or `set default`.
-- `delete` - specifies the "on delete" action: `no action`, `cascade`, `set null` or `set default`.
+- `update` - specifies the "on update" action: `no action`, `cascade`, `set null`, or `set default`.
+- `delete` - specifies the "on delete" action: `no action`, `cascade`, `set null`, or `set default`.
 
 ### Complex associations
 
-Similar to simple associations, Xomega automatically establishes an implicit association to a domain object with a complex key whenever you use its key fieldset in another domain object. This is possible because fieldsets that are used as keys on one object cannot be used as a key on another object, as we discussed [above](#pk2).
+Similar to simple associations, Xomega automatically establishes an implicit association to a domain object with a complex key whenever you use its key fieldset in another domain object. This is possible because field sets that are used as keys on one object cannot be used as a key on another object, as we discussed [above](#pk2).
 
 The following example shows how the `special offer product` object has a composite key implemented by the corresponding fieldset with the same name, and the `detail` subobject of the `sales order` object uses that fieldset, thereby referencing the `special offer product` object.
 
@@ -390,16 +390,16 @@ If you need to configure the properties of the underlying foreign key, you can d
 The `sql:composite-foreign-key` element allows you to specify the following attributes.
 - `name` - custom foreign key name, if not derived from the names of the fields and related objects.
 - `mode` - set to `none` to suppress the foreign key constraint.
-- `update` - specifies the "on update" action: `no action`, `cascade`, `set null` or `set default`.
-- `delete` - specifies the "on delete" action: `no action`, `cascade`, `set null` or `set default`.
+- `update` - specifies the "on update" action: `no action`, `cascade`, `set null`, or `set default`.
+- `delete` - specifies the "on delete" action: `no action`, `cascade`, `set null`, or `set default`.
 
 ### Subtype associations
 
-If a simple primary key of your domain object has an association to another object, then it's modeled in Xomega by using a subtype of the referenced object's key type as the key type of your object.
+If a simple primary key of your domain object has an association with another object, then it's modeled in Xomega by using a subtype of the referenced object's key type as the key type of your object.
 
-To illustrate this concept, let's consider that you have three domain objects: `business entity`, `person` and `employee`, where each type of domain objects defines a subset of the previous type of object, i.e. `employee` objects are a subset of `person` objects.
+To illustrate this concept, let's consider that you have three domain objects: `business entity`, `person`, and `employee`, where each type of domain object defines a subset of the previous type of object, i.e., `employee` objects are a subset of `person` objects.
 
-What you need to do is to define a logical type for each type of domain objects, and inherit them from each other, as follows.
+What you need to do is to define a logical type for each type of domain object and inherit them from each other, as follows.
 
 ```xml
 <types>
@@ -409,7 +409,7 @@ What you need to do is to define a logical type for each type of domain objects,
 </types>
 ```
 
-Now, when you use these types on the key fields of the corresponding domain objects, as illustrated below, you will establish implicit associations to the base type's object, i.e. the `employee` object will have a reference to the `person` object from its key, which will in turn have a reference to the `business entity` object from its key.
+Now, when you use these types on the key fields of the corresponding domain objects, as illustrated below, you will establish implicit associations to the base type's object, i.e., the `employee` object will have a reference to the `person` object from its key, which will, in turn, have a reference to the `business entity` object from its key.
 
 ```xml
 <objects>
@@ -443,10 +443,10 @@ If you also need to configure the foreign key attributes for any of these implic
 
 Following the best practices of Domain Driven Design (DDD), Xomega allows you to define some domain objects as subobjects of the parent aggregate object. The top-level object is called an *aggregate root* in DDD.
 
-Subobjects are defined under the `subobjects` element of its parent object, and have the same structure as any other objects, including being able to have their own subobjects. Subobjects do have the following differences from aggregate roots.
-- Subobject name must be unique only within its parent object, but its full unique name starts with the full name of its parent.
-- Subobject's primary key automatically includes the primary key of its parent.
-- Subobject has an implicit association to its parent object.
+Subobjects are defined under the `subobjects` element of its parent object and have the same structure as any other objects, including being able to have their own subobjects. Subobjects do have the following differences from aggregate roots.
+- The subobject name must be unique only within its parent object, but its full unique name starts with the full name of its parent.
+- The subobject's primary key automatically includes the primary key of its parent.
+- The subobject has an implicit association with its parent object.
 
 In the following example, the `sales order` object has a list of `line item` subobjects, which in turn includes a list of options for each line item defined by its subobject `option`.
 
@@ -480,9 +480,9 @@ In the following example, the `sales order` object has a list of `line item` sub
 
 ### Primary keys
 
-If you take a look at the above example, you'll notice that the `line item` subobject has its field `product id` marked with the `key="reference"` attribute. This is assuming that its type `product` is used on the key of the `product` object, which is not shown here. Alternatively, if you define and use a subtype of the `product` type for the key field, e.g. `line item product`, then you will be able to use the `key="supplied"` attribute instead.
+If you take a look at the above example, you'll notice that the `line item` subobject has its field `product id` marked with the `key="reference"` attribute. This is assuming that its type `product` is used on the key of the `product` object, which is not shown here. Alternatively, if you define and use a subtype of the `product` type for the key field, e.g., `line item product`, then you will be able to use the `key="supplied"` attribute instead.
 
-The generated `line item` entity will automatically include the primary key of its parent object `sales order`, i.e. the `sales order id` field, as part of its own primary key along with the `product id`. This makes defining subobjects more natural, as you don't need to worry about including the parent key fields in it.
+The generated `line item` entity will automatically include the primary key of its parent object `sales order`, i.e., the `sales order id` field, as part of its own primary key along with the `product id`. This makes defining subobjects more natural, as you don't need to worry about including the parent key fields in them.
 
 If you look at the `option` subobject, you will see that it has a key field `option code` that is supplied by the user. However, the generated entity for that object will also include both `sales order id` and `product id`, which are the primary key of its parent object `line item`, and those fields will be part of the `option` entity's primary key.
 
@@ -508,9 +508,9 @@ Now imagine that we change the `line item` subobject to use an auto-generated ke
 </object>
 ```
 
-In this case, the `line item id` will be considered unique in and of its own, and will serve as the sole primary key for the `line item` entity. The parent object's primary key `sales order id` will still be implicitly included in the `line item` object, but it will not be part of its primary key.
+In this case, the `line item id` will be considered unique in and of its own and will serve as the sole primary key for the `line item` entity. The parent object's primary key `sales order id` will still be implicitly included in the `line item` object, but it will not be part of its primary key.
 
-Similarly, the `option` subobject will automatically include only the `line item id` key field from its parent, but not the `sales order id` field from its grandparent, since the former already uniquely identifies the `line item`. Both `line item id` and `option code` will serve as a primary key for the `option` object, since the supplied key `option code` will be considered to be not globally unique.
+Similarly, the `option` subobject will automatically include only the `line item id` key field from its parent, but not the `sales order id` field from its grandparent, since the former already uniquely identifies the `line item`. Both `line item id` and `option code` will serve as a primary key for the `option` object since the supplied key `option code` will be considered to be not globally unique.
 
 ### Parent associations
 
@@ -544,5 +544,5 @@ If you need to configure specific properties of the implicit foreign key to the 
 The `sql:parent-foreign-key` element allows you to specify the following attributes.
 - `name` - custom foreign key name, if not derived from the names of the field and related objects.
 - `mode` - set to `none` to suppress the foreign key constraint.
-- `update` - specifies the "on update" action: `no action`, `cascade`, `set null` or `set default`.
-- `delete` - specifies the "on delete" action: `no action`, `cascade`, `set null` or `set default`.
+- `update` - specifies the "on update" action: `no action`, `cascade`, `set null`, or `set default`.
+- `delete` - specifies the "on delete" action: `no action`, `cascade`, `set null`, or `set default`.

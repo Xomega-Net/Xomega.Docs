@@ -5,11 +5,11 @@ pagination_next: null
 
 # Global Configuration
 
-Xomega model project allows a single top-level `config` node, where you can specify global model configuration that is not tied to any element. By default, it will be in the `global_config.xom` file, and allows various configurations for individual extensions in their respective namespaces.
+Xomega model project allows a single top-level `config` node, where you can specify a global model configuration that is not tied to any element. By default, it will be in the `global_config.xom` file, and allows various configurations for individual extensions in their respective namespaces.
 
-The global model configuration is used to provide configuration that needs to be shared between multiple generators, as well as complex configuration that cannot be easily specified by a generator parameter.
+The global model configuration is used to provide a configuration that needs to be shared between multiple generators, as well as a complex configuration that cannot be easily specified by a generator parameter.
 
-For example, generators of any classes that use the generated service contracts, such as data objects or service implementations, need to know the namespace for the service contracts, so it cannot be just a parameter of the [Service Contracts generator](../../generators/services/contracts.md).
+For example, generators of any classes that use the generated service contracts, such as data objects or service implementations, need to know the namespace for the service contracts, so it cannot be just a parameter of the [Service Contracts generator](../../generators/services/contracts).
 
 :::tip
 To find out which configurations are used by each generator, you can also check the documentation on that generator.
@@ -19,7 +19,7 @@ Below are some quick descriptions of the existing global configurations.
 
 ## Services config
 
-This section configures generation of [service contracts](../../generators/services/contracts.md) and [implementations](../../generators/services/service-impl.md), including TypeScript ones, as follows.
+This section configures the generation of [service contracts](../../generators/services/contracts) and [implementations](../../generators/services/service-impl), including TypeScript ones, as follows.
 
 ```xml title="global_config.xom"
 <config xmlns="http://www.xomega.net/omodel"
@@ -34,14 +34,14 @@ This section configures generation of [service contracts](../../generators/servi
 ```
 
 :::note
-As you can see from the `tsOutputPath` attribute above, the output path for generated TypeScript objects can also be specified in the global configuration, rather than as individual generator parameters.
+As you can see from the `tsOutputPath` attribute above, the output path for generated TypeScript objects can also be specified in the global configuration rather than as individual generator parameters.
 
-This is because the generated TypeScript files that use other generated TypeScript files need to know their exact location, in order to properly include them, unlike C# files that just need to know the namespace.
+This is because the generated TypeScript files that use other generated TypeScript files need to know their exact location in order to properly include them, unlike C# files that just need to know the namespace.
 :::
 
 ## WCF config
 
-This section provides configuration of WCF endpoints, which is used both on the [server side](../../generators/services/wcf-config.md) and on any [client that uses WCF services](../../generators/presentation/common/wcf-config.md), as follows.
+This section provides the configuration of WCF endpoints, which is used both on the [server side](../../generators/services/wcf-config) and on any [client that uses WCF services](../../generators/presentation/common/wcf-config), as follows.
 
 ```xml title="global_config.xom"
 <config xmlns="http://www.xomega.net/omodel"
@@ -62,7 +62,7 @@ You need to provide this global configuration in order to enable WCF services an
 
 ## Data objects config
 
-This section configures [generation of Xomega Framework data objects](../../generators/presentation/common/data-objects.md), including TypeScript ones, as follows.
+This section configures the [generation of Xomega Framework data objects](../../generators/presentation/common/data-objects), including TypeScript ones, as follows.
 
 ```xml title="global_config.xom"
 <config xmlns="http://www.xomega.net/omodel"
@@ -76,7 +76,7 @@ This section configures [generation of Xomega Framework data objects](../../gene
 
 ## Enumerations config
 
-This section configures generation of [constants for enumerations](../../generators/enums/enum-const.md), as follows.
+This section configures the generation of [constants for enumerations](../../generators/enums/enum-const) as follows.
 
 ```xml title="global_config.xom"
 <config xmlns="http://www.xomega.net/omodel"
@@ -88,7 +88,7 @@ This section configures generation of [constants for enumerations](../../generat
 
 ## Entities config
 
-This section configures generation of [domain entities](../../generators/data/entities.md), as follows.
+This section configures the generation of [domain entities](../../generators/data/entities) as follows.
 
 ```xml title="global_config.xom"
 <config xmlns="http://www.xomega.net/omodel"
@@ -102,9 +102,9 @@ This section configures generation of [domain entities](../../generators/data/en
 
 ## UI controls
 
-This section provides default configuration for Xomega Blazor controls in the `ui:blazor-controls` element, specifically the `XGrid`, for the [Blazor Views generator](../../generators/presentation/blazor/views.md). This configuration can be overridden on each specific list data object in the model.
+This section provides the default configuration for Xomega Blazor controls in the `ui:blazor-controls` element, specifically the `XGrid`, for the [Blazor Views generator](../../generators/presentation/blazor/views). This configuration can be overridden on each specific list data object in the model.
 
-It also specifies the paths to the customizable Web Forms user controls and the master page for [ASP.NET Views generator](../../generators/presentation/webforms/views.md) under the `ui:user-controls` element. The following snippet illustrates this configuration.
+It also specifies the paths to the customizable Web Forms user controls and the master page for [ASP.NET Views generator](../../generators/presentation/webforms/views) under the `ui:user-controls` element. The following snippet illustrates this configuration.
 
 ```xml title="global_config.xom"
 <config xmlns="http://www.xomega.net/omodel"
@@ -133,7 +133,7 @@ It also specifies the paths to the customizable Web Forms user controls and the 
 
 ## Syncfusion Blazor controls
 
-This section provides default configuration for Xomega Syncfusion Blazor controls in the `blazor-controls-config` element, specifically the `XSfGrid`, for the [Syncfusion Blazor Views generator](../../generators/presentation/blazor/views-xsf.md), as follows.
+This section provides the default configuration for Xomega Syncfusion Blazor controls in the `blazor-controls-config` element, specifically the `XSfGrid`, for the [Syncfusion Blazor Views generator](../../generators/presentation/blazor/views-xsf), as follows.
 
 ```xml title="global_config.xom"
 <config xmlns="http://www.xomega.net/omodel">
@@ -153,9 +153,9 @@ This section provides default configuration for Xomega Syncfusion Blazor control
 This configuration can be overridden on each specific list data object in the model.
 
 :::note
-The above example uses a custom namespace without a prefix for convenience, in order to allow you to easily copy and paste the `XSfGrid` element from the `.razor` pages.
+The above example uses a custom namespace without a prefix for convenience in order to allow you to easily copy and paste the `XSfGrid` element from the `.razor` pages.
 
-Alternatively, you can set it up with a prefix, e.g. `xsf`, but you'd have to use that prefix on all nested elements, as follows.
+Alternatively, you can set it up with a prefix, e.g., `xsf`, but you'd have to use it on all nested elements, as follows.
 
 ```xml
 <xsf:blazor-controls-config xmlns:xsf="http://www.xomega.net/xsf">
@@ -166,7 +166,7 @@ Alternatively, you can set it up with a prefix, e.g. `xsf`, but you'd have to us
 
 ## Legacy layout configs
 
-This section allows configuring named layouts that can be referenced from the model views, and are used for legacy views generation, such as [ASP.NET Views](../../generators/presentation/webforms/views.md), [WPF](../../generators/presentation/wpf/views.md) or [SPA Views](../../generators/presentation/spa/views.md). The snippet below illustrates this configuration.
+This section allows configuring named layouts that can be referenced from the model views and are used for legacy views generation, such as [ASP.NET Views](../../generators/presentation/webforms/views), [WPF](../../generators/presentation/wpf/views), or [SPA Views](../../generators/presentation/spa/views). The snippet below illustrates this configuration.
 
 ```xml title="global_config.xom"
 <config xmlns="http://www.xomega.net/omodel"
@@ -198,5 +198,5 @@ This section allows configuring named layouts that can be referenced from the mo
 ```
 
 :::caution
-This configuration is not used by the modern [Blazor Views](../../generators/presentation/blazor/views.md) generators, as those utilize the latest more flexible layout configuration on each individual data object.
+This configuration is not used by the modern [Blazor Views](../../generators/presentation/blazor/views) generators, as those utilize the latest, more flexible layout configuration on each individual data object.
 :::

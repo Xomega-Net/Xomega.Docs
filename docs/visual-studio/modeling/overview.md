@@ -4,13 +4,13 @@ sidebar_position: 1
 
 # Model Structure
 
-The structure of the Xomega models is defined by extensible XSD schemas, which govern what elements and attributes are allowed in the model within each element, what order do these elements go in, the types of allowed values, as well as specific enumerations for attributes that allow values only from a strict list.
+The structure of the Xomega models is defined by extensible XSD schemas, which govern what elements and attributes are allowed in the model within each element, what order these elements go in, the types of allowed values, as well as specific enumerations for attributes that allow values only from a strict list.
 
 ## Schemas and namespaces
 
 The core model is defined in the `http://www.xomega.net/omodel` namespace, which covers the general structure of the model, and includes basic domain and service model elements. This is usually a default namespace that is used without a prefix in the model.
 
-In addition to the core model elements, Xomega allows layer-specific or custom extensions, that are defined in separate namespaces and would require their own prefix. Those are also defined by separate XSD schemas.
+In addition to the core model elements, Xomega allows layer-specific or custom extensions that are defined in separate namespaces and would require their own prefix. Those are also defined by separate XSD schemas.
 
 The following table outlines the standard set of schemas and extensions that are included in Xomega.Net, as well as their namespaces and the default prefixes.
 
@@ -41,10 +41,10 @@ Xomega modules are **not hierarchical**, and you cannot nest them within each ot
 All modules do is provide a simple way for grouping related model elements.
 :::
 
-Modules can be used to output generated artifacts under separate folder for each module, which helps you better manage the generated code. In certain cases, modules can be also adopted to represent **microservices**, so that the generated artifacts for each module would go into their own individual microservice. Here's where you can learn more on [using modules in output paths](../model-project/configuring-generators.md#output-paths).
+Modules can be used to output generated artifacts under separate folders for each module, which helps you better manage the generated code. In certain cases, modules can also be adapted to represent **microservices** so that the generated artifacts for each module would go into their own individual microservice. Here's where you can learn more about [using modules in output paths](../model-project/configuring-generators#output-paths).
 
 :::tip
-The best practice is to place model files for the same module into the same folder, in order to keep your model project well organized.
+The best practice is to place model files for the same module into the same folder to keep your model project well organized.
 :::
 
 The structure of the `module` element with descriptions is illustrated in the following snippet.
@@ -116,17 +116,17 @@ The name should be in synch with the constant AttributeMultival defined in the O
 This is similar to the documentation that you provide on regular C# elements.
 :::
 
-These descriptions can be displayed in the model editors as tooltips on the corresponding references, or when selecting them via IntelliSense dropdown lists or in the *Symbol Browser* view, which can help you better understand your model as you browse or edit it.
+These descriptions can be displayed in the model editors as tooltips on the corresponding references or when selecting them via IntelliSense dropdown lists or in the *Symbol Browser* view, which can help you better understand your model as you browse or edit it.
 
-They are also output as C# documentation on the generated classes, which would help you when using those generated classes in your custom code, or when debugging the generated code.
+They are also output as C# documentation on the generated classes, which would help you when using those generated classes in your custom code or when debugging the generated code.
 
-Finally, you can also generate technical design docs from the model that will use the documentation you provided. This will allow you to communicate the model design with other developers or stakeholders, and make sure such documentation is always up-to-date.
+Finally, you can also generate technical design docs from the model that will use the documentation you provided. This will allow you to communicate the model design with other developers or stakeholders and make sure such documentation is always up-to-date.
 
 ## Element configuration
 
-All essential elements in the Xomega model have a dedicated child node `config`, where you can specify additional specific configuration from a custom namespace, which can be used by different generators.
+All essential elements in the Xomega model have a dedicated child node `config`, where you can specify additional specific configurations from a custom namespace, which can be used by different generators.
 
-For example, a logical type `money` may have additional custom configuration with a mapping to the corresponding SQL type, the Xomega Framework property, and a UI display configuration, as follows.
+For example, a logical type `money` may have an additional custom configuration with a mapping to the corresponding SQL type, the Xomega Framework property, and a UI display configuration, as follows.
 
 ```xml
 <type name="money" base="decimal">
@@ -160,10 +160,10 @@ The `config` nodes also serve as extension points where you can supply your own 
 
 ## Global configuration
 
-Xomega model project allows a single top-level `config` node, where you can specify [global model configuration](config.md) that is not tied to any element. By default, it will be in the `global_config.xom` file, and allows various configurations for individual extensions in their respective namespaces.
+Xomega model project allows a single top-level `config` node, where you can specify a [global model configuration](config) that is not tied to any element. By default, it will be in the `global_config.xom` file, and allows various configurations for individual extensions in their respective namespaces.
 
-The global model configuration is used to provide configuration that needs to be shared between multiple generators, as well as complex configuration that cannot be easily specified by a generator parameter.
+The global model configuration is used to provide a configuration that needs to be shared between multiple generators, as well as a complex configuration that cannot be easily specified by a generator parameter.
 
 :::tip
-To see how it is used by individual generators, you can check the [documentation on each specific generator](../../generators/overview.md).
+To see how it is used by individual generators, you can check the [documentation on each specific generator](../../generators/overview).
 :::

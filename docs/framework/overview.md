@@ -20,7 +20,7 @@ The framework has been built from more than 20 years of experience, and is based
 
 There exists a number of various frameworks in .Net ecosystem for building web, desktop and mobile applications. Most of them would lock your app into a specific UI technology (e.g. Blazor or WPF), or a certain communication framework, such as REST WebAPI. When a new UI or communication framework comes along, e.g. MAUI or gRPC, upgrading your app to the new technology may require a major rewrite, making the cost prohibitive to justify the benefits of the upgrade.
 
-Yet, a large portion of the presentation and business logic in data-driven applications can be written using just the core .Net libraries, and does not need to depend on a specific UI framework or communication technology. Xomega Framework was designed to allow you to build such platform-independent logic for your application, and then easily integrate it with specific UI or backend technologies. This will make your app's logic not only future-proof and portable to other technologies, but also easily testable, as you won't need to mock those technologies.
+Yet, a large portion of the presentation and business logic in data-driven applications can be written using just the core .Net libraries and does not need to depend on a specific UI framework or communication technology. Xomega Framework was designed to allow you to build such platform-independent logic for your application and then easily integrate it with specific UI or backend technologies. This will make your app's logic not only future-proof and portable to other technologies, but also easily testable, as you won't need to mock those technologies.
 
 ## Xomega Framework packages
 

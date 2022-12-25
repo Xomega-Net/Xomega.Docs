@@ -8,25 +8,25 @@ toc_max_heading_level: 4
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Most line of business applications have a certain amount of static data that does not change from one release of the application to another, and yet is critical for the functioning of the application.
+Most line-of-business applications have a certain amount of static data that does not change from one release of the application to another and yet is critical for the functioning of the application.
 
-For example, a list of possible order statuses is usually known at design-time, since the application needs to have the code that handles each status, and therefore adding or changing a status would require a new release. Such a list is typically stored in a separate database table, hardcoded in various application selection lists or defined as a plain enum.
+For example, a list of possible order statuses is usually known at design time since the application needs to have the code that handles each status. Therefore adding or changing a status would require a new release. Such a list is typically stored in a separate database table, hard-coded in various application selection lists, or defined as a plain enum.
 
-The common problem with storing it exclusively in a database table is that you would not have that list readily available at design-time, which also means no good version control or change history from one release to another. At best, the original source for that list will exist in some version controlled SQL script that loads it into your table, so that you could spin up and populate a new environment.
+The common problem with storing it exclusively in a database table is that you would not have that list readily available at design time, which also means no good version control or change history from one release to another. At best, the original source for that list will exist in some version-controlled SQL script that loads it into your table so that you can spin up and populate a new environment.
 
-Hardcoding it in the application in a selection list or as a plain C# enum is also not great, since you may need to do it in multiple places or be limited to specifying just the basic enum data, you still cannot easily use it in design-time for documentation or review, and each type of static data may be inconsistently defined using its own format.
+Hardcoding it in the application in a selection list or as a plain C# enum is also not great since you may need to do it in multiple places or be limited to specifying just the basic enum data you still cannot easily use it in design time for documentation or review, and each type of static data may be inconsistently defined using its own format.
 
-Xomega model addresses these issues by providing a consistent, flexible and extensible model for you to define your static data, which you can use both in runtime and in design time for documentation and review.
+Xomega model addresses these issues by providing a consistent, flexible, and extensible model for you to define your static data, which you can use both in runtime and in design time for documentation and review.
 
 ## Static enumerations
 
 The way to describe your static data in the Xomega model is by defining a static enumeration using an `enum` element under the parent `enums` node of the top-level `module` element.
 
-You need to give it a unique name in the `name` attribute, which should also not conflict with a name of any [dynamic enumerations](services.md#dynamic-enumerations) defined using `xfk:enum-cache` elements.
+You need to give it a unique name in the `name` attribute, which should also not conflict with the name of any [dynamic enumerations](services#dynamic-enumerations) defined using `xfk:enum-cache` elements.
 
 ### Enumeration items
 
-You can list the enumeration items in the nested `item` nodes with unique `name` and `value` attributes within your enum, as follows.
+You can list the enumeration items in the nested `item` nodes with a unique `name` and `value` attributes within your enum, as follows.
 
 ```xml
 <module xmlns="http://www.xomega.net/omodel"
@@ -49,7 +49,7 @@ You can list the enumeration items in the nested `item` nodes with unique `name`
 This would be very similar to how you define selection lists in HTML or other UI frameworks, where the value is what gets stored in the database and passed around, while the name is what usually gets displayed to the user.
 
 :::caution
-Xomega also generates C# constants for enumeration items, so the **name must be a valid identifier** except for any blank space. If the text you want to display to the user must contain illegal characters, or if it needs to be different from the name, then you should specify it in the inner `text` element, as follows.
+Xomega also generates C# constants for enumeration items, so the **name must be a valid identifier** except for any blank space. If the text you want to display to the user must contain illegal characters, or if it needs to be different from the name, then you should specify it in the inner `text` element as follows.
 ```xml
   <item name="In process" value="1">
 <!-- highlight-next-line -->
@@ -85,26 +85,26 @@ Xomega model allows you to provide a description and documentation for your enum
 ```
 
 :::tip
-Since enumerations typically describe critical business data, we recommend that you document it in the model to keep it all together. Xomega will be able to use these descriptions in the generated application, and also in the technical design documents generated from the model.
+Since enumerations typically describe critical business data, we recommend that you document it in the model to keep it all together. Xomega will be able to use these descriptions in the generated application and also in the technical design documents generated from the model.
 :::
 
 #### Inactive items
 
-As your application evolves from one release to another, so does your static data. If at some point you need to retire a certain enumeration item, then, instead of deleting it, you may want to mark it as inactive by setting the `active="false"` attribute on it, as illustrated below. 
+As your application evolves from one release to another, so does your static data. If, at some point, you need to retire a certain enumeration item, then instead of deleting it, you may want to mark it as inactive by setting the `active="false"` attribute on it, as illustrated below.
 
 ```xml
   <item name="Rejected" value="4" active="false"/>
 ```
 
-This will allow your application to still resolve the old values, and display the proper user-friendly text, but those inactive items won't be available for selection when editing or creating new business objects.
+This will allow your application to still resolve the old values and display the proper user-friendly text, but those inactive items won't be available for selection when editing or creating new business objects.
 
 :::note
-To use your static enumeration elsewhere in the Xomega static model, you need to [associate it with a logical type](types.md#static-enumeration).
+To use your static enumeration elsewhere in the Xomega static model, you need to [associate it with a logical type](types#static-enumeration).
 :::
 
 ### Additional properties
 
-On top of the main `name` and `value` attributes, as well as the optional `active` flag, you can specify any number of additional properties for each enumeration item, including multi-value properties. They are typically used to filter the list of items, or group them by certain properties.
+On top of the main `name` and `value` attributes, as well as the optional `active` flag, you can specify any number of additional properties for each enumeration item, including multi-value properties. They are typically used to filter the list of items or group them by certain properties.
 
 #### Declaring properties
 
@@ -165,16 +165,16 @@ Once you declare your additional properties for the enumeration, you can set the
 ```
 
 :::note
-Xomega will provide Intellisense for selecting the property in the `ref` attribute along with the description of each property that you provided. It will also validate the `prop` elements, and will show an error, if the property name is invalid, or if you supplied multiple values for a property that is not configured as multi-value.
+Xomega will provide Intellisense for selecting the property in the `ref` attribute along with the description of each property that you provided. It will also validate the `prop` elements and will show an error if the property name is invalid or if you supply multiple values for a property that is not configured as multi-value.
 :::
 
 ### Inheriting static enums
 
-Sometimes you need to define two or more enumerations that are very similar, and contain almost the same, yet different, set of items, so that you cannot just use the same enumeration. For example, you may need to configure some enumeration slightly differently for various installations of your app. Or you may just have enumerations that share significant number of their items, such as when you have a field that requires special operators, while still supporting the standard set of operators.
+Sometimes you need to define two or more enumerations that are very similar and contain almost the same, yet different, set of items so that you cannot just use the same enumeration. For example, you may need to configure some enumeration slightly differently for various installations of your app. Or you may just have enumerations that share a significant number of their items, such as when you have a field that requires special operators while still supporting the standard set of operators.
 
-You can try to combine all items from such enumerations into one big enumeration, and then differentiate using additional properties, but this can become unwieldy, and may cause difficulties with proper validations. If you keep them as separate enumerations though, it will result in duplication of the items, and cause potential maintenance issues down the line.
+You can try to combine all items from such enumerations into one big enumeration and then differentiate using additional properties, but this can become unwieldy and may cause difficulties with proper validations. If you keep them as separate enumerations, though, it will result in duplication of the items and cause potential maintenance issues down the line.
 
-Xomega model provides a powerful and elegant way to reduce the duplication in your static data by allowing you to **inherit** one enumeration from another, and then **add, remove or override any items** in it. All you have to do is to set the `base` attribute on your `enum` element, and specify another enumeration to inherit the items from, as follows.
+Xomega model provides a powerful and elegant way to reduce the duplication in your static data by allowing you to **inherit** one enumeration from another and then **add, remove or override any items** in it. All you have to do is to set the `base` attribute on your `enum` element and specify another enumeration to inherit the items from, as follows.
 
 ```xml
 <enum name="user operators" base="operators">[...]
@@ -182,8 +182,7 @@ Xomega model provides a powerful and elegant way to reduce the duplication in yo
 
 #### Adding elements
 
-To add a new item, an additional property, or a property value of a specific item, you just need to add the corresponding element using the standard enumeration structure. In the following example, inherited enumeration `user operators` defines a new property
-`my prop`, adds a new item `Is Internal`, and sets the value of the new `my prop` property for the existing item `Is Equal To`.
+To add a new item, an additional property, or a property value of a specific item, you just need to add the corresponding element using the standard enumeration structure. In the following example, the inherited enumeration `user operators` defines a new property `my prop`, adds a new item `Is Internal` and sets the value of the new `my prop` property for the existing item `Is Equal To`.
 
 ```xml
 <enum name="user operators" base="operators">
@@ -201,18 +200,18 @@ To add a new item, an additional property, or a property value of a specific ite
 ```
 
 :::note
-Your enumeration will override the existing elements of the base enumeration, if you use the same name for an item or a property from the base enumeration, or the same `ref` attribute for an item's property, unless that property is multi-value, in which case it will add a new value to the item's property.
+Your enumeration will override the existing elements of the base enumeration if you use the same name for an item or a property from the base enumeration or the same `ref` attribute for an item's property unless that property is multi-valued, in which case it will add a new value to the item's property.
 :::
 
 :::caution
-Any new items will be added at the end of the base enumeration's items, and currently there is no way to enforce a different order.
+Any new items will be added at the end of the base enumeration's items, and currently, there is no way to enforce a different order.
 :::
 
 #### Deleting elements
 
-If you want to delete a certain item, property or a value of a property from the base enumeration, then you just need to add it to your enumeration, and set the `overrideAction="delete"` attribute.
+If you want to delete a certain item, property, or value of a property from the base enumeration, then you just need to add it to your enumeration and set the `overrideAction="delete"` attribute.
 
-The following example shows how in our `user operators` enumerations we delete the `sort order` property, which also removes its values from all the items, delete the `Last 30 Days` item, and some properties of the `Starts With` item.
+The following example shows how in our `user operators` enumerations, we delete the `sort order` property, which also removes its values from all the items, delete the `Last 30 Days` item, and some properties of the `Starts With` item.
 
 ```xml
 <enum name="user operators" base="operators">
@@ -232,9 +231,9 @@ The following example shows how in our `user operators` enumerations we delete t
 ```
 
 :::note
-When your element is identified by a single attribute, e.g. `name` for an item or property, or `ref` for a single-value property, then you can put anything in the other attributes such as `value` when deleting that element.
+When your element is identified by a single attribute, e.g., a `name` for an item or property, or `ref` for a single-value property, then you can put anything in the other attributes, such as `value` when deleting that element.
 
-However, if the element is identified by two attributes, such as both `ref` and `value` for multi-value properties, then you need to specify both of them, in order to delete it from the enum, as illustrated by the `type` property of the `Starts With` item above.
+However, if the element is identified by two attributes, such as both `ref` and `value` for multi-value properties, then you need to specify both of them in order to delete it from the enum, as illustrated by the `type` property of the `Starts With` item above.
 :::
 
 #### Replacing elements
@@ -255,7 +254,7 @@ For example, if you want to replace a `Starts With` item, including all its prop
 
 #### Abstract enumerations
 
-If you have two enumerations that share a number of items that you don't want to duplicate, then you can create a base enumeration with those items, which they both will inherit from. However, if that base enumeration is not intended to be used directly, and only serves as the base for the other enumerations that inherit from it, then you can mark it with the `abstract="true"` attribute.
+If you have two enumerations that share a number of items that you don't want to duplicate, then you can create a base enumeration with those items, which they both will inherit from. However, if that base enumeration is not intended to be used directly and only serves as the base for the other enumerations that inherit from it, then you can mark it with the `abstract="true"` attribute.
 
 In the following example, both `numeric operators` and `date operators` inherit from the abstract `base operators` enumeration.
 
@@ -267,23 +266,23 @@ In the following example, both `numeric operators` and `date operators` inherit 
 ```
 
 :::tip
-Marking base enumerations as abstract can help reduce the amount of generated code, as they will only contribute their items to other enumerations, and will not themselves be output as separate enumerations.
+Marking base enumerations as abstract can help reduce the amount of generated code, as they will only contribute their items to other enumerations and will not themselves be output as separate enumerations.
 :::
 
 ## Static data in DB tables
 
-As you can see above, Xomega model provides a flexible and powerful structure to describe arbitrary static data, which can be used then in your generated application and documentation. Your model can serve as the primary source of your static data, and provide rigorous version control.
+As you can see above, the Xomega model provides a flexible and powerful structure to describe arbitrary static data, which can be used then in your generated application and documentation. Your model can serve as the primary source of your static data and provide rigorous version control.
 
-However, you may still need to store your static data in the database tables, in order to make it available to any application logic in the database layer, such as database views, triggers or stored procedures. Xomega model allows you to configure the objects that store  static enumerations and associate them with each specific enumeration, as described below.
+However, you may still need to store your static data in the database tables in order to make it available to any application logic in the database layer, such as database views, triggers, or stored procedures. Xomega model allows you to configure the objects that store static enumerations and associate them with each specific enumeration, as described below.
 
 ### Importing enums from tables{#import}
 
-If you have an existing database for your Xomega application, and some tables in there already store static data, then you can import them as static enumerations into your Xomega model. To do that you need to find the domain object that maps to your table, and add a `sql:enum-items` config element to it, where you can set the source fields for the enumeration items using the following attributes.
-- `item-value` - the field that stores item values. Required attribute typically mapping to the ID field.
+If you have an existing database for your Xomega application, and some tables in there already store static data, then you can import them as static enumerations into your Xomega model. To do that, you need to find the domain object that maps to your table and add a `sql:enum-items` config element to it, where you can set the source fields for the enumeration items using the following attributes.
+- `item-value` - the field that stores item values. Required attribute, typically mapping to the ID field.
 - `item-text` - the field that stores item texts. Required attribute, usually some name or description.
 - `item-desc` - the field that stores item descriptions. Optional attribute used to import item documentation.
 
-You can also import any other columns as additional properties of each item by adding a nested `sql:property` for each column, specifying the `field-name` attribute for the source field, and the `property-name` for the enumeration property to store the values of that column.
+You can also import any other columns as additional properties of each item by adding a nested `sql:property` for each column, specifying the `field-name` attribute for the source field and the `property-name` for the enumeration property to store the values of that column.
 
 For example, if you have a `SalesReason` table that contains static sales reason, and you want to import them as a static enumeration to the Xomega model, then you can add the following config to the corresponding `sales reason` domain object.
 
@@ -306,7 +305,7 @@ For example, if you have a `SalesReason` table that contains static sales reason
 </object>
 ```
 
-Note that we import the `reason type` values as an additional property named `type`. Once you configure the object like that, you can run the [Enumerations from Database generator](../../generators/model/enums.md), and it will add a separate file under the configured *Output Path*, which will have the imported enumerations with the same names as the source object, as illustrated below.
+Note that we import the `reason type` values as an additional property named `type`. Once you configure the object like that, you can run the [Enumerations from Database generator](../../generators/model/enums), and it will add a separate file under the configured *Output Path*, which will have the imported enumerations with the same names as the source object, as illustrated below.
 
 ```xml
 <!-- highlight-next-line -->
@@ -342,14 +341,14 @@ Note that we import the `reason type` values as an additional property named `ty
 Note that the imported enumeration is automatically associated with the source object using the `sql:enum-source` config element.
 
 :::tip
-After importing your enums, you can move them to the appropriate model files and folders as needed, unless you configured the *Output Path* of the generator to output them in the proper place right away. You can also start maintaining your enums in the Xomega model now to leverage version control and other static model features, such as enumeration inheritance.
+After importing your enums, you can move them to the appropriate model files and folders as needed unless you configured the *Output Path* of the generator to output them in the proper place right away. You can also start maintaining your enums in the Xomega model now to leverage version control and other static model features, such as enumeration inheritance.
 :::
 
 ### Storing enums in tables
 
 If you imported your static enumerations from database tables and started maintaining them in your Xomega model, or if you created them initially in the model, and need to load them into your database tables, then Xomega allows you to generate a SQL script that would reload your tables with the static data from your enumerations.
 
-If you manually defined your enumerations in the model, then you need to configure the corresponding object that you want to reload with the enumeration items, using the `sql:enum-items` config and any nested `sql:property` elements, the same way you would do it for [importing enumerations](#import). You also need to specify that object on the `sql:enum-source` config element of your enum, as follows.
+If you manually defined your enumerations in the model, then you need to configure the corresponding object that you want to reload with the enumeration items using the `sql:enum-items` config and any nested `sql:property` elements, the same way you would do it for [importing enumerations](#import). You also need to specify that object on the `sql:enum-source` config element of your enum, as follows.
 
 ```xml
 <enum name="sales reason">
@@ -361,7 +360,7 @@ If you manually defined your enumerations in the model, then you need to configu
 </enum>
 ```
 
-If your target object has any field that must be populated with a fixed value that is not stored as an additional property of your items, then you can add a nested `sql:fixed` config element, and specify the field name and the value or a function in there.
+If your target object has any field that must be populated with a fixed value that is not stored as an additional property of your items, then you can add a nested `sql:fixed` config element and specify the field name and the value or a function in there.
 
 For example, the `sales reason` object has a `modified date` field, which is not stored with the items of our static enumeration. To populate that column in the SQL script with the current date, you can set the fixed value for it to the `GetDate()` function, as follows.
 
@@ -386,7 +385,7 @@ For example, the `sales reason` object has a `modified date` field, which is not
 </object>
 ```
 
-If you run the [Enumeration Reload SQL generator](../../generators/enums/enum-sql.md), then it will create a SQL script to reload static enumerations, as shown below.
+If you run the [Enumeration Reload SQL generator](../../generators/enums/enum-sql), then it will create a SQL script to reload static enumerations, as shown below.
 
 ```sql title="reload_enumerations.sql"
 ...
@@ -401,11 +400,11 @@ insert into Sales.SalesReason ([SalesReasonID], [Name], [ReasonType], [ModifiedD
 ...
 ```
 
-Once you generate the SQL script, you can review it and run against your databases in various environments to reload the static data.
+Once you generate the SQL script, you can review it and run it against your databases in various environments to reload the static data.
 
 ## Generic dictionary tables
 
-Instead of storing each enumeration in a separate table, it's common within large projects to define some generic dictionary tables that store items and their property values for different types of enumerations in the same tables.
+Instead of storing each enumeration in a separate table, it's common within large projects to define some generic dictionary tables that store the items and their property values for different types of enumerations in the same tables.
 
 If your database doesn't already have such generic dictionary tables, then Xomega can help you create and configure such tables. All you need to do is to right-click on the *Framework* folder of the model project, select *Add > New Item...*, and pick the *Dictionary Object* item template.
 
@@ -457,12 +456,12 @@ You can customize the default field names, as well as their types and lengths, a
 :::
 
 :::note
-If your database already has a table that stores items for multiple enumerations, then you can just add the `sql:enum-items` element to the corresponding object, and configure its attributes as appropriate. Xomega will provide the Intellisense and validation for those attributes.
+If your database already has a table that stores items for multiple enumerations, then you can just add the `sql:enum-items` element to the corresponding object and configure its attributes as appropriate. Xomega will provide the Intellisense and validation for those attributes.
 :::
 
 ### Item properties
 
-To store the values of any additional properties of enumeration items, the default `dictionary` object defines a subobject `property` that stores the `property name` and `property value` as strings. Since the `property name` can have duplicate values for the same enumeration item, if the property is multi-value, it cannot uniquely identify the the record, so the subobject has a serial `id` field as a key.
+To store the values of any additional properties of the enumeration items, the default `dictionary` object defines a subobject `property` that stores the `property name` and `property value` as strings. Since the `property name` can have duplicate values for the same enumeration item, if the property is multi-value, it cannot uniquely identify the record, so the subobject has a serial `id` field as a key.
 
 The `property` object is also configured with a `sql:enum-item-properties` element, which tells Xomega which fields of the object, including implicitly included key fields of the parent object, map to the corresponding attributes of the enumeration items and the property value, as illustrated below.
 
@@ -502,7 +501,7 @@ If your `property` object needs to have another field that should be populated w
 ```
 :::
 
-Again, the `default="true"` attribute above indicates that all additional properties for any enumeration will be stored in this object, unless the object is explicitly configured for that enumeration using the `item-properties-object` attribute of the `sql:enum-source` config element, as follows.
+Again, the `default="true"` attribute above indicates that all additional properties for any enumeration will be stored in this object unless the object is explicitly configured for that enumeration using the `item-properties-object` attribute of the `sql:enum-source` config element, as follows.
 
 ```xml
 <enum name="sales order status">
@@ -524,7 +523,7 @@ Just like with the `dictionary` object, you can customize the `property` subobje
 
 ### Dictionary service
 
-If you define and maintain your static enumerations in your model, then you can provide access to the enumeration items and their properties from your application by generating [Enumeration Constants](../../generators/enums/enum-const.md) and an embedded resource with [Enumeration Data XML](../../generators/enums/enum-xml.md), which you then load into a Xomega Framework lookup cache using a built-in XML cache loader.
+If you define and maintain your static enumerations in your model, then you can provide access to the enumeration items and their properties from your application by generating [Enumeration Constants](../../generators/enums/enum-const) and an embedded resource with [Enumeration Data XML](../../generators/enums/enum-xml), which you then load into a Xomega Framework lookup cache using a built-in XML cache loader.
 
 For such enumerations, the only reason to store their items and properties in generic dictionary tables would be to provide access to them from any database layer logic, such as stored procedures or triggers.
 
@@ -532,11 +531,11 @@ If, however, your generic dictionary tables store any enumerations that you don'
 
 Xomega model allows you to create a service operation that returns generic dictionary items for multiple enumerations, and for each item it would include a nested list of property values in a name/value format.
 
-To generate a cache loader for such an operation, which will allow you to load the lookup cache from the dictionary tables, you need to use the same `xfk:enum-cache` config element that you use for [standard dynamic enumerations](../modeling/services.md#dynamic-enumerations). However, instead of the `enum-name` attribute, you'd specify the `enum-param` attribute, which will indicate which output parameter contains the enumeration name for each item.
+To generate a cache loader for such an operation, which will allow you to load the lookup cache from the dictionary tables, you need to use the same `xfk:enum-cache` config element that you use for [standard dynamic enumerations](../modeling/services#dynamic-enumerations). However, instead of the `enum-name` attribute, you'd specify the `enum-param` attribute, which will indicate which output parameter contains the enumeration name for each item.
 
 Also, to indicate which output parameter contains the list of additional properties for each item, you will need to add a nested config element `xfk:properties`, set that structure parameter in the `properties-struct` attribute, and indicate which parameters of that structure contain the name and value of the additional property using the `name-param` and `value-param` attributes respectively.
 
-The following example illustrates this `read` operation on the `dictionary` object, which returns items for multiple enumerations and their additional properties as a child name/value list, and configures it for [generation of a Lookup Cache Loader](../../generators/enums/cache-loaders.md).
+The following example illustrates this `read` operation on the `dictionary` object, which returns items for multiple enumerations and their additional properties as a child name/value list, and configures it for the [generation of a Lookup Cache Loader](../../generators/enums/cache-loaders).
 
 ```xml
 <!-- highlight-next-line -->
@@ -607,17 +606,17 @@ public partial class DictionaryService : BaseService, IDictionaryService
 
 ## Item text localization
 
-Normally, the default display text for each enumeration item comes either from the item's `name` attribute, or from the `text` child element, where provided. However, for applications running in multiple locales you need to be able to store translations of the text for each item into various supported languages.
+Normally, the default display text for each enumeration item comes either from the item's `name` attribute or from the `text` child element, where provided. However, for applications running in multiple locales, you need to be able to store translations of the text for each item in various supported languages.
 
 Xomega model supports multiple ways to provide the localized text for each item depending on whether the items are defined in the static model or come dynamically from the database, as described in the sections below.
 
 ### Localizing static items
 
-When you have the items of your enumerations defined statically in the model, you can provide the localized display text for each item either directly in the model in additional properties, or separately in the standard resource files.
+When you have the items of your enumerations defined statically in the model, you can provide the localized display text for each item either directly in the model in additional properties or separately in the standard resource files.
 
 #### Translations in resources
 
-When you provide localized text in the standard resource files, you don't have to change anything in the Xomega model. Instead, for each enumeration item you need to specify a resource entry with a key `Enum_<EnumName>.<ItemValue>` and the localized text as the value. Xomega Framework will use this key automatically to look up the localized text, as described [here](../../framework/common-ui/lookup#localizing-static-data).
+When you provide localized text in the standard resource files, you don't have to change anything in the Xomega model. Instead, for each enumeration item, you need to specify a resource entry with a key `Enum_<EnumName>.<ItemValue>` and the localized text as the value. Xomega Framework will use this key automatically to look up the localized text, as described [here](../../framework/common-ui/lookup#localizing-static-data).
 
 The following examples illustrate a sample `error severity` enumeration, the corresponding default resource file, as well as ones for the German and Bulgarian languages.
 
@@ -668,9 +667,9 @@ The default resource file can be generated automatically from your enumerations 
 
 #### Translations in item properties
 
-Instead of supplying localized resource files, you can also specify localization text for each item in additional properties that are named as `lang-<Culture Name>` for each supported language/culture. You can use either just a language ISO code there, such as `lang-en`for English, or country-specific overrides, e.g. `lang-en-US`, and Xomega Framework will automatically handle such [language properties](../../framework/common-ui/lookup#localizing-dynamic-data).
+Instead of supplying localized resource files, you can also specify localization text for each item in additional properties that are named `lang-<Culture Name>` for each supported language/culture. You can use either just a language ISO code there, such as `lang-en` for English, or country-specific overrides, e.g., `lang-en-US`, and Xomega Framework will automatically handle such [language properties](../../framework/common-ui/lookup#localizing-dynamic-data).
 
-The following example demonstrates the same `error severity` enumeration with German and Bulgarian localizations specified in the additional properties.
+The following example demonstrates the same `error severity` enumeration with German and Bulgarian localization specified in the additional properties.
 
 ```xml
 <enum name="error severity">
@@ -698,20 +697,20 @@ The following example demonstrates the same `error severity` enumeration with Ge
 ```
 
 :::caution
-If your localization process involves sending texts for translation to others, then using **standard resource files may work better** for you, since the translators may not be familiar with the structure of the Xomega static data model.
+If your localization process involves sending texts for translation to others, then using **standard resource files may work better** for you since the translators may not be familiar with the structure of the Xomega static data model.
 :::
 
 ### Localizing dynamic items
 
-When your enumeration items are not statically defined in your model, but are sourced from a database, and therefore can be updated dynamically, you can no longer use the static resource files for the localized text. The only option is to provide the text in additional attributes that use the `lang-<Culture Name>` naming convention.
+When your enumeration items are not statically defined in your model but are sourced from a database and, therefore, can be updated dynamically, you can no longer use the static resource files for the localized text. The only option is to provide the text in additional attributes that use the `lang-<Culture Name>` naming convention.
 
-For each item stored in the database, you can either provide translations in a separate column for each supported language, or read them from a child table, where the list of supported languages can be also dynamic.
+For each item stored in the database, you can either provide translations in a separate column for each supported language or read them from a child table, where the list of supported languages can also be dynamic.
 
 #### Translations in separate columns
 
-If you store translations for each supported language in a separate column, then you can define those columns on the same object that stores the enumerated items. In the `read enum` operation that returns those items you will need to add output parameters for each language using the `lang-<Culture Name>` convention, and make sure they return the localized values for each language.
+If you store translations for each supported language in a separate column, then you can define those columns on the same object that stores the enumerated items. In the `read enum` operation that returns those items, you will need to add output parameters for each language using the `lang-<Culture Name>` convention and make sure they return the localized values for each language.
 
-In the following example, we store a list of address types with their names in a database table, and specify additional German and Spanish translations in the `name-de` and `name-es` fields respectively.
+In the following example, we store a list of address types with their names in a database table and specify additional German and Spanish translations in the `name-de` and `name-es` fields, respectively.
 
 We return those fields as the `lang-de` and `lang-es` parameters in the `read enum` operation. However, since these names don't match, we need to map them in the custom code of the generated `AddressTypeService` class.
 
@@ -811,7 +810,7 @@ If you want to support a dynamic list of languages rather than a preset list, th
 
 In order for the generated cache loader to properly add the nested records as additional attributes of the `Header` objects, you need to add the `xfk:properties` child element to the `xfk:enum-cache` definition, where you specify which parameter has the attribute name and which one has the value.
 
-In the following example we added a `translation` subobject of the `address type` that has a `lang` and `text` fields. You can store the value in the `lang` field as just the culture name, such as `en` or `en-US`, but you'll need to convert it in the `AddressTypeService` to the `lang-<Culture Name>` format, when you return it as part of the nested `translations` list in the `read enum` operation.
+In the following example, we added a `translation` subobject of the `address type` that has `lang` and `text` fields. You can store the value in the `lang` field as just the culture name, such as `en` or `en-US`, but you'll need to convert it in the `AddressTypeService` to the `lang-<Culture Name>` format when you return it as part of the nested `translations` list in the `read enum` operation.
 
 <Tabs>
   <TabItem value="xom" label="address_type.xom">
