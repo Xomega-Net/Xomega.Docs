@@ -90,7 +90,7 @@ SpecialOfferIdProperty.SetCacheLoaderParameters(Enumerations.SpecialOfferProduct
 This will automatically listen for changes in the `ProductIdProperty`, and will reload the local cache loader for the `SpecialOfferIdProperty` whenever the product ID changes, which will in turn update the list of possible values for the special offer selection.
 
 :::note
-Note, that the setup of such enumeration configuration for a "readlist" operation can be easily added automatically to the model by a special [model enhancement CRUD generator](../model/crud.md).
+Note, that the setup of such enumeration configuration for a "readlist" operation can be easily added automatically to the model by a special [model enhancement CRUD generator](../model/crud).
 :::
 
 ### Generator outputs

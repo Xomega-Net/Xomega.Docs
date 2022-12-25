@@ -10,7 +10,7 @@ For list objects it generates a search view with a paged data grid, and a collap
 
 For regular non-list objects it generates a details view with controls and panels for child objects arranged according to the display configuration of those objects, as well as the standard *Save*/*Delete* actions as per the data object's operations.
 
-The generated views extend base classes from the `Xomega.Framework.Blazor` package, and are bound to their corresponding *View Models* that are generated using [View Models Generator](../common/view-models.md).
+The generated views extend base classes from the `Xomega.Framework.Blazor` package, and are bound to their corresponding *View Models* that are generated using [View Models Generator](../common/view-models).
 
 You can add your customizations to a partial class for the generated view, where you can override any methods from the base class to customize the view actions or certain appearance aspects of the view components.
 
@@ -98,7 +98,7 @@ The '*Customer Info*' and '*Lookup Customer*' panels will also have fields layed
 For each field inside the `ui:fields` element you can specify whether it is hidden or editable/readonly, and the label or column header to use instead of deriving it from the property's name.
 
 :::note
-Note that the labels you specify will not be added directly to the generated markup, but rather to a generated resource file by a separate [Label Resources Generator](../common/resources.md) to allow localization and overrides.
+Note that the labels you specify will not be added directly to the generated markup, but rather to a generated resource file by a separate [Label Resources Generator](../common/resources) to allow localization and overrides.
 :::
 
 The following snippet demonstrates such a setup.
@@ -142,7 +142,7 @@ The named links to other views, which are defined on the view's data objects in 
 When a link has a `child="true"` attribute, the target view will be opened in a popup dialog, or in a separate details panel based on the link's `mode` attribute. Otherwise, the view will be opened in a new page.
 
 :::note
-Most of this setup for standard details and search views in the Xomega model can be easily added automatically by a special [model enhancement CRUD generator](../../model/crud.md).
+Most of this setup for standard details and search views in the Xomega model can be easily added automatically by a special [model enhancement CRUD generator](../../model/crud).
 :::
 
 ### Grid customization

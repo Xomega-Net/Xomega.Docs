@@ -43,7 +43,7 @@ You can move the separator inside the braces, e.g. `{Module/}` to account for an
 Based on your preferences and development standards, you can configure the generated files to be all completely isolated in a separate folder (e.g. with `Gen/{Module/}/{File}`), have them co-mingled with custom files, or a combination of the two, e.g. with `{Module/}Gen/{File}`, which will result in the generated files being isolated within each module. Each approach has its pros and cons.
 
 :::tip
-To check if a specific parameter allows any placeholders, you can view its description in the *Properties* window, as illustrated above for the `Custom Path` parameter, or you can check the [documentation](../../generators/overview.md) for that generator.
+To check if a specific parameter allows any placeholders, you can view its description in the *Properties* window, as illustrated above for the `Custom Path` parameter, or you can check the [documentation](../../generators/overview) for that generator.
 :::
 
 ### Database parameters
@@ -68,14 +68,14 @@ Xomega.Net allows you to clone any existing generator configuration, and save it
 You can always delete the cloned configuration later by pressing *Delete* on it.
 :::
 
-This is useful for flexible generators that support many different parameters, such as the [*Full CRUD with Views*](../../generators/model/crud.md) model enhancement generator, which adds specified elements, like operations or data objects and views, to your model.
+This is useful for flexible generators that support many different parameters, such as the [*Full CRUD with Views*](../../generators/model/crud) model enhancement generator, which adds specified elements, like operations or data objects and views, to your model.
 
 With this generator, you can create configurations that add only a specific type of elements by turning everything off except for that one parameter. For example, you can have a generator that adds only REST methods to the operations.
 
 You can also have a configuration of this generator that adds everything to the model at once, or you can create configurations for any combinations of the elements that you need to add as required.
 
 :::info
-The [documentation](../../generators/overview.md) of each generator typically specifies some common configurations, where applicable.
+The [documentation](../../generators/overview) of each generator typically specifies some common configurations, where applicable.
 :::
 
 ## Global model configuration{#global}
@@ -83,5 +83,5 @@ The [documentation](../../generators/overview.md) of each generator typically sp
 The global model configuration is defined under the top-level `config` element in the model, and contains configuration that is available to all generators, so that it could be shared between multiple generators, where it cannot be specified as parameters of individual generators.
 
 :::tip
-You can view detailed documentation on the global configuration [here](../modeling/config.md). To see how it is used by individual generators, you can also check [documentation](../../generators/overview.md) on each specific generator.
+You can view detailed documentation on the global configuration [here](../modeling/config). To see how it is used by individual generators, you can also check [documentation](../../generators/overview) on each specific generator.
 :::

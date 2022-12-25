@@ -6,7 +6,7 @@ For list objects it generates a search view with a paged data grid, and a collap
 
 For regular non-list objects it generates a details view with controls and panels for child objects arranged using the specified layout, as well as the standard *Save*/*Delete* actions as per the data object's operations.
 
-The generated views extend base classes from the `Xomega.Framework.Web` package, and are bound to their corresponding View Models that are generated using [View Models Generator](../common/view-models.md).
+The generated views extend base classes from the `Xomega.Framework.Web` package, and are bound to their corresponding View Models that are generated using [View Models Generator](../common/view-models).
 
 You can add your customizations to a subclass of the generated code-behind class for the view, where you can programmatically update any generated server controls, and implement any additional ASP.NET-specific view logic.
 
@@ -108,7 +108,7 @@ The named links to other views, which are defined on the view's data objects in 
 When a link has a `child="true"` attribute, the target view will be opened in a popup dialog, or in a separate details split-panel, if the link is on a search view with a master-details layout. Otherwise, the view will be opened as a new page.
 
 :::note
-Most of this setup for standard details and search views in the Xomega model can be easily added automatically by a special [model enhancement CRUD generator](../../model/crud.md).
+Most of this setup for standard details and search views in the Xomega model can be easily added automatically by a special [model enhancement CRUD generator](../../model/crud).
 :::
 
 ## Generator outputs

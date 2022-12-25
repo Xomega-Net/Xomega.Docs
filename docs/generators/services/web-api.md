@@ -61,7 +61,7 @@ For example, the `authenticate` operation below can be used by the Web API inter
 ```
 
 :::note
-This REST configuration for standard CRUD and `ReadList` operations can be added automatically to the model by a special [model enhancement CRUD generator](../model/crud.md) with the *Generate Rest Methods* parameter set to `true`.
+This REST configuration for standard CRUD and `ReadList` operations can be added automatically to the model by a special [model enhancement CRUD generator](../model/crud) with the *Generate Rest Methods* parameter set to `true`.
 :::
 
 ## Generator outputs

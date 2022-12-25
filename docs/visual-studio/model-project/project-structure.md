@@ -36,7 +36,7 @@ Configuration of the base types is also broken down by technology, which is stor
 As with the generators, you can just delete type configs for technologies that you don't need, as it would be much easier than adding those back.
 :::
 
-The global model configuration is defined by default in the `global_config.xom` file. You can read about the details of the global configuration in the [next section](configuring-generators.md#global).
+The global model configuration is defined by default in the `global_config.xom` file. You can read about the details of the global configuration in the [next section](configuring-generators#global).
 
 :::info
 The default global configuration will also have settings for all technologies, which you can easily delete, if you don't need those.
@@ -60,4 +60,4 @@ By default, the *Import from Database* generator outputs the model files into a 
 If your existing database is not SQL Server, you can still leverage the *Import from Database* generator. You just need to export a DDL script for your DB structure using your database tools, run it against an empty SQL Server database, and then import the objects from that database.
 :::
 
-For further details on importing the model from a database please check the description of the [*Import from Database*](../../generators/model/import.md) generator, as well as the [step-by-step tutorial](../../tutorial/1-basic/2-import.md).
+For further details on importing the model from a database please check the description of the [*Import from Database*](../../generators/model/import) generator, as well as the [step-by-step tutorial](../../tutorial/1-basic/2-import).

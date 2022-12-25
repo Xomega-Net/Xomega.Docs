@@ -7,7 +7,7 @@ sidebar_position: 1
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Blazor views in Xomega Framework are high-level components that can be bound to [View Models](../common-ui/vm/view-models.md) and represent independent parts of the user workflow within your application. To make them reusable, you can design your views to allow either navigating to them directly via a browser URL or opening them as child views that are embedded into a parent view.
+Blazor views in Xomega Framework are high-level components that can be bound to [View Models](../common-ui/vm/view-models) and represent independent parts of the user workflow within your application. To make them reusable, you can design your views to allow either navigating to them directly via a browser URL or opening them as child views that are embedded into a parent view.
 
 :::tip
 Blazor views can be reused in both Blazor Server and WebAssembly architectures. Therefore, we recommend that you define them, as well as other Blazor components, in a separate project that is referenced from either the *Blazor.Server* or *Blazor.Wasm* projects.
@@ -108,7 +108,7 @@ When you navigate to another top-level view, the current view **will not prompt 
 
 ### Child views
 
-Child views are embedded in their parent view and can be opened either inline or as a modal popup dialog. Normally, the mode for how the child view must be opened is passed to the view model using the `ViewParams.Mode.Param` [activation parameter](../common-ui/vm/view-models.md#activation) and the view just open in the specified mode.
+Child views are embedded in their parent view and can be opened either inline or as a modal popup dialog. Normally, the mode for how the child view must be opened is passed to the view model using the `ViewParams.Mode.Param` [activation parameter](../common-ui/vm/view-models#activation) and the view just open in the specified mode.
 
 #### Inline child views
 

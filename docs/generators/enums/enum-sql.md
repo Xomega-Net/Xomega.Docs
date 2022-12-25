@@ -106,7 +106,7 @@ The following example illustrates such a configuration for a generic `dictionary
 ```
 
 :::tip
-If you configure such dictionary objects for existing database tables then, instead of manually defining those enumerations and their values in the model, you can initially import their data as model enumerations using the [Enumerations from Database](../model/enums.md) generator generator.
+If you configure such dictionary objects for existing database tables then, instead of manually defining those enumerations and their values in the model, you can initially import their data as model enumerations using the [Enumerations from Database](../model/enums) generator generator.
 
 This will also configure the source objects for the imported enumerations as appropriate.
 :::

@@ -6,7 +6,7 @@ sidebar_position: 6
 
 In this section you'll learn how to secure a Blazor WebAssembly application, which uses a different authentication mechanism than the Blazor Server application that we secured earlier, since it uses a standalone REST API to call business services.
 
-Nevertheless, make sure you **complete the previous section** on [Blazor Server security](5-blazor-server.md) first, since we added some common code that applies to both Blazor Server and WebAssembly.
+Nevertheless, make sure you **complete the previous section** on [Blazor Server security](5-blazor-server) first, since we added some common code that applies to both Blazor Server and WebAssembly.
 
 ## Adding REST API authentication
 
@@ -226,7 +226,7 @@ If you are planning to have both Blazor Server and WebAssembly projects, it woul
 
 ## Reviewing the results
 
-That's all we need to add Blazor WebAssembly security. In order to run the WebAssembly application, let's set the Client.Blazor.Wasm and Services.Rest projects as the startup up projects in the solution properties as described in the [first chapter](../1-basic/5-run.md#running-webassembly-application).
+That's all we need to add Blazor WebAssembly security. In order to run the WebAssembly application, let's set the Client.Blazor.Wasm and Services.Rest projects as the startup up projects in the solution properties as described in the [first chapter](../1-basic/5-run#running-webassembly-application).
 
 If we run the application now, we'll see our usual *Login* screen, where we can enter credentials for our customer "amy1@adventure-works.com". Once you hit *Login* and navigate to the *Sales Order List* screen, you should be able to see only your sales orders, and the customer criteria will be hidden, as illustrated in the picture below.
 

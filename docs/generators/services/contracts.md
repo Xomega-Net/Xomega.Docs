@@ -106,7 +106,7 @@ The logical types usually inherit such configurations from their base types, but
 ```
 
 :::note
-Standard CRUD and `read list` operations for an object can be easily added automatically to the model by a special [model enhancement CRUD generator](../model/crud.md).
+Standard CRUD and `read list` operations for an object can be easily added automatically to the model by a special [model enhancement CRUD generator](../model/crud).
 :::
 
 ## Generator outputs
@@ -153,7 +153,7 @@ These parameters include whether the service operations are `async`, whether the
 You should make the service operations async and support cancellation tokens where possible, unless you need to support legacy frameworks such as WCF or WebForms.
 :::
 
-The generated service interface and structures will be decorated with WCF attributes for service and data contracts only if WCF configuration is defined in the `wcf:config` element of the global model configuration under the top level `config` element, as  described [here](../../visual-studio/modeling/config.md#wcf-config).
+The generated service interface and structures will be decorated with WCF attributes for service and data contracts only if WCF configuration is defined in the `wcf:config` element of the global model configuration under the top level `config` element, as  described [here](../../visual-studio/modeling/config#wcf-config).
 
 ### Common configurations
 
@@ -181,7 +181,7 @@ You should never edit generated service and data contracts directly. This allows
 
 #### WCF Attributes
 
-If you need to provide additional custom WCF attributes beyond the basic `ServiceContract` and `OperationContract` that will be generated if you have a `wcf:config` element in the model configuration, then you can add a `wcf:operation` element in the model to the `config` element of individual operations, or a `wcf:service` element to the `config` element of the object, as described [here](../../visual-studio/modeling/services.md#wcf-configuration).
+If you need to provide additional custom WCF attributes beyond the basic `ServiceContract` and `OperationContract` that will be generated if you have a `wcf:config` element in the model configuration, then you can add a `wcf:operation` element in the model to the `config` element of individual operations, or a `wcf:service` element to the `config` element of the object, as described [here](../../visual-studio/modeling/services#wcf-configuration).
 
 ### Cleaning generator’s output
 

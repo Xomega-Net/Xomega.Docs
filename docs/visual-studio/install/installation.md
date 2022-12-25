@@ -50,4 +50,4 @@ For building legacy .NET applications, you may also use the following components
 - Visual Studio 2017 Community or higher
 - .NET Framework 4.5 or higher
 
-To view the notices for licensed third-party software components included within Xomega.Net [click here](third-party.md).
+To view the notices for licensed third-party software components included within Xomega.Net [click here](third-party).

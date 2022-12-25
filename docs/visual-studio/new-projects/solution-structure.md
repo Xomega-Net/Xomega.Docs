@@ -18,7 +18,7 @@ In the middle of the solution, between client and services projects, you'll find
 
 ### *SolutionName*.Model
 
-The model project combines `.xom` files that store Xomega model elements and configurations, as well as various generators that you can run on your model. We discuss the structure of the model project in the [next chapter](../model-project/project-structure.md).
+The model project combines `.xom` files that store Xomega model elements and configurations, as well as various generators that you can run on your model. We discuss the structure of the model project in the [next chapter](../model-project/project-structure).
 
 ## Shared project
 

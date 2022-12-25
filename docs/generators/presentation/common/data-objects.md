@@ -90,7 +90,7 @@ You need to specify the property `class` and `namespace` on the `xfk:property` e
 ```
 
 :::note
-Most of this setup of data objects in the model for standard CRUD and `Read List` operations can be easily added automatically to the model by a special [model enhancement CRUD generator](../../model/crud.md).
+Most of this setup of data objects in the model for standard CRUD and `Read List` operations can be easily added automatically to the model by a special [model enhancement CRUD generator](../../model/crud).
 :::
 
 ## Generator outputs

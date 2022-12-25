@@ -93,7 +93,7 @@ This will NOT allow TypeScript compiler to check the type of the arguments that 
 :::
 
 :::note
-Standard CRUD and `read list` operations for an object can be easily added automatically to the model by a special [model enhancement CRUD generator](../../model/crud.md).
+Standard CRUD and `read list` operations for an object can be easily added automatically to the model by a special [model enhancement CRUD generator](../../model/crud).
 :::
 
 ## Generator outputs

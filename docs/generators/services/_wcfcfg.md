@@ -55,7 +55,7 @@ The following table lists configuration parameters that are set as the generator
 
 Endpoint configuration parameters for the generator are specified in the Xomega model in the `wcf:endpoint-config` elements nested within the `wcf:config` node under the top level `config` element, which is conventionally placed in the `global_config.xom` file.
 
-For each type of endpoint that you want to generate, you can specify the type of WCF binding, the name of the binding configuration to use, base local address, and a base remote address template, which may contain {Module/} and {File} placeholders, and should be consistent with the output path configuration for the [WCF Service Host Files](wcf-host.md) generator.
+For each type of endpoint that you want to generate, you can specify the type of WCF binding, the name of the binding configuration to use, base local address, and a base remote address template, which may contain {Module/} and {File} placeholders, and should be consistent with the output path configuration for the [WCF Service Host Files](wcf-host) generator.
 
 A separate `svc:services-config` element specifies the namespaces of the service contracts and their implementations. The following snippet illustrates such a configuration.
 

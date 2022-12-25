@@ -60,7 +60,7 @@ The snippet below illustrates configuration of links in the model.
 ```
 
 :::note
-Most of this setup of view models in the Xomega model for standard details and list objects can be easily added automatically by a special [model enhancement CRUD generator](../../model/crud.md).
+Most of this setup of view models in the Xomega model for standard details and list objects can be easily added automatically by a special [model enhancement CRUD generator](../../model/crud).
 :::
 
 ## Generator outputs

@@ -91,7 +91,7 @@ You need to specify the property's TypeScript class and module on the `xfk:prope
 The module is specified in the `tsModule` attribute, and can be set to `xomega` for properties from the XomegaJS framework, or to your custom module, if you use custom properties. The property class is specified in the `tsClass` attribute, but can be omitted if it has the same name as the property from the Xomega Framework, in which case the value from the class attribute will be used.
 
 :::note
-Most of this setup of data objects in the model for standard CRUD and `read list` operations can be easily added automatically to the model by a special [model enhancement CRUD generator](../../model/crud.md).
+Most of this setup of data objects in the model for standard CRUD and `read list` operations can be easily added automatically to the model by a special [model enhancement CRUD generator](../../model/crud).
 :::
 
 ## Generator outputs

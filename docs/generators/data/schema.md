@@ -201,7 +201,7 @@ The sections below provide some details on how to work with the generator.
 
 You can run this generator for the entire model only. For that you need to select it in the model project, and then select *Generate* menu from either the context menu or the top-level *Project* menu.
 
-You can rerun the generator when you change any objects, fields or types in the model, which may require re-running other generators that depend on the same model elements, such as generator of [Service Implementations](../services/service-impl.md).
+You can rerun the generator when you change any objects, fields or types in the model, which may require re-running other generators that depend on the same model elements, such as generator of [Service Implementations](../services/service-impl).
 
 :::tip
 Normally, you need to run it only initially, when you create your database, and then as needed, if you need a script to recreate the database structure for a new environment. You don't need to include this generator into the model build process.

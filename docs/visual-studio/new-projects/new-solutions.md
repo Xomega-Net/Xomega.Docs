@@ -99,4 +99,4 @@ Here's the full list of parameters that you can configure for different solution
 - **WCF API**
   - *Project* - the name of the project to use.
 
-We will describe the details of each project in the [next section](solution-structure.md). Normally, you can just stick to the default configuration for most components, and then click the *Create* button to create your solution.
+We will describe the details of each project in the [next section](solution-structure). Normally, you can just stick to the default configuration for most components, and then click the *Create* button to create your solution.

@@ -6,7 +6,7 @@ pagination_prev: null
 
 # Xomega Video Tutorials
 
-The following video tutorials are based on the **older version of Xomega** that demonstrates how to build legacy WebForms, WPF and SPA applications. To learn about building modern Blazor applications, you can also check our latest [Walkthrough Tutorial](../../tutorial/get-started.md).
+The following video tutorials are based on the **older version of Xomega** that demonstrates how to build legacy WebForms, WPF and SPA applications. To learn about building modern Blazor applications, you can also check our latest [Walkthrough Tutorial](../../tutorial/get-started).
 
 While some things have been improved in the latest versions, you can still get a good idea of how to use Xomega to model and generate various applications from these videos.
 

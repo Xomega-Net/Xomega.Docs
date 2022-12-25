@@ -113,7 +113,7 @@ The named links to other views, which are defined on the view's data objects in 
 When a link has a `child="true"` attribute, the target view will be opened in a popup dialog, or in a separate details split-panel, if the link is on a search view with a master-details layout. Otherwise, the view will be opened as a new page.
 
 :::note
-Most of this setup for standard details and search views in the Xomega model can be easily added automatically by a special [model enhancement CRUD generator](../../model/crud.md).
+Most of this setup for standard details and search views in the Xomega model can be easily added automatically by a special [model enhancement CRUD generator](../../model/crud).
 :::
 
 ## Generator outputs
