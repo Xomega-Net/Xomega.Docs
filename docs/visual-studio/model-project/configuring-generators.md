@@ -12,7 +12,7 @@ You can configure generator parameters in the *Properties* view for the selected
 
 ### Common parameters
 
-All generators have a set of common parameters that include the `Generator Name`, `Folder Name` and whether or not it should be included in the build of the model project, as follows.
+All generators have a set of common parameters that include the `Generator Name`, `Folder Name`, and whether or not it should be included in the build of the model project, as follows.
 
 ![Common parameters](img/params-common.png)
 
@@ -28,11 +28,11 @@ Most of the generators that output one or more files, when run, allow specifying
 
 ![Path parameters](img/params-paths.png)
 
-The relative paths oftentimes point to other projects in the solution, and allow specifying special placeholders like `{Module}` and `{File}`. This provides you with the maximum flexibility in how you want the generated code to be structured.
+The relative paths oftentimes point to other projects in the solution and allow specifying special placeholders like `{Module}` and `{File}`. This provides you with the maximum flexibility in how you want the generated code to be structured.
 
 For instance, if you don't include any of these placeholders, the generated objects will be all output into the same file. This is how some generators used to do it, e.g. the *Entity Data Model*. While it may be convenient in some cases to keep all generated code in one file, that file could become quite large and hard to navigate, when you want to troubleshoot your app.
 
-If you include just the `{Module}` placeholder, then the generator will create one file per module. This could still result in large generated files, but falls somewhere in the middle between a single file and individual files.
+If you include just the `{Module}` placeholder, then the generator will create one file per module. This could still result in large generated files but falls somewhere in the middle between a single file and individual files.
 
 The recommended practice is to include both the `{Module}` and `{File}` placeholders to output generated code into individual files based on the context. The `{Module}` placeholder will allow you to group generated files by module in separate folders or using a naming convention (e.g. `{Module}_{File}`).
 
@@ -48,7 +48,7 @@ To check if a specific parameter allows any placeholders, you can view its descr
 
 ### Database parameters
 
-Some generators that require a connection to the database, e.g. to read the database structure or the actual data, will have a set of database related parameters, as shown below.
+Some generators that require a connection to the database, e.g. to read the database structure or the actual data, will have a set of database-related parameters, as shown below.
 
 ![Database parameters](img/params-db.png)
 
@@ -56,7 +56,7 @@ The `Database Connection` is edited via a separate dialog that allows specifying
 
 ![Database configuration](img/db-config-summary.png)
 
-Since generators that need DB connection may need to share the same DB configuration, you can save these parameters as the project default, rather than for the specific generator, so that other generators could also use it. In this case the actual values from the first picture will be displayed on the properties of the *Model* project, while the properties of the generator will show the following.
+Since generators that need DB connection may need to share the same DB configuration, you can save these parameters as the project default, rather than for the specific generator, so that other generators could also use it. In this case, the actual values from the first picture will be displayed on the properties of the *Model* project, while the properties of the generator will show the following.
 
 ![Database parameters](img/params-use-project.png)
 
@@ -70,7 +70,7 @@ You can always delete the cloned configuration later by pressing *Delete* on it.
 
 This is useful for flexible generators that support many different parameters, such as the [*Full CRUD with Views*](../../generators/model/crud) model enhancement generator, which adds specified elements, like operations or data objects and views, to your model.
 
-With this generator, you can create configurations that add only a specific type of elements by turning everything off except for that one parameter. For example, you can have a generator that adds only REST methods to the operations.
+With this generator, you can create configurations that add only a specific type of element by turning everything off except for that one parameter. For example, you can have a generator that adds only REST methods to the operations.
 
 You can also have a configuration of this generator that adds everything to the model at once, or you can create configurations for any combinations of the elements that you need to add as required.
 
@@ -80,8 +80,8 @@ The [documentation](../../generators/overview) of each generator typically speci
 
 ## Global model configuration{#global}
 
-The global model configuration is defined under the top-level `config` element in the model, and contains configuration that is available to all generators, so that it could be shared between multiple generators, where it cannot be specified as parameters of individual generators.
+The global model configuration is defined under the top-level `config` element in the model and contains configuration that is available to all generators so that it could be shared between multiple generators, where it cannot be specified as parameters of individual generators.
 
 :::tip
-You can view detailed documentation on the global configuration [here](../modeling/config). To see how it is used by individual generators, you can also check [documentation](../../generators/overview) on each specific generator.
+You can view detailed documentation on the global configuration [here](../modeling/config). To see how it is used by individual generators, you can also check the [documentation](../../generators/overview) on each specific generator.
 :::

@@ -21,24 +21,24 @@ If you add elements out of order, you will get a validation error both in the to
 ![XML validation](img/validation-xml.png)
 
 :::tip
-These error messages use standard texts, which at times may not be all that user-friendly. Besides deciphering the issue from the text, you can consult the structure of the underlying XSD, or the documentation for the specific elements.
+These error messages use standard texts, which at times may not be all that user-friendly. Besides deciphering the issue from the text, you can consult the structure of the underlying XSD or the documentation for the specific elements.
 :::
 
 ## Custom model validations
 
 In addition to standard XML validations, Xomega Editor validates the model against a number of logical rules, which would be hard or impossible to express in the XSD. These rules are designed to keep the model consistent and clean to save developers from costly troubleshooting of model errors in the generated artifacts.
 
-Just like with the standard validations, Xomega Editor will highlight the invalid element, attribute or value, and will show the validation message both as a tooltip, and in the *Error List* window, as follows.
+Just like with the standard validations, Xomega Editor will highlight the invalid element, attribute or value, and will show the validation message both as a tooltip and in the *Error List* window, as follows.
 
 ![Model validation](img/validation-xom.png)
 
 :::tip
-The custom validation errors and warnings are typically very **detailed and user-friendly**, and usually advise you on how to deal with them.
+The custom validation errors and warnings are typically very **detailed and user-friendly**, and usually, advise you on how to deal with them.
 :::
 
 ## Validating the entire model
 
-While Xomega Editor shows validation errors only for the currently open file, you can also validate the entire model to see validation errors and warnings in all model files. To do that you can right-click on the model project, and select the *Validate* option, or pick the *Project > Validate* menu when the model project is selected.
+While Xomega Editor shows validation errors only for the currently open file, you can also validate the entire model to see validation errors and warnings in all model files. To do that you can right-click on the model project and select the *Validate* option, or pick the *Project > Validate* menu when the model project is selected.
 
 :::info
 The validation will happen automatically whenever you run any generators, so this standalone option is useful when you don't want to run any generators.

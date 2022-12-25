@@ -4,11 +4,11 @@ sidebar_position: 4
 
 # IntelliSense and Descriptions
 
-To help you edit Xomega models, Xomega Editor provides IntelliSense and tooltip descriptions for both model structure, based on the underlying XSD schemas, as well as for specific values that reference various elements defined in your Xomega model itself.
+To help you edit Xomega models, Xomega Editor provides IntelliSense and tooltip descriptions for both model structures, based on the underlying XSD schemas, as well as for specific values that reference various elements defined in your Xomega model itself.
 
 ## Schema-based IntelliSense
 
-The structure of the Xomega models is defined by extensible XSD schemas, which govern what elements and attributes are allowed in the model within each element, what order do these elements go in, the types of allowed values, as well as specific enumerations for attributes that allow values only from a strict list.
+The structure of the Xomega models is defined by extensible XSD schemas, which govern what elements and attributes are allowed in the model within each element, what order these elements go in, the types of allowed values, as well as specific enumerations for attributes that allow values only from a strict list.
 
 The core model is defined in the `http://www.xomega.net/omodel` namespace, but any technology-specific extensions, including custom ones, are defined in separate namespaces, which would require their own prefix, e.g. `xmlns:ui="http://www.xomega.net/ui"`.
 
@@ -17,7 +17,7 @@ For both core and extension schemas, Xomega Editor provides IntelliSense that al
 ![XSD IntelliSense](img/xsd-intellisense.png)
 
 :::note
-It should be familiar to you, since this is standard for any schema-based XML that you edit with the regular Visual Studio editor.
+It should be familiar to you since this is standard for any schema-based XML that you edit with the regular Visual Studio editor.
 :::
 
 :::tip
@@ -26,9 +26,9 @@ The IntelliSense dropdown will appear as you type. To explicitly bring it up, yo
 
 ### Schema-based descriptions
 
-In addition, the schemas may contain documentation for some XML elements, attributes or allowed values, as well as for their types.
+In addition, the schemas may contain documentation for some XML elements, attributes, or allowed values, as well as for their types.
 
-By default, Xomega editor will display this documentation in a tooltip for the corresponding element the same way the standard Visual Studio XML editor does, as illustrated below.
+By default, the Xomega editor will display this documentation in a tooltip for the corresponding element the same way the standard Visual Studio XML editor does, as illustrated below.
 
 ![XSD tooltips](img/xsd-tooltips.png)
 
@@ -83,7 +83,7 @@ This is also similar to showing descriptions from the `<doc>` comments for class
 :::
 
 :::tip
-Providing good documentation for your model elements will go a long way, as it will allow you to define easy to understand, logical models, and will minimize any errors when building your models.
+Providing good documentation for your model elements will go a long way, as it will allow you to define easy-to-understand, logical models, and will minimize any errors when building your models.
 
 You can also leverage this model documentation to generate technical design docs from your model.
 :::

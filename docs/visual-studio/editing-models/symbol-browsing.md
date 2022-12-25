@@ -16,7 +16,7 @@ You can also browse it in other Visual Studio views, such as the *Class View* or
 
 ## Object Browser view
 
-Object Browser view allows browsing the object model via standard Visual Studio tools, navigate between the model entities, and locate selected elements in the Xomega Editor.
+Object Browser view allows browsing the object model via standard Visual Studio tools, navigating between the model entities, and locating selected elements in the Xomega Editor.
 
 The model entities are organized in a tree view under the model project by their respective modules and the types of entities, e.g. *Objects*, *Types*, *Fieldsets*, etc. Elements that have no module will be grouped under the `[Default]` tree node.
 
