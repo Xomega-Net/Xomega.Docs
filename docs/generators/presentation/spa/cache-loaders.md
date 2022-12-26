@@ -4,7 +4,7 @@ sidebar_position: 4
 
 # TS Lookup Cache Loaders
 
-Generates XomegaJS based classes for contextual loading of lookup tables from a database using a service operation. The lookup cache is then used to populate selection lists and to decode values, if the list is relatively static.
+Generates XomegaJS-based classes for contextual loading of lookup tables from a database using a service operation. The lookup cache is then used to populate selection lists and to decode values if the list is relatively static.
 
 The service operations for contextual cache loaders take input parameters, so the generated cache loaders classes extend the base `LocalCacheLoader` class, and you should make sure the values of the input parameters get set from the context that they are used in, which can be handled automatically by the `EnumProperty`.
 
@@ -48,7 +48,7 @@ The following example shows a `special offer product` cache loader, which loads 
 </object>
 ```
 
-The generated class will extend the `LocalCacheLoader` base class from XomegaJS framework, and you will need to make sure that the input parameters for the `read enum` operation are set for the current context before the cache is loaded.
+The generated class will extend the `LocalCacheLoader` base class from the XomegaJS framework, and you will need to make sure that the input parameters for the `read enum` operation are set for the current context before the cache is loaded.
 
 You can either
 - manually subscribe to the changes of the input parameters, and then call the `setParameters` method of the generated cache loader directly with the new values,
@@ -59,13 +59,13 @@ this.SpecialOfferId.LocalCacheLoader = new SpecialOfferProductReadEnumCacheLoade
 this.SpecialOfferId.setCacheLoaderParameters(SpecialOfferProduct.Parameters.ProductId, this.ProductId);
 ```
 
-This will automatically listen for changes in the `ProductIdProperty`, and will reload the local cache loader for the `SpecialOfferIdProperty` whenever the product ID changes, which will in turn update the list of possible values for the special offer selection.
+This will automatically listen for changes in the `ProductIdProperty` and will reload the local cache loader for the `SpecialOfferIdProperty` whenever the product ID changes, which will in turn update the list of possible values for the special offer selection.
 
 ### Static Loaders
 
 For `read enum` operations that have no input parameters, and return static data that can be loaded into the lookup cache globally, the cache loaders are generated in C# by a separate generator for Xomega Framework to load them into the lookup cache on the server side.
 
-The lookup tables are then exposed via a standard REST endpoint, which XomegaJS framework uses to load the static data to the client. Therefore, there is no need to generate static TypeScript cache loaders for such operations.
+The lookup tables are then exposed via a standard REST endpoint, which the XomegaJS framework uses to load the static data to the client. Therefore, there is no need to generate static TypeScript cache loaders for such operations.
 
 ## Generator outputs
 
@@ -79,7 +79,7 @@ The generator also adds the generated classes to the specified project as needed
 
 ## Configuration
 
-The following sections describe configuration parameters used by the generator.
+The following sections describe the configuration parameters used by the generator.
 
 ### Generator parameters
 
@@ -96,7 +96,7 @@ The following table lists configuration parameters that are set as the generator
 
 ### Model configuration
 
-Parameters specified in the model configuration that are used by this generator consist of the output path for the TypeScript service contracts. This is specified in the `svc:services-config` element under the top level `config` model element, which is conventionally placed in the `global_config.xom` file, as follows.
+The model configuration parameters that are used by this generator consist of the output path for the TypeScript service contracts. This is specified in the `svc:services-config` element under the top-level `config` model element, which is conventionally placed in the `global_config.xom` file, as follows.
 
 ```xml title="global_config.xom"
 <svc:services-config tsOutputPath="../MySolution.Client.Spa/ServiceContracts/{Module/}{File}"/>
@@ -104,7 +104,7 @@ Parameters specified in the model configuration that are used by this generator 
 
 ### Common configurations
 
-There expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
+There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 
@@ -112,12 +112,12 @@ The sections below provide some details on how to work with the generator.
 
 ### Running the generator
 
-You can run this generator either for the entire model, or for individual files by selecting them in the model project, and running the generator from the context menu.
+You can run this generator either for the entire model or for individual files by selecting them in the model project and running the generator from the context menu.
 
-You can rerun the generator when you add or change the contextual `xfk:enum-cache` configuration of `read enum` operations, or if you change any parameters on those operations. Normally, the latter will require re-running other generators that depend on the same model elements, such as generators of UI views, data objects, service and data contracts or the service implementations.
+You can rerun the generator when you add or change the contextual `xfk:enum-cache` configuration of `read enum` operations, or if you change any parameters on those operations. Normally, the latter will require re-running other generators that depend on the same model elements, such as generators of UI views, data objects, service and data contracts, or service implementations.
 
 :::note
-Therefore, this generator should be included in the build of the model project in the configuration, in order to allow to easily regenerate all cache loaders along with other artifacts.
+Therefore, this generator should be included in the build of the model project in the configuration, to allow you to easily regenerate all cache loaders along with other artifacts.
 :::
 
 ### Customizing the output
@@ -128,9 +128,9 @@ You should never edit generated cache loaders directly. This allows re-running t
 
 To add your customizations, you should create a subclass of the generated cache loader class, and use the subclass in your code.
 
-### Cleaning generator’s output
+### Cleaning the generator’s output
 
-This generator supports cleaning either all generated cache loaders, or only the ones from the selected model files using the *Clean* context menu for that generator.
+This generator supports cleaning either all generated cache loaders or only the ones from the selected model files using the *Clean* context menu for that generator.
 
 :::tip
 Normally, cleaning the generated files makes sense if you are planning to change the output path for the generator, or when you have removed some of the enumerations from the model, and want the generated classes deleted and removed from the target project.

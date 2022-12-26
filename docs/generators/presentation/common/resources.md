@@ -4,23 +4,23 @@ sidebar_position: 3
 
 # Label Resources
 
-Generates a resource file with labels and titles for data properties, data objects and views declared in the model.
+Generates a resource file with labels and titles for data properties, data objects, and views declared in the model.
 
-The generator uses specific labels and titles that are configured in the model for the corresponding entities, or uses their names to generate a label.
+The generator uses specific labels and titles that are configured in the model for the corresponding entities or uses their names to generate a label.
 
-The generator uses standard format for the resource keys, which allows Xomega Framework to automatically set the labels for data properties and use them on the property-bound controls that support it, such as Blazor.
+The generator uses a standard format for the resource keys, which allows Xomega Framework to automatically set the labels for data properties and use them on the property-bound controls that support it, such as Blazor.
 
 Other generators of views and the main menu can also use these resource keys to set localized titles for child panels or tabs, as well as the navigation buttons.
 
 ## Generator inputs
 
-The generator uses the names of object properties, links and views, as well as custom label and title attributes to generate resources for field and link labels with access keys, panel and view titles, and top level navigation menus.
+The generator uses the names of object properties, links, and views, as well as custom label and title attributes to generate resources for the field and link labels with access keys, panel and view titles, and top-level navigation menus.
 
 ### Field labels and access keys
 
-For each field/property on the data objects declared in the model the generator will create resources for their labels and access keys, if the latter are explicitly specified.
+For each field/property on the data objects declared in the model, the generator will create resources for their labels and access keys, if the latter is explicitly specified.
 
-The following snippet shows an example of how a `SalesOrderList` object customizes labels for some of it properties, while labels for its other properties that are not listed or have no label attribute will be generated from their names.
+The following snippet shows an example of how a `SalesOrderList` object customizes labels for some of its properties, while labels for its other properties that are not listed or have no label attribute will be generated from their names.
 
 ```xml
 <xfk:data-object class="SalesOrderList" list="true">
@@ -40,9 +40,9 @@ The following snippet shows an example of how a `SalesOrderList` object customiz
 
 ### Link labels and access keys
 
-For each link declared on the data objects in the model the generator will create resources for their labels and access keys, if the latter are explicitly specified.
+For each link declared on the data objects in the model, the generator will create resources for their labels and access keys, if the latter is explicitly specified.
 
-The following snippet shows an example of how a `SalesOrderList` object customizes the label and access key for its `new` link, while the `details` link will be shown on the `sales order number` field and does not really need a label.
+The following snippet shows an example of how a `SalesOrderList` object customizes the label and access key for its `new` link, while the `details` link will be shown on the `sales order number` field and does not need a label.
 
 ```xml
 <xfk:data-object class="SalesOrderList" list="true">
@@ -64,7 +64,7 @@ The following snippet shows an example of how a `SalesOrderList` object customiz
 
 ### Panel titles
 
-For each child object declared on a data object in the model the generator will create resources for their titles, using either the child's name or the custom `title` attribute on the corresponding `ui:panel` or `ui:tab` element, as shown below.
+For each child object declared on a data object in the model, the generator will create resources for their titles, using either the child's name or the custom `title` attribute on the corresponding `ui:panel` or `ui:tab` element, as shown below.
 
 ```xml
 <xfk:data-object class="SalesOrderCustomerObject" customize="true">
@@ -94,7 +94,7 @@ For each child object declared on a data object in the model the generator will 
 ```
 
 :::note
-Note, that the title for the main panel with object's fields will be displayed only if you specify the `title` attribute on the `ui:fields` element.
+Note, that the title for the main panel with the object's fields will be displayed only if you specify the `title` attribute on the `ui:fields` element.
 :::
 
 ### View titles
@@ -112,7 +112,7 @@ For each view declared in the model the generator will create resources for thei
 
 For each primary view declared in the model without the `child` attribute, the generator will create resources for their navigation menu titles using the view's name or the `title` attribute.
 
-The titles for details views, which would be for creating new details objects when opened from a top-level navigation menu, will be prefixed with a word "*New* ".
+The titles for details views, which would be for creating new details objects when opened from a top-level navigation menu, will be prefixed with the word "*New* ".
 
 :::tip
 You can always override specific resources in your own set of resources using the same key, or you can update the menu options to use a different resource key.
@@ -120,7 +120,7 @@ You can always override specific resources in your own set of resources using th
 
 ### Static enumerations
 
-For each item of a static enumeration defined in the model, the generator will create a resource with the default text for the item using the resource key formatted as `Enum_<EnumName>.<ItemValue>`, in order to allow [localization of the static data](../../../framework/common-ui/lookup#localizing-static-data). The default text will be either the content of the `text` child element, if provided, or the item's `name` attribute.
+For each item of a static enumeration defined in the model, the generator will create a resource with the default text for the item using the resource key formatted as `Enum_<EnumName>.<ItemValue>`, to allow [localization of the static data](../../../framework/common-ui/lookup#localizing-static-data). The default text will be either the content of the `text` child element if provided or the item's `name` attribute.
 
 For example, you can define an enumeration `error severity`, and provide a custom `text` value for the *Error* severity as follows.
 
@@ -152,7 +152,7 @@ This generator creates a single `.resx` XML file with resource keys and values, 
 
 ## Configuration
 
-The following sections describe configuration parameters used by the generator.
+The following sections describe the configuration parameters used by the generator.
 
 ### Generator parameters
 
@@ -173,7 +173,7 @@ The generator doesn't use any other configuration parameters from the model.
 
 ### Common configurations
 
-There expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
+There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 
@@ -201,6 +201,6 @@ You should update the model as appropriate instead.
 Alternatively, you can override the values of the generated resources in your custom resources using the same resource keys, and use your custom resources in the `CompoundResourceManager` before the generated resources.
 :::
 
-### Cleaning generator’s output
+### Cleaning the generator’s output
 
 This generator does not support separate cleaning, since it always regenerates all resources when you rerun it.

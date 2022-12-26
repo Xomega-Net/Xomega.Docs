@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Full CRUD with Views
 
-This is the main, extremely flexible model enhancement generator, which allows you to quickly add and configure different model elements, such as `create`, `read`, `update`, `delete` (CRUD) and `read list` operations for the services, as well as corresponding presentation data objects and UI views, all based on the definition of your model objects.
+This is the main, extremely flexible model enhancement generator, which allows you to quickly add and configure different model elements, such as `create`, `read`, `update`, `delete` (CRUD), and `read list` operations for the services, as well as corresponding presentation data objects and UI views, all based on the definition of your model objects.
 
 ## Generator inputs
 
@@ -16,7 +16,7 @@ It can also be run to enhance existing operations, such as to add REST methods o
 
 ## Generator outputs
 
-This generator updates a single or multiple `.xom` files that contain model objects with operations, data objects, views, or other elements as configured by the generator parameters.
+This generator updates single or multiple `.xom` files that contain model objects with operations, data objects, views, or other elements as configured by the generator parameters.
 
 ### CRUD Operations
 
@@ -24,7 +24,7 @@ When *Generate CRUD* or *Generate Subobject CRUD* parameters are set to `True`, 
 
 The input parameters of the CRUD operations will be based on the object key fields. Non-key fields will be also in the input of the `create` and `update` operations, as well as in the output of the `read` operation.
 
-The input structures will be generated such that it would be easy to expose them via REST services. And if *Generate Rest Methods* parameter is set, then the generator will also configure the operations with annotations for REST method, as illustrated below.
+The input structures will be generated such that it would be easy to expose them via REST services. And if *Generate Rest Methods* parameter is set, then the generator will also configure the operations with annotations for the REST method, as illustrated below.
 
 ```xml
 <objects>
@@ -53,15 +53,15 @@ The input structures will be generated such that it would be easy to expose them
 </objects>
 ```
 
-After you add CRUD operations to an object, you can update their input and output parameters, as well as the REST method configuration as appropriate.
+After you add the CRUD operations to an object, you can update their input and output parameters, as well as the REST method configuration as appropriate.
 
 ### Read List Operation
 
 If you set the *Generate Read List* or *Generate Subobject Read List* parameters of the generator to `True`, the generator will add `read list` operations to the selected objects and/or their subobjects.
 
-The output of the operation will have a `list="true"` attribute, and will contain all object's fields. The input parameters for a `read list` operation on a subobject will contain just the parent object's key fields.
+The output of the operation will have a `list="true"` attribute and will contain all the object's fields. The input parameters for a `read list` operation on a subobject will contain just the parent object's key fields.
 
-For primary objects that don't have a parent though, the input parameters will contain all object's fields as criteria, if the *Generate Read List Criteria* parameter is set. Additionally, if *Generate Read List Operators* parameter is set, then the criteria input structure will have a special comparison operator parameter for each field, and there will be a second parameter added for fields that allow for a `BETWEEN` operator, such as for dates or numbers, to let you supply a range.
+For primary objects that don't have a parent though, the input parameters will contain all the object's fields as criteria, if the *Generate Read List Criteria* parameter is set. Additionally, if *Generate Read List Operators* parameter is set, then the criteria input structure will have a special comparison operator parameter for each field, and there will be a second parameter added for fields that allow for a `BETWEEN` operator, such as for dates or numbers, to let you supply a range.
 
 The following example illustrates such a setup.
 
@@ -98,7 +98,7 @@ As with the CRUD operations, specifying *Generate Rest Methods* parameter will a
 
 ### Data Objects
 
-When you set the *Generate Data Objects* parameter of the generator to `True`, the generator will add declarations of "details" or "list" objects for the corresponding CRUD or `read list` operations, and will add such data objects to the configuration of those operations, which determines the set of data object's properties, as follows.
+When you set the *Generate Data Objects* parameter of the generator to `True`, the generator will add declarations of "details" or "list" objects for the corresponding CRUD or `read list` operations and will add such data objects to the configuration of those operations, which determines the set of data object's properties, as follows.
 
 ```xml
 <operation name="read list" type="readlist">
@@ -137,13 +137,13 @@ In addition, the generator can configure the data objects to make a serial key f
 </xfk:data-objects>
 ```
 
-The data objects serve as view models for search or details views, and are the main part of the views.
+The data objects serve as view models for search or details views and are the main part of the views.
 
 ### Search/Details Views
 
 When you set the *Generate Search View* or *Generate Details View* parameters of the generator to `True`, the generator will add declarations of search and/or details views based on the corresponding data objects as view models.
 
-The view name should be unique, so it will be built from the object name, with a word "List" added for search views, and a postfix specified by the *View Name Postfix*, which is typically set to "*View*".
+The view name should be unique, so it will be built from the object name, with the word "List" added for search views, and a postfix specified by the *View Name Postfix*, which is typically set to "*View*".
 
 The following snippet illustrates such a view setup.
 
@@ -167,7 +167,7 @@ For objects that represent static data that is stored in the database, but can b
 This is done by specifying the *Generate Read Enum* and/or *Generate Subobject Read Enum* generator parameters, which will add a `read enum` operation decorated with a dynamic enumeration specification that tells the Xomega Framework which output parameter is an internal Id, and which one should be used as a user-facing description.
 
 :::caution
-If the generator cannot find a proper object field to use as the Id or a description, then it will just add those as output parameters, and you'll need to manually provide custom code in the services for those parameters, in order to return proper values.
+If the generator cannot find a proper object field to use as the Id or a description, then it will just add those as output parameters, and you'll need to manually provide custom code in the services for those parameters, to return proper values.
 :::
 
 You can also set the *Make Key Type Enumerated* parameter to update the key type for the object, and link it to the new enumeration, which would provide a selection control for any field that is using that type, as illustrated below.
@@ -205,7 +205,7 @@ You can also set the *Make Key Type Enumerated* parameter to update the key type
 
 ## Configuration
 
-The following sections describe configuration parameters used by the generator.
+The following sections describe the configuration parameters used by the generator.
 
 ### Generator parameters
 
@@ -250,7 +250,7 @@ This is a flexible generator that can be configured in different ways and saved 
 
 #### Full CRUD with Search and Details views
 
-This is a default 'all inclusive' configuration with the values as described above. It can be used to quickly add all CRUD and `read list` operations to the barebone objects, as well as standard Search and Details views based on those operations.
+This is a default 'all-inclusive' configuration with the values described above. It can be used to quickly add all CRUD and `read list` operations to the barebone objects, as well as standard Search and Details views based on those operations.
 
 #### Lookup view
 
@@ -268,7 +268,7 @@ The sections below provide some details on how to work with the generator.
 
 You can run this generator for either one file, or for multiple selected files if you want to enhance multiple objects.
 
-You can run a configuration that adds all enhancements at once, or you can create multiple configurations that add different enhancements, and then run them one by one. For example, you can add a `read list` operation first, and then CRUD operations, and then data object definitions, views etc.
+You can run a configuration that adds all enhancements at once, or you can create multiple configurations that add different enhancements, and then run them one by one. For example, you can add a `read list` operation first, then CRUD operations, and then data object definitions, views, etc.
 
 :::caution
 The generator is not supposed to be included in the model build process.
@@ -276,7 +276,7 @@ The generator is not supposed to be included in the model build process.
 
 ### Customizing the output
 
-After you have added your operations, data objects, or other enhancements with this generator, you can update the model to taylor your operations for your application. The generator creates operations based on all fields of the object, so it will be just a matter of removing parameters for the fields that you don't need in the operations, and adding parameters that are not based directly on the object's fields.
+After you have added your operations, data objects, or other enhancements with this generator, you can update the model to tailor your operations for your application. The generator creates operations based on all fields of the object, so it will be just a matter of removing parameters for the fields that you don't need in the operations and adding parameters that are not based directly on the object's fields.
 
 If you re-run the generator after updating the model, your manual changes should be largely preserved.
 
@@ -284,11 +284,11 @@ If you re-run the generator after updating the model, your manual changes should
 However, it is still recommended to **check in your model** to your source control before re-running the generator, so that you could easily review the changes from it.
 :::
 
-### Cleaning generator’s output
+### Cleaning the generator’s output
 
 This generator supports cleaning the enhancements it adds when you run the *Clean* command.
 
-This could be useful during initial prototyping when you are actively changing the object fields, so that you could re-add the operations, or to clean up the model if you ran the generator on a wrong file.
+This could be useful during initial prototyping when you are actively changing the object fields so that you could re-add the operations, or clean up the model if you run the generator on the wrong file.
 
 :::danger
 Keep in mind that the *Clean* operation will also remove any customizations that you may have made, so you want to make sure that you **check in your model** to your source control before running it to avoid any loss of useful model data.

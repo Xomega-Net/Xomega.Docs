@@ -79,16 +79,16 @@ For example, the `customer update` and `payment update` structures that are refe
 The name of the generated class will be based on the name of the structure, e.g. `CustomerUpdate`, which should be unique as long as there are no other classes with this name defined in the services' namespace.
 
 :::note
-The standalone structures can in turn have parameters referencing other standalone structures, or can have other inline structures nested inside of them, which will be also generated using their fully qualified name.
+The standalone structures can in turn have parameters referencing other standalone structures or can have other inline structures nested inside of them, which will be also generated using their fully qualified name.
 :::
 
 ### CLR types
 
 The CLR types that are used on the generated structures are determined based on the configuration of their logical types in the model.
 
-If the logical type is not specified on the structure's parameter, then the type of the field with the same name on the corresponding object will be used, which is either the object that the operation is defined on, or the object referenced by the `object` attribute on a standalone structure.
+If the logical type is not specified on the structure's parameter, then the type of the field with the same name on the corresponding object will be used, which is either the object that the operation is defined on or the object referenced by the `object` attribute on a standalone structure.
 
-The logical types usually inherit such configurations from their base types, but can override the CLR types to use as needed. You need to add the `clr:type` element under the `config` element of the type, and specify the CLR type's name and namespace, as well as whether it's a value type, as follows.
+The logical types usually inherit such configurations from their base types but can override the CLR types to use as needed. You need to add the `clr:type` element under the `config` element of the type, and specify the CLR type's name and namespace, as well as whether it's a value type, as follows.
 
 ```xml
 <type name="date time">
@@ -121,7 +121,7 @@ Usually you want to output generated classes to a separate shared project that c
 
 ## Configuration
 
-The following sections describe configuration parameters used by the generator.
+The following sections describe the configuration parameters used by the generator.
 
 ### Generator parameters
 
@@ -137,7 +137,7 @@ The following table lists configuration parameters that are set as the generator
 
 ### Model configuration
 
-Configuration parameters for the generator that need to be also accessible to other generators are specified in the Xomega model in the `svc:services-config` element under the top level `config` element, which is conventionally placed in the `global_config.xom` file.
+The generator's configuration parameters that need to be also accessible to other generators are specified in the Xomega model in the `svc:services-config` element under the top-level `config` element, which is conventionally placed in the `global_config.xom` file.
 
 These parameters include whether the service operations are `async`, whether they include a `cancellation` token, and the `namespace` for the generated classes, as shown below.
 
@@ -150,14 +150,14 @@ These parameters include whether the service operations are `async`, whether the
 ```
 
 :::tip
-You should make the service operations async and support cancellation tokens where possible, unless you need to support legacy frameworks such as WCF or WebForms.
+You should make the service operations async and support cancellation tokens where possible unless you need to support legacy frameworks such as WCF or WebForms.
 :::
 
-The generated service interface and structures will be decorated with WCF attributes for service and data contracts only if WCF configuration is defined in the `wcf:config` element of the global model configuration under the top level `config` element, as  described [here](../../visual-studio/modeling/config#wcf-config).
+The generated service interface and structures will be decorated with WCF attributes for service and data contracts only if WCF configuration is defined in the `wcf:config` element of the global model configuration under the top-level `config` element, as described [here](../../visual-studio/modeling/config#wcf-config).
 
 ### Common configurations
 
-There expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
+There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 
@@ -165,12 +165,12 @@ The sections below provide some details on how to work with the generator.
 
 ### Running the generator
 
-You can run this generator either for the entire model, or for individual files by selecting them in the model project, and running the generator from the context menu.
+You can run this generator either for the entire model, or for individual files by selecting them in the model project and running the generator from the context menu.
 
 You can rerun the generator when you add or change object operations or structures in the model, which will require re-running other generators that depend on the same model elements, such as generators of UI views, data objects as well as service implementations.
 
 :::note
-Therefore, this generator should be included in the build of the model project in the configuration, in order to allow to easily regenerate all service and data contracts along with other artifacts.
+Therefore, this generator should be included in the build of the model project in the configuration, to allow you to easily regenerate all service and data contracts along with other artifacts.
 :::
 
 ### Customizing the output
@@ -183,9 +183,9 @@ You should never edit generated service and data contracts directly. This allows
 
 If you need to provide additional custom WCF attributes beyond the basic `ServiceContract` and `OperationContract` that will be generated if you have a `wcf:config` element in the model configuration, then you can add a `wcf:operation` element in the model to the `config` element of individual operations, or a `wcf:service` element to the `config` element of the object, as described [here](../../visual-studio/modeling/services#wcf-configuration).
 
-### Cleaning generator’s output
+### Cleaning the generator’s output
 
-This generator supports cleaning either all generated service contracts, or only the ones from the selected model files using the *Clean* context menu for that generator.
+This generator supports cleaning either all generated service contracts or only the ones from the selected model files using the *Clean* context menu for that generator.
 
 :::tip
 Normally, cleaning the generated files makes sense if you are planning to change the output path for the generator, or when you have removed some of the services from the model, and want the generated classes deleted.

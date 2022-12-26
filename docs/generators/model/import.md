@@ -4,13 +4,13 @@ sidebar_position: 1
 
 # Import from Database
 
-This generator helps you jump-start Xomega object modeling by importing the model from an existing SQL Server database. The generator builds the objects and fields from the corresponding database tables and columns, declares logical types and field-sets for object keys so that to preserve relationships between objects, and declares reusable types for all other object fields.
+This generator helps you jump-start Xomega object modeling by importing the model from an existing SQL Server database. The generator builds the objects and fields from the corresponding database tables and columns, declares logical types and field sets for object keys to preserve relationships between objects, and declares reusable types for all other object fields.
 
-Prior to running the generator though, you need to make sure you pre-configure the model as described below.
+Before running the generator though, you need to make sure you pre-configure the model as described below.
 
 ## Generator inputs
 
-The generator takes the structure of the target database, and creates model types, field-sets and objects for the database tables, except for any tables that were excluded from the import.
+The generator takes the structure of the target database and creates model types, field sets, and objects for the database tables, except for any tables that were excluded from the import.
 
 ### Logical Types
 
@@ -31,13 +31,13 @@ Therefore, before you run the import you may want to make sure the existing type
 </type>
 ```
 
-However if the standard for your current system is `tinyint` to store a boolean, then you should update the Xomega type to map to `tinyint`, so that it can be properly identified by the generator.
+However, if the standard for your current system is `tinyint` to store a boolean, then you should update the Xomega type to map to `tinyint` so that it can be properly identified by the generator.
 
 ### Field-sets
 
-By the same token, the generator can identify groups of fields that match one of the field-sets defined in the model and use a reference to the field-set instead of those fields.
+By the same token, the generator can identify groups of fields that match one of the field sets defined in the model and use a reference to the field set instead of those fields.
 
-If all or most of your tables, for example, have a set of standard audit columns, such as the user who created the record and the creation time stamp, then you can just define such a fieldset in your model first and it will be automatically used by the imported objects.
+If all or most of your tables, for example, have a set of standard audit columns, such as the user who created the record and the creation timestamp, then you can just define such a field set in your model first and it will be automatically used by the imported objects.
 
 ```xml
 <fieldset name="audit fields">
@@ -46,7 +46,7 @@ If all or most of your tables, for example, have a set of standard audit columns
 </fieldset>
 ```
 
-If later on you will want to also add the user who last modified the record and the last modification time stamp, then you could just add them to that fieldset definition and they will be automatically included in all the objects that use that fieldset.
+If later on, you will want to also add the user who last modified the record and the last modification time stamp, then you could just add them to that fieldset definition and they will be automatically included in all the objects that use that fieldset.
 
 ```xml
 <fieldset name="audit fields">
@@ -71,11 +71,11 @@ You can obviously refactor the model structure after you import it, but sometime
 
 ## Generator outputs
 
-This generator creates a single or multiple `.xom` files with objects, field-sets and logical types as defined by the *OutputPath* parameter, and adds them to the model project.
+This generator creates single or multiple `.xom` files with objects, field sets, and logical types as defined by the *OutputPath* parameter, and adds them to the model project.
 
 ### Logical Types
 
-For the columns where the generator cannot map the database type to one of the existing Xomega types, it will define a new type that derives from one of the existing types, and will use it on all columns with the same type, as illustrated below.
+For the columns where the generator cannot map the database type to one of the existing Xomega types, it will define a new type that derives from one of the existing types and will use it on all columns with the same type, as illustrated below.
 
 ```xml
 <types>
@@ -94,7 +94,7 @@ You can rename and refactor such types after the import to give them proper logi
 
 ### Key Types
 
-For primary keys the generator will define either a simple logical type, or a fieldset, if the key is composite with more than just parent table's key. The following snippet illustrates this setup.
+For primary keys, the generator will define either a simple logical type or a fieldset, if the key is composite with more than just the parent table's key. The following snippet illustrates this setup.
 
 ```xml
 <types>
@@ -178,7 +178,7 @@ Without such a configuration, the column name for the field will be implicitly d
 
 ## Configuration
 
-The following sections describe configuration parameters used by the generator.
+The following sections describe the configuration parameters used by the generator.
 
 ### Generator parameters
 
@@ -209,13 +209,13 @@ The generator doesn't use any other configuration parameters from the model.
 
 ### Common configurations
 
-When importing the model from a database you should first of all define the database connection for the generator. You can do it via the *Database Connection Configuration* dialog that pops up from the generator's *Properties* page. In that dialog you should specify an OLE DB connection string to your database, which Xomega will validate and will use to read your database metadata.
+When importing the model from a database you should, first of all, define the database connection for the generator. You can do it via the *Database Connection Configuration* dialog that pops up from the generator's *Properties* page. In that dialog, you should specify an OLE DB connection string to your database, which Xomega will validate and will use to read your database metadata.
 
-On the next tab of the dialog you can specify which database tables you would like to exclude from the model. Next, the system will try to determine if your database names are case-sensitive and will set the *Database Case* to `CamelCase` or your choice of `UPPER_CASE` or `lower_case` respectively, which will be used for generating tables for all new objects as well.
+On the next tab of the dialog, you can specify which database tables you would like to exclude from the model. Next, the system will try to determine if your database names are case-sensitive and will set the *Database Case* to `CamelCase` or your choice of `UPPER_CASE` or `lower_case` respectively, which will be used for generating tables for all new objects as well.
 
-It makes sense to save this database configuration as default project settings, which will be one of the options in the dialog, so that all other database-related generators could reuse the same settings. This way, for example, the *Database Change Script* generator won't try to remove the tables that have been explicitly excluded from the model.
+It makes sense to save this database configuration as default project settings, which will be one of the options in the dialog so that all other database-related generators could reuse the same settings. This way, for example, the *Database Change Script* generator won't try to remove the tables that have been explicitly excluded from the model.
 
-If you save it as a default configuration then it will be available in the model project's *Properties* page, and the corresponding generator properties will be set to the '*Use Project Setting*' value.
+If you save it as a default configuration then it will be available on the model project's *Properties* page, and the corresponding generator properties will be set to the '*Use Project Setting*' value.
 
 ## How to use the generator
 
@@ -223,7 +223,7 @@ The sections below provide some details on how to work with the generator.
 
 ### Running the generator
 
-You can run this generator for the entire database or for a subset of tables after configuring the database generator parameters.
+You can run this generator for the entire database or a subset of tables after configuring the database generator parameters.
 
 :::caution
 The model must contain no objects defined when the generator runs to prevent overwriting any custom changes if you rerun it.
@@ -232,17 +232,17 @@ The model must contain no objects defined when the generator runs to prevent ove
 The generated Xomega files will be automatically added to the project under the folder designated by the *Output Path* property.
 
 :::tip
-You can make it output to the project folder, but initially you may want to consider generating it in some project sub-folder (such as the default `Import/` folder). This will allow you to review the generated files, and clean them all easily if you realize that you need to make any adjustments in the database or the configuration, and then rerun the generator.
+You can make it output to the project folder, but initially, you may want to consider generating it in some project sub-folder (such as the default `Import/` folder). This will allow you to review the generated files, and clean them all easily if you realize that you need to make any adjustments in the database or the configuration, and then rerun the generator.
 :::
 
 ### Customizing the output
 
 If upon review of the imported model you would like to re-import it differently, you will need to *remove all of the generated objects*, make the necessary changes in the generator parameters, such as whether or not to keep table or column names, in the model, such as defining new types or fieldsets that can be used by the import, or in the database, such as adding foreign keys with cascade delete between parent objects and sub-objects, and then rerun the generator.
 
-After that you can make any necessary changes directly in the model without rerunning the generator anymore.
+After that, you can make any necessary changes directly in the model without rerunning the generator anymore.
 
-### Cleaning generator’s output
+### Cleaning the generator’s output
 
-This generator does not support cleaning of the generated files.
+This generator does not support the cleaning of the generated files.
 
 While you review the initial import of the model from the database, you may want to output the imported objects into a dedicated folder under the model project, so that it would be easy to delete the generated folder, make the necessary updates, and rerun the generator.

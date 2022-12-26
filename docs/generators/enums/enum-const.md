@@ -4,21 +4,21 @@ sidebar_position: 2
 
 # Enumeration Constants
 
-Generates static C# constants for all enumerations, their items and properties declared in the Xomega model.
+Generates static C# constants for all enumerations, their items, and properties declared in the Xomega model.
 
-This allows using the generated constants in the code to refer to specific items, properties and enumerations, which provides compile-time validation of the code in cases when any of those get renamed or deleted.
+This allows using the generated constants in the code to refer to specific items, properties, and enumerations, which provides compile-time validation of the code in cases when any of those get renamed or deleted.
 
 ## Generator inputs
 
-For each static enumeration that is declared in the model using `enum` element, or dynamic enumeration that is defined by a `xfk:enum-cache` config element of a `read enum` operation, the generator will create a static C# class, which will contain a constant `EnumName` with the enumeration name, a nested class `Attributes` with constants for the names of enumeration properties, and a nested class `Parameters` with constants for the input parameters, as appropriate.
+For each static enumeration that is declared in the model using `enum` element, or dynamic enumeration that is defined by an `xfk:enum-cache` config element of a `read enum` operation, the generator will create a static C# class, which will contain a constant `EnumName` with the enumeration name, a nested class `Attributes` with constants for the names of enumeration properties, and a nested class `Parameters` with constants for the input parameters, as appropriate.
 
-For static enumerations it will also contain string constants for enumeration items, which will be assigned to the item value. If enumeration inherits from another enumeration, the list of items will be merged with the base enumeration.
+Static enumerations will also contain string constants for enumeration items, which will be assigned to the item value. If an enumeration inherits from another enumeration, the list of items will be merged with the base enumeration.
 
 ### Properties of static enumerations
 
 Each enumeration allows declaring a list of additional properties that can be specified for each item on top of the standard name and value.
 
-They are typically used to filter the list of items, or group them by certain properties. When stored in a lookup cache, the values for each item's properties are stored as additional named attributes on each record, so the generator creates constants for each property name to use in the code.
+They are typically used to filter the list of items or group them by certain properties. When stored in a lookup cache, the values for each item's properties are stored as additional named attributes on each record, so the generator creates constants for each property name to use in the code.
 
 The following example illustrates how a `person type` enumeration has a single-value property `internal` declared, which defaults to `false`, and is set to `true` for the `Sales person` and `Employee` items.
 
@@ -73,7 +73,7 @@ For dynamic enumerations that are based on a `read enum` operation, additional p
 
 ### Parameters of contextual enumerations
 
-For dynamic enumerations based on a `read enum` operation that have input parameters, and their list of values is therefore dependent on the values of those parameters, constants for the names of such parameters will be generated in the `Parameters` class, so that they could be used with the local lookup cache loaders.
+For dynamic enumerations based on `read enum` operations that have input parameters, and their list of values is therefore dependent on the values of those parameters, constants for the names of such parameters will be generated in the `Parameters` class, so that they could be used with the local lookup cache loaders.
 
 The following snippet shows such an enumeration with a `product id` input parameter.
 
@@ -123,7 +123,7 @@ If the displayed text must be different from the name, e.g. when the generated c
 
 ### Enumeration inheritance
 
-An enumeration can inherit from another enumeration, and add, remove, or replace items or their properties. This can be used to minimize duplication between enumerations that are similar, but with slight differences. The generated class for the enumeration will contain constants for combined/merged list of items.
+An enumeration can inherit from another enumeration, and add, remove, or replace items or their properties. This can be used to minimize duplication between similar enumerations, but with slight differences. The generated class for the enumeration will contain constants for the combined/merged list of items.
 
 The snippet below illustrates how the `sales order status` enumeration extends from the base `order status` enumeration, removes the `New` item, changes the value for the `Rejected` and `Cancelled` items, and adds new `Backordered` and `Shipped` items.
 
@@ -148,7 +148,7 @@ This generator creates a single file with C# classes for all static and dynamic 
 
 ## Configuration
 
-The following sections describe configuration parameters used by the generator.
+The following sections describe the configuration parameters used by the generator.
 
 ### Generator parameters
 
@@ -164,9 +164,9 @@ The following table lists configuration parameters that are set as the generator
 
 ### Model configuration
 
-Parameters specified in the model configuration that are used by this generator consist of just the namespace for the classes that contain enumeration constants.
+Parameters specified in the model configuration that is used by this generator consist of just the namespace for the classes that contain enumeration constants.
 
-This is specified in the `xfk:enumerations-config` element under the top level `config` model element, which is conventionally placed in the `global_config.xom` file, as illustrated by the following snippet.
+This is specified in the `xfk:enumerations-config` element under the top-level `config` model element, which is conventionally placed in the `global_config.xom` file, as illustrated by the following snippet.
 
 ```xml title="global_config.xom"
 <xfk:enumerations-config namespace="MySolution.Enumerations"/>
@@ -174,7 +174,7 @@ This is specified in the `xfk:enumerations-config` element under the top level `
 
 ### Common configurations
 
-There expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
+There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 
@@ -184,12 +184,12 @@ The sections below provide some details on how to work with the generator.
 
 You can run this generator for the entire model only.
 
-You can rerun the generator when you add or change enumeration items or properties, or the `xfk:enum-cache` configuration of `read enum` operations, or if you change any parameters on those operations.
+You can rerun the generator when you add or change enumeration items or properties or the `xfk:enum-cache` configuration of `read enum` operations, or if you change any parameters on those operations.
 
 :::note
-Normally, the latter will require re-running other generators that depend on the same model elements, such as generators of UI views, data objects, service and data contracts or the service implementations.
+Normally, the latter will require re-running other generators that depend on the same model elements, such as generators of UI views, data objects, service and data contracts, or the service implementations.
 
-Therefore, this generator should be included in the build of the model project in the configuration, in order to allow to easily regenerate all enumeration constants along with other artifacts.
+Therefore, this generator should be included in the build of the model project in the configuration, to allow easy regeneration of all enumeration constants along with other artifacts.
 :::
 
 ### Customizing the output
@@ -200,6 +200,6 @@ You should never edit generated classes or constants directly to allow re-runnin
 
 You should update the model as appropriate instead.
 
-### Cleaning generator’s output
+### Cleaning the generator’s output
 
 This generator does not support separate cleaning, since it always regenerates all enumerations when you rerun it.

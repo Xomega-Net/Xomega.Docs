@@ -37,7 +37,7 @@ The generator outputs `.svc` files for each service, possibly grouped by module,
 
 ## Configuration
 
-The following sections describe configuration parameters used by the generator.
+The following sections describe the configuration parameters used by the generator.
 
 ### Generator parameters
 
@@ -68,7 +68,7 @@ The generator itself doesn't use any configuration from the model, but the `base
 
 ### Common configurations
 
-There expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
+There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 
@@ -78,7 +78,7 @@ The sections below provide some details on how to work with the generator.
 
 You can run this generator for the entire model only.
 
-You can rerun the generator when you add new services to the system, which happens if you add operations to a model object that didn't have any operations. This is usually the case during initial active prototyping or development of the system.
+You can rerun the generator when you add new services to the system, which happens if you add operations to a model object that didn't have any operations. This is usually the case during the initial active prototyping or development of the system.
 
 :::tip
 Therefore, this generator can be included in the build of the model project in its configuration initially, and then, once the list of services is stable, can be excluded from the model build.
@@ -86,9 +86,9 @@ Therefore, this generator can be included in the build of the model project in i
 
 ### Customizing the output
 
-The generator doesn't support any additional customization beyond what can specified in the generator's parameters.
+The generator doesn't support any additional customization beyond what can be specified in the generator's parameters.
 
-### Cleaning generator’s output
+### Cleaning the generator’s output
 
 This generator does not support cleaning generated service host files.
 

@@ -9,12 +9,12 @@ Generates a rerunnable SQL script for reloading enumerations defined in the Xome
 Those database tables should have corresponding objects defined in the model, which will have configurations of how the object fields map to the structure of Xomega enumerations.
 
 :::info
-This generator is useful when you want to maintain your static data both in the Xomega model, so that it could be version controlled, allows inheritance and generation of other artifacts (such as constants) from it, and also have the static data in the database, which allows using it in SQL queries and stored procedures, and loading it from the database in runtime.
+This generator is useful when you want to maintain your static data both in the Xomega model so that it could be version controlled, allows inheritance and generation of other artifacts (such as constants) from it, and also have the static data in the database, which allows using it in SQL queries and stored procedures, and loading it from the database in runtime.
 :::
 
 ## Generator inputs
 
-The generator takes any static enumerations declared in the model using `enum` element that have a configuration of the enumeration source specified, and creates a rerunnable SQL script to load enumeration items and properties into the source tables.
+The generator takes any static enumerations declared in the model using `enum` element that has a configuration of the enumeration source specified and creates a rerunnable SQL script to load enumeration items and properties into the source tables.
 
 If enumeration inherits from another enumeration, the list of items will be merged with the base enumeration.
 
@@ -22,7 +22,7 @@ If enumeration inherits from another enumeration, the list of items will be merg
 
 The source for the enumeration items in the database is specified by a `sql:enum-source` element nested under the enumeration's `config` element.
 
-In the source element you need to set the `items-object` attribute that points to an object defined in the model for the source table, which has a mapping between the object fields and enumeration structure.
+In the source element, you need to set the `items-object` attribute that points to an object defined in the model for the source table, which has a mapping between the object fields and enumeration structure.
 
 Since each enumeration item may have multi-value properties, you can also specify a separate (sub-) object that holds properties for enumeration items in the `item-properties-object` attribute, as illustrated below.
 
@@ -42,7 +42,7 @@ Since each enumeration item may have multi-value properties, you can also specif
 
 The objects that are set as a source of enumeration items for one or multiple enumerations must have an element `sql:enum-items` element nested under their `config` element, which provides a mapping between the object fields and the enumeration structure.
 
-Specifically, it should set which of the object's fields store the value, text and description of enumeration items in its attributes `item-value`, `item-text` and `item-desc` respectively.
+Specifically, it should set which of the object's fields store the value, text, and description of enumeration items in its attributes `item-value`, `item-text`, and `item-desc` respectively.
 
 If the object represents a generic dictionary that contains items for multiple enumerations, then you must indicate which field stores the name of the enumeration in its `enum-name` attribute.
 
@@ -50,7 +50,7 @@ You can also set the `default="true"` attribute on a generic dictionary, which w
 
 For any other field of the object, you should add nested `sql:property` elements to indicate which single-value property it maps to, or a `sql:fixed` element to set the field to a fixed value or a formula.
 
-Similarly, objects that store multi-value properties of enumeration items, or properties of generic dictionaries for multiple enumerations, must have an element `sql:enum-item-properties` element nested under their `config` element, specifying which of the object's fields store the item value, property name and property value in its attributes `item-value`, `property-name` and `property-value` respectively.
+Similarly, objects that store multi-value properties of enumeration items, or properties of generic dictionaries for multiple enumerations, must have an element `sql:enum-item-properties` element nested under their `config` element, specifying which of the object's fields store the item value, property name, and property value in its attributes `item-value`, `property-name` and `property-value` respectively.
 
 If the object is part of a generic dictionary that contains item properties for multiple enumerations, then you must indicate which field stores the name of the enumeration in its `enum-name` attribute.
 
@@ -106,7 +106,7 @@ The following example illustrates such a configuration for a generic `dictionary
 ```
 
 :::tip
-If you configure such dictionary objects for existing database tables then, instead of manually defining those enumerations and their values in the model, you can initially import their data as model enumerations using the [Enumerations from Database](../model/enums) generator generator.
+If you configure such dictionary objects for existing database tables then, instead of manually defining those enumerations and their values in the model, you can initially import their data as model enumerations using the [Enumerations from Database](../model/enums) generator.
 
 This will also configure the source objects for the imported enumerations as appropriate.
 :::
@@ -117,7 +117,7 @@ This generator creates a single SQL file with a script that loads static enumera
 
 ## Configuration
 
-The following sections describe configuration parameters used by the generator.
+The following sections describe the configuration parameters used by the generator.
 
 ### Generator parameters
 
@@ -137,7 +137,7 @@ The generator doesn't use any other configuration parameters from the model.
 
 ### Common configurations
 
-There expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
+There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 
@@ -154,7 +154,7 @@ You should always carefully review the generated script before running it, to ma
 You can rerun the generator when you add or change enumeration items or properties.
 
 :::note
-This generator doesn't have to be included in the build of the model project in the configuration, and run only on as-needed basis instead, when you are ready to reload enumerations in the database.
+This generator doesn't have to be included in the build of the model project in the configuration and run only on an as-needed basis instead when you are ready to reload enumerations in the database.
 :::
 
 ### Customizing the output
@@ -165,6 +165,6 @@ You should never edit generated SQL directly to allow re-running the generator a
 
 You should update the model as appropriate instead.
 
-### Cleaning generator’s output
+### Cleaning the generator’s output
 
 This generator does not support separate cleaning, since it always regenerates all enumerations when you rerun it.

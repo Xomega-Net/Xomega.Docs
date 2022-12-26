@@ -6,19 +6,19 @@ sidebar_position: 1
 
 Generates search or details views for HTML5 Single Page Applications based on the type of their associated data object.
 
-For list objects it generates a search view with a paged data grid, and a collapsible criteria panel, which can have flexible search criteria with operators, if there is a corresponding criteria data object defined.
+For list objects, it generates a search view with a paged data grid, and a collapsible criteria panel, which can have flexible search criteria with operators, if there is a corresponding criteria data object defined.
 
-For regular non-list objects it generates a details view with controls and panels for child objects arranged using the specified layout, as well as the standard *Save*/*Delete* actions as per the data object's operations.
+For regular non-list objects, it generates a details view with controls and panels for child objects arranged using the specified layout, as well as the standard *Save*/*Delete* actions as per the data object's operations.
 
 The generated TypeScript view models extend from `XomegaJS` base classes for search and details views.
 
 You can add your customizations to a subclass of the generated view model, where you can programmatically update any generated HTML controls using JQuery, and implement any additional view logic.
 
-If you cannot make your customizations programmatically in the custom view model subclass, and need to change the generated HTML markup, then you can mark the layout on such a view as custom in the model, and the view won't be updated when rerunning the generator to preserve your custom changes.
+If you cannot make your customizations programmatically in the custom view model subclass and need to change the generated HTML markup, then you can mark the layout on such a view as custom in the model, and the view won't be updated when rerunning the generator to preserve your custom changes.
 
 ## Generator inputs
 
-The generator uses view definitions in the Xomega model in order to generate the corresponding SPA views. The view definitions consist of a view model with its associated data object that is also defined in the model, and optionally a layout specification, which can reference an existing layout configuration, and/or provide custom layout settings.
+The generator uses view definitions in the Xomega model to generate the corresponding SPA views. The view definitions consist of a view model with its associated data object that is also defined in the model, and optionally a layout specification, which can reference an existing layout configuration, and/or provide custom layout settings.
 
 ### Views
 
@@ -26,7 +26,7 @@ The generator will create search or details views based on whether or not the da
 
 In addition to a unique view name, you can specify a title for the view, and a `child` attribute, which determines if the view should be added to the main menu.
 
-To add custom logic to the generated view you need to set the `customize="true"` attribute on the `ui:view` element, which will  create and use a subclass of the generated view model class with a *Customized* postfix.
+To add custom logic to the generated view you need to set the `customize="true"` attribute on the `ui:view` element, which will create and use a subclass of the generated view model class with a *Customized* postfix.
 
 The following snippet shows an example of a search view definition in the Xomega model.
 
@@ -44,7 +44,7 @@ If you need to change the HTML markup, you can set a `custom="true"` attribute o
 
 ### Controls
 
-The HTML controls that are used on the generated views are determined based on the configuration of the types for the properties of the data objects that the view is based on. The types usually inherit such configurations from their base types, but can override the controls to use as needed.
+The HTML controls that are used on the generated views are determined based on the configuration of the types for the properties of the data objects that the view is based on. The types usually inherit such configurations from their base types but can override the controls to use as needed.
 
 Read-only fields will use a standard span element, but you can set up different editors for single-value and multi-value properties using standard HTML controls with any custom attributes, as illustrated below.
 
@@ -75,9 +75,9 @@ XomegaJS framework allows you to extend its standard Knockout-based property bin
 
 ### Fields
 
-To customize display of the data object's fields on the view, you can provide additional configurations in the model under the data object's `ui:display` element.
+To customize the display of the data object's fields on the view, you can provide additional configurations in the model under the data object's `ui:display` element.
 
-For each field you can specify whether it is hidden or editable/readonly, and the label or column header to use instead of deriving it from the property's name. The following snippet demonstrates such a setup.
+For each field, you can specify whether it is hidden or editable/read-only, and the label or column header to use instead of deriving it from the property's name. The following snippet demonstrates such a setup.
 
 ```xml
 <xfk:data-object class="SalesOrderList" list="true" customize="true">
@@ -110,7 +110,7 @@ The named links to other views, which are defined on the view's data objects in 
 </xfk:data-object>
 ```
 
-When a link has a `child="true"` attribute, the target view will be opened in a popup dialog, or in a separate details split-panel, if the link is on a search view with a master-details layout. Otherwise, the view will be opened as a new page.
+When a link has a `child="true"` attribute, the target view will be opened in a popup dialog, or separate details split panel if the link is on a search view with a master-details layout. Otherwise, the view will be opened as a new page.
 
 :::note
 Most of this setup for standard details and search views in the Xomega model can be easily added automatically by a special [model enhancement CRUD generator](../../model/crud).
@@ -118,17 +118,17 @@ Most of this setup for standard details and search views in the Xomega model can
 
 ## Generator outputs
 
-This generator creates SPA views with HTML markup and a TypeScript view model class, and registers their paths with the RequireJS configuration in the specified *Registry File*.
+This generator creates SPA views with HTML markup and a TypeScript view model class and registers their paths with the RequireJS configuration in the specified *Registry File*.
 
 If the view is not marked with a `child` attribute, it will also be added to the specified *Menu File* with Durandal routes registration, so that it could be displayed in the main menu.
 
 The generator also adds all the generated files to the specified SPA project as needed.
 
-For views that are decorated with a `customize="true"` attribute, it also creates a subclass of the generated view model class with a postfix *Customized* appended to the class name, if one does not exist yet. It will use this subclass in the RequireJS configuration for that view, and can also nest the customized class under the generated view in the project, if so configured.
+For views that are decorated with a `customize="true"` attribute, it also creates a subclass of the generated view model class with a postfix *Customized* appended to the class name if one does not exist yet. It will use this subclass in the RequireJS configuration for that view, and can also nest the customized class under the generated view in the project if so configured.
 
 ## Configuration
 
-The following sections describe configuration parameters used by the generator.
+The following sections describe the configuration parameters used by the generator.
 
 ### Generator parameters
 
@@ -151,7 +151,7 @@ The following table lists configuration parameters that are set as the generator
 
 ### Model configuration
 
-Additional configuration used by the generator is specified in the Xomega model under the top level `config` element, which is conventionally placed in the `global_config.xom` file.
+Additional configuration used by the generator is specified in the Xomega model under the top-level `config` element, which is conventionally placed in the `global_config.xom` file.
 
 The global configuration contains named layout configurations that are referenced in the individual views, which are specified under the `ui:layout-config` element, as shown below.
 
@@ -180,7 +180,7 @@ The global configuration contains named layout configurations that are reference
 
 ### Common configurations
 
-Normally, there expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
+Normally, there is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 :::tip
 When you are working on a specific view though, you can also copy the default configuration, and set that view as the selector, so that you could easily regenerate just that view instead of all the views.
@@ -194,7 +194,7 @@ The sections below provide some details on how to work with the generator.
 
 You can run this generator for all the views in the model, or for a specific view that is specified in the generator's parameter.
 
-You can rerun the generator when you change the data objects for the views, or UI configuration of their properties, and also when you change any other configurations that the views depend upon, such as links, layout, fields' settings, etc.
+You can rerun the generator when you change the data objects for the views, or the UI configuration of their properties, and also when you change any other configurations that the views depend upon, such as links, layout, fields' settings, etc.
 
 :::note
 This generator should be included in the build of the model project in the configuration, in order to allow to easily regenerate all views along with other artifacts.
@@ -203,18 +203,18 @@ This generator should be included in the build of the model project in the confi
 ### Customizing the output
 
 :::danger
-You should not edit generated markup or code behind for the views directly, if you would like to re-run the generator later without losing your changes, unless you specifically enabled custom layout for your view.
+You should not edit generated markup or code behind for the views directly if you would like to re-run the generator later without losing your changes unless you specifically enabled a custom layout for your view.
 :::
 
-To add your customizations, you need to edit a subclass of the generated view model class for the view that was added when you specified the `customize` attribute on the view. In that subclass you will have access to the view's HTML controls via JQuery, and can programmatically change them or add custom behaviors.
+To add your customizations, you need to edit a subclass of the generated view model class for the view that was added when you specified the `customize` attribute on the view. In that subclass, you will have access to the view's HTML controls via JQuery, and can programmatically change them or add custom behaviors.
 
 :::tip
 If you do need to change the markup for the view, you can set the `custom="true"` attribute on the view's `ui:layout` element after generating that view initially, and it won't be updated during subsequent runs of the generator.
 
-In this case you may as well delete the view from the model after initial generation, unless you need it there for link references from other objects.
+In this case, you may as well delete the view from the model after the initial generation unless you need it there for link references from other objects.
 :::
 
-### Cleaning generator’s output
+### Cleaning the generator’s output
 
 This generator supports cleaning all generated views using the *Clean* context menu for that generator.
 
@@ -223,5 +223,5 @@ Normally, cleaning the generated files makes sense if you are planning to change
 :::
 
 :::caution
-Note, that the customization subclasses that were generated for views with a `customize="true"` attribute will not be cleaned during these operations to prevent any loss of custom code during accidental run of such actions. Therefore, you may get compilation errors for those classes if you clean your views, and will need to delete them manually as needed.
+Note, that the customization subclasses that were generated for views with a `customize="true"` attribute will not be cleaned during these operations to prevent any loss of custom code during an accidental run of such actions. Therefore, you may get compilation errors for those classes if you clean your views, and will need to delete them manually as needed.
 :::

@@ -14,13 +14,13 @@ The generator can generate classes for either Entity Framework 6.x or Entity Fra
 
 The generator uses objects and their fields defined in the model to create EF entities and their configurations.
 
-It also leverages the structure of sub-objects, as well as the way key fields or fieldsets are set up, in order to infer the associations between the entities, so that they wouldn't need to be defined explicitly.
+It also leverages the structure of sub-objects, as well as the way key fields or fieldsets are set up, to infer the associations between the entities so that they wouldn't need to be defined explicitly.
 
 ### Objects and associations
 
 For primary objects (i.e. not sub-objects) with a single key field, the generated entities will have a set of properties based largely on the list of the object's fields.
 
-Xomega model requires key fields to have dedicated types declared in the model. If such a key type (or any of its derived types) is used for a non-key field, or for a field with a `key="reference"` attribute, then that field will be assumed to reference the object, for which this is a key type. In this case, the entity will also contain the referenced entity using field's name and a postfix "Object".
+Xomega model requires key fields to have dedicated types declared in the model. If such a key type (or any of its derived types) is used for a non-key field, or a field with a `key="reference"` attribute, then that field will be assumed to reference the object, for which this is a key type. In this case, the entity will also contain the referenced entity using the field's name and a postfix "Object".
 
 The following example illustrates how the key field `customer id` of the `customer` object uses a dedicated type, also named `customer`, while the `customer id` field of the `sales order` object below it also uses this type, thereby referencing the `customer` object.
 
@@ -51,13 +51,13 @@ The following example illustrates how the key field `customer id` of the `custom
 </objects>
 ```
 
-If the object contains a fieldset in the list of fields, then the entity will contain all fields from that fieldset, using its fields' names prefixed with the name of the fieldset in the object, if set.
+If the object contains a field set in the list of fields, then the entity will contain all fields from that field set, using its fields' names prefixed with the name of the field set in the object, if set.
 
 If the object has a sub-object defined, then the entity will have a collection of the associated sub-object entities, with a name of the subobject and a postfix "ObjectList".
 
 ### Complex associations and subobjects
 
-If an object has a composite key, then it should have a dedicated fieldset declared in the model, which will be used with `key="supplied"` on that object.
+If an object has a composite key, then it should have a dedicated field set declared in the model, which will be used with `key="supplied"` on that object.
 
 If such a fieldset is used in another object's fields without a `key` attribute, or with `key="reference"`, then that other object will be considered as referencing the object with a composite key.
 
@@ -98,13 +98,13 @@ The key of the parent object is automatically included in all of its subobjects,
 
 ### Field configurations
 
-The EF configuration for the properties of the generated entities will be largely driven by configuration of the field's type or its based types.
+The EF configuration for the properties of the generated entities will be largely driven by the configuration of the field's type or its based types.
 
-The property type comes from the `clr:type` config element of the field's type, but additional configurations, such as `FixedLength`, `Unicode` or `Precision` may come from the corresponding `sql:type` element. The maximum size of the field comes from the `size` attribute of the type itself.
+The property type comes from the `clr:type` config element of the field's type, but additional configurations, such as `FixedLength`, `Unicode`, or `Precision` may come from the corresponding `sql:type` element. The maximum size of the field comes from the `size` attribute of the type itself.
 
-Whether or not the entity property is required comes from the `required` attribute on the field. Additional field-specific EF configuration, such as the `ConcurrencyMode` can be specified under the field's `edm:property` config element.
+Whether or not the entity property is required comes from the `required` attribute on the field. Additional field-specific EF configurations, such as the `ConcurrencyMode` can be specified under the field's `edm:property` config element.
 
-The following example illustrates EF configuration for the logical type `city name`, and additional field-specific EDM attributes for the `rowguid` property.
+The following example illustrates EF configuration for the logical type `city name` and additional field-specific EDM attributes for the `rowguid` property.
 
 ```xml
 <types>
@@ -141,11 +141,11 @@ The following example illustrates EF configuration for the logical type `city na
 
 This generator creates C# classes for EF entities, their configurations using Fluent API, and a subclass of the `DbContext` that contains all those entities and registers their configurations.
 
-The classes for entities and configurations, can be placed in separate files by domain object, grouped by module, or output to a single file, depending on how you set up your *Output Path* parameter. The generated files for the entity configuration will be nested under the files for the corresponding entities according to the rules specified in the `.filenesting.json` file for the target project.
+The classes for entities and configurations can be placed in separate files by domain object, grouped by module, or output to a single file, depending on how you set up your *Output Path* parameter. The generated files for the entity configuration will be nested under the files for the corresponding entities according to the rules specified in the `.filenesting.json` file for the target project.
 
 ## Configuration
 
-The following sections describe configuration parameters used by the generator.
+The following sections describe the configuration parameters used by the generator.
 
 ### Generator parameters
 
@@ -167,7 +167,7 @@ The following table lists configuration parameters that are set as the generator
 
 ### Model configuration
 
-Configuration parameters for the generator that need to be also accessible to other generators are specified in the Xomega model in the `edm:entities-config` element under the top level `config` element, which is conventionally placed in the `global_config.xom` file.
+The configuration parameters for the generator that need to be also accessible to other generators are specified in the Xomega model in the `edm:entities-config` element under the top-level `config` element, which is conventionally placed in the `global_config.xom` file.
 
 A boolean parameter `efCore` indicates whether to generate classes for Entity Framework Core (`true`) or Entity Framework 6.x (`false`).
 
@@ -179,7 +179,7 @@ Other parameters include the namespace for the generated entity classes, as well
 
 ### Common configurations
 
-There expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
+There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 
@@ -187,14 +187,14 @@ The sections below provide some details on how to work with the generator.
 
 ### Running the generator
 
-You can run this generator either for the entire model, or for individual files by selecting them in the model project, and running the generator from the context menu.
+You can run this generator either for the entire model or for individual files by selecting them in the model project and running the generator from the context menu.
 
-You can rerun the generator when you change any objects, fields or types in the model, which may require re-running other generators that depend on the same model elements, such as generator of [Service Implementations](../services/service-impl).
+You can rerun the generator when you change any objects, fields, or types in the model, which may require re-running other generators that depend on the same model elements, such as the generator of [Service Implementations](../services/service-impl).
 
 :::tip
 This generator can be included in the build of the model project in the configuration while the entity schema is still changing, such as during initial prototyping and development.
 
-After that it can be excluded from the build, and rerun manually whenever the schema changes.
+After that, it can be excluded from the build, and rerun manually whenever the schema changes.
 :::
 
 ### Customizing the output
@@ -203,7 +203,7 @@ After that it can be excluded from the build, and rerun manually whenever the sc
 You should never edit the generated entity classes directly to avoid losing your changes when you rerun the generator.
 :::
 
-The generated entity classes are declared as partial, so you can add any fields to them by declaring your own partial classes in separate files. You can have such a partial class generated automatically for you, if it doesn't exist yet, if you add `edm:customize` element to the object's `config` element, and set the `extend="true"` attribute, as follows.
+The generated entity classes are declared as partial, so you can add any fields to them by declaring your own partial classes in separate files. You can have such a partial class generated automatically for you if it doesn't exist yet if you add `edm:customize` element to the object's `config` element, and set the `extend="true"` attribute, as follows.
 
 ```xml
 <object name="person">
@@ -215,15 +215,15 @@ The generated entity classes are declared as partial, so you can add any fields 
 </object>
 ```
 
-The file for the generated partial class will have `Extended.cs` postfix, and will be nested under the corresponding entity file according to the rules specified in the `.filenesting.json` file for the target project.
+The file for the generated partial class will have `Extended.cs` postfix and will be nested under the corresponding entity file according to the rules specified in the `.filenesting.json` file for the target project.
 
-In order to customize the generated subclass of `DbContext` you need to declare your own class that extends from the the generated context class, and register your custom class instead of the generated context class with the Dependency Injection container during the application start-up.
+To customize the generated subclass of `DbContext` you need to declare your own class that extends from the generated context class, and then register your custom class instead of the generated context class with the Dependency Injection container during the application start-up.
 
-In your custom context class you can specify your own Entity Framework related behavior, including the way to obtain the database connection, logging behavior, etc. You can also override the `OnModelCreating` method to specify any additional configuration of the domain entities, or to update the generated configuration using Fluent API.
+In your custom context class, you can specify your own Entity Framework-related behavior, including the way to obtain the database connection, logging behavior, etc. You can also override the `OnModelCreating` method to specify any additional configuration of the domain entities or to update the generated configuration using Fluent API.
 
-### Cleaning generator’s output
+### Cleaning the generator’s output
 
-This generator supports cleaning either all generated entities, or only the ones from the selected model files using the *Clean* context menu for that generator.
+This generator supports cleaning either all generated entities or only the ones from the selected model files using the *Clean* context menu for that generator.
 
 :::tip
 Normally, cleaning the generated files makes sense if you are planning to change the output path for the generator, or when you have removed some of the domain objects from the model, and want the generated classes deleted and removed from the target project.

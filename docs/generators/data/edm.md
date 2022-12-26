@@ -4,25 +4,25 @@ sidebar_position: 2
 
 # Entity Data Model
 
-Generates Entity Data Model `.edmx` file from the Xomega object model with proper associations between entities, which allows to graphically view the domain model in Visual Studio on a single or multiple diagrams.
+Generates Entity Data Model `.edmx` file from the Xomega object model with proper associations between entities, which allows the graphical view of the domain model in Visual Studio on a single or multiple diagrams.
 
 :::note
-The generated Entity Data Model is **no longer used by the application** either in runtime or for generation of C# classes from the EDM, and is therefore available only for creation of graphical diagrams of the domain model.
+The generated Entity Data Model is **no longer used by the application** either in runtime or for generation of C# classes from the EDM and is therefore available only for the creation of graphical diagrams of the domain model.
 :::
 
-The application now uses the [EF Domain Objects](entities) generator to create entity classes and their EF configurations, as well as the DB context, which are further used by the generated service implementations.
+The application now uses the [EF Domain Objects](entities) generator to create entity classes and their EF configurations, as well as the DB context, which is further used by the generated service implementations.
 
 ## Generator inputs
 
 The generator uses objects and their fields defined in the model to create EDM entities for both the conceptual model and the storage model.
 
-It also leverages the structure of sub-objects, as well as the way key fields or fieldsets are set up, in order to infer the associations between the entities, so that they wouldn't need to be defined explicitly.
+It also leverages the structure of sub-objects, as well as the way key fields or fieldsets are set up, to infer the associations between the entities so that they wouldn't need to be defined explicitly.
 
 ### Objects and associations
 
 For primary objects (i.e. not sub-objects) with a single key field, the generated entities will have a set of properties based largely on the list of the object's fields.
 
-Xomega model requires key fields to have dedicated types declared in the model. If such a key type (or any of its derived types) is used for a non-key field, or for a field with a `key="reference"` attribute, then that field will be assumed to reference the object, for which this is a key type. In this case, the entity will also contain the referenced entity using field's name and a postfix "Object".
+Xomega model requires key fields to have dedicated types declared in the model. If such a key type (or any of its derived types) is used for a non-key field, or a field with a `key="reference"` attribute, then that field will be assumed to reference the object, for which this is a key type. In this case, the entity will also contain the referenced entity using the field's name and a postfix "Object".
 
 The following example illustrates how the key field `customer id` of the `customer` object uses a dedicated type, also named `customer`, while the `customer id` field of the `sales order` object below it also uses this type, thereby referencing the `customer` object.
 
@@ -53,13 +53,13 @@ The following example illustrates how the key field `customer id` of the `custom
 </objects>
 ```
 
-If the object contains a fieldset in the list of fields, then the entity will contain all fields from that fieldset, using its fields' names prefixed with the name of the fieldset in the object, if set.
+If the object contains a field set in the list of fields, then the entity will contain all fields from that field set, using its fields' names prefixed with the name of the field set in the object, if set.
 
 If the object has a sub-object defined, then the entity will have a collection of the associated sub-object entities, with a name of the subobject and a postfix "ObjectList".
 
 ### Complex associations and subobjects
 
-If an object has a composite key, then it should have a dedicated fieldset declared in the model, which will be used with `key="supplied"` on that object.
+If an object has a composite key, then it should have a dedicated field set declared in the model, which will be used with `key="supplied"` on that object.
 
 If such a fieldset is used in another object's fields without a `key` attribute, or with `key="reference"`, then that other object will be considered as referencing the object with a composite key.
 
@@ -100,13 +100,13 @@ The key of the parent object is automatically included in all of its subobjects,
 
 ### EDM attributes
 
-The EDM attributes for the properties of the generated entities will be largely driven by configuration of the field's type or its based types.
+The EDM attributes for the properties of the generated entities will be largely driven by the configuration of the field's type or its based types.
 
 The actual EDM type is specified on the `edm:type` config element of the field's type, which may contain some additional attributes as well. The maximum size of the field will come from the `size` attribute of the type itself.
 
 Whether or not the entity property is required comes from the `required` attribute on the field, but each field can have additional field-specific EDM configuration under its `edm:property` config element.
 
-The following example illustrates EF configuration for the logical type `city name`, and additional field-specific EDM attributes for the `rowguid` property.
+The following example illustrates EF configuration for the logical type `city name` and additional field-specific EDM attributes for the `rowguid` property.
 
 ```xml
 <types>
@@ -139,13 +139,13 @@ The following example illustrates EF configuration for the logical type `city na
 
 ## Generator outputs
 
-This generator creates *Conceptual Model*, *Storage Model* and an *EDM Mapping* between the two in the specified `.edmx` file, including all the necessary Entities and Associations between them.
+This generator creates *Conceptual Model*, *Storage Model*, and an *EDM Mapping* between the two in the specified `.edmx` file, including all the necessary Entities and Associations between them.
 
 This helps to hide the complexities and intricacies of different EDM models.
 
 ## Configuration
 
-The following sections describe configuration parameters used by the generator.
+The following sections describe the configuration parameters used by the generator.
 
 ### Generator parameters
 
@@ -171,7 +171,7 @@ The generator doesn't use any other configuration parameters from the model.
 
 ### Common configurations
 
-There expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
+There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 
@@ -181,7 +181,7 @@ The sections below provide some details on how to work with the generator.
 
 To run this generator, you need to select it in the model project, and then select *Generate* menu from either the context menu or the top-level *Project* menu.
 
-You can rerun the generator when you change any objects, fields or types in the model, and would like to generate updated diagrams. The layout of any diagrams created via the EDM designer should be preserved after you regenerate the EDM.
+You can rerun the generator when you change any objects, fields, or types in the model, and would like to generate updated diagrams. The layout of any diagrams created via the EDM designer should be preserved after you regenerate the EDM.
 
 ### Customizing the output
 
@@ -191,6 +191,6 @@ You should never edit the properties of the generated Entity Data Model directly
 
 You can lay out the generated EDM entities on different diagrams in the EDM designer, and they should be preserved when the EDM is regenerated, but it's still better to move the diagrams to a separate file in the designer.
 
-### Cleaning generator’s output
+### Cleaning the generator’s output
 
 The generator doesn't support cleaning the entities, since all entities are regenerated when you rerun the generator.

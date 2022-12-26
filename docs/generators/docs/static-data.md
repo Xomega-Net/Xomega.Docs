@@ -4,12 +4,12 @@ sidebar_position: 3
 
 # Static Data Design
 
-This generator creates a professional Microsoft Word design document that describes the static data architecture used by the system, as well as full structure and documentation of all enumerations and their items grouped by module.
+This generator creates a professional Microsoft Word design document that describes the static data architecture used by the system, as well as the full structure and documentation of all enumerations and their items grouped by module.
 
-The generated document is based on a customizable Word template that you can update to change the look and feel, the static content, and even the way dynamic content is added.
+The generated document is based on a customizable Word template that you can update to change the look-and-feel, the static content, and even the way dynamic content is added.
 
 :::tip
-This can save you countless hours on developing and maintaining high quality design documentation, and will allow you to be more agile by sharing the design with other stakeholders at any point.
+This can save you countless hours on developing and maintaining high-quality design documentation and will allow you to be more agile by sharing the design with other stakeholders at any point.
 
 Plus, you'll never have to worry about the technical design being out of sync with the actual implementation.
 :::tip
@@ -20,7 +20,7 @@ For each enumeration defined in the model, grouped by module, the generated desi
 
 In addition to the explicit documentation provided in the model for the enumeration and each item or property under their `doc` elements, the generator also uses other information from the model to create comprehensive documentation on each item or property.
 
-The following example illustrates the structure of the `doc` element for different model elements. It contains a `summary` tag, which briefly describes the item, the property or the enumeration, and can also be output in the comments of generated code, followed by any additional free text documentation on those.
+The following example illustrates the structure of the `doc` element for different model elements. It contains a `summary` tag, which briefly describes the item, the property, or the enumeration, and can also be output in the comments of generated code, followed by any additional free text documentation on those.
 
 ```xml
 <enums>
@@ -69,7 +69,7 @@ This generator creates a Microsoft Word static data design document at the speci
 
 ## Configuration
 
-The following sections describe configuration parameters used by the generator.
+The following sections describe the configuration parameters used by the generator.
 
 ### Generator parameters
 
@@ -95,7 +95,7 @@ The generator doesn't use any other global configurations in the model.
 
 ### Common configurations
 
-There expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
+There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 
@@ -103,16 +103,16 @@ The sections below provide some details on how to work with the generator.
 
 ### Running the generator
 
-You can run this generator for the entire model only. For that you need to select it in the model project, and then select *Generate* menu from either the context menu or the top-level *Project* menu.
+You can run this generator for the entire model only. For that, you need to select it in the model project, and then select *Generate* menu from either the context menu or the top-level *Project* menu.
 
 :::caution
 After you generate the document, you need to open it and refresh all fields there, such as the table of contents, by selecting all text (Ctrl+A) and pressing F9.
 :::
 
-You can rerun the generator when you add or change enumeration items or properties, or the `xfk:enum-cache` configuration of `read enum` operations, or if you change any parameters on those operations.
+You can rerun the generator when you add or change enumeration items or properties, the `xfk:enum-cache` configuration of `read enum` operations, or if you change any parameters on those operations.
 
 :::tip
-Normally, you need to run it initially, during the design of the system, and then as needed, to generate up-to-date documentation. You don't need to include this generator into the model build process.
+Normally, you need to run it initially, during the design of the system, and then as needed, to generate up-to-date documentation. You don't need to include this generator in the model build process.
 :::
 
 ### Customizing the output
@@ -121,8 +121,8 @@ Normally, you need to run it initially, during the design of the system, and the
 You should never edit the generated document directly to avoid losing your changes when you rerun the generator.
 :::
 
-Instead, you should update the MS Word template that is used to create the document, or make changes in the model itself.
+Instead, you should update the MS Word template that is used to create the document or make changes in the model itself.
 
-### Cleaning generator’s output
+### Cleaning the generator’s output
 
 The generator doesn't support a *Clean* operation, since the entire document is regenerated when you rerun the generator.

@@ -4,12 +4,12 @@ sidebar_position: 1
 
 # Domain Model Design
 
-This generator creates a professional Microsoft Word design document that describes the general domain architecture used by the system, as well as full structure and documentation of all domain objects and their fields grouped by module.
+This generator creates a professional Microsoft Word design document that describes the general domain architecture used by the system, as well as the full structure and documentation of all domain objects and their fields grouped by module.
 
-The generated document is based on a customizable Word template that you can update to change the look and feel, the static content, and even the way dynamic content is added.
+The generated document is based on a customizable Word template that you can update to change the look-and-feel, the static content, and even the way dynamic content is added.
 
 :::tip
-This can save you countless hours on developing and maintaining high quality design documentation, and will allow you to be more agile by sharing the design with other stakeholders at any point.
+This can save you countless hours on developing and maintaining high-quality design documentation and will allow you to be more agile by sharing the design with other stakeholders at any point.
 
 Plus, you'll never have to worry about the technical design being out of sync with the actual implementation.
 :::
@@ -75,7 +75,7 @@ This generator creates a Microsoft Word domain design document at the specified 
 
 ## Configuration
 
-The following sections describe configuration parameters used by the generator.
+The following sections describe the configuration parameters used by the generator.
 
 ### Generator parameters
 
@@ -101,7 +101,7 @@ The generator doesn't use any other global configurations in the model.
 
 ### Common configurations
 
-There expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
+There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 
@@ -109,16 +109,16 @@ The sections below provide some details on how to work with the generator.
 
 ### Running the generator
 
-You can run this generator for the entire model only. For that you need to select it in the model project, and then select *Generate* menu from either the context menu or the top-level *Project* menu.
+You can run this generator for the entire model only. For that, you need to select it in the model project, and then select *Generate* menu from either the context menu or the top-level *Project* menu.
 
 :::caution
 After you generate the document, you need to open it and refresh all fields there, such as the table of contents, by selecting all text (Ctrl+A) and pressing F9.
 :::
 
-You can rerun the generator when you change any objects, fields or types in the model, which may require re-running other generators that depend on the same model elements, such as generators of service implementations.
+You can rerun the generator when you change any objects, fields, or types in the model, which may require re-running other generators that depend on the same model elements, such as generators of service implementations.
 
 :::tip
-Normally, you need to run it initially, during the design of the system, and then as needed, to generate up-to-date documentation. You don't need to include this generator into the model build process.
+Normally, you need to run it initially, during the design of the system, and then as needed, to generate up-to-date documentation. You don't need to include this generator in the model build process.
 :::
 
 ### Customizing the output
@@ -127,8 +127,8 @@ Normally, you need to run it initially, during the design of the system, and the
 You should never edit the generated document directly to avoid losing your changes when you rerun the generator.
 :::
 
-Instead, you should update the MS Word template that is used to create the document, or make changes in the model itself.
+Instead, you should update the MS Word template that is used to create the document or make changes in the model itself.
 
-### Cleaning generator’s output
+### Cleaning the generator’s output
 
 The generator doesn't support a *Clean* operation, since the entire document is regenerated when you rerun the generator.

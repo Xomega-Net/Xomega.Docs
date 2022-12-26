@@ -12,9 +12,9 @@ You have several different options for writing custom code for the generated ser
 
 ## Generator inputs
 
-The generator uses the `type` attribute on the operation, as well as the structure of its input and output parameters to create implementation of the service operations.
+The generator uses the `type` attribute on the operation, as well as the structure of its input and output parameters to create an implementation of the service operations.
 
-For any parameters that have a corresponding field on the object with the same name, the implementation will either use it to look up the object, if it's a key input parameter, store parameter's value on the entity, if it's a non-key input parameter, or set it from the corresponding field, if this is an output parameter.
+For any parameters that have a corresponding field on the object with the same name, the implementation will either use it to look up the object, if it's a key input parameter, store the parameter's value on the entity, if it's a non-key input parameter, or set it from the corresponding field, if this is an output parameter.
 
 If there is no object field for the given parameter, the generator will output a special commented `TODO` placeholder that allows you to provide inline custom code right in the generated method.
 
@@ -111,7 +111,7 @@ The customized and extended classes will be nested under the corresponding gener
 
 ## Configuration
 
-The following sections describe configuration parameters used by the generator.
+The following sections describe the configuration parameters used by the generator.
 
 ### Generator parameters
 
@@ -129,7 +129,7 @@ The following table lists configuration parameters that are set as the generator
 
 ### Model configuration
 
-Configuration parameters for the generator that need to be also accessible to other generators are specified in the Xomega model in the `svc:services-config` element under the top level `config` element, which is conventionally placed in the `global_config.xom` file.
+The generator's configuration parameters that need to be also accessible to other generators are specified in the Xomega model in the `svc:services-config` element under the top-level `config` element, which is conventionally placed in the `global_config.xom` file.
 
 These parameters include the namespace for the generated classes, as shown below.
 
@@ -139,7 +139,7 @@ These parameters include the namespace for the generated classes, as shown below
 
 ### Common configurations
 
-There expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
+There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 
@@ -147,17 +147,17 @@ The sections below provide some details on how to work with the generator.
 
 ### Running the generator
 
-You can run this generator either for the entire model, or for individual files by selecting them in the model project, and running the generator from the context menu.
+You can run this generator either for the entire model, or for individual files by selecting them in the model project and running the generator from the context menu.
 
-You can rerun the generator when you change the structure of operations or the related configuration. Normally, this will require re-running other generators that depend on the same model elements, such as generators of service and data contracts, UI views and data objects.
+You can rerun the generator when you change the structure of operations or the related configuration. Normally, this will require re-running other generators that depend on the same model elements, such as generators of service and data contracts, UI views, and data objects.
 
-Therefore, this generator should be included in the build of the model project in the configuration, in order to allow to easily regenerate all service implementations along with other artifacts.
+Therefore, this generator should be included in the build of the model project in the configuration, to allow you to easily regenerate all service implementations along with other artifacts.
 
 ### Customizing the output
 
-The generated service implementation classes allow you to intermingle your custom code with the generated code both to provide implementation for the parameters that the generator doesn't know how to handle, and to add custom behavior to the implementation.
+The generated service implementation classes allow you to intermingle your custom code with the generated code both to provide an implementation for the parameters that the generator doesn't know how to handle and to add custom behavior to the implementation.
 
-For this, the generated code will contain special placeholders starting with a commented `CUSTOM_CODE_START` marker followed by the marker text explaining the intended purpose of the custom code, and ending with a `CUSTOM_CODE_END` marker, as follows.
+For this, the generated code will contain special placeholders starting with a commented `CUSTOM_CODE_START` marker followed by the marker text explaining the intended purpose of the custom code and ending with a `CUSTOM_CODE_END` marker, as follows.
 
 ```cs
 // highlight-next-line
@@ -169,7 +169,7 @@ if (_salesOrderId != null)
 } // CUSTOM_CODE_END
 ```
 
-The custom code placeholders for the pieces that the generator doesn't know how to handle properly will have a special `TODO` tag, in order to allow you to find all such places easily, and provide the necessary implementations.
+The custom code placeholders for the pieces that the generator doesn't know how to handle properly will have a special `TODO` tag, to allow you to find all such places easily, and provide the necessary implementations.
 
 :::caution
 To make sure that your custom code is preserved during subsequent generator runs, you need to always place it in between the designated markers, and also make sure that the marker text in the comment doesn't change from one run to another, since it's used as an identifier of each custom code.
@@ -183,7 +183,7 @@ If you do need to rename the custom parameters or their operation in the model, 
 
 Normally, you want to minimize the amount of custom code that you provide inline, mixed in with the generated code. To achieve that, you can add a partial class for the generated service implementation, add to it some custom methods that take any input arguments as the context and return the needed results, and then call those methods from the inline custom code. This way your custom code will be mostly contained in a separate file that you can easily view and keep safe.
 
-The generator can help you create such a partial class if you add a `svc:customize` element to the object's `config` element, and set the `extend="true"` attribute on it, as illustrated below.
+The generator can help you create such a partial class if you add an `svc:customize` element to the object's `config` element, and set the `extend="true"` attribute on it, as illustrated below.
 
 ```xml
 <object name="sales order">
@@ -201,16 +201,16 @@ Additionally, you can set `subclass="true"` attribute on the `svc:customize` ele
 You can also add your own custom subclass or partial class of the generated service implementation in your project, but then you will need to make sure to register that subclass with the dependency injection service container after the generated service implementation classes are registered.
 :::
 
-### Cleaning generator’s output
+### Cleaning the generator’s output
 
-This generator supports cleaning either all generated service implementations, or only the ones from the selected model files using the *Clean* context menu for that generator.
+This generator supports cleaning either all generated service implementations or only the ones from the selected model files using the *Clean* context menu for that generator.
 
 :::tip
 Normally, cleaning the generated files makes sense if you are planning to change the output path for the generator, or when you have removed some of the services from the model, and want the generated classes deleted.
 :::
 
 :::danger
-Note that, while custom subclasses and partial classes will not be cleaned during these operations, all of your **inline customizations will be lost** during *Clean*, so you need to be very careful when running a *Clean* command on the generator or on the model project.
+Note that, while custom subclasses and partial classes will not be cleaned during these operations, all of your **inline customizations will be lost** during *Clean*, so you need to be very careful when running a *Clean* command on the generator or the model project.
 :::
 
 If you have a generated file with a service implementation that contains inline custom code that you don't want to lose during *Clean*, then you need to do one of the following things:

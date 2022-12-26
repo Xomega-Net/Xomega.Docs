@@ -4,21 +4,21 @@ sidebar_position: 2
 
 # Syncfusion Blazor Views
 
-Generates Bootstrap styled search or details views for both Blazor Server and WebAssembly based on the type of their associated data object using Syncfusion Blazor components.
+Generates Bootstrap-styled search or details views for both Blazor Server and WebAssembly based on the type of their associated data object using Syncfusion Blazor components.
 
-For list objects it generates a search view with a paged data grid, and a collapsible criteria side panel, which can have flexible search criteria with operators, if there is a corresponding criteria data object defined.
+For list objects, it generates a search view with a paged data grid, and a collapsible criteria side panel, which can have flexible search criteria with operators, if there is a corresponding criteria data object defined.
 
-For regular non-list objects it generates a details view with controls and panels for child objects arranged according to the display configuration of those objects, as well as the standard *Save*/*Delete* actions as per the data object's operations.
+For regular non-list objects, it generates a details view with controls and panels for child objects arranged according to the display configuration of those objects, as well as the standard *Save*/*Delete* actions as per the data object's operations.
 
 The generated views extend base classes from the `Xomega.Syncfusion.Blazor` package, and are bound to their corresponding *View Models* that are generated using [View Models Generator](../common/view-models).
 
 You can add your customizations to a partial class for the generated view, where you can override any methods from the base class to customize the view actions or certain appearance aspects of the view components.
 
-If you cannot make your customizations programmatically in the partial class, and need to change the generated razor file, then you can mark the layout on such a view as custom in the model, and the view won't be updated when rerunning the generator to preserve your custom changes.
+If you cannot make your customizations programmatically in the partial class and need to change the generated razor file, then you can mark the layout on such a view as custom in the model, and the view won't be updated when rerunning the generator to preserve your custom changes.
 
 ## Generator inputs
 
-The generator uses view definitions in the Xomega model in order to generate the corresponding Blazor views. The view definitions consist of a view model with its associated data object that is also defined in the model, as well as any of its child objects.
+The generator uses view definitions in the Xomega model to generate the corresponding Blazor views. The view definitions consist of a view model with its associated data object that is also defined in the model, as well as any of its child objects.
 
 ### Views
 
@@ -42,7 +42,7 @@ If you need to change the generated Razor markup, you can set a `custom="true"` 
 
 ### Controls
 
-The Syncfusion Blazor components that are used for controls on the generated views are determined based on the configuration of the types for the properties of the data objects that the view is based on. The types usually inherit such configurations from their base types, but can override the controls to use as needed.
+The Syncfusion Blazor components that are used for controls on the generated views are determined based on the configuration of the types for the properties of the data objects that the view is based on. The types usually inherit such configurations from their base types but can override the controls to use as needed.
 
 By default, the base types use Blazor components that are defined in the `Xomega.Syncfusion.Blazor` package and can be bound to Xomega Framework properties.
 
@@ -67,9 +67,9 @@ The snippet below shows how to associate a Blazor component with a logical type 
 
 ### Layout
 
-To customize layout of the data object's fields and child objects on the view, you can provide additional configurations in the model under the data object's `ui:display/ui:fields` element.
+To customize the layout of the data object's fields and child objects on the view, you can provide additional configurations in the model under the data object's `ui:display/ui:fields` element.
 
-You can set a custom title for the group of the object's immediate fields here, and also indicate how many columns to use for layout of the fields within the panel using `field-cols` attribute. Similarly you can also set the `panel-cols` attribute to indicate how many columns does the parent panel use to lay out the panel with object's fields along with other panels for the child objects, which you can also configure separately in the `ui:child-panels` element.
+You can set a custom title for the group of the object's immediate fields here, and also indicate how many columns to use for the layout of the fields within the panel using `field-cols` attribute. Similarly, you can also set the `panel-cols` attribute to indicate how many columns the parent panel uses to lay out the panel with the object's fields along with other panels for the child objects, which you can also configure separately in the `ui:child-panels` element.
 
 For example, with the following configuration, the main panel for the `SalesOrderCustomerObject` will have a panel with the object's direct fields titled '*Customer Info*', and panels for its child objects arranged in two columns based on their `panel-cols` attribute.
 
@@ -91,11 +91,11 @@ For example, with the following configuration, the main panel for the `SalesOrde
 </xfk:data-object>
 ```
 
-The '*Customer Info*' and '*Lookup Customer*' panels will also have fields layed out in two columns based on their `field-cols` attribute.
+The '*Customer Info*' and '*Lookup Customer*' panels will also have fields laid out in two columns based on their `field-cols` attribute.
 
 ### Fields
 
-For each field inside the `ui:fields` element you can specify whether it is hidden or editable/readonly, and the label or column header to use instead of deriving it from the property's name.
+For each field inside the `ui:fields` element you can specify whether it is hidden or editable/read-only, and the label or column header to use instead of deriving it from the property's name.
 
 :::note
 Note that the labels you specify will not be added directly to the generated markup, but rather to a generated resource file by a separate [Label Resources Generator](../common/resources) to allow localization and overrides.
@@ -139,7 +139,7 @@ The named links to other views, which are defined on the view's data objects in 
 </xfk:data-object>
 ```
 
-When a link has a `child="true"` attribute, the target view will be opened in a popup dialog, or in a separate details panel based on the link's `mode` attribute. Otherwise, the view will be opened in a new page.
+When a link has a `child="true"` attribute, the target view will be opened in a popup dialog, or in a separate details panel based on the link's `mode` attribute. Otherwise, the view will be opened on a new page.
 
 :::note
 Most of this setup for standard details and search views in the Xomega model can be easily added automatically by a special [model enhancement CRUD generator](../../model/crud).
@@ -147,7 +147,7 @@ Most of this setup for standard details and search views in the Xomega model can
 
 ### Grid customization
 
-For each list data object you can specify custom settings for the generated grids at the end under the `blazor-controls` element, as shown below.
+For each list data object, you can specify custom settings for the generated grids at the end under the `blazor-controls` element, as shown below.
 
 ```xml
 <xfk:data-object class="SalesOrderList" list="true">
@@ -173,7 +173,7 @@ For views that are decorated with a `customize="true"` attribute, it also create
 
 ## Configuration
 
-The following sections describe configuration parameters used by the generator.
+The following sections describe the configuration parameters used by the generator.
 
 ### Generator parameters
 
@@ -195,7 +195,7 @@ The following table lists configuration parameters that are set as the generator
 
 ### Model configuration
 
-Additional configuration used by the generator is specified in the Xomega model under the top level `config` element, which is conventionally placed in the `global_config.xom` file.
+Additional configuration used by the generator is specified in the Xomega model under the top-level `config` element, which is conventionally placed in the `global_config.xom` file.
 
 The default grid configuration for all generated grids that don't have an override on the data object level is specified under the `blazor-controls-config` element, where you can set attributes for the `XSfGrid` control from the `Xomega.Syncfusion.Blazor` package, as shown below.
 
@@ -214,7 +214,7 @@ The default grid configuration for all generated grids that don't have an overri
 
 ### Common configurations
 
-Normally, there expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
+Normally, there is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 :::tip
 When you are working on a specific view though, you can also copy the default configuration, and set that view as the selector, so that you could easily regenerate just that view instead of all the views.
@@ -228,19 +228,19 @@ The sections below provide some details on how to work with the generator.
 
 You can run this generator for all the views in the model, or for a specific view that is specified in the generator's parameter.
 
-You can rerun the generator when you change the data objects for the views, or UI configuration of their properties, and also when you change any other configurations that the views depend upon, such as links, layout, fields' settings, etc.
+You can rerun the generator when you change the data objects for the views, or the UI configuration of their properties, and also when you change any other configurations that the views depend upon, such as links, layout, fields' settings, etc.
 
 :::note
-This generator should be included in the build of the model project in the configuration, in order to allow to easily regenerate all views along with other artifacts.
+This generator should be included in the build of the model project in the configuration, to allow easy regeneration of all enumeration constants along with other artifacts.
 :::
 
 ### Customizing the output
 
 :::danger
-You should not edit generated markup or code behind for the views directly, if you would like to re-run the generator later without losing your changes, unless you specifically enabled custom layout for your view.
+You should not edit generated markup or code behind for the views directly if you would like to re-run the generator later without losing your changes unless you specifically enabled a custom layout for your view.
 :::
 
-To add your customizations, you need to edit a partial class for the generated view that was added when you specified the `customize` attribute on the view. In that partial class you can override any methods from the base class to customize the view actions or certain appearance aspects of the view components, such as text and visibility for the action buttons.
+To add your customizations, you need to edit a partial class for the generated view that was added when you specified the `customize` attribute on the view. In that partial class, you can override any methods from the base class to customize the view actions or certain appearance aspects of the view components, such as text and visibility for the action buttons.
 
 :::info
 Unlike WPF views or WebForms, you generally should not manipulate the Blazor components directly, but rather update the underlying data they are bound to.
@@ -249,10 +249,10 @@ Unlike WPF views or WebForms, you generally should not manipulate the Blazor com
 :::tip
 If you do need to change the markup for the view, you can set the `custom="true"` attribute on the view's `ui:layout` element after generating that view initially, and it won't be updated during subsequent runs of the generator.
 
-In this case you may as well delete the view from the model after initial generation, unless you need it there for link references from other objects.
+In this case, you may as well delete the view from the model after the initial generation, unless you need it there for link references from other objects.
 :::
 
-### Cleaning generator’s output
+### Cleaning the generator’s output
 
 This generator supports cleaning all generated views using the *Clean* context menu for that generator.
 
@@ -261,5 +261,5 @@ Normally, cleaning the generated files makes sense if you are planning to change
 :::
 
 :::caution
-Note, that the customization partial classes that were generated for views with a `customize="true"` attribute will not be cleaned during these operations to prevent any loss of custom code during accidental run of such actions. Therefore, you may get compilation errors for those classes if you clean your views, and will need to delete them manually as needed.
+Note, that the customization partial classes that were generated for views with a `customize="true"` attribute will not be cleaned during these operations to prevent any loss of custom code during an accidental run of such actions. Therefore, you may get compilation errors for those classes if you clean your views, and will need to delete them manually as needed.
 :::

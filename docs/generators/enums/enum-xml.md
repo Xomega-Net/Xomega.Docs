@@ -8,7 +8,7 @@ Exports static enumerations defined in the Xomega model along with their items a
 
 ##  Generator inputs
 
-The generator takes static enumerations declared in the model using `enum` element, and outputs them into the specified XML file using the same format, as the one that is used in the model. If enumeration inherits from another enumeration, the list of items will be merged with the base enumeration.
+The generator takes static enumerations declared in the model using `enum` element and outputs them into the specified XML file using the same format, as the one that is used in the model. If an enumeration inherits from another enumeration, the list of items will be merged with the base enumeration.
 
 The snippet below illustrates how the `sales order status` enumeration extends from the base `order status` enumeration, removes the `New` item, changes the value for the `Rejected` and `Cancelled` items, and adds new `Backordered` and `Shipped` items.
 
@@ -50,7 +50,7 @@ This generator creates a single XML file with all static enumerations and their 
 
 ## Configuration
 
-The following sections describe configuration parameters used by the generator.
+The following sections describe the configuration parameters used by the generator.
 
 ### Generator parameters
 
@@ -70,7 +70,7 @@ The generator doesn't use any other configuration parameters from the model.
 
 ### Common configurations
 
-There expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
+There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 
@@ -83,7 +83,7 @@ You can run this generator for the entire model only.
 You can rerun the generator when you add or change enumeration items or properties.
 
 :::note
-This generator can be included in the build of the model project in the configuration, in order to allow to easily regenerate all static enumeration data along with other artifacts.
+This generator can be included in the build of the model project in the configuration, to allow easy regeneration of all enumeration constants along with other artifacts.
 :::
 
 ### Customizing the output

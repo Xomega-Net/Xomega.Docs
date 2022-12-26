@@ -56,7 +56,7 @@ For the input and output structures, as well as any inline structures nested wit
 
 Instead of inline structures defined directly inside the service operations, you can just reference a named structure that is defined globally in the model.
 
-For example, the `customer update` and `payment update` structures that are referenced in the previous example, can be defined under the `structs` top-level element in the model as follows.
+For example, the `customer update` and `payment update` structures that are referenced in the previous example can be defined under the `structs` top-level element in the model as follows.
 
 ```xml
 <structs>
@@ -81,7 +81,7 @@ For example, the `customer update` and `payment update` structures that are refe
 The name of the generated class will be based on the name of the structure, e.g. `CustomerUpdate`, which should be unique.
 
 :::note
-The standalone structures can in turn have parameters referencing other standalone structures, or can have other inline structures nested inside of them, which will be also generated using their fully qualified name.
+The standalone structures can in turn have parameters referencing other standalone structures or can have other inline structures nested inside of them, which will be also generated using their fully qualified name.
 :::
 
 ### TypeScript types
@@ -89,7 +89,7 @@ The standalone structures can in turn have parameters referencing other standalo
 The primitive properties on the generated structures will be of type any, so there is no need to map logical types in the model to the TypeScript types.
 
 :::caution
-This will NOT allow TypeScript compiler to check the type of the arguments that you pass to the input structures, or assign from the output structures, but it will provide you with IntelliSense and compiler checks of the the names for input and output parameters used, which is more important.
+This will NOT allow the TypeScript compiler to check the type of the arguments that you pass to the input structures or assign from the output structures, but it will provide you with IntelliSense and compiler checks of the names for input and output parameters used, which is more important.
 :::
 
 :::note
@@ -104,7 +104,7 @@ The standalone structures will be output in a separate file by module with a "*S
 
 ## Configuration
 
-The following sections describe configuration parameters used by the generator.
+The following sections describe the configuration parameters used by the generator.
 
 ### Generator parameters
 
@@ -120,7 +120,7 @@ The following table lists configuration parameters that are set as the generator
 
 ### Model configuration
 
-Configuration parameters for the generator that need to be also accessible to other generators are specified in the Xomega model in the `svc:services-config` element under the top level `config` element, which is conventionally placed in the `global_config.xom` file.
+The generator's configuration parameters that need to be also accessible to other generators are specified in the Xomega model in the `svc:services-config` element under the top-level `config` element, which is conventionally placed in the `global_config.xom` file.
 
 These parameters include the output path for the generated TypeScript files, which may contain {Module} and {File} placeholders to output them by module and service, as shown below.
 
@@ -136,7 +136,7 @@ To be able to use the generated classes in other TypeScript files requires impor
 
 ### Common configurations
 
-There expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
+There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 
@@ -144,12 +144,12 @@ The sections below provide some details on how to work with the generator.
 
 ### Running the generator
 
-You can run this generator either for the entire model, or for individual files by selecting them in the model project, and running the generator from the context menu.
+You can run this generator either for the entire model or for individual files by selecting them in the model project and running the generator from the context menu.
 
 You can rerun the generator when you add or change object operations or structures in the model, which will require re-running other generators that depend on the same model elements, such as generators of UI views, data objects as well as service implementations. 
 
 :::note
-Therefore, this generator should be included in the build of the model project in the configuration, in order to allow to easily regenerate all service and data contracts along with other artifacts.
+Therefore, this generator should be included in the build of the model project in the configuration, to allow you to easily regenerate all service and data contracts along with other artifacts.
 :::
 
 ### Customizing the output
@@ -160,9 +160,9 @@ You should never edit generated service and data contracts directly. This allows
 
 You should update the model as appropriate to customize the generated classes.
 
-### Cleaning generator’s output
+### Cleaning the generator’s output
 
-This generator supports cleaning either all generated service contracts, or only the ones from the selected model files using the *Clean* context menu for that generator.
+This generator supports cleaning either all generated service contracts or only the ones from the selected model files using the *Clean* context menu for that generator.
 
 :::tip
 Normally, cleaning the generated files makes sense if you are planning to change the output path for the generator, or when you have removed some of the services from the model, and want the generated classes deleted and removed from the target project.
