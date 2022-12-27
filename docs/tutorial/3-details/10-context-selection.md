@@ -4,11 +4,11 @@ sidebar_position: 11
 
 # 3.10 Standard contextual selection
 
-In this section we will use a similar technique to set up contextual selection for the *Credit Card Id* on the *Payment* tab, but we'll use Xomega Framework support to minimize the custom code needed for standard cases.
+In this section, we will use a similar technique to set up contextual selection for the *Credit Card Id* on the *Payment* tab, but we'll use Xomega Framework support to minimize the custom code needed for standard cases.
 
 ## Overview of updates
 
-Instead of showing a text field to enter ID of a stored credit card, we will display a dropdown list with the credit cards stored for the current customer's person. We will move both the credit card selection and the *Credit Card Approval Code* fields to a child panel *Credit Card* under the *Payment* tab.
+Instead of showing a text field to enter the ID of a stored credit card, we will display a dropdown list with the credit cards stored for the current customer's person. We will move both the credit card selection and the *Credit Card Approval Code* fields to a child panel *Credit Card* under the *Payment* tab.
 
 ![Credit card ID](img10/credit-card-id.png)
 
@@ -20,9 +20,9 @@ We will start by defining a contextual dynamic enumeration that returns a list o
 
 ### Person Credit Card subobject
 
-The list of credit cards of a specific persons is defined in the `Sales.PersonCreditCard` database table, which should normally be a subobject of the `person` aggregate object.
+The list of credit cards of specific persons is defined in the `Sales.PersonCreditCard` database table, which should normally be a subobject of the `person` aggregate object.
 
-However that table does not have a *cascade* delete on its foreign key to the parent `Person.Person` table, so it was imported into the model as a separate `person credit card` entity that has a compound key defined by a fieldset with the same name, as follows.
+However, that table does not have a *cascade* delete on its foreign key to the parent `Person.Person` table, so it was imported into the model as a separate `person credit card` entity that has a compound key defined by a field set with the same name, as follows.
 
 ```xml title="person_credit_card.xom"
   <fieldsets>
@@ -47,7 +47,7 @@ However that table does not have a *cascade* delete on its foreign key to the pa
   </objects>
 ```
 
-In order to make it a subobject of a `person` object, we'll move its `object` element to the `person.xom` file under a `subobjects` element. We will also rename it to be just `credit card`, since it's name is automatically qualified with the parent object's name, and will change the key field to be just the `credit card id` from the above fieldset, since the `business entity id` will be already inherited from the parent `person` object, as shown below.
+In order to make it a subobject of a `person` object, we'll move its `object` element to the `person.xom` file under a `subobjects` element. We will also rename it to be just `credit card`, since its name is automatically qualified with the parent object's name, and will change the key field to be just the `credit card id` from the above field set since the `business entity id` will be already inherited from the parent `person` object, as shown below.
 
 
 ```xml title="person.xom"
@@ -88,11 +88,11 @@ In order to make it a subobject of a `person` object, we'll move its `object` el
 Since the `credit card id` field references a separate `credit card` object, we need to set the `key` attribute to `reference`. Also, if we want to keep the `delete` action for the parent foreign key, instead of using the default *cascade* action, then we'll need to set it on the `sql:parent-foreign-key` element.
 :::
 
-At this point we can delete the `person_credit_card.xom` file from the *Sales* folder, since there will be nothing useful left in it. Also, in order to rebuild the entity classes using the new structure, we will run a *Clean* command on the *EF Domain Objects* generator under the *Data Layer* folder, followed by the *Generate* command on that generator.
+At this point, we can delete the `person_credit_card.xom` file from the *Sales* folder, since there will be nothing useful left in it. Also, to rebuild the entity classes using the new structure, we will run a *Clean* command on the *EF Domain Objects* generator under the *Data Layer* folder, followed by the *Generate* command on that generator.
 
 ### Configuring credit card types
 
-Before we add our enumeration, let's open the `credit_card.xom` file, and update the `card number` field to use a new logical type `credit card number`, instead of the `string25` that was created by the import process. In order to make credit card a selection, we will also update the key type `credit card` to be based on `integer enumeration`, as illustrated below.
+Before we add our enumeration, let's open the `credit_card.xom` file, and update the `card number` field to use a new logical type `credit card number`, instead of the `string25` that was created by the import process. To make credit card a selection, we will also update the key type `credit card` to be based on `integer enumeration`, as illustrated below.
 
 ```xml title="credit_card.xom"
   <types>
@@ -121,7 +121,7 @@ Before we add our enumeration, let's open the `credit_card.xom` file, and update
 
 Similar to what we did [before](custom-selection#adding-read-enum-on-a-subobject), we will make sure that *Read Enum Operation* generator is configured to generate a `read enum` on subobjects only, and then will run that generator on the `person.xom` file.
 
-Next, instead of the default `modified date` output parameter, we will add output parameters for a number of `credit card` object's fields that we want to show when selecting a credit card, using their respective types, as illustrated below.
+Next, instead of the default `modified date` output parameter, we will add output parameters for a number of `credit card` object fields that we want to show when selecting a credit card, using their respective types, as illustrated below.
 
 ```xml title="person.xom"
 <object name="person">
@@ -216,7 +216,7 @@ public partial class PersonService : BaseService, IPersonService
 }
 ```
 
-In order to make sure that your inline customizations are [preserved if you run the *Clean* command](../search/custom-result#caution-on-mixed-in-customizations) on the model, you can add a  `svc:customize` config element to the `person` object, and set the `preserve-on-clean="true"` attribute, as follows.
+In order to make sure that your inline customizations are [preserved if you run the *Clean* command](../search/custom-result#caution-on-mixed-in-customizations) on the model, you can add an `svc:customize` config element to the `person` object, and set the `preserve-on-clean="true"` attribute, as follows.
 
 ```xml title="person.xom"
     <config>
@@ -280,7 +280,7 @@ Now we can configure our data object to make credit card non-key fields read-onl
 
 ### Updating operation structures
 
-Next we will move the `credit card id` and `credit card approval code` parameters from the `payment info` and `payment update` structures to a new structure `sales order credit card`, and will update both payment structures to use a reference to this new structure instead, as follows.
+Next, we will move the `credit card id` and `credit card approval code` parameters from the `payment info` and `payment update` structures to a new structure `sales order credit card`, and will update both payment structures to use a reference to this new structure instead, as follows.
 
 ```xml
 <!-- highlight-next-line -->
@@ -317,7 +317,7 @@ Next we will move the `credit card id` and `credit card approval code` parameter
 ```
 
 :::note
-This new structure is different from the `credit card info` structure that we defined, since it's used specifically for the operations. It must be referenced using the same name `credit card`, as the one that we used for our child data object earlier.
+This new structure is different from the `credit card info` structure that we defined since it's used specifically for the operations. It must be referenced using the same name `credit card`, as the one that we used for our child data object earlier.
 :::
 
 ### Refactoring custom service code
@@ -408,7 +408,7 @@ Now, in order to display the credit card details whenever a credit card is selec
     <xfk:data-object class="CreditCardPaymentObject" customize="true">[...]
 ```
 
- We'll add a credit card change listener in the `OnInitialized` method, which will populate other properties from the credit card attributes. The expiration property will combine both expiration month and year, as shown below.
+ We'll add a credit card change listener in the `OnInitialized` method, which will populate other properties from the credit card attributes. The expiration property will combine both the expiration month and year, as shown below.
 
 ```cs title="CreditCardPaymentObjectCustomized.cs"
 /* added-next-line */
@@ -446,6 +446,6 @@ Let's run the application, and review our changes. The *Payment* tab should now 
 
 ![Credit card selection](img10/cc-selection.png)
 
-As you see, we're displaying a list of person's saved credit cards using the credit card type and the last four digits of the card number now, and show specific credit card details when one is selected from the list.
+As you see, we're displaying a list of the person's saved credit cards using the credit card type and the last four digits of the card number now, and show specific credit card details when one is selected from the list.
 
 If you change the customer on the *Customer* tab, the list of credit cards will be automatically refreshed, and the credit card fields will be blanked out until you select a new credit card.

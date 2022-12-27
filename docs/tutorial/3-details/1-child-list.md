@@ -8,19 +8,19 @@ With all the changes that we have already made to the model, let's run the appli
 
 ## Overview of updates
 
-You will notice that the fields, for which we have defined static and dynamic enumerations in the model, such as *Status*, *Sales Person* and the *Sales Territory* already have drop-down list controls for selecting a value, which display a user-friendly name, as highlighted in green below.
+You will notice that the fields, for which we have defined static and dynamic enumerations in the model, such as *Status*, *Sales Person*, and the *Sales Territory* already have drop-down list controls for selecting a value, which displays a user-friendly name, as highlighted in green below.
 
 ![Details TODO](img1/details-todo.png)
 
-We will start improving the *Sales Order* details screen by updating the child table with the order line items, which shows the products ordered, their quantities and prices. Looking at the current table, the following updates come to mind.
-1. Display *Product* using product name as the first column, which will have a link to the line item details, and move the *Carrier Tracking Number* to the end.
+We will start improving the *Sales Order* details screen by updating the child table with the order line items, which shows the products ordered, their quantities, and prices. Looking at the current table, the following updates come to mind.
+1. Display the *Product* using the product name as the first column, which will have a link to the line item details, and move the *Carrier Tracking Number* to the end.
 1. Display the *Special Offer* using its description instead of the internal ID.
 1. Remove *Rowguid* and *Modified Date* internal columns
-1. Display *Unit Price Discount* as percentage, and the *Line Total* in the currency format.
+1. Display the *Unit Price Discount* as a percentage, and the *Line Total* in the currency format.
 
 ## Product enumeration
 
-We will turn the list of products into a dynamic enumeration, since it does not change very often, and is not too large, so it can be cached. Make sure that you set the `Make Key Type Enumerated` property of the * Read Enum Operation* generator to `True`, so that it would automatically configure the key type. Next, open up the `product.xom` file in the model, and run that generator on that file, as shown below.
+We will turn the list of products into a dynamic enumeration, since it does not change very often and is not too large, so it can be cached. Make sure that you set the `Make Key Type Enumerated` property of the * Read Enum Operation* generator to `True` so that it would automatically configure the key type. Next, open up the `product.xom` file in the model, and run that generator on that file, as shown below.
 
 ![Product gen enum](img1/product-gen-enum.png)
 
@@ -30,7 +30,7 @@ Expand the generated `read enum` operation on the `product` object, and remove a
 
 Also, add a required boolean parameter `is active`, which will indicate if this is a current product that has not been discontinued. We will also set this parameter as such on the enumeration configuration, so that it would not prompt discontinued products in any selection lists, but can still use them to decode a product ID into the corresponding name.
 
-With these changes your `read enum` operation will look as follows.
+With these changes, your `read enum` operation will look as follows.
 
 ```xml title="product.xom"
     <object name="product">
@@ -122,7 +122,7 @@ public virtual async Task<Output<ICollection<Product_ReadEnumOutput>>>
 }
 ```
 
-In order to make sure that your inline customizations are [preserved if you run the *Clean* command](../search/custom-result#caution-on-mixed-in-customizations) on the model, you can add a  `svc:customize` config element to the `product` object, and set the `preserve-on-clean="true"` attribute, as follows.
+In order to make sure that your inline customizations are [preserved if you run the *Clean* command](../search/custom-result#caution-on-mixed-in-customizations) on the model, you can add an `svc:customize` config element to the `product` object, and set the `preserve-on-clean="true"` attribute, as follows.
 
 ```xml title="product.xom"
     <config>
@@ -140,7 +140,7 @@ We will do similar steps for the `special offer` object, generating a `read enum
 
 ### Configuring enumeration fields
 
-We will strip it off of any extraneous parameters except for the `special offer id`, `description`, and the `category` attribute for cascading selection. We will also add `is active` parameter to indicate current special offers, and will set it on the enumeration as well.
+We will strip it off of any extraneous parameters except for the `special offer id`, `description`, and `category` attribute for cascading selection. We will also add `is active` parameter to indicate current special offers, and will set it on the enumeration as well.
 
 ```xml title="special_offer.xom"
     <object name="special offer">
@@ -216,7 +216,7 @@ public virtual async Task<Output<ICollection<SpecialOffer_ReadEnumOutput>>>
 }
 ```
 
-In order to make sure that your inline customizations are [preserved if you run the *Clean* command](../search/custom-result#caution-on-mixed-in-customizations) on the model, you can add a  `svc:customize` config element to the `special offer` object, and set the `preserve-on-clean="true"` attribute, as follows.
+In order to make sure that your inline customizations are [preserved if you run the *Clean* command](../search/custom-result#caution-on-mixed-in-customizations) on the model, you can add an `svc:customize` config element to the `special offer` object, and set the `preserve-on-clean="true"` attribute, as follows.
 
 ```xml title="special_offer.xom"
     <config>
@@ -279,7 +279,7 @@ Note that these parameters will be added to the `SalesOrderDetailList` data obje
 
 ### Formatting result fields
 
-For now, let's address the issues with the formatting of the `unit price discount` and `line total` fields. You can see that based on their SQL types the price discount was imported with type `money` and the line total was imported with a generated type `numeric_38_6`, which even has a warning on its definition saying that it extends a deprecated type `numeric`.
+For now, let's address the issues with the formatting of the `unit price discount` and `line total` fields. You can see that based on their SQL types the price discount was imported with the type `money` and the line total was imported with a generated type `numeric_38_6`, which even has a warning on its definition saying that it extends a deprecated type `numeric`.
 
 ```xml
 <object name="detail">
@@ -305,10 +305,10 @@ For the `unit price discount` field, we will define a new type `discount` in the
 ```
 
 :::note
-We will also had to use a SQL type override, so that it keeps the mapping to the original SQL type `money`.
+We will also have to use a SQL type override so that it keeps the mapping to the original SQL type `money`.
 :::
 
-Now, if you right click on the `numeric_38_6` type, and select *Find All References*, you will see that it is used solely on our `line total` field. Therefore, we will just rename this type to be `line total`, move it to the same file `sales_order.xom`, and then make it inherit from the `money` type to make sure that it gets formatted as currency. We'll also keep the SQL type configuration override, as shown below.
+Now, if you right-click on the `numeric_38_6` type, and select *Find All References*, you will see that it is used solely on our `line total` field. Therefore, we will just rename this type to be `line total`, move it to the same file `sales_order.xom`, and then make it inherit from the `money` type to make sure that it gets formatted as currency. We'll also keep the SQL type configuration override, as shown below.
 
 ```xml
     <!-- highlight-next-line -->
@@ -364,7 +364,7 @@ We have also updated the `details` link to be displayed on the field `product id
 
 ## Reviewing the results
 
-After you build the model one more time, and run the application now, you'll see that the *Sales Order Detail* grid looks exactly according to the requirements that we defined earlier. Below is a picture that illustrates this.
+After you build the model one more time and run the application now, you'll see that the *Sales Order Detail* grid looks exactly according to the requirements that we defined earlier. Below is a picture that illustrates this.
 
 ![Child list results](img1/child-list-results.png)
 

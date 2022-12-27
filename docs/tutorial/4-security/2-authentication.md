@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # 4.2 Password authentication
 
-In this section we are going to add a common *Login View* for our application, as well as a service that performs user authentication by email and password.
+In this section, we are going to add a common *Login View* for our application, as well as a service that performs user authentication by email and password.
 
 :::note
 The final implementation of the authentication will depend on the specific technology we use, and we'll describe it for each technology in the subsequent sections.
@@ -12,7 +12,7 @@ The final implementation of the authentication will depend on the specific techn
 
 ## Defining Authentication data object
 
-As usual, we will begin with defining the relevant things in our Xomega model. Let's open up the `person.xom` file, and declare a new data object called `AuthenticationObject`, which will serve as a data model for our *Login* view.
+As usual, we will begin by defining the relevant things in our Xomega model. Let's open up the `person.xom` file, and declare a new data object called `AuthenticationObject`, which will serve as a data model for our *Login* view.
 
 ```xml title="person.xom"
 <!-- added-lines-start -->
@@ -25,7 +25,7 @@ As usual, we will begin with defining the relevant things in our Xomega model. L
 
 ### Credentials structure
 
-Next we will define a new structure `credentials` with two parameters for the `email` and `password`, which will be added to our `AuthenticationObject` as properties.
+Next, we will define new structure `credentials` with two parameters for the `email` and `password`, which will be added to our `AuthenticationObject` as properties.
 
 ```xml
 <!-- added-lines-start -->
@@ -162,7 +162,7 @@ This is where we would need to hash the user-supplied password using the salt th
 
 If the email address is not found or if the password is not valid, we'll report a critical error using the generated constant `InvalidCredentials` for our message.
 
-## Custom code for Authentication object
+## Custom code for the Authentication object
 
 Next, let's open the generated `AuthenticationObjectCustomized.cs` in the `AdventureWorks.Client.Common` project, and set it up to not track modifications, as shown below. We also set the `IsNew` flag to `false`, so that the view title would say just *Login* instead of *New Login*.
 
@@ -181,7 +181,7 @@ public class AuthenticationObjectCustomized : AuthenticationObject
 }
 ```
 
-With this common code we'll have an internal operation that can authenticate a person by email and password, and a generated *Login View* that can collect this information and call that operation when the user clicks the *Save* button.
+With this common code, we'll have an internal operation that can authenticate a person by email and password, and a generated *Login View* that can collect this information and call that operation when the user clicks the *Save* button.
 
 Presenting the *Login* view and the actual authentication of the user will need to be implemented for each specific technology, as we'll see in subsequent sections.
 

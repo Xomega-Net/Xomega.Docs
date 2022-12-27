@@ -4,9 +4,9 @@ sidebar_position: 12
 
 # 3.11 Computed fields
 
-In the beginning of this chapter we have [updated the list of line items](child-list) for a sales order to show the relevant information.
+At the beginning of this chapter we have [updated the list of line items](child-list) for a sales order to show the relevant information.
 
-In this section we will add ability to edit line items via a child view using some techniques that we have already learned before, and some new Xomega Framework methods for working with computed fields.
+In this section, we will add the ability to edit line items via a child view using some techniques that we have already learned before, and some new Xomega Framework methods for working with computed fields.
 
 ## Overview of updates
 
@@ -20,7 +20,7 @@ To help identify the sales order, for which we are adding or editing a line item
 
 Since the number of products is too large to allow easy selection from the dropdown list, we will add a *Product Subcategory* dropdown, which will narrow down the list of products to the selected subcategory.
 
-Also we want to hide all internal fields like `rowguid`, `modified date` and `sales order id`, and make fields that are calculated from other fields readonly.
+Also, we want to hide all internal fields like `rowguid`, `modified date`, and `sales order id`, and make fields that are calculated from other fields read-only.
 
 Selecting a product should populate the *Unit Price*, and filter the *Special Offer* dropdown list to the offers for the selected product. Selecting a *Special Offer* should populate the *Unit Price Discount* accordingly.
 
@@ -28,11 +28,11 @@ And entering the *Order Quantity* should recalculate the *Line Total*, taking in
 
 ## Updating Detail CRUD operations
 
-Let's start by updating the CRUD operations for the `details` sub-object of the `sales order` object, in order to return all the necessary information, and to only update fields that can be updated.
+Let's start by updating the CRUD operations for the `details` sub-object of the `sales order` object, to return all the necessary information, and to only update fields that can be updated.
 
 ### Configuring the Read operation
 
-We'll start by making the `read` operation return additional output parameters `sales order number` and `subcategory`, and will remove the `rowguid` and `modified date` parameters. In order to set up a proper order of fields on the screen when displayed in two columns, we will also **reorder** some of the **remaining parameters**, as illustrated below.
+We'll start by making the `read` operation return additional output parameters `sales order number` and `subcategory`, and will remove the `rowguid` and `modified date` parameters. To set up a proper order of fields on the screen when displayed in two columns, we will also **reorder** some of the **remaining parameters**, as illustrated below.
 
 ```xml title="sales_order.xom"
     <object name="sales order">
@@ -82,7 +82,7 @@ We'll start by making the `read` operation return additional output parameters `
 
 ### Fixing Create and Update operations
 
-Following the best service design principles, you don't want to send any calculated values in the `create` or `update` operations, but let the service operations calculate and store those values on its own instead.
+Following the best service design principles, you don't want to send any calculated values in the `create` or `update` operations, but let the service operations calculate and store those values on their own instead.
 
 So we will remove any computed values from both the `create` and `update` operations, leaving only the fields that can be updated by the user, as follows.
 
@@ -191,7 +191,7 @@ public partial class SalesOrderService
 
 The first call to `AbortIfHasErrors` ensures that there are no validation errors so far, and all objects have been resolved from their IDs. Then, we set the computed fields from the values of other underlying fields, and initialize the `ModifiedDate` and `Rowguid` as needed.
 
-Next, we will open the generated `SalesOrderService` class, and will update the `Detail_CreateAsync` and `Detail_UpdateAsync` method to use our new method, as follows.
+Next, we will open the generated `SalesOrderService` class and will update the `Detail_CreateAsync` and `Detail_UpdateAsync` methods to use our new method, as follows.
 
 ```cs title="SalesOrderService.cs"
 public partial class SalesOrderService : BaseService, ISalesOrderService
@@ -228,7 +228,7 @@ Before we move to update the UI, let's first configure some dynamic enumerations
 
 ### Adding Subcategory enumeration
 
-To allow selection of a subcategory, we will configure the *Read Enum Operation* generator to set the *Generate Read Enum* parameter back to `True`, and then will run that generator on the `product_subcategory.xom` file. In the generated `read enum` operation, we will remove the `rowguid` and `modified date` output parameters as follows.
+To allow the selection of a subcategory, we will configure the *Read Enum Operation* generator to set the *Generate Read Enum* parameter back to `True`, and then will run that generator on the `product_subcategory.xom` file. In the generated `read enum` operation, we will remove the `rowguid` and `modified date` output parameters as follows.
 
 ```xml title="product_subcategory.xom"
 <object name="product subcategory">
@@ -330,7 +330,7 @@ We will also add some output parameters that we'll need from the special offer f
 ```
 
 :::note
-Normally, we would turn the `special offer product` object into a `product` subobject of the `special offer` object, similar to [what we did before](context-selection#person-credit-card-subobject) with the `person credit card` object. In this case the above operation would be on the `special offer` object, and would look slightly different.
+Normally, we would turn the `special offer product` object into a `product` subobject of the `special offer` object, similar to [what we did before](context-selection#person-credit-card-subobject) with the `person credit card` object. In this case, the above operation would be on the `special offer` object and would look slightly different.
 
 However, the problem is that the `special offer product` object is referenced directly by the `detail` subobject of the `sales order` object. Domain Driven Design principles do not allow referencing subobjects from outside of their aggregate object, and there is no way to set up such a reference in the Xomega model either.
 :::
@@ -395,7 +395,7 @@ Now we are ready to finish up the *Line Item* view with the UI updates.
 
 ### Implementing dynamic view title
 
-Let's start with updating the view title, and make it dynamically include the order number.
+Let's start with updating the view title, and making it dynamically include the order number.
 
 We will set the `title` of our `SalesOrderDetailView` to be "*Line Item for Sales Order {0}*", where the placeholder will contain the order number. We'll implement the dynamic title in the custom view model, so we'll need to set the `customize="true"` on its `ui:view-model` element, as follows.
 
@@ -424,7 +424,7 @@ We have added the `sales order number` to the `read` operation, so it should be 
 </xfk:data-object>
 ```
 
-Now we need to build the *Model* again, and add an override for the `BaseTitle` to the `SalesOrderDetailViewModelCustomized` class, as shown below.
+Now we need to build the *Model* again and add an override for the `BaseTitle` to the `SalesOrderDetailViewModelCustomized` class, as shown below.
 
 ```cs title="SalesOrderDetailViewModelCustomized.cs"
 public class SalesOrderDetailViewModelCustomized : SalesOrderDetailViewModel
@@ -435,13 +435,13 @@ public class SalesOrderDetailViewModelCustomized : SalesOrderDetailViewModel
 }
 ```
 
-This code reads the localized resource for the view title, and formats it using the value of the `SalesOrderNumberProperty`.
+This code reads the localized resource for the view title and formats it using the value of the `SalesOrderNumberProperty`.
 
 ### Configuring data object fields
 
 We are going to implement behavior for computed fields and cascading selection in the customized `SalesOrderDetailObject`, so let's set the `customize="true"` attribute on this data object.
 
-We will also lay out the fields in two columns by setting `field-cols="2"` here, and will configure them to hide `sales order id` and `sales order number`. Then we'll manually make the `subcategory` editable, since it's not updated in any operations, and will set proper labels for `product id` and `special offer id`, as follows.
+We will also lay out the fields in two columns by setting `field-cols="2"` here and will configure them to hide the `sales order id` and `sales order number`. Then we'll manually make the `subcategory` editable since it's not updated in any operations, and will set proper labels for `product id` and `special offer id`, as follows.
 
 ```xml title="sales_order.xom"
 <!-- highlight-next-line -->
@@ -470,7 +470,7 @@ We will also lay out the fields in two columns by setting `field-cols="2"` here,
 
 Let's build the *Model* project one more time, and open the generated `SalesOrderDetailObjectCustomized.cs` file. We will set up cascading selection of the product off of the selected subcategory by calling the `SetCascadingProperty` method. We'll also configure it to show uncategorized products only, when the selected subcategory is blank, as opposed to showing all products.
 
-To configure contextual selection of the special offer based on the selected product, we'll set up a `LocalCacheLoader` using a class generated from our contextual enumeration, and then we will call `SetCacheLoaderParameters` to provide a source property for the `ProductId` parameter of the cache loader, as shown below.
+To configure the contextual selection of the special offer based on the selected product, we'll set up a `LocalCacheLoader` using a class generated from our contextual enumeration, and then we will call `SetCacheLoaderParameters` to provide a source property for the `ProductId` parameter of the cache loader, as shown below.
 
 ```cs title="SalesOrderDetailObjectCustomized.cs"
 /* added-lines-start */
@@ -501,9 +501,9 @@ public class SalesOrderDetailObjectCustomized : SalesOrderDetailObject
 
 ### Configuring computed properties
 
-Finally, let's configure computed properties on the UI to have them automatically update whenever values of the underlying properties change. You can set it up manually using property listeners, but Xomega Framework makes it extremely easy using LINQ expressions.
+Finally, let's configure computed properties on the UI to have them automatically update whenever the values of the underlying properties change. You can set it up manually using property listeners, but Xomega Framework makes it extremely easy with using LINQ expressions.
 
-All you have to do is to create an expression that returns the computed value based on the provided arguments, and pass it to the `SetComputedValue` method along with the instances of those arguments. You can pass the entire data object or individual properties as the arguments, or any combination thereof. To make the expression easier to write, you can also define and use helper functions, such as the `GetLineTotal` for calculating the line total from nullable values, as illustrated below.
+All you have to do is to create an expression that returns the computed value based on the provided arguments and pass it to the `SetComputedValue` method along with the instances of those arguments. You can pass the entire data object or individual properties as the arguments, or any combination thereof. To make the expression easier to write, you can also define and use helper functions, such as the `GetLineTotal` for calculating the line total from nullable values, as illustrated below.
 
 ```cs title="SalesOrderDetailObjectCustomized.cs"
 ...
@@ -545,12 +545,12 @@ public class SalesOrderDetailObjectCustomized : SalesOrderDetailObject
 
 ## Reviewing the results
 
-Let's run the application to review the results of our hard work. If you open details of an existing sales order, and click *New* on the *Details* tab, the following screen will appear.
+Let's run the application to review the results of our hard work. If you open the details of an existing sales order and click *New* on the *Details* tab, the following screen will appear.
 
 ![Computed fields](img11/computed-fields.png)
 
-Notice how the view title has been updated, and includes the number of the current sales order. The fields are laid out in two columns, and include a *Subcategory* to help you select a *Product*.
+Notice how the view title has been updated and includes the number of the current sales order. The fields are laid out in two columns and include a *Subcategory* to help you select a *Product*.
 
-Once you select a *Product*, the readonly *Unit Price* field will show the price, and the *Special Offer* list will be updated with applicable special offers. Selecting a special offer will update the calculated *Unit Price Discount* value that is displayed as %.
+Once you select a *Product*, the read-only *Unit Price* field will show the price, and the *Special Offer* list will be updated with applicable special offers. Selecting a special offer will update the calculated *Unit Price Discount* value that is displayed as %.
 
-Finally, changing the *Product*, *Order Qty* or *Special Offer* will trigger recalculation of the *Line Total* value.
+Finally, changing the *Product*, *Order Qty* or *Special Offer* will trigger a recalculation of the *Line Total* value.

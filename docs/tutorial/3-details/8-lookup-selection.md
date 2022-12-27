@@ -4,19 +4,19 @@ sidebar_position: 9
 
 # 3.8 Lookup selection form
 
-When creating sales orders, one of the main things the user needs to do is to select a customer for the order. Unlike other enumerated fields, such as a `sales person`, which you can select from a relatively small list that can be cached on the client, there could be potentially thousands of customers to select from, which doesn't lend itself to selecting them from a drop-down list or caching them on the client.
+When creating sales orders, one of the main things the user needs to do is select a customer for the order. Unlike other enumerated fields, such as a `sales person`, which you can select from a relatively small list that can be cached on the client, there could be potentially thousands of customers to select from, which doesn't lend itself to selecting them from a drop-down list or caching them on the client.
 
-What we really need is a way to look up the customer by some attributes like names, or a specific account number, and then select it for the current sales order. In this step we will show you how Xomega makes it extremely easy when leveraging all the techniques that you've learned so far.
+What we really need is a way to look up the customer by some attributes like names, or a specific account number, and then select it for the current sales order. In this step, we will show you how Xomega makes it extremely easy when leveraging all the techniques that you've learned so far.
 
 ## Adding Lookup View generator
 
-First thing we need to do is to create a *Customer Search* view similar to how we've created a search view for sales orders. However, in this particular case, we're interested in only a Search view for customers, without any Details views.
+The first thing we need to do is to create a *Customer Search* view similar to how we've created a search view for sales orders. However, in this particular case, we're interested in only a Search view for customers, without any Details views.
 
-So, to enhance the customer object in the model with just a `read list` operation and a search view without the CRUD operations or views, we will configure a new *Lookup View* generator by cloning existing *Full CRUD with Views* generator. You can do it by selecting it, pressing Ctrl+C to clone, and then pressing F2 to rename it in the tree, as illustrated below.
+So, to enhance the customer object in the model with just a `read list` operation and a search view without the CRUD operations or views, we will configure a new *Lookup View* generator by cloning the existing *Full CRUD with Views* generator. You can do it by selecting it, pressing Ctrl+C to clone, and then pressing F2 to rename it in the tree, as illustrated below.
 
 ![Copy CRUD generator](img8/gen-crud-copy.png)
 
-We will give it a name `Lookup View`, and then open its properties, and set the `Generate CRUD` and `Generate Subobject CRUD` flags to `False` under the *Operations CRUD* group as follows.
+We will give it the name `Lookup View`, and then open its properties, and set the `Generate CRUD` and `Generate Subobject CRUD` flags to `False` under the *Operations CRUD* group as follows.
 
 ![Lookup view generator](img8/gen-lookup-view.png)
 
@@ -34,7 +34,7 @@ The generator will add the necessary model elements to configure the customer se
 
 ### Configuring results and criteria
 
-We need to add all customer-related parameters from our `customer info` structure to the output of the `read list` operation, so that the lookup screen could return their values to the invoking screen for the selected record.
+We need to add all customer-related parameters from our `customer info` structure to the output of the `read list` operation so that the lookup screen could return their values to the invoking screen for the selected record.
 
 As for the criteria, we'll just allow filtering by the same parameters using operators, as follows.
 
@@ -127,7 +127,7 @@ To make our customer lookup view look pretty, we will configure the data objects
 
 ### Custom service implementation
 
-Since we have custom output parameters, we will need to build the model to regenerate the services, and provide custom implementations in the `ReadListAsync` method of the `CustomerService` class as follows.
+Since we have custom output parameters, we will need to build the model to regenerate the services and provide custom implementations in the `ReadListAsync` method of the `CustomerService` class as follows.
 
 ```cs title="CustomerService.cs"
 public partial class CustomerService : BaseService, ICustomerService
@@ -163,7 +163,7 @@ public partial class CustomerService : BaseService, ICustomerService
 }
 ```
 
-In order to make sure that your inline customizations are [preserved if you run the *Clean* command](../search/custom-result#caution-on-mixed-in-customizations) on the model, you can add a  `svc:customize` config element to the `customer` object, and set the `preserve-on-clean="true"` attribute, as follows.
+In order to make sure that your inline customizations are [preserved if you run the *Clean* command](../search/custom-result#caution-on-mixed-in-customizations) on the model, you can add an `svc:customize` config element to the `customer` object, and set the `preserve-on-clean="true"` attribute, as follows.
 
 ```xml title="special_offer.xom"
     <config>
@@ -177,7 +177,7 @@ In order to make sure that your inline customizations are [preserved if you run 
 
 Now that we have the *Customer List* view ready, we need to add a link to that view from the *Sales Order* details screen. Since the link will be to select a customer, we will add it to the `SalesOrderCustomerObject` data object under a name `look up`.
 
-We'll set the target `view` to `CustomerListView` and will set the `child="true"` attribute to open it as a child popup window. To configure the target view for selection of a a single customer, we'll pass to it an `_action` parameter with a value `select`, and a `_selection` parameter with a value `single`.
+We'll set the target `view` to `CustomerListView` and will set the `child="true"` attribute to open it as a child popup window. To configure the target view for the selection of a single customer, we'll pass to it an `_action` parameter with a value `select`, and a `_selection` parameter with a value `single`.
 
 To map the columns of the selected record to the data object properties to be populated from it, we will also add `ui:result` parameters to the link for each customer list output parameter used, and indicate the fields on the current object that these output parameters will populate.
 
@@ -212,17 +212,17 @@ To make this mapping process easier Xomega provides Intellisense for the values 
 
 ### Reviewing the results
 
-If we build the model now, and run the application, then we will see that the *Customer* tab will have a *Look Up* link now, which opens up the *Customer List* screen as a child dialog, where you can search for customers using our criteria, and select a specific customer, as shown in the picture below.
+If we build the model now and run the application, then we will see that the *Customer* tab will have a *Look Up* link now, which opens up the *Customer List* screen as a child dialog, where you can search for customers using our criteria, and select a specific customer, as shown in the picture below.
 
 ![Lookup link](img8/lookup-link.png)
 
-Notice how the child *Customer List* screen automatically allows single selection in the grid, and provides a *Select* button to confirm your selection, thanks to the selection parameters that we configured on our `look up` link.
+Notice how the child *Customer List* screen automatically allows a single selection in the grid, and provides a *Select* button to confirm your selection, thanks to the selection parameters that we configured on our `look up` link.
 
-Technically, this fulfills our requirements for allowing to select a customer, but this process could be a little cumbersome, since you always have to pull up the customer list screen, populate the criteria, and run the search, in order to select a customer.
+Technically, this fulfills our requirements for allowing us to select a customer, but this process could be a little cumbersome since you always have to pull up the customer list screen, populate the criteria, and run the search, to select a customer.
 
 ## Lookup form with parameters
 
-What would be better is if you could enter some common lookup criteria, such as the store and the person names, right on the *Sales Order* details screen. If they match exactly one customer, the *Look Up* button would populate its values without even popping up a selection dialog. If they match no customer or multiple customers, then the link will open up the *Customer List* dialog with the specified criteria and results pre-populated.
+What would be better is if you could enter some common lookup criteria, such as the store and the person's names, right on the *Sales Order* details screen. If they match exactly one customer, the *Look Up* button would populate its values without even popping up a selection dialog. If they match no customer or multiple customers, then the link will open up the *Customer List* dialog with the specified criteria and results pre-populated.
 
 ### Adding a lookup child object
 
@@ -260,7 +260,7 @@ Then we'll move the `look up` link to that new object, and will update the resul
     </xfk:data-object>
 ```
 
-To add properties to this data object we will define an auxiliary structure `customer lookup` with `store name` and `person name` parameters added to this data object, as follows.
+To add properties to this data object we will define an auxiliary structure `customer lookup` with the `store name` and `person name` parameters added to this data object, as follows.
 
 ```xml
 <!-- added-lines-start -->
@@ -305,9 +305,9 @@ With `CN` value for the operators, the search will automatically look for custom
 
 ### Disabling modification tracking
 
-With the `SalesCustomerLookupObject` object being a child of the `SalesOrderCustomerObject`, which, in turn, is a child of the main `SalesOrderObject`, any changes to the fields of the lookup object will automatically make the entire sales order modified, which will cause a confirmation prompt for unsaved changes. This would be undesirable though, since this object is not really a part of the sales order.
+With the `SalesCustomerLookupObject` object being a child of the `SalesOrderCustomerObject`, which, in turn, is a child of the main `SalesOrderObject`, any changes to the fields of the lookup object will automatically make the entire sales order modified, which will cause a confirmation prompt for unsaved changes. This would be undesirable though since this object is not really a part of the sales order.
 
-We can disable modification tracking for this object in its customized subclass. For this we'll set the `customize="true"` attribute on the data object declaration as follows.
+We can disable modification tracking for this object in its customized subclass. For this, we'll set the `customize="true"` attribute on the data object declaration as follows.
 
 ```xml
     <xfk:data-object class="SalesCustomerLookupObject" customize="true">[...]
@@ -339,4 +339,4 @@ As you see, the *Customer* tab has a child *Lookup* panel with the *Store Name* 
 
 You can confirm that entering anything in these fields alone would not mark the view as modified, which you can check by making sure that the view title doesn't get an asterisk, the *Save* button remains disabled, and there won't be a confirmation message if you close the view, when it was opened from the *Sales Order List* screen.
 
-If you enter a person name that matches multiple customers and click the *Look Up* button, then you will get a *Customer List* dialog pre-populated with the matching customers to select. On the other hand, if you enter a person's name that results in a single match, then it will be automatically selected and populated when you click the *Look Up* button, without even popping up the *Customer List* dialog.
+If you enter a person's name that matches multiple customers and click the *Look Up* button, then you will get a *Customer List* dialog pre-populated with the matching customers to select. On the other hand, if you enter a person's name that results in a single match, then it will be automatically selected and populated when you click the *Look Up* button, without even popping up the *Customer List* dialog.

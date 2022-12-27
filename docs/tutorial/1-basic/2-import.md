@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # 1.2 Import Xomega model
 
-First thing you need to do in order to import the Xomega model from a database is to set up the connection properties for the corresponding generator.
+The first thing you need to do to import the Xomega model from a database is to set up the connection properties for the corresponding generator.
 
 ## Configure database connection
 
@@ -26,9 +26,9 @@ Once you set up the connection string and click *Next*, you will be prompted to 
 
 Verify the database information, select the option to save it as a project default configuration, and then click *Finish*.
 
-## Run the import from database
+## Run the import from a database
 
-To run the import from database, right click on the *Import from Database* generator, and select the *Generate* option from the context menu.
+To run the import from the database, right-click on the *Import from Database* generator, and select the *Generate* option from the context menu.
 
 ![Import generate](img2/import-generate.png)
 
@@ -38,4 +38,4 @@ Once the generator is finished running, you should see the imported model files 
 
 The model objects were imported from the database using the database structure, as well as any model setup that existed before the import, such as the logical types defined.
 
-This is a good start, but it is not enough to build a fully fledged application beyond just a "database table editor". To model our application and describe different services and views that it will have, we need to further enhance our model with all that information, which is what we're going to do next.
+This is a good start, but it is not enough to build a fully-fledged application beyond just a "database table editor". To model our application and describe different services and views that it will have, we need to further enhance our model with all that information, which is what we're going to do next.

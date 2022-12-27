@@ -4,9 +4,9 @@ sidebar_position: 6
 
 # 2.5 Static enumerations
 
-When you look at the status column on the *Sales Order List* screen, you will notice that it shows internally stored numeric values instead of user-friendly status descriptions. The list of possible status values and their descriptions is static, and is not stored in any of the database tables.
+When you look at the status column on the *Sales Order List* screen, you will notice that it shows internally stored numeric values instead of user-friendly status descriptions. The list of possible status values and their descriptions is static and is not stored in any of the database tables.
 
-Right now you can only find it in the documentation stored on the *Status* column of the `SalesOrderHeader` database table, which was imported into the model as shown below.
+Right now you can only find it in the documentation stored in the *Status* column of the `SalesOrderHeader` database table, which was imported into the model as shown below.
 
 ```xml title="sales_order.xom"
 <field name="status" type="tiny int" required="true">
@@ -28,7 +28,7 @@ So let's see how we can enhance our model with static lists of values like the o
 
 ## Enumerations for numeric values
 
-We will start by adding `enums` element after the `types` element in the `sales_order.xom` file, and will declare an enumeration named `sales order status` in there, listing all its items with their respective names and values.
+We will start by adding an `enums` element after the `types` element in the `sales_order.xom` file, and will declare an enumeration named `sales order status` in there, listing all its items with their respective names and values.
 
 ```xml title="sales_order.xom"
   <enums>
@@ -57,7 +57,7 @@ Next, we will declare a new logical type, which we can also call `sales order st
   </types>
 ```
 
-Since the original type of the status field is `tiny int`, we set the base type for our new type to be **`tiny int enumeration`**, which is declared in the framework, and combines various enumeration configurations with the `tiny int` configurations.
+Since the original type of the status field is `tiny int`, we set the base type for our new type to be **`tiny int enumeration`**, which is declared in the framework and combines various enumeration configurations with the `tiny int` configurations.
 
 As you add the new type, you will notice a warning on it, telling you that this type is currently not used in the model. So the next logical thing to do will be to set this type on the `status` field of the `sales order` object as follows.
 
@@ -74,7 +74,7 @@ As you add the new type, you will notice a warning on it, telling you that this 
 
 To provide another example, let's define one more static enumeration, which will be based on string values now, rather than on numeric values. This is also typical if you store short codes that have longer decodes, e.g. a list of states with NJ as a code and "New Jersey" as a decode.
 
-If you open `sales_territory.xom` file, then you will see that sales territories have a `group` field, which specifies one of the territories' global regions: North America, Europe or Pacific.
+If you open `sales_territory.xom` file, then you will see that sales territories have a `group` field, which specifies one of the territories' global regions: North America, Europe, or the Pacific.
 
 ```xml title="sales_territory.xom"
 <object name="sales territory">
@@ -87,7 +87,7 @@ If you open `sales_territory.xom` file, then you will see that sales territories
 </object>
 ```
 
-Note that this field has an auto-generated type `string50`, which maps a unicode string of up to 50 characters long.
+Note that this field has an auto-generated type `string50`, which maps a Unicode string of up to 50 characters long.
 
 As we've done before, we will first define an enumeration `sales territory group` in the same file, with all its values listed, as follows.
 
@@ -101,7 +101,7 @@ As we've done before, we will first define an enumeration `sales territory group
   </enums>
 ```
 
-Then we'll declare a type with the same name that references this enumeration. This time though, we will inherit our new type from the string-based `enumeration` type. But to preserve the database properties of our original type, we will set its size to 50, and will use the `nvarchar` SQL type, as shown below.
+Then we'll declare a type with the same name that references this enumeration. This time though, we will inherit our new type from the string-based `enumeration` type. But to preserve the database properties of our original type, we will set its size to 50 and will use the `nvarchar` SQL type, as shown below.
 
 ```xml
   <types>
@@ -117,7 +117,7 @@ Then we'll declare a type with the same name that references this enumeration. T
   </types>
 ```
 
-And finally we'll set that type on the `group` field of the `sales territory` object. 
+And finally, we'll set that type on the `group` field of the `sales territory` object. 
 
 ```xml title="sales_territory.xom"
 <object name="sales territory">
@@ -201,4 +201,4 @@ If you run the search now, the results grid will look like this.
 
 ![Results grid](img5/results-enums.png)
 
-Notice that the Status automatically shows decoded descriptions instead of the numeric values, both in the grid and in the criteria summary panel above the grid.
+Notice that the Status automatically shows decoded descriptions instead of numeric values, both in the grid and in the criteria summary panel above the grid.

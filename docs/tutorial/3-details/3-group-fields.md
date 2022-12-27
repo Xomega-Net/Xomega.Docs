@@ -4,15 +4,15 @@ sidebar_position: 4
 
 # 3.3 Group fields into sub-panel
 
-When working with such a large data object as the `SalesOrder`, it makes sense to break it up into groups of related fields, and display them in tabbed child panels.
+When working with such a large data object as the `SalesOrder`, it makes sense to break it up into groups of related fields and display them in tabbed child panels.
 
 ## Overview of updates
 
-For example, the fields highlighted below in yellow are related to the payment information, and can be grouped under the *Payment* tab.
+For example, the fields highlighted below in yellow are related to the payment information and can be grouped under the *Payment* tab.
 
 ![Grouping TODO](img3/grouping-todo.png)
 
-Let's update our model, so that these fields would be displayed in the *Payment* child panel.
+Let's update our model so that these fields would be displayed in the *Payment* child panel.
 
 ## Shipment method enumeration
 
@@ -75,7 +75,7 @@ Once you do that, you will get a model warning telling you that your new data ob
 
 ### Defining data object structures
 
-Right above the top level `objects` element, we will add a `structs` element, and define two structures named `payment info` and `payment update` that are based on the `sales order` object, and will configure them to have their parameters added to the `SalesOrderPaymentObject` data object.
+Right above the top-level `objects` element, we will add a `structs` element and define two structures named `payment info` and `payment update` that are based on the `sales order` object and will configure them to have their parameters added to the `SalesOrderPaymentObject` data object.
 
 The first structure, `payment info`, will represent the payment fields that we read from the `SalesOrderService`, so we'll go ahead and move all those read output parameters to this structure.
 
@@ -107,13 +107,13 @@ Again, since it has all parameters for our data object, and goes first in the mo
   <objects>[...]
 ```
 
-While we were at it, we also overrode the type for the `due date` parameter to be just `date`, and set the type of the `currency rate` to be a string, so that we could return a user-friendly description of the currency rate.
+While we were at it, we also overrode the type for the `due date` parameter to be just the `date` and set the type of the `currency rate` to be a string, so that we could return a user-friendly description of the currency rate.
 
 :::tip
 Remember to add a `config/xfk:add-to-object` to each structure to configure it for your data object.
 :::
 
-The second structure, `payment update`, will represent a smaller subset of the fields, which can actually be set by the user, as shown in the following snippet. Those will not include any amounts or the currency rate, which are calculated internally by the system from other data.
+The second structure, `payment update`, will represent a smaller subset of the fields, which can be set by the user, as shown in the following snippet. Those will not include any amounts or the currency rate, which are calculated internally by the system from other data.
 
 ```xml
   <structs>
@@ -289,7 +289,7 @@ Finally, we will perform the same replacements in the input of the `update` oper
 
 Now that we have updated our service model to return and accept child structures like this, we will need to provide custom implementations for handling these parameters in the generated service.
 
-However, those will be pretty large pieces of custom code, which we don't want mixed in with the generated code. Plus, that custom code for the `update` and `create` operations will be pretty much the same.
+However, those will be pretty large pieces of custom code, which we don't want to be mixed in with the generated code. Plus, that custom code for the `update` and `create` operations will be pretty much the same.
 
 So a better design will be for us to extend the generated partial class `SalesOrderService` with our own file, where we can implement this custom code in separate methods, and mix in the calls to those methods in the generated file, which we are about to see.
 
@@ -310,7 +310,7 @@ The easiest way to do it is to set the `extend="true"` attribute on the `svc:cus
     </object>
 ```
 
-Once we build the model, we will notice that there is a `SalesOrderServiceExtended.cs` file nested under the `SalesOrderService.cs` file, which provides extension of the partial class for our custom methods.
+Once we build the model, we will notice that there is a `SalesOrderServiceExtended.cs` file nested under the `SalesOrderService.cs` file, which provides an extension of the partial class for our custom methods.
 
 ![Service extended](img3/service-extended.png)
 
@@ -332,7 +332,7 @@ You can manually add a `CurrencyRateExtended.cs` class next to that entity, or s
     </object>
 ```
 
-Once you build the model, you will notice that there is a `CurrencyRateExtended.cs` file nested under the `CurrencyRate.cs` file, which provides extension of the partial class for our customized entity.
+Once you build the model, you will notice that there is a `CurrencyRateExtended.cs` file nested under the `CurrencyRate.cs` file, which provides an extension of the partial class for our customized entity.
 
 ![Entity extended](img3/entity-extended.png)
 
@@ -348,7 +348,7 @@ So let's go ahead and add a new property to our entity with the rate display str
 
 ### Custom Get for the output structure
 
-Next let's open up the `SalesOrderServiceExtended.cs` file that we created earlier, and add a `GetPaymentInfo` method that populates and returns a `PaymentInfo` structure for the given `SalesOrder` object as follows.
+Next, let's open up the `SalesOrderServiceExtended.cs` file that we created earlier, and add a `GetPaymentInfo` method that populates and returns a `PaymentInfo` structure for the given `SalesOrder` object as follows.
 
 ```cs title="SalesOrderServiceExtended.cs"
     public partial class SalesOrderService
@@ -375,7 +375,7 @@ Next let's open up the `SalesOrderServiceExtended.cs` file that we created earli
 Notice how we were able to easily set the currency rate string to our new `RateString` property on the `CurrencyRate` entity, which allowed us to use a null propagation operator to handle `null` cases.
 :::
 
-After that you can go ahead and update the custom code for the `Payment` output parameter in the generated `SalesOrderService.ReadAsync` method to call our `GetPaymentInfo` method as follows.
+After that, you can go ahead and update the custom code for the `Payment` output parameter in the generated `SalesOrderService.ReadAsync` method to call our `GetPaymentInfo` method as follows.
 
 ```cs title="SalesOrderService.cs"
     public partial class SalesOrderService : BaseService, ISalesOrderService
@@ -406,7 +406,7 @@ In the custom Update method for the payment input structure, we'll want to valid
 
 Then we will run the custom tool on the [`Messages.tt`](../../framework/services/errors#message-constants-generator) T4 template file nested under it to generate the constants, similar to how we did it for the [UI validation messages](../search/ui-validation#generating-message-constants) earlier.
 
-Next, we will add a reusable method `UpdatePayment`, which takes input data as a `PaymentUpdate` structure, and updates the `SalesOrder` object provided within the specified context. This method can accept both new and existing `SalesOrder` objects, and therefore can be used from both `create` and `update` operations. The snippet below shows what it would look like.
+Next, we will add a reusable method `UpdatePayment`, which takes input data as a `PaymentUpdate` structure, and updates the `SalesOrder` object provided within the specified context. This method can accept both new and existing `SalesOrder` objects, and therefore can be used for both `create` and `update` operations. The snippet below shows what it would look like.
 
 ```cs title="SalesOrderServiceExtended.cs"
 public partial class SalesOrderService
@@ -475,4 +475,4 @@ As you can see, our payment fields have been moved down from the main panel to a
 
 The fields that are not listed in the `payment update` structure, such as the calculated amounts, are displayed as read-only labels.
 
-*Shipment Method* with updated label is a dropdown list with available shipments methods, the *Due Date* is displayed as a date only, and the *Currency Rate* is shown as a string that we build in our customized entity.
+*Shipment Method* with an updated label is a dropdown list with available shipment methods, the *Due Date* is displayed as a date only, and the *Currency Rate* is shown as a string that we build in our customized entity.

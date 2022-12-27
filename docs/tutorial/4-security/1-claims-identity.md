@@ -8,7 +8,7 @@ Let's update our model and add some code that would allow us to construct a clai
 
 ## Email type for authentication
 
-We will start by declaring a type for email in the `email_address.xom` file, which we're planning to use as the user ID. We will also use this type on the `email address` field of the `email address` object, instead of a more generic type `name`, as follows.
+We will start by declaring a type for an email in the `email_address.xom` file, which we're planning to use as the user ID. We will also use this type on the `email address` field of the `email address` object, instead of a more generic type `name`, as follows.
 
 ```xml title="email_address.xom"
 <!-- added-lines-start -->
@@ -31,7 +31,7 @@ We will start by declaring a type for email in the `email_address.xom` file, whi
 
 ## Person Type for authorization
 
-Next, we will create an enumeration `person type` with possible values of the person type and their descriptions, and will declare a type with the same name for that enumeration, and use that type on the `person type` field of the `person` object, as follows.
+Next, we will create an enumeration `person type` with possible values of the person type and their descriptions and will declare a type with the same name for that enumeration, and use that type on the `person type` field of the `person` object, as follows.
 
 ```xml title="person.xom"
 <types>
@@ -76,7 +76,7 @@ Next, we will create an enumeration `person type` with possible values of the pe
 
 ## Person Info structure for claims
 
-With that done, let's declare a structure `person info` that will contain all the necessary information for the security claims, as follows.
+With that done, let's declare a structure called `person info` that will contain all the necessary information for the security claims, as follows.
 
 ```xml title="person.xom"
 <!-- added-lines-start -->
@@ -199,12 +199,12 @@ public class PersonServiceCustomized : PersonService
 As you see, we are using several joins and some rather cumbersome left joins in LINQ to retrieve the data. If we cannot find the person by the provided email address, then we add a critical error using a generated constant for our message.
 
 :::note
-Unlike the way we customized service code before, where we extended the partial service class, and provided custom code inline with the generated code, this is a subclass of the generated service, where you can override any operation, and need to provide custom implementation for the entire method.
+Unlike the way we customized service code before, where we extended the partial service class, and provided custom code inline with the generated code, this is a subclass of the generated service, where you can override any operation, and need to provide a custom implementation for the entire method.
 :::
 
 ## Constructing Claims Identity
 
-In order to encapsulate common security related code that can be shared between different types of projects, we will add a new static class called `SecurityManager` to the `AdventureWorks.Services.Common` project, where we will define a method that creates claims identity from a `PersonInfo` structure as follows.
+To encapsulate common security-related code that can be shared between different types of projects, we will add a new static class called `SecurityManager` to the `AdventureWorks.Services.Common` project, where we will define a method that creates claims identity from a `PersonInfo` structure as follows.
 
 ```cs title="SecurityManager.cs"
 /* added-next-line */
@@ -242,7 +242,7 @@ public static class SecurityManager
 /* added-lines-end */
 ```
 
-For most of the fields in the `PersonInfo` structure we used standard claim types. For the `person type` we used the `Role` claim type, which is consistent with how we're using it in the first place.
+For most of the fields in the `PersonInfo` structure, we used standard claim types. For the `person type`, we used the `Role` claim type, which is consistent with how we're using it in the first place.
 
 For any non-standard info, such as the store ID or the vendor ID for the user, we're using custom claim types, which we declared as constants at the top of the class.
 

@@ -16,7 +16,7 @@ Select the* Xomega Solution* template, and click *Next* to get to the following 
 
 ![Configure project](img1/configure-project.png)
 
-Set *AdventureWorks* as the project name, select the location to create the solution in, check the checkbox to place solution and project in the same directory, and click *Create*.
+Set *AdventureWorks* as the project name, select the location where to create the solution, check the checkbox to place the solution and project in the same directory, and click *Create*.
 
 ## Xomega solution configuration
 
@@ -32,7 +32,7 @@ You'll notice that all required projects with common logic and services will be 
 If you want to target several technologies at the same time, such as WPF, you can select additional projects here, and they'll share most of the presentation and business logic of your solution. 
 :::
 
-Once you select the projects for your solution, click *Preview* to view and update configuration of the selected projects. You can customize the name of each project, and specify project-specific options, such as which Blazor components to use, as shown below.
+Once you select the projects for your solution, click *Preview* to view and update the configuration of the selected projects. You can customize the name of each project, and specify project-specific options, such as which Blazor components to use, as shown below.
 
 ![Blazor config](img1/blazor-config.png)
 
@@ -50,8 +50,8 @@ Creating a solution with all the projects may take a while as all the dependency
 - **AdventureWorks.Model** is the project that will contain your XML domain and service models for the application, and various generators that perform model transformations and code generation.
 - **AdventureWorks.Services.Common** project will have all interfaces and data contracts (DTOs) for your service model, as well as other classes that are shared between the client and the services layers.
 - **AdventureWorks.Services.Entities** project will contain the back-end domain object classes based on Entity Framework, as well as implementations of the services that use these domain objects.
-- **AdventureWorks.Services.Rest** project will contain Web API controllers that expose the services via REST interface.
-- **AdventureWorks.Client.Common** project will contain Xomega Framework C# data objects for the presentation layer, as well as view models for different views, and will encapsulate a significant part of the client logic. These objects and view models are not specific to any particular client, and are reused by all C# based clients, such as WPF clients, Blazor Server or WebForms. This is why they are configured to have their own project.
+- **AdventureWorks.Services.Rest** project will contain Web API controllers that expose the services via the REST interface.
+- **AdventureWorks.Client.Common** project will contain Xomega Framework C# data objects for the presentation layer, as well as view models for different views, and will encapsulate a significant part of the client logic. These objects and view models are not specific to any particular client and are reused by all C# based clients, such as WPF clients, Blazor Server or WebForms. This is why they are configured to have their own project.
 - **AdventureWorks.Client.Blazor.Common** project will contain Blazor views and components that are shared between the Blazor Server and WebAssembly projects.
 - **AdventureWorks.Client.Blazor.Server** project is the main application project for the Blazor Server client.
 - **AdventureWorks.Client.Blazor.Wasm** project is the main application project for the Blazor WebAssembly client.

@@ -8,7 +8,7 @@ While securing business services can generally fulfill your security requirement
 
 ## Restricted criteria fields
 
-Our *Sales Order List* screen has criteria by customer store and name as shown below.
+Our *Sales Order List* screen has criteria by customer store and names as shown below.
 
 ![Customer criteria](img4/customer-criteria.png)
 
@@ -16,7 +16,7 @@ However, they don't make much sense for external customer users, since the list 
 
 ## Hiding restricted fields
 
-In order to hide these fields for external customers, let's open our `SalesOrderCriteriaCustomized` data object, and add the following code to its `OnInitialized` method.
+To hide these fields for external customers, let's open our `SalesOrderCriteriaCustomized` data object, and add the following code to its `OnInitialized` method.
 
 ```cs title="SalesOrderCriteriaCustomized.cs"
 /* added-next-line */
@@ -46,7 +46,7 @@ public class SalesOrderCriteriaCustomized : SalesOrderCriteria
 }
 ```
 
-In this case, we are using the `CurrentPrincipal` member of the data object, as well as our handy extension methods to determine the user privileges. For external customers we set the `AccessLevel` to `None` on the operator properties for customer store and name, and Xomega Framework takes care of hiding the property-bound controls, and their labels for us.
+In this case, we are using the `CurrentPrincipal` member of the data object, as well as our handy extension methods to determine the user privileges. For external customers, we set the `AccessLevel` to `None` on the operator properties for customer store and name, and Xomega Framework takes care of hiding the property-bound controls, and their labels for us.
 
 :::note
 With this logic being in a data object class, it will be also reusable with other C# based clients like WebForms or WPF desktop clients.

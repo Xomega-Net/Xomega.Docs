@@ -4,24 +4,24 @@ sidebar_position: 4
 
 # 1.4 Build the model
 
-Now that we have a domain model and a basic service model with views for the sales order object, we need to run all re-runnable generators to generate the actual code for our application. All such generators have *Include in Build* property set to *True* by default, which you can configure as you like to control which generators are run when you build the model project.
+Now that we have a domain model and a basic service model with views for the sales order object, we need to run all re-runnable generators to generate the actual code for our application. All such generators have the *Include in Build* property set to *True* by default, which you can configure as you like to control which generators are run when you build the model project.
 
 :::caution
 Note that the **model** project will **not** be **built automatically** when you build the entire solution, since it needs to be built only if the model changes, so you need to build it manually.
 :::
 
-In order to build the model you have to manually run the build for the model project by right-clicking on the project and selecting the *Build* menu option.
+To build the model you have to manually run the build for the model project by right-clicking on the project and selecting the *Build* menu option.
 
 ![Build menu.png](img4/build-menu.png)
 
 This will run the generators and write their output to the respective output paths, as configured for each generator.
 
 :::danger
-**Beware of the *Clean*** option, unless you know what you are doing.
+**Beware of the *Clean*** option unless you know what you are doing.
 
-The *Clean* option will **delete** all **generated files**, and any **mixed-in customizations**.
+The *Clean* option will **delete** all **generated files** and any **mixed-in customizations**.
 
-Cleaning is only useful when you are renaming model entities in such a way, that it affects the names of the generated files, and you need to clean up the old files. Always **check in your files to your source control** first.
+Cleaning is only useful when you are renaming model entities in such a way, that it affects the names of the generated files, and you need to clean up the old files. Always **check your files in your source control** first.
 :::
 
 ## Model build output

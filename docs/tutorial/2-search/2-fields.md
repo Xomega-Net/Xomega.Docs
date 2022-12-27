@@ -39,12 +39,12 @@ After our updates to the output of the `read list` operation in the previous sec
   </object>
 ```
 
-Please note the `xfk:add-to-object` element under the `config` section of the output structure, which specifies that all result parameters should be added as properties to the client data object `SalesOrderList`, which is defined separately in the model. This data object serves as part of the view model for our search view, and you can update its model configuration to adjust visibility of the fields, set custom labels, etc.
+Please note the `xfk:add-to-object` element under the `config` section of the output structure, which specifies that all result parameters should be added as properties to the client data object `SalesOrderList`, which is defined separately in the model. This data object serves as part of the view model for our search view, and you can update its model configuration to adjust the visibility of the fields, set custom labels, etc.
 
 
 ## Hidden fields
 
-If you noticed before, our *Sales Order List* screen was not showing internal sales order IDs, which would not be very useful for the users. However, we still need to have those IDs in the result, in order to generate a proper link to the details screen, so it cannot be just removed from the output parameters. For such internal fields that we still need on the client, but don't want to display, the model provides a way to configure the corresponding client data object to hide them on the UI.
+As you may have noticed before, our *Sales Order List* screen was not showing internal sales order IDs, which would not be very useful for the users. However, we still need to have those IDs in the result, to generate a proper link to the details screen, so it cannot be just removed from the output parameters. For such internal fields that we still need on the client, but don't want to display, the model provides a way to configure the corresponding client data object to hide them on the UI.
 
 When we generated the CRUD operations for the sales order, it automatically configured the data object to hide a serial key, which is specified on the generator's parameters as follows:
 
@@ -97,11 +97,11 @@ The label text you provide here will be added to a resource file to allow you to
 
 ## Grid column widths
 
-By default the column widths of the results grid will be allocated proportionate to the typical length of the data in each column, in order to work better for different screen sizes. You have the following two ways to configure the width of the grid columns in the model.
+By default, the column widths of the results grid will be allocated proportionately to the typical length of the data in each column, to work better for different screen sizes. You have the following two ways to configure the width of the grid columns in the model.
 
-### Configure field's type
+### Configure the field's type
 
-Each object field or parameter has a corresponding logical type defined in the model, which the view generator uses to figure out the typical length of the field data for the column width calculation. For textual fields it uses the maximum field size by default.
+Each object field or parameter has a corresponding logical type defined in the model, which the view generator uses to figure out the typical length of the field data for the column width calculation. For textual fields, it uses the maximum field size by default.
 
 For example, the `sales order number` field was imported with an automatically created type `string25` that has a maximum length of 25, as shown below.
 
@@ -131,7 +131,7 @@ In our case, we will define a `sales order number` type with `size` set to 25, b
   </types>
 ```
 
-Now any field or parameter that will use this type in the model will be assumed to have a typical length of 10 for the purposes of the column width calculation. So let's go ahead and update the type on the `sales order number` field to use our newly defined type.
+Now any field or parameter that will use this type in the model will be assumed to have a typical length of 10 for the column width calculation. So let's go ahead and update the type on the `sales order number` field to use our newly defined type.
 
 ```xml
         <field name="sales order number" type="sales order number" required="true">[...]
@@ -146,17 +146,17 @@ You can also set the `width` attribute directly on the field configuration of th
         <ui:field param="sales order number" label="SO#" width="10%"/>
 ```
 
-This will apply only to the specific views that use that data object, and will override the type-level configuration.
+This will apply only to the specific views that use that data object and will override the type-level configuration.
 
 :::caution
-Since it's using CSS-style format, it will apply primarily to the web technologies, and may not work for desktop applications. Currently it's implemented for Blazor views only.
+Since it's using CSS-style format, it will apply primarily to web technologies, and may not work for desktop applications. Currently, it's implemented for Blazor views only.
 :::
 
 ## Link display config
 
 In addition to the `ui:display` element, you can find two links under the `SalesOrderList` data object - one to open details of an existing sales order, and another one to create a new sales order.
 
-Inside the `details` link you will see that the model displays a validation error, telling you that the link cannot be displayed on the `revision number` field anymore, because we removed it from the output parameters.
+Inside the `details` link, you will see that the model displays a validation error, telling you that the link cannot be displayed on the `revision number` field anymore, because we removed it from the output parameters.
 
 Go to that attribute in error, press Ctrl+Space to pull up the list of other non-hidden fields on the data object, and select the `sales order number` to display the details link on that column, as shown below.
 

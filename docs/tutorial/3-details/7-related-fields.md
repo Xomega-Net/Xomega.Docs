@@ -4,19 +4,19 @@ sidebar_position: 8
 
 # 3.7 Fields from related objects
 
-In this step we will demonstrate how to show fields from related objects on a details screen using techniques that we've learned so far.
+In this step, we will demonstrate how to show fields from related objects on a details screen using techniques that we've learned so far.
 
 ## Overview of updates
 
-The customer related fields, highlighted in yellow on the *Sales Order* details screen below, are just the internal IDs of the related customer and address objects that are stored on the `sales order` object, and were added to our screen by default.
+The customer-related fields, highlighted in yellow on the *Sales Order* details screen below, are just the internal IDs of the related customer and address objects that are stored on the `sales order` object, and were added to our screen by default.
 
 ![Customer TODO](img7/customer-todo.png)
 
-What we need to do is to move them into a child panel *Customer*, and display the relevant customer fields instead of the IDs. In the next step, we will also show how to enable selection of a customer ID using a lookup form.
+What we need to do is to move them into a child panel *Customer*, and display the relevant customer's fields instead of the IDs. In the next step, we will also show how to enable the selection of a customer ID using a lookup form.
 
-## Grouping into Customer tab
+## Grouping into the Customer tab
 
-Let's make the necessary model updates, in order to group the customer fields into a separate tab.
+Let's make the necessary model updates, to group the customer fields into a separate tab.
 
 ### Defining child data object
 
@@ -38,7 +38,7 @@ Similar to the steps that we did before, we will define a new data object `Sales
 
 Now let's define a `customer info` structure for this data object, which will be used for reading customer information as part of the sales order, including additional customer fields that we want to display on the sales order details, such as the customer account number and territory.
 
-If you remember from the search screen, a customer object consists of a store and/or a person, so we will add a `store name` and a `person name` parameters to our structure. We'll also add the corresponding `store id` and `person id` hidden parameters, which we will need later in order to read address details.
+If you remember from the search screen, a customer object consists of a store and/or a person, so we will add a `store name` and a `person name` parameters to our structure. We'll also add the corresponding hidden parameters `store id` and `person id`, which we will need later to read address details.
 
 The resulting structure should look as shown below.
 
@@ -69,7 +69,7 @@ The resulting structure should look as shown below.
 We used `object="customer"` to set `customer` as the base object for our structure. Therefore, any parameters that don't have a matching field on the `customer` object must be qualified with a type. 
 :::
 
-Similarly, we'll define a `customer update` structure for updating customer information on the sales order. It will have just a few customer-related fields that can be actually saved on the order, as shown below.
+Similarly, we'll define a `customer update` structure for updating customer information on the sales order. It will have just a few customer-related fields that can be saved on the order, as shown below.
 
 ```xml
     <struct name="customer info" object="customer">[...]
@@ -104,9 +104,9 @@ Now we can configure our `SalesOrderCustomerObject` data object to have those in
 
 ### Refactoring CRUD operations
 
-Next, we will replace those internal ID parameters (i.e. `customer id`, `bill to address id` and `ship to address id`) on the output of the `read` operation, and the input for the `create` and `update` operations with references to the `customer info` and `customer update` structures respectively.
+Next, we will replace those internal ID parameters (i.e. `customer id`, `bill to address id`, and `ship to address id`) on the output of the `read` operation, and the input for the `create` and `update` operations with references to the `customer info` and `customer update` structures respectively.
 
-While we're at it, we will also set the type for the `ship date` parameter to be just `date` without the time component in all those operations.
+While we're at it, we will also set the type for the `ship date` parameter to be just the `date` without the time component in all those operations.
 
 Below is a snippet that highlights all these changes.
 
@@ -178,11 +178,11 @@ As usual, we had to add the structure references using the same name `customer` 
 
 ## Custom service implementation
 
-Now that we have updated the model, let's provide custom implementation for the services to support our updates.
+Now that we have updated the model, let's provide a custom implementation for the services to support our updates.
 
 ### Customized Person entity
 
-To make writing custom service code easier, let's fist create a custom partial class for the `Person` entity, in order to expose a `FullName` property to display a person as a string.
+To make writing custom service code easier, let's first create a custom partial class for the `Person` entity, to expose a `FullName` property to display a person as a string.
 
 As we did before, we can simply set the `extend="true"` attribute on the `edm:customize` element of the `person` object's configuration, as shown below.
 
@@ -242,7 +242,7 @@ Notice how we used our new custom `FullName` property, which allowed us to easil
 :::tip
 You can also use our new `FullName` property in other places where we had to manually construct it in the LINQ queries. This will allow you to define this format in just one place.
 
-However, you may want to watch performance of any such LINQ queries, since Entity Framework will no longer be able to translate this property directly to SQL, which means that it will have to always read the entire `Person` entity and evaluate the `FullName` on the service side after the query has been executed.
+However, you may want to watch the performance of any such LINQ queries, since Entity Framework will no longer be able to translate this property directly to SQL, which means that it will have to always read the entire `Person` entity and evaluate the `FullName` on the service side after the query has been executed.
 :::
 
 To populate the `customer` structure in the read results, we'll call this method in the custom code of the generated `ReadAsync` method of the `SalesOrderService`, as follows.
@@ -266,13 +266,13 @@ To populate the `customer` structure in the read results, we'll call this method
 
 ### Custom Update for the input
 
-Just like we did before, we are going to add a customer validation message to the `Resources.resx` file in the `AdventureWorks.Services.Entities` project, and then run the custom tool on the nested [`Messages.tt`](../../framework/services/errors#message-constants-generator) to generate message constants.
+Just like we did before, we are going to add a validation message for the customer to the `Resources.resx` file in the `AdventureWorks.Services.Entities` project, and then run the custom tool on the nested [`Messages.tt`](../../framework/services/errors#message-constants-generator) to generate message constants.
 
 |Name|Value|Comment|
 |-|-|-|
 |CustomerRequired|Customer information is required for order {0}.|{0}=Order ID|
 
-Next, we will add `UpdateCustomer` method to the extended `SalesOrderService` service, in order to update customer and address objects on the `SalesOrder` object from the provided `CustomerUpdate` structure, as follows.
+Next, we will add `UpdateCustomer` method to the extended `SalesOrderService` service, to update the customer and address objects on the `SalesOrder` object from the provided `CustomerUpdate` structure, as follows.
 
 ```cs title="SalesOrderServiceExtended.cs"
 public partial class SalesOrderService
@@ -299,7 +299,7 @@ public partial class SalesOrderService
 Notice how we use a generated constant for the validation error message that we added to the resources.
 :::
 
-After that we can update both `CreateAsync` and `UpdateAsync` methods in the generated `SalesOrderService` class to handle the new `CustomerUpdate` structure, as follows.
+After that, we can update both `CreateAsync` and `UpdateAsync` methods in the generated `SalesOrderService` class to handle the new `CustomerUpdate` structure, as follows.
 
 ```cs title="SalesOrderService.cs"
 public partial class SalesOrderService : BaseService, ISalesOrderService
@@ -336,6 +336,6 @@ Let's run the application to review our changes. The following screenshot shows 
 
 ![Customer result](img7/customer-result.png)
 
-Notice that now we have a child tab *Customer* with the customer information, and that the *Ship Date* has no time component anymore. 
+Notice that now we have a child tab *Customer* with the customer information and that the *Ship Date* has no time component anymore. 
 
 Since the internal customer ID is no longer visible on the screen, and hence not editable either, we will need to provide another way to select a customer for a sales order, which we will do in the next step.

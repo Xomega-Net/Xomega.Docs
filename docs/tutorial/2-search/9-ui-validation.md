@@ -53,12 +53,12 @@ Notice how we used the generated constant `Messages.OrderFromToDate` for our mes
 
 ## Reviewing the results
 
-Now if you run the application, and specify invalid *From* and *To* order dates in the criteria and hit *Search*, you will see our validation error displayed.
+Now if you run the application and specify invalid *From* and *To* order dates in the criteria and hit *Search*, you will see our validation error displayed.
 
 ![Validation results](img9/results.png)
 
 :::note
-Note that so far we have been adding all that custom code to the generated data objects, which are reusable between multiple C#-based clients, such as Blazor, WPF or Web Forms.
+Note that so far we have been adding all that custom code to the generated data objects, which are reusable between multiple C#-based clients, such as Blazor, WPF, or Web Forms.
 
-This means that all these custom validations, cascading selection, etc. will be also available in the corresponding Web Forms or WPF desktop applications out of the box. This is just an example of how Xomega Framework helps you write reusable code.
+This means that all these custom validations, cascading selections, etc. will be also available in the corresponding Web Forms or WPF desktop applications out of the box. This is just an example of how Xomega Framework helps you write reusable code.
 :::

@@ -18,7 +18,7 @@ We also want it on a separate *Sales* child panel on this screen grouped with ot
 
 ## Removing child CRUD and views
 
-We will start by removing any elements related to the `reason` sub-object, that were added for us by the *Full CRUD with Views* generator that we ran initially on the `sales_order.xom` file. Those include operations, data objects and views, as shown below.
+We will start by removing any elements related to the `reason` sub-object, that have been added for us by the *Full CRUD with Views* generator that we ran initially on the `sales_order.xom` file. Those include operations, data objects, and views, as shown below.
 
 ```xml title="sales_order.xom"
   <objects>
@@ -52,7 +52,7 @@ We will start by removing any elements related to the `reason` sub-object, that 
   </ui:views>
 ```
 
-One way to also clean any previously generated artifacts for those removed elements is to run a `Clean` command on the *AdventureWorks.Model* project before the `Build` command. This will delete those generated files, and will remove them from their projects.
+One way to also clean any previously generated artifacts for those removed elements is to run a `Clean` command on the *AdventureWorks.Model* project before the `Build` command. This will delete those generated files and will remove them from their projects.
 
 :::warning
 Before you do anything like that though, you want to absolutely make sure that any generated classes containing custom code will be preserved during the *Clean*.
@@ -93,7 +93,7 @@ After we clean and then build the model, we will want to define a dynamic enumer
 
 ### Configuring key type
 
-In addition, we will override the Blazor control that is used for multiple selection on the `sales reason` type as follows.
+In addition, we will override the Blazor control that is used for multi-selection on the `sales reason` type as follows.
 
 ```xml
     <type name="sales reason" base="integer enumeration">
@@ -108,15 +108,15 @@ In addition, we will override the Blazor control that is used for multiple selec
     </type>
 ```
 
-We will use `XPickList` component from the `Xomega.Framework.Blazor` package, which has two lists and *Add/Remove* buttons to move items from one list to another.
+We will use the [`XPickList`](../../framework/blazor/controls#xpicklist) component from the `Xomega.Framework.Blazor` package, which has two lists and the *Add/Remove* buttons to move items from one list to another.
 
-## Grouping into Sales tab
+## Grouping into the Sales tab
 
 Next, we'll follow the technique for grouping fields in a child panel that we described earlier.
 
 ### Defining child data object
 
-We will first declare a new data object in the model with a class `SalesOrderSalesObject`, and will add it as a child of the `SalesOrderObject` under the name `sales`, as shown below.
+We will first declare a new data object in the model with a class `SalesOrderSalesObject` and will add it as a child of the `SalesOrderObject` under the name `sales`, as shown below.
 
 ```xml title="sales_order.xom"
   <xfk:data-objects>
@@ -133,7 +133,7 @@ We will first declare a new data object in the model with a class `SalesOrderSal
   </xfk:data-objects>
 ```
 
-Next we will define a new structure `sales info` with our sales fields for the new data object. To allow multiple values for the `sales reason` parameter, we will set its attribute `list="true"`, as follows.
+Next, we will define a new structure of `sales info` with our sales fields for the new data object. To allow multiple values for the `sales reason` parameter, we will set its attribute `list="true"`, as follows.
 
 ```xml
 <!-- added-lines-start -->
@@ -176,7 +176,7 @@ The following snippet demonstrates this configuration.
 ```
 
 :::note
-We have also set the `customize="true"` attribute on the data object, in order to set up cascading selection for a sales person off of the selected territory, which we will do in a generated customized subclass later in this section.
+We have also set the `customize="true"` attribute on the data object, to set up cascading selection for a salesperson off of the selected territory, which we will do in a generated customized subclass later in this section.
 :::
 
 ### Refactoring CRUD operations
@@ -245,11 +245,11 @@ After all these model updates, let's build the model project again to regenerate
 
 ## Custom service implementation
 
-Once all the code is regenerated, we'll need to provide custom service implementations for our CRUD operations to handle the new `sales` structure.
+Once all the code is regenerated, we'll need to provide a custom service implementation for our CRUD operations to handle the new `sales` structure.
 
 ### Custom Get for the output
 
-First, let's open up the extended `SalesOrderService` class, and  add to it the following `GetSalesInfo` method, which populates the `SalesInfo` structure for the given sales order.
+First, let's open up the extended `SalesOrderService` class, and add to it the following `GetSalesInfo` method, which populates the `SalesInfo` structure for the given sales order.
 
 ```cs title="SalesOrderServiceExtended.cs"
 public partial class SalesOrderService
@@ -344,7 +344,7 @@ public partial class SalesOrderService
 Notice how the method adds or removes sales reasons to the child list based on the supplied new list of reasons.
 :::
 
-After that we can update both `CreateAsync` and `UpdateAsync` methods in the generated `SalesOrderService` class to handle the new `Sales` structure, as follows.
+After that, we can update both `CreateAsync` and `UpdateAsync` methods in the generated `SalesOrderService` class to handle the new `Sales` structure, as follows.
 
 ```cs title="SalesOrderService.cs"
 public partial class SalesOrderService : BaseService, ISalesOrderService

@@ -51,7 +51,7 @@ public partial class SalesOrderService : BaseService, ISalesOrderService
 }
 ```
 
-Notice how we are using the `CurrentPrincipal` member of the service to determine permissions of the current user, and leverage the convenient methods that we added to the `SecurityManager` class earlier.
+Notice how we are using the `CurrentPrincipal` member of the service to determine the permissions of the current user, and leverage the convenient methods that we added to the `SecurityManager` class earlier.
 
 :::note
 Since the `ErrorType` enum is in the `Xomega.Framework` namespace, which was not used or declared in this generated file, we needed to declare it in the custom section for the namespaces at the top of the file to prevent it from being erased during regeneration.
@@ -60,14 +60,14 @@ Since the `ErrorType` enum is in the `Xomega.Framework` namespace, which was not
 If the security check fails, we report a critical error of type `Security`, which will abort the execution and will return the `OperationNotAllowed` message to the client.
 
 :::note
-When the business services are called via REST API, these security errors will be reported using HTTP status code 403 (Forbidden), following the REST standards.
+When the business services are called via REST API, these security errors will be reported using the HTTP status code 403 (Forbidden), following the REST standards.
 :::
 
 ## Restricting access to data
 
 Now, let's restrict the data returned by the `ReadListAsync` method for external customers to show only their own sales orders.
 
-We need to find a custom code placeholder for additional filter criteria on the source query, and add some custom code that checks if the `CurrentPrincipal` is a store or individual customer, and then add their associated `storeId` or `personId` respectively as additional filter criteria for the sales order's customer, as follows.
+We need to find a custom code placeholder for additional filter criteria on the source query and add some custom code that checks if the `CurrentPrincipal` is a store or individual customer, and then add their associated `storeId` or `personId` respectively as additional filter criteria for the sales order's customer, as follows.
 
 ```cs
 public partial class SalesOrderService : BaseService, ISalesOrderService

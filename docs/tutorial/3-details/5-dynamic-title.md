@@ -4,11 +4,11 @@ sidebar_position: 6
 
 # 3.5 Dynamic view title
 
-In this section we are going to make our view *Sales Order Details* use a dynamic title, which would include the current sales order number.
+In this section, we are going to make our *Sales Order Details* view use a dynamic title, which would include the current sales order number.
 
 ## View title overview
 
-The base titles of our views are specified as an attribute of the view definition, and were set up for us from the object names when we initially added CRUD operations and views to our model, as shown below.
+The base titles of our views are specified as an attribute of the view definition and were set up for us from the object names when we initially added CRUD operations and views to our model, as shown below.
 
 ```xml title="sales_order.xom"
   <ui:views>
@@ -35,7 +35,7 @@ While this is great functionality that you get right out of the box, which norma
 
 ## Customizing view model
 
-Xomega makes setting up dynamic view titles pretty easy by letting you override the base title in your custom view model, which will make it automatically work for all clients. In order to customize the view model, you need to set the `customize="true"` attribute on the view's view model, as follows.
+Xomega makes setting up dynamic view titles pretty easy by letting you override the base title in your custom view model, which will make it automatically work for all clients. To customize the view model, you need to set the `customize="true"` attribute on the view's view model, as follows.
 
 ```xml
     <ui:view name="SalesOrderView" title="Sales Order">
@@ -44,7 +44,7 @@ Xomega makes setting up dynamic view titles pretty easy by letting you override 
     </ui:view>
 ```
 
-Then you need to run the *View Models* generator under the *Presentation Layer/Common* folder, navigate to the *AdventureWorks.Client.Common* project, and open the generated `SalesOrderViewModelCustomized.cs` file, which will be nested under the corresponding `ViewModels/Sales/SalesOrderViewModel.cs`.
+Then you need to run the *View Models* generator under the *Presentation Layer/Common* folder and navigate to the *AdventureWorks.Client.Common* project, and open the generated `SalesOrderViewModelCustomized.cs` file, which will be nested under the corresponding `ViewModels/Sales/SalesOrderViewModel.cs`.
 
 ![View model customized](img5/vm-customized.png)
 
@@ -62,7 +62,7 @@ To make the title of our *Sales Order Details* view display the sales order numb
 
 ```
 
-Notice how we append the value of the `SalesOrderNumberProperty` to the base title for existing orders using `MainObj` to reference the main data object for the view. The title will be automatically updated when you save the order, which works for us, since the sales order number is only set once when you save a new sales order.
+Notice how we append the value of the `SalesOrderNumberProperty` to the base title for existing orders using `MainObj` to reference the main data object for the view. The title will be automatically updated when you save the order, which works for us since the sales order number is only set once when you save a new sales order.
 
 :::tip
 If you need to display the value of another data property in the title, then you may need to subscribe to that data property's changes in your view model, and then fire a change of the `ViewTitle` property as a result.
@@ -78,4 +78,4 @@ If you run the application now, you'll see that the title of our details view in
 
 Notice that after we edited the *Comment* field, the view title still displayed an asterisk indicating that the view has been modified.
 
-This also enabled the *Save* button, and will pop up a confirmation message about unsaved changes, if you try to close a modified view without saving.
+This also enabled the *Save* button and will pop up a confirmation message about unsaved changes, if you try to close a modified view without saving.

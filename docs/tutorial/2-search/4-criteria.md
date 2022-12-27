@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # 2.4 Model search criteria
 
-Now that we have modeled our list results, let's move on to modeling the search criteria. They are defined in a structure with a name `criteria` inside the input of the `read list` operation.
+Now that we have modeled our list results, let's move on to modeling the search criteria. They are defined in a structure with name `criteria` inside the input of the `read list` operation.
 
 ```xml title="sales_order.xom"
     <operation name="read list" type="readlist">
@@ -27,15 +27,15 @@ We will first need to delete any criteria that we don't need, so it's good that 
 
 ## Search use cases
 
-Deciding which criteria to keep may be even more important than picking the result fields, since they directly support the business use cases. Here are some sample use cases that we will use to determine which criteria we need:
+Deciding which criteria to keep may be even more important than picking the result fields since they directly support the business use cases. Here are some sample use cases that we will use to determine which criteria we need:
 - Looking up a specific sales order by a sales order number.
 - Searching sales orders in a certain status.
-- Finding orders placed during a certain time period.
+- Finding orders placed during a certain period.
 - Finding orders that are past due or due soon.
 - Finding large orders and small orders by the total amount.
-- Finding orders by the customer store name or individual name.
+- Finding orders by the customer's store name or individual name.
 - Searching orders within certain geographical regions and territories.
-- Searching orders placed by specific sales people.
+- Searching orders placed by specific salespeople.
 
 ## Search criteria model
 
@@ -82,14 +82,14 @@ Here is what our model will look like after deleting unnecessary criteria, and a
     </operation>
 ```
 
-As with the result fields, we will override the type on the date criteria to be just date without the time component, as well as set the type on the custom criteria `customer store` and `customer name` that don't have a corresponding object field. We also added operator parameters for our custom criteria, and removed the second value for `status` criteria, which doesn't need a `BETWEEN` operator.
+As with the result fields, we will override the type on the date criteria to be just the date without the time component, as well as set the type on the custom criteria `customer store` and `customer name` that don't have a corresponding object field. We also added operator parameters for our custom criteria and removed the second value for `status` criteria, which doesn't need a `BETWEEN` operator.
 
 Notice also the highlighted config section, which specifies that all these parameters should be added to the client data object `SalesOrderCriteria` that the search criteria panel will be bound to. This data object is where we will be able to configure criteria labels in the model.
 
 :::note
 Remember that when we added custom result fields to the output, we had to also add custom code to the service implementation to retrieve these fields.
 
-Since the custom criteria we just added have exactly the same names as the corresponding result fields (`customer store` and `customer name`), Xomega was able to generate code that simply filters on those results fields, so we don't need to provide any additional custom code.
+Since the custom criteria we just added have the same names as the corresponding result fields (`customer store` and `customer name`), Xomega was able to generate code that simply filters on those results fields, so we don't need to provide any additional custom code.
 :::
 
 ## Reviewing the results

@@ -4,19 +4,19 @@ sidebar_position: 7
 
 # 2.6 Dynamic enumerations
 
-In the previous section, we have seen how to define static enumerations in the model, which have a fixed list of values that doesn't change within any specific version of the application. In addition to static enumerations, applications also typically have dynamic enumerations based on some reference data.
+In the previous section, we have seen how to define static enumerations in the model, which have a fixed list of values that don't change within any specific version of the application. In addition to static enumerations, applications also typically have dynamic enumerations based on some reference data.
 
 The lists of values for dynamic enumerations are often small enough to allow selecting values from a dropdown list or a list box. The lists may change over time, but this generally happens rather infrequently, which warrants caching them in the application.
 
 ## Sales territory enumeration
 
-In our project, a list of sales territories is a good example of such a dynamic enumeration. Instead of showing or entering internal numeric territory ID on the sales order screens, we would like to show or select the territory name that is defined on the `sales territory` object.
+In our project, a list of sales territories is a good example of such a dynamic enumeration. Instead of showing or entering the internal numeric territory ID on the sales order screens, we would like to show or select the territory name that is defined on the `sales territory` object.
 
 In a nutshell, defining dynamic enumerations in the model is similar to defining static ones, except that instead of explicitly providing a list of values in the model, you need to configure a `read enum` operation with an `xfk:enum-cache` element, where you can give enumeration a name, and indicate which output parameter returns the ID, and which parameter returns the description for each enumeration element.
 
 ### Generating Read Enum operation
 
-Xomega makes it really easy by providing a special *Read Enum Operation* generator under the *Model Enhancement* group. Let's go ahead and right-click on the `sales_territory.xom` file and run this generator on the `sales territory` object, as shown below.
+Xomega makes it quite easy by providing a special *Read Enum Operation* generator under the *Model Enhancement* group. Let's go ahead and right-click on the `sales_territory.xom` file and run this generator on the `sales territory` object, as shown below.
 
 ![Generate territory enum](img6/gen-territory-enum.png)
 
@@ -77,7 +77,7 @@ Since instead of territory IDs we'll want to display the name, let's also update
 
 ## Sales person enumeration
 
-Now that we understand the structure of the model for dynamic enumerations, let's set it up for another object `sales person`, which will have a couple if additional twists to it.
+Now that we understand the structure of the model for dynamic enumerations, let's set it up for another object `sales person`, which will have a couple of additional twists to it.
 
 The problem is that the key type `sales person` inherits from another key type `employee` for the employee object, which tells the model that a salesperson is a type of employee, and establishes an implicit zero-to-one relationship between the two objects.
 
@@ -96,12 +96,12 @@ We can configure the *Read Enum Operation* generator to leave the key types alon
 ![Generator key type](img6/gen-key-type.png)
 
 :::note
-You'll need to set it back to `True` after running the generator, if you're not planning to keep it this way.
+You'll need to set it back to `True` after running the generator if you're not planning to keep it this way.
 :::
 
 Let's again right-click on the `sales_person.xom` file and run the *Read Enum Operation* generator.
 
-As before, this will add a `read enum` operation to the `sales person` object, decorated with the enumeration specification. We will strip it off of any extraneous parameters, except for the key, description and the `territory id`, which we can use for cascading selection. We'll also add an output parameter `is-current` and will tie it to the enumeration's `is-active-param` attribute, as follows.
+As before, this will add a `read enum` operation to the `sales person` object, decorated with the enumeration specification. We will strip it off of any extraneous parameters, except for the key, description, and `territory id`, which we can use for cascading selection. We'll also add an output parameter `is-current` and will tie it to the enumeration's `is-active-param` attribute, as follows.
 
 
 ```xml
@@ -136,10 +136,10 @@ As before, this will add a `read enum` operation to the `sales person` object, d
 ```
 
 :::note
-Since the `sales person` object does not have any suitable fields for the display name of its own, the generated added a `description` output parameter to the operation, and set it as the description parameter `desc-param` for our enumeration.
+Since the `sales person` object does not have any suitable fields for the display name of its own, the generator added a `description` output parameter to the operation and set it as the description parameter `desc-param` for our enumeration.
 :::
 
-The `is current` output parameter that we added and set as the enumeration's `is-active-param` attribute indicates whether or not this is a currently employed salesperson. This will allow displaying only active/current salespersons in any selection lists, while still using any inactive items to decode salesperson ID to their name/description.
+The `is current` output parameter that we added and set as the enumeration's `is-active-param` attribute indicates whether or not this is a currently employed salesperson. This will allow displaying only active/current salespersons in any selection lists, while still using any inactive items to decode the salesperson ID to their name/description.
 
 ### Configuring key type for enumeration
 
@@ -169,14 +169,14 @@ Because the key type was not updated to inherit from the `integer enumeration` t
 ```
 
 :::note
-When using other UI technologies, such as WPF, WebForms or HTML, you'll need to configure the appropriate controls here for those technologies.
+When using other UI technologies, such as WPF, WebForms, or HTML, you'll need to configure the appropriate controls here for those technologies.
 :::
 
-And, of course, we added a reference to our dynamic enumeration to the type, in order to make it enumerated, and also set the `typical-length` to 20 for a better calculation of the column width.
+And, of course, we added a reference to our dynamic enumeration to the type, to make it enumerated, and also set the `typical-length` to 20 for a better calculation of the column width.
 
 ### Implementing custom attributes
 
-To add a custom implementation for our `description` and `is-current` parameters, we will build the model first, and then will update the `ReadEnumAsync` service method on the generated `SalesPersonService` class as follows.
+To add a custom implementation for our `description` and `is-current` parameters, we will build the model first and then will update the `ReadEnumAsync` service method on the generated `SalesPersonService` class as follows.
 
 ```cs title="SalesPersonService.cs"
 public virtual async Task<Output<ICollection<SalesPerson_ReadEnumOutput>>>
@@ -206,7 +206,7 @@ public virtual async Task<Output<ICollection<SalesPerson_ReadEnumOutput>>>
     ...
 ```
 
-In order to make sure that your inline customizations are [preserved if you run the *Clean* command](custom-result#caution-on-mixed-in-customizations) on the model, you can add a  `svc:customize` config element to the `sales person` object, and set the `preserve-on-clean="true"` attribute, as follows.
+In order to make sure that your inline customizations are [preserved if you run the *Clean* command](custom-result#caution-on-mixed-in-customizations) on the model, you can add an `svc:customize` config element to the `sales person` object, and set the `preserve-on-clean="true"` attribute, as follows.
 
 ```xml title="sales_person.xom"
     <config>
@@ -272,7 +272,7 @@ Finally, we will update the labels for the `sales person id` and `sales territor
 
 Now, following an already familiar procedure, we will build the model again to regenerate all the artifacts, and then run the application.
 
-If you open the *Sales Order List* screen, you'll see that *Search Criteria* panel features a drop down list to select a sales territory, and a listbox to select multiple salespersons.
+If you open the *Sales Order List* screen, you'll see that the *Search Criteria* panel features a drop-down list to select a sales territory, and a list box to select multiple salespersons.
 
 ![Criteria enum.png](img6/criteria-enum.png)
 
@@ -281,4 +281,4 @@ You can check that the filtering also works for the multi-value criteria when yo
 
 ![Results enum](img6/results-enum.png)
 
-As you see, both Sales Person and Sales Territory now show their display names rather than IDs in both the results list and in the search criteria summary above the grid.
+As you see, both Sales Person and Sales Territory now show their display names rather than IDs in both the results list and the search criteria summary above the grid.

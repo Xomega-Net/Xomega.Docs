@@ -4,17 +4,17 @@ sidebar_position: 6
 
 # 4.6 WebAssembly security
 
-In this section you'll learn how to secure a Blazor WebAssembly application, which uses a different authentication mechanism than the Blazor Server application that we secured earlier, since it uses a standalone REST API to call business services.
+In this section, you'll learn how to secure a Blazor WebAssembly application, which uses a different authentication mechanism than the Blazor Server application that we secured earlier since it uses a standalone REST API to call business services.
 
-Nevertheless, make sure you **complete the previous section** on [Blazor Server security](5-blazor-server) first, since we added some common code that applies to both Blazor Server and WebAssembly.
+Nevertheless, make sure you **complete the previous section** on [Blazor Server security](5-blazor-server) first since we added some common code that applies to both Blazor Server and WebAssembly.
 
 ## Adding REST API authentication
 
 If you look at the `AdventureWorks.Services.Rest` project that was included in our Xomega solution, then you'll see that it already contains all ASP.NET Core controllers to expose our services via REST, which were generated from our model when we were building the model.
 
-This project was also pre-configured with an `AuthenticationController` under the *App_Start* folder, which uses JWT authentication, and by default authenticates all users (including *anonymous*) as *Guest*.
+This project was also pre-configured with an `AuthenticationController` under the *App_Start* folder, which uses JWT authentication, and by default authenticates any user (including *anonymous*) as a *Guest*.
 
-First thing that we need to do to implement proper authentication for the REST API is to inject our `PersonService` into the `AuthenticationController` as follows.
+The first thing that we need to do to implement proper authentication for the REST API is to inject our `PersonService` into the `AuthenticationController` as follows.
 
 ```cs title="AuthenticationController.cs"
 /* added-next-line */
@@ -38,7 +38,7 @@ public class AuthenticationController : TokenAuthController
 }
 ```
 
-Next we will need to update the `AuthenticateAsync` method in it to uncomment the code that checks the `ModelState` to make sure credentials are populated, and then call the `personService.AuthenticateAsync` and `ReadAsync` operations to read the person info and construct proper claims identity from it, as shown below.
+Next, we will need to update the `AuthenticateAsync` method in it to uncomment the code that checks the `ModelState` to make sure credentials are populated, and then call the `personService.AuthenticateAsync` and `ReadAsync` operations to read the person's info and construct proper claims identity from it, as shown below.
 
 ```cs title="AuthenticationController.cs"
 [AllowAnonymous]
@@ -95,11 +95,11 @@ This should secure our REST services using the password authentication that we s
 
 ## Implementing the Login view
 
-Next, similarly to [what we did](blazor-server#implementing-loginview) for the `AdventureWorks.Client.Blazor.Server` project, we need to add a subclass of the generated `LoginView` to the our project, which will map to the "/login" route, and implement the WebAssembly-specific authentication logic.
+Next, similarly to [what we did](blazor-server#implementing-loginview) for the `AdventureWorks.Client.Blazor.Server` project, we need to add a subclass of the generated `LoginView` to our project, which will map to the "/login" route, and implement the WebAssembly-specific authentication logic.
 
-Unlike Blazor Server application, instead of calling our custom `authenticate` operation directly, we need to call the `AuthenticationController` that we set up above, which will return a JWT authentication token. Therefore, we'll need to override the entire *Save* button click handler `OnSaveAsync`, and implement custom authentication code.
+Unlike the Blazor Server application, instead of calling our custom operation `authenticate` directly, we need to call the `AuthenticationController` that we set up above, which will return a JWT authentication token. Therefore, we'll need to override the entire *Save* button click handler `OnSaveAsync` and implement a custom authentication code.
 
-So let's add a class `BlazorLoginView` to the `AdventureWorks.Client.Blazor.Wasm` project, set the `Route` attribute for the "/login" route, and provide WebAssembly authentication logic, as shown below.
+So let's add a class `BlazorLoginView` to the `AdventureWorks.Client.Blazor.Wasm` project set the `Route` attribute for the "/login" route, and provide WebAssembly authentication logic, as shown below.
 
 ```cs title="BlazorLoginView.cs"
 /* added-lines-start */
@@ -154,17 +154,17 @@ namespace AdventureWorks.Client.Blazor.Wasm
 /* added-lines-end */
 ```
 
-First, we validate the data object properties, and report any client-side errors.
+First, we validate the data object properties and report any client-side errors.
 
-Then we call the `RestServices.Authenticate` method from the `AdventureWorks.Client.Common` package with the supplied user name and password. This method, in turn, calls the `authentication` REST endpoint to get an access token, constructs a `ClaimsPrincipal` from it, and updates the `HttpClient` to use this token for any subsequent service calls.
+Then we call the `RestServices.Authenticate` method from the `AdventureWorks.Client.Common` package with the supplied username and password. This method, in turn, calls the `authentication` REST endpoint to get an access token, constructs a `ClaimsPrincipal` from it, and updates the `HttpClient` to use this token for any subsequent service calls.
 
-In order to apply the current principal to the Blazor WebAssembly project, the Xomega project template provided a class `AuthStateProvider`, which implements the Blazor's `AuthenticationStateProvider` service as a singleton, and allows setting the current principal.
+To apply the current principal to the Blazor WebAssembly project, the Xomega project template provided a class `AuthStateProvider`, which implements the Blazor's `AuthenticationStateProvider` service as a singleton, and allows setting the current principal.
 
 After a successful login, the view redirects you to the URL supplied in the `redirectUri` parameter, or to the root page.
 
 ### Removing anonymous authentication
 
-By default the WebAssembly project was set up to get an access token using *anonymous* user in the main `Program.cs`, so we need to remove that code, as shown below.
+By default the WebAssembly project was set up to get an access token using an *anonymous* user in the main `Program.cs`, so we need to remove that code, as shown below.
 
 ```cs title="Program.cs"
 public class Program
@@ -226,7 +226,7 @@ If you are planning to have both Blazor Server and WebAssembly projects, it woul
 
 ## Reviewing the results
 
-That's all we need to add Blazor WebAssembly security. In order to run the WebAssembly application, let's set the Client.Blazor.Wasm and Services.Rest projects as the startup up projects in the solution properties as described in the [first chapter](../1-basic/5-run#running-webassembly-application).
+That's all we need to add Blazor WebAssembly security. To run the WebAssembly application, let's set the `Client.Blazor.Wasm` and `Services.Rest` projects as the startup projects in the solution properties as described in the [first chapter](../1-basic/5-run#running-webassembly-application).
 
 If we run the application now, we'll see our usual *Login* screen, where we can enter credentials for our customer "amy1@adventure-works.com". Once you hit *Login* and navigate to the *Sales Order List* screen, you should be able to see only your sales orders, and the customer criteria will be hidden, as illustrated in the picture below.
 
@@ -235,5 +235,5 @@ If we run the application now, we'll see our usual *Login* screen, where we can 
 As you can see, the Blazor WebAssembly application can reuse the same backend services exposed via REST, the common UI logic, and also the common Blazor components that are shared with the Blazor Server application. All we had to do was to add some custom login logic that is specific to the WebAssembly platform, and we got a web app with the same functionality.
 
 :::tip
-If you use an industry standard authentication mechanism for your REST services, such as an OpenID Connect identity provider, instead of a custom-made password-based login form that we used in our example, then you'd be able to use the standard security support provided by the Blazor WebAssembly framework, which will make it even easier.
+If you use an industry-standard authentication mechanism for your REST services, such as an OpenID Connect identity provider, instead of a custom-made password-based login form that we used in our example, then you'd be able to use the standard security support provided by the Blazor WebAssembly framework, which will make it even easier.
 :::

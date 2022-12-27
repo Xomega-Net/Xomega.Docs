@@ -4,11 +4,11 @@ sidebar_position: 8
 
 # 2.7 Using auto-complete
 
-Sometimes, for relatively large enumerations, it is better to give the users a text field to enter the values, where they can type in partial names, and then select the value from a smaller, filtered drop down list. The list may show full names, but when the user selects an item, an internal value will be inserted into the text field.
+Sometimes, for relatively large enumerations, it is better to give the users a text field to enter the values, where they can type in partial names, and then select the value from a smaller, filtered drop-down list. The list may show full names, but when the user selects an item, an internal value will be inserted into the text field.
 
-For example, the drop down list may display a list of state names, such as "New Jersey", but the text field will have the 2-character code NJ, which is used internally by the system.
+For example, the drop-down list may display a list of state names, such as "New Jersey", but the text field will have the 2-character code NJ, which is used internally by the system.
 
-To demonstrate how to configure auto-complete in the model, we will use the order status criteria. This may not be the best example, since the list of statuses is pretty small, and their internal codes are numeric, and not that user friendly, but it should be okay for the demonstration purposes.
+To demonstrate how to configure auto-complete in the model, we will use the order status criteria. This may not be the best example, since the list of statuses is pretty small, and their internal codes are numeric, and not that user-friendly, but it should be okay for demonstration purposes.
 
 We want to show that auto-complete will work even for text fields that accept multiple values. So let's go ahead and add the `list="true"` attribute on the `status` parameter of the sales order criteria, as shown below.
 
@@ -30,7 +30,7 @@ We want to show that auto-complete will work even for text fields that accept mu
 
 ## Setting up auto-complete
 
-Next, we will update the configuration of the `sales order status` type in the model to override the blazor control used for multi-value properties to use `XAutoComplete`, as opposed to the `XSelect` that is inherited from its base type `tiny int enumeration`.
+Next, we will update the configuration of the `sales order status` type in the model to override the Blazor control used for multi-value properties to use `XAutoComplete`, as opposed to the `XSelect` that is inherited from its base type `tiny int enumeration`.
 
 ```xml
     <type name="sales order status" base="tiny int enumeration">
@@ -87,7 +87,7 @@ Open it up, and set the `DisplayFormat` of the generated `StatusProperty` in the
 
 That's all there is to it. If you run the application now, you will see that the status operators have been updated for the multi-value properties.
 
-If you select an operator, e.g. *Is One Of*, you'll see that the selection control has been changed to a textbox with a drop down list, which displays the statuses using our new display format.
+If you select an operator, e.g. *Is One Of*, you'll see that the selection control has been changed to a textbox with a drop-down list, which displays the statuses using our new display format.
 
 ![Auto-complete](img7/auto-complete.png)
 
