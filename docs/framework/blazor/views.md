@@ -75,13 +75,19 @@ You also need to override the `BindTo` method and store the passed model in your
 
 You can open a new Blazor view either as a top-level view to start a new workflow or as a child view of one of the currently open views within the same workflow.
 
-### Top-level views
+### Top-level page views
 
 To open a view as a top-level view, you can navigate to it via a browser URL by clicking a hyperlink or by calling the standard Blazor `NavigationManager.NavigateTo` method. This will close the workflow associated with the current top-level view and start a new workflow for the target view.
 
 :::warning
 The **state of the current view will be reset**, so if you try to navigate back to it later, then it will open in its initial state.
 :::
+
+Normally, top-level views do not need a *Close* button, since they are opened as primary views and it's not clear which view must be displayed upon closing. However, such a view may still have a *Close* button to also allow opening it as a child view from another view.
+
+Therefore, the base view model sets its `CloseAction` property as not visible for top-level views that are activated with no value for the `ViewParams.Mode.Param` parameter, to hide any *Close* buttons that are bound to that action property.
+
+#### Page component
 
 If you define your view as a shared component that can be used both as a top-level view and a child of another view, then for the former, you will need to wrap it in a separate *Page* component, where you specify the URL route using the `@page` directive. Since the view is not visible by default, you will also need to set the `Visible="`true"` parameter as follows.
 
@@ -98,13 +104,39 @@ To activate the view model from the query parameters of the URL, you also want t
 
 For example, navigating to `/SalesOrderView?SalesOrderId=45305` can open details of the specified sales order while going to the URL `/SalesOrderListView?OrderDate=2012-01-01&OrderDateOperator=EQ&_action=search` will automatically run the search for sales orders made on *01/01/2012*.
 
-Normally, top-level views do not have a *Close* button, and the base view model sets its `CloseAction` property as not visible to hide any bound *Close* buttons in cases when you need those to allow opening and closing the view as a child.
+#### Page title and navigation lock
+
+Xomega Framework provides a base class `BlazorPage` for your pages that helps you to display the title of your top-level view also in the page title (i.e. the browser tab), as well as to prompt for unsaved changes whenever you navigate away from a modified view to another top-level view, a different URL or even close your browser window.
+
+The following example illustrates how to set up your page with the base `BlazorPage` class, and explains each required step.
+
+```razor title="SalesOrderViewPage.razor"
+@page "/SalesOrderView"
+<!-- Inherit your page from the BlazorPage component. -->
+<!-- highlight-next-line -->
+@inherits BlazorPage
+
+<!-- Wrap components that must be refreshed whenever the view is modified and the title changes
+in a Fragment component, and assign it to the ModifyFragment member for better performance. -->
+<Fragment @ref="ModifyFragment">
+
+  <!-- Use the view model's ViewTitle in the PageTitle component. -->
+  <PageTitle>@MainView?.Model?.ViewTitle</PageTitle>
+
+  <!-- For unsaved changes prompts add a NavigationLock component. -->
+  <NavigationLock ConfirmExternalNavigation="MainView?.IsModified() ?? false"
+                  OnBeforeInternalNavigation="ConfirmNavigation"/>
+</Fragment>
+
+<!-- Store the reference to your top-level view in the MainView member. -->
+<SalesOrderView @ref="MainView" ActivateFromQuery="true" Visible="true"></SalesOrderView>
+```
 
 :::caution
-When you navigate to another top-level view, the current view **will not prompt for unsaved changes**.
-
-*Note: [Preventing Blazor navigation](https://learn.microsoft.com/en-us/aspnet/core/blazor/fundamentals/routing?view=aspnetcore-7.0#handleprevent-location-changes) has been added in ASP.NET Core 7, so you'll be able to implement the unsaved changes prompt in your top-level views if you use .NET 7.*
+You need to **target the .NET 7 framework** or higher to use the `NavigationLock` component, which enables the prompt for unsaved changes during the internal navigation to another top-level view or external browser navigation.
 :::
+
+With the above setup, if your view or **any of its child views** are modified, the app will prompt you to confirm losing any unsaved changes whenever you try to navigate away to another top-level view or an external URL.
 
 ### Child views
 
@@ -112,14 +144,17 @@ Child views are embedded in their parent view and can be opened either inline or
 
 #### Inline child views
 
-To allow showing a child view inline with the view's main content, the parent view needs to add them both to a container that will adjust accordingly when the child view is open. The base class `BlazorView` provides support for a **responsive Bootstrap layout system**, where you can place both the main content and the child view in a `d-flex` container to open the child on the side as follows.
+To allow showing a child view inline with the view's main content, the parent view needs to add both of them to a container that will adjust accordingly when the child view is open. The base class `BlazorView` provides support for a **responsive Bootstrap layout system**, where you can place both the main content and the child view in a `d-flex` container to open the child on the side as follows.
 
 ```razor title="SalesOrderListView.razor"
 <div @ref="MainPanel" class="@UpperClass">
   <div class="@MiddleClass">
 <!-- highlight-next-line -->
     <div class="d-flex">
+      <!-- the main content for the list view -->
+<!-- highlight-next-line -->
       <div class="@GetViewCol(null) @LowerClass">[...]
+      <!-- the inline child view -->
 <!-- highlight-next-line -->
       <SalesOrderView @ref="cvSalesOrderView" Class="@GetViewCol(cvSalesOrderView)"></SalesOrderView>
     </div>
