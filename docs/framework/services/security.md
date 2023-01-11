@@ -88,7 +88,7 @@ int? personId = CurrentPrincipal.GetPersonId();
 
 ## Principal providers
 
-As you saw above, for the services to access the current principal, your `Startup` class needs to register with the DI container either a method to get an instance of the current `IPrincipal`, or an implementation of the `IPrincipalProvider` interface that is defined in the `Xomega.Framework` namespace.
+As you saw above, for the services to access the current principal, your startup class needs to register with the DI container either a method to get an instance of the current `IPrincipal`, or an implementation of the `IPrincipalProvider` interface that is defined in the `Xomega.Framework` namespace.
 
 Xomega Framework provides a default implementation class called `DefaultPrincipalProvider`, which exposes the `CurrentPrincipal` property. You can register this provider with the DI container for the current context, and use it to set the current principal in your code based on the specific technology you are using.
 
@@ -97,12 +97,7 @@ Xomega Framework provides a default implementation class called `DefaultPrincipa
 For ASP.NET Core applications, such as Blazor Server or when hosting your business services as a WebAPI, you can register a `ContextPrincipalProvider` provided by Xomega Framework as a transient service, which pulls the current principal from the current `HttpContext`, as shown below.
 
 ```cs
-public void ConfigureServices(IServiceCollection services)
-{
-    ...
-/* highlight-next-line */
-    services.AddTransient<IPrincipalProvider, ContextPrincipalProvider>();
-}
+services.AddTransient<IPrincipalProvider, ContextPrincipalProvider>();
 ```
 
 ### Principal in WCF apps{#wcf}
@@ -110,12 +105,7 @@ public void ConfigureServices(IServiceCollection services)
 WCF services don't support dependency injection by default. If you want to expose your business services via WCF, you'll need to use Xomega Framework [support for WCF](api/wcf), and register a scoped `DefaultPrincipalProvider`, as shown below, which Xomega Framework will use to set the current principal from the current `ServiceSecurityContext`.
 
 ```cs
-public void ConfigureServices(IServiceCollection services)
-{
-    ...
-/* highlight-next-line */
-    services.AddScoped<IPrincipalProvider, DefaultPrincipalProvider>();
-}
+services.AddScoped<IPrincipalProvider, DefaultPrincipalProvider>();
 ```
 
 ### Principal in Blazor WebAssembly{#wasm}
@@ -125,14 +115,7 @@ Normally, you would not have your business services running in WebAssembly (Wasm
 However, to provide the current principal to any Xomega Framework objects and services on the client side of the Blazor Wasm app, the framework offers an implementation class `AuthStatePrincipalProvider`, which sets the current principal from the Blazor's `AuthenticationStateProvider`. You can register it with your DI container in the main `Program` class for your Wasm app, as follows.
 
 ```cs
-public static async Task Main(string[] args)
-{
-    var builder = WebAssemblyHostBuilder.CreateDefault(args);
-    var services = builder.Services;
-    ...
-/* highlight-next-line */
-    services.AddSingleton<IPrincipalProvider, AuthStatePrincipalProvider>();
-}
+services.AddSingleton<IPrincipalProvider, AuthStatePrincipalProvider>();
 ```
 
 ### Principal in WPF apps{#wpf}
@@ -142,12 +125,7 @@ Just like with the Blazor Wasm, multi-tier WPF apps would not run any business s
 By default, WPF apps don't have dependency injection enabled, so you'll need to set it up manually in your app. Since WPF apps are single-user applications, you would register the `DefaultPrincipalProvider` as a singleton with your DI container, as follows.
 
 ```cs
-public void ConfigureServices(IServiceCollection services)
-{
-    ...
-/* highlight-next-line */
-    services.AddSingleton<IPrincipalProvider, DefaultPrincipalProvider>();
-}
+services.AddSingleton<IPrincipalProvider, DefaultPrincipalProvider>();
 ```
 
 Once your app authenticates the current user, it will need to get the current `IPrincipalProvider` service from the service provider and set the `CurrentPrincipal` to the authenticated user.

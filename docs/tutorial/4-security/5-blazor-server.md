@@ -239,26 +239,18 @@ Let's see how we can secure the main navigation menu.
 
 If you remember, we made our `SalesOrderService` to allow reading a list of sales orders only for internal employees and external customers, but not for other users, such as vendor contacts. To describe this in our Blazor application, we'll define a new policy called "*Sales*" for those roles.
 
-We'll add it in the `ConfigureServices` method of the `Startup` class under the corresponding *TODO* comment, as follows.
+We'll add it in the startup class under the corresponding *TODO* comment, as follows.
 
-```cs title="Startup.cs"
-public class Startup
-{
-    public void ConfigureServices(IServiceCollection services)
-    {
-        ...
-        // TODO: add authorization with any security policies
+```cs title="Program.cs"
+// TODO: add authorization with any security policies
 /* added-lines-start */
-        services.AddAuthorization(o => {
-            o.AddPolicy("Sales", policy => policy.RequireAssertion(ctx =>
-                ctx.User.IsEmployee() ||
-                ctx.User.IsIndividualCustomer() ||
-                ctx.User.IsStoreContact()));
-        });
+services.AddAuthorization(o => {
+    o.AddPolicy("Sales", policy => policy.RequireAssertion(ctx =>
+        ctx.User.IsEmployee() ||
+        ctx.User.IsIndividualCustomer() ||
+        ctx.User.IsStoreContact()));
+});
 /* added-lines-end */
-        ...
-    }
-}
 ```
 
 :::tip
@@ -273,34 +265,26 @@ We can also define this policy in the `AdventureWorks.Client.Blazor.Common` proj
 
 After we define the authorization policies we can set them on the items on the main menu. If you manually maintain the structure of the main menu, then you can just set the policy on each menu item individually.
 
-If you use the `MainMenu` class that is auto-generated from the model, then you can recursively call the `SecureMenu` method on each item, which sets the policy for each menu item.
+If you use the `MainMenu` class that is auto-generated from the model, then you can recursively call a method on each item, which sets the policy for that menu item.
 
-So let's update the `SecureMenu` method to set the "*Sales*" policy on all menu items under the *Sales* sub-menu by checking the `Href` of the corresponding views, as follows.
+So let's update the startup code to set the "*Sales*" policy on all menu items under the *Sales* sub-menu by checking the `Href` of the corresponding views, as follows.
 
-```cs title="Startup.cs"
-public class Startup
-{
-    public void ConfigureServices(IServiceCollection services)
+```cs title="Program.cs"
+// TODO: add authorization with any security policies
+foreach (var mi in MainMenu.Items)
+    mi.ForEachItem(mi =>
     {
-        ...
-// highlight-start
-        foreach (var mi in MainMenu.Items)
-            mi.ForEachItem(SecureMenu);
-// highlight-end
-    }
-
-    private void SecureMenu(MenuItem mi)
-    {
-/* removed-next-line */
+/* removed-lines-start */
+        // TODO: set security policy for navigation menu items here
         mi.Policy = null;
+/* removed-lines-end */
 /* added-lines-start */
         if (mi?.Href == null) return;
         if (mi.Href.StartsWith("Sales") || mi.Href.StartsWith("Customer"))
             mi.Policy = "Sales";
         else mi.Policy = ""; // visible for all authorized users
 /* added-lines-end */
-    }
-}
+    });
 ```
 
 ### Reviewing menu security

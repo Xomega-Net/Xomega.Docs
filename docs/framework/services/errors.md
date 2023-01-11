@@ -59,16 +59,7 @@ During the execution of an operation, the current errors and other messages are 
 The `ErrorList` for the current operation's errors is not supposed to be created manually but rather instantiated by the dependency injection container for the current scope. Therefore, you need to make sure that it is registered in the startup class of your application as a scoped service, as shown below.
 
 ```cs
-public class Startup
-{
-    public void ConfigureServices(IServiceCollection services)
-    {
-        ...
-/* highlight-next-line */
-        services.AddScoped<ErrorList>();
-        ...
-    }
-}
+services.AddScoped<ErrorList>();
 ```
 
 :::note
@@ -207,23 +198,18 @@ The `ErrorParser` class is constructed with an instance of a service provider an
 You can override the generic framework message for unhandled exceptions in your project by using [hierarchical resources](#i18n).
 :::
 
-You need to register the default (or a custom) error parser with the DI container in the `Startup` class for your application. You can add it as a singleton, and use the full exception in the development environment only, as follows.
+You need to register the default (or a custom) error parser with the DI container in the startup class for your application. You can add it as a singleton, and use the full exception in the development environment only, as follows.
 
 ```cs
-public void ConfigureServices(IServiceCollection services)
-{
-    ...
-    bool fullException = env.IsDevelopment();
+bool fullException = builder.Environment.IsDevelopment();
 /* highlight-next-line */
-    services.AddSingleton(sp => new ErrorParser(sp, fullException)); // add default or custom error parser
-    ...
-}
+services.AddSingleton(sp => new ErrorParser(sp, fullException)); // add default or custom error parser
 ```
 
 If you want to use the default error parser, then you can register it together with the `ErrorList` using an extension method `AddErrors` provided by the Xomega Framework, as follows.
 
 ```cs
-services.AddErrors(env.IsDevelopment()); // add default error parser and error list
+services.AddErrors(builder.Environment.IsDevelopment()); // add default error parser and error list
 ```
 
 ## Internationalization{#i18n}
@@ -250,20 +236,17 @@ This way, for example, if you call `GetString("SaveButton", "LoginView_")` then 
 
 ### Resource registration
 
-To make a composite resource manager available to business services and error lists, you need to register it as a singleton with the DI container in your `Startup` class.
+To make a composite resource manager available to business services and error lists, you need to register it as a singleton with the DI container in your startup class.
 
 In the following example, we register a composite resource manager, where the messages from a common client project add to and override the messages from the services project, which in turn add to and override the standard Xomega Framework messages.
 
 ```cs
-public void ConfigureServices(IServiceCollection services)
-{
 /* highlight-next-line */
-    services.AddSingleton<ResourceManager>(sp => new CompositeResourceManager(
-        MyProject.Client.Common.Messages.ResourceManager,
-        MyProject.Client.Common.Labels.ResourceManager,
-        MyProject.Services.Entities.Messages.ResourceManager,
-        Xomega.Framework.Messages.ResourceManager));
-}
+services.AddSingleton<ResourceManager>(sp => new CompositeResourceManager(
+    MyProject.Client.Common.Messages.ResourceManager,
+    MyProject.Client.Common.Labels.ResourceManager,
+    MyProject.Services.Entities.Messages.ResourceManager,
+    Xomega.Framework.Messages.ResourceManager));
 ```
 
 ### Message resources{#messageCodes}

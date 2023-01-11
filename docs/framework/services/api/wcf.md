@@ -20,7 +20,7 @@ By default, the WCF framework doesn't provide any built-in support for dependenc
 
 ### Define AppInitializer
 
-Xomega Framework defines a class `AppInitializer` with an abstract method `ConfigureServices`. You will need to create a subclass of this class in your WCF project, and implement the `ConfigureServices` method similar to the ones you'd use in the regular `Startup` classes of the ASP.NET Core applications, as follows.
+Xomega Framework defines a class `AppInitializer` with an abstract method `ConfigureServices`. You will need to create a subclass of this class in your WCF project, and implement the `ConfigureServices` method similar to the ones you'd use in the regular startup classes of the ASP.NET Core applications, as follows.
 
 ```cs
 /* highlight-next-line */

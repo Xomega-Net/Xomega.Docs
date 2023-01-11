@@ -480,7 +480,7 @@ Details view are usually opened as a child view, so they also have a *Close* but
 Having a *Delete* button on the details view, as compared to deleting entities from a search view, allows the users to review the full details of the entity, which can help them make sure that they don't accidentally delete a wrong entity. There is also a confirmation dialog for the *Delete* action.
 :::
 
-The base class `BlazorDetailsView` provides handlers for *Save*, *Delete*, and *Close* buttons, which basically delegate those actions to the bound view model. Following is an example of a footer of a details view with all of those standard actions.
+The base class `BlazorDetailsView` provides handlers for *Save*, *Delete*, and *Close* buttons, which basically delegate those actions to the bound view model. Following is an example of a footer of a Details view with all of those standard actions.
 
 ```razor title="SalesOrderView.razor"
 <!-- highlight-next-line -->

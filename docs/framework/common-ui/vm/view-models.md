@@ -120,15 +120,10 @@ public static IServiceCollection AddViewModels(this IServiceCollection services)
 }
 ```
 
-This will allow you to register all view models with a single line of code in your application's `Startup` class, as follows.
+This will allow you to register all view models with a single line of code in your application's startup class, as follows.
 
-```cs title="Startup.cs"
-public void ConfigureServices(IServiceCollection services)
-{
-    ...
-// highlight-next-line
-    services.AddViewModels();
-}
+```cs
+services.AddViewModels();
 ```
 
 ### Activation

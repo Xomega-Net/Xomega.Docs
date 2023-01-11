@@ -120,17 +120,12 @@ Defining custom operators may be useful if your field contains some special valu
 
 Xomega Framework provides an `OperatorRegistry` class to allow registering operators and looking them up by name. By default, the `OperatorRegistry` class registers all [standard operators](#standard-operators) supported by Xomega Framework.
 
-To make the operator registry accessible to the base service and all other services, you need to register it as a singleton in your `Startup` class using either an extension method or explicitly, as follows.
+To make the operator registry accessible to the base service and all other services, you need to register it as a singleton in your startup class using either an extension method or explicitly, as follows.
 
-```cs title="Startup.cs"
-public void ConfigureServices(IServiceCollection services)
-{
-    ...
+```cs
 /* highlight-next-line */
-    services.AddOperators(); // register using an extension method
-    services.AddSingleton<OperatorRegistry>(); // or register explicitly
-    ...
-}
+services.AddOperators(); // register using an extension method
+services.AddSingleton<OperatorRegistry>(); // or register explicitly
 ```
 
 If you need to register any custom operators, then you can also manually create a new `OperatorRegistry`, and call its `Register` method to register your operators before adding it as a singleton, as follows.

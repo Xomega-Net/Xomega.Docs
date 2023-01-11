@@ -138,7 +138,7 @@ To remove security from a menu item, you need to set both the `Policy` and `Role
 
 For example, let's say that you define a *Sales* policy in your app configuration as follows.
 
-```cs title="Startup.cs"
+```cs
 services.AddAuthorization(o => {
 /* highlight-next-line */
     o.AddPolicy("Sales", policy => policy.RequireAssertion(ctx =>
@@ -149,19 +149,17 @@ services.AddAuthorization(o => {
 To apply it to your menu items, you can either assign it directly on each item using the `Policy` property or call a recursive function `ForEachItem` on each top-level item, where you can configure your security based on the `Href` value, as illustrated below.
 
 ```cs
-foreach (var mi in MainMenu.Items)
+foreach (var mmi in MainMenu.Items)
 /* highlight-next-line */
-    mi.ForEachItem(SecureMenu);
-...
-private void SecureMenu(MenuItem mi)
-{
-    if (mi?.Href == null) return;
-    if (mi.Href.StartsWith("Sales") || mi.Href.StartsWith("Customer"))
+    mmi.ForEachItem(mi =>
+    {
+        if (mi?.Href == null) return;
+        if (mi.Href.StartsWith("Sales") || mi.Href.StartsWith("Customer"))
 /* highlight-start */
-        mi.Policy = "Sales";
-    else mi.Policy = ""; // visible for all authorized users
+            mi.Policy = "Sales";
+        else mi.Policy = ""; // visible for all authorized users
 /* highlight-end */
-}
+    });
 ```
 
 :::warning

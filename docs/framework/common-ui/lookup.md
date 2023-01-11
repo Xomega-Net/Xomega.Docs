@@ -335,7 +335,7 @@ LookupCache globalCache = LookupCache.Get(serviceProvider, LookupCache.Global);
 
 The `LookupCache.Get` method delegates retrieval of the specified cache to the current `ILookupCacheProvider` that is registered with the `serviceProvider`. If no lookup cache provider is registered there, then it will use the `DefaultLookupCacheProvider` class that creates and returns a single instance of the lookup cache regardless of the specified cache type.
 
-You can register an appropriate lookup cache provider for your app in your `Startup` class either directly or by using extension methods, as illustrated below.
+You can register an appropriate lookup cache provider for your app in your startup class either directly or by using extension methods, as illustrated below.
 
 ```cs
 // register a global DefaultLookupCacheProvider
@@ -404,25 +404,20 @@ globalCache.RemoveLookupTable("status"); // clear cached lookup table to be relo
 
 The `LookupCache` loads its lookup tables using a number of lookup cache loader classes that implement the `ILookupCacheLoader` interface. Each lookup cache loader can load lookup tables of one or more types.
 
-You can pass a specific list of cache loaders to the constructor of the `LookupCache`, or you can pass `null`, and it will use the cache loaders that you registered with the service provider in your `Startup` class. You can use an extension method for brevity, as follows.
+You can pass a specific list of cache loaders to the constructor of the `LookupCache`, or you can pass `null`, and it will use the cache loaders that you registered with the service provider in your startup class. You can use an extension method for brevity, as follows.
 
-```cs title="Startup.cs"
-public void ConfigureServices(IServiceCollection services)
-{
-/* highlight-next-line */
-    services.AddLookupCacheLoaders();
-    ...
-}
+```cs
+services.AddLookupCacheLoaders();
 ```
 
 We recommend that you define your extension method in a separate class, where you would register all the cache loaders for the project as singletons, as follows.
 
 ```cs
-public static void AddLookupCacheLoaders(this IServiceCollection container)
+public static void AddLookupCacheLoaders(this IServiceCollection services)
 {
 // highlight-start
-    container.AddSingleton<ILookupCacheLoader, ProductCacheLoader>();
-    container.AddSingleton<ILookupCacheLoader, SalesPersonCacheLoader>();
+    services.AddSingleton<ILookupCacheLoader, ProductCacheLoader>();
+    services.AddSingleton<ILookupCacheLoader, SalesPersonCacheLoader>();
 // highlight-end
     ...
 }
@@ -700,13 +695,9 @@ The format of the XML data is based on the [Xomega model for static data](../../
 You can also have `property` elements under the `properties` node that provide default values for the named attributes.
 :::
 
-In order to register an `XmlLookupCacheLoader` for your resource file during the startup, you can call the `AddXmlResourceCacheLoader` extension method and give it the assembly that contains your embedded resource, as well as the name of the resource file, as follows.
+To register an `XmlLookupCacheLoader` for your resource file during the startup, you can call the `AddXmlResourceCacheLoader` extension method and give it the assembly that contains your embedded resource, as well as the name of the resource file, as follows.
 
 ```cs
-public void ConfigureServices(IServiceCollection services)
-{
-    ...
 /* highlight-next-line */
-    services.AddXmlResourceCacheLoader(GetType().Assembly, ".enumerations.xres", false);
-}
+services.AddXmlResourceCacheLoader(GetType().Assembly, ".enumerations.xres", false);
 ```

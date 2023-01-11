@@ -17,7 +17,7 @@ Individual data controls on the view are bound to the [*Data Properties*](proper
 Data objects and their data properties take care of converting the values to or from the display formats, validating the values, tracking modifications, propagating changes, and a ton of other common things that you otherwise would have to do in your view models.
 
 :::info
-By their structure, Data Objects and Data Properties can be compared to Angular's *Form Groups* and *Form Controls* on steroids.
+By their structure, Data Objects, and Data Properties can be compared to Angular's *Form Groups* and *Form Controls* on steroids.
 :::
 
 Both the view model and its data objects may have regular properties, such as [*View Title*](vm/view-models#view-title), which you can listen to using the standard `INotifyPropertyChanged` (*INPC*) interface, and update the title of the bound view accordingly.

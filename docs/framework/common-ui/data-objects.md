@@ -38,15 +38,10 @@ public static IServiceCollection AddDataObjects(this IServiceCollection services
 }
 ```
 
-This will allow you to register all data objects with a single line of code in your application's `Startup` class, as follows.
+This will allow you to register all data objects with a single line of code in your application's startup class, as follows.
 
-```cs title="Startup.cs"
-public void ConfigureServices(IServiceCollection services)
-{
-    ...
-/* highlight-next-line */
-    services.AddDataObjects();
-}
+```cs
+services.AddDataObjects();
 ```
 
 ### Data properties initialization

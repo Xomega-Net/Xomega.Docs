@@ -167,17 +167,13 @@ After a successful login, the view redirects you to the URL supplied in the `red
 By default the WebAssembly project was set up to get an access token using an *anonymous* user in the main `Program.cs`, so we need to remove that code, as shown below.
 
 ```cs title="Program.cs"
-public class Program
-{
-    public static async Task Main(string[] args)
-    {
-        ...
-        // TODO: add any custom initialization here
+var host = builder.Build();
+
+// TODO: add any custom initialization here
 /* removed-next-line */
-        await RestServices.Authenticate(host.Services, "anonymous", null);
-        ...
-    }
-}
+await RestServices.Authenticate(host.Services, "anonymous", null);
+
+await host.RunAsync();
 ```
 
 ## Securing navigation menu
@@ -185,26 +181,20 @@ public class Program
 Now we just need to add the same authorization policy and menu security, as we added earlier to the Blazor Server project, as follows.
 
 ```cs title="Program.cs"
-public class Program
-{
-    public static async Task Main(string[] args)
-    {
-        ...
-        // add authorization
+// add authorization
 /* removed-next-line */
-        services.AddAuthorizationCore(); // TODO: add security policies
+services.AddAuthorizationCore(); // TODO: add security policies
 /* added-lines-start */
-        services.AddAuthorizationCore(o => {
-            o.AddPolicy("Sales", policy => policy.RequireAssertion(ctx =>
-                ctx.User.IsEmployee() ||
-                ctx.User.IsIndividualCustomer() ||
-                ctx.User.IsStoreContact()));
-        });
+services.AddAuthorizationCore(o => {
+    o.AddPolicy("Sales", policy => policy.RequireAssertion(ctx =>
+        ctx.User.IsEmployee() ||
+        ctx.User.IsIndividualCustomer() ||
+        ctx.User.IsStoreContact()));
+});
 /* added-lines-end */
-        ...
-    }
-
-    private static void SecureMenu(MenuItem mi)
+...
+foreach (var mi in MainMenu.Items)
+    mi.ForEachItem(mi =>
     {
 /* removed-lines-start */
         // TODO: set security policy for navigation menu items here
@@ -216,8 +206,7 @@ public class Program
             mi.Policy = "Sales";
         else mi.Policy = ""; // visible for all authorized users
 /* added-lines-end */
-    }
-}
+    });
 ```
 
 :::tip

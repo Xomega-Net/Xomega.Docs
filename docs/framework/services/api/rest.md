@@ -41,29 +41,20 @@ public partial class SalesOrderController : BaseController
 }
 ```
 
-You can configure these controllers in the `Startup` class of your web application using the standard ASP.NET Core mechanisms, as illustrated below.
+You can configure these controllers in the startup class of your web application using the standard ASP.NET Core mechanisms, as illustrated below.
 
 ```cs
-public class Startup
-{
-    public void Configure(IApplicationBuilder app)
-    {
-        ...
-        app.UseEndpoints(endpoints =>
-        {
-/* highlight-next-line */
-            endpoints.MapControllers();
-        });
-    }
+var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
-    public void ConfigureServices(IServiceCollection services)
-    {
-        ...
 /* highlight-next-line */
-        services.AddControllers(o => o.Filters.Add(new AuthorizeFilter()));
-        ...
-    }
-}
+services.AddControllers(o => o.Filters.Add(new AuthorizeFilter()));
+...
+var app = builder.Build();
+/* highlight-next-line */
+app.MapControllers();
+...
+app.Run();
 ```
 
 ### Controller actions
@@ -113,13 +104,9 @@ While ASP.NET Core does support synchronous methods, make sure that you **use as
 While you can properly report any exceptions in the current error list using a `try/catch` in each action, there may be still unhandled exceptions raised by the ASP.NET Core middleware. If you also want to report them in a standardized way through an error list, then Xomega Framework provides a special `ErrorController` for that, which you can register as the global exception handler in your startup class, as follows.
 
 ```cs
-public void Configure(IApplicationBuilder app)
-{
-    ...
-    // configure global exception handling using Xomega Framework
+// configure global exception handling using Xomega Framework
 /* highlight-next-line */
-    app.UseExceptionHandler(ErrorController.DefaultPath);
-}
+app.UseExceptionHandler(ErrorController.DefaultPath);
 ```
 
 :::note
@@ -217,30 +204,25 @@ To configure the parameters for the issued tokens Xomega Framework uses the `app
 }
 ```
 
-To enable this configuration you need to register it in your `Startup` class using the `AddAuthConfig` extension method, and then use it to provide the token validation parameters, as follows.
+To enable this configuration you need to register it in your startup class using the `AddAuthConfig` extension method, and then use it to provide the token validation parameters, as follows.
 
-```cs title="Startup.cs"
-private readonly IConfiguration configuration;
-...
-public void ConfigureServices(IServiceCollection services)
+```cs
+// configure JWT authentication
+/* highlight-next-line */
+var jwtOptions = services.AddAuthConfig(builder.Configuration);
+
+services.AddAuthentication(x =>
 {
-    // configure JWT authentication
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
 /* highlight-next-line */
-    var jwtOptions = services.AddAuthConfig(configuration);
-
-    services.AddAuthentication(x =>
-    {
-        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(x =>
-    {
-        x.RequireHttpsMetadata = false;
-        x.SaveToken = true;
-/* highlight-next-line */
-        x.TokenValidationParameters = jwtOptions.ValidationParameters;
-    });
-}
+    x.TokenValidationParameters = jwtOptions.ValidationParameters;
+});
 ```
 
 :::note
@@ -308,36 +290,31 @@ public class SalesOrderServiceClient : HttpServiceClient, ISalesOrderService
 }
 ```
 
-The `httpClient` and `SerializerOptions` will be injected from the DI container, so you want to configure them in your `Startup` class. You can configure JSON serialization options, set the `BaseAddress` for the `HttpClient`, and register your service clients for each business service, as follows.
+The `httpClient` and `SerializerOptions` will be injected from the DI container, so you want to configure them in your startup class. You can configure JSON serialization options, set the `BaseAddress` for the `HttpClient`, and register your service clients for each business service, as follows.
 
 ```cs
-public void ConfigureServices(IServiceCollection services)
+// configure serialization options
+services.Configure<JsonSerializerOptions>(o =>
 {
-    ...
-    // configure serialization options
-    services.Configure<JsonSerializerOptions>(o =>
-    {
-        o.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-        o.PropertyNameCaseInsensitive = true;
-    });
+    o.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    o.PropertyNameCaseInsensitive = true;
+});
 
-    // configure HttpClient
-    services.AddSingleton(new HttpClient
-    {
-        BaseAddress = new Uri(apiBaseAddress)
-    });
+// configure HttpClient
+services.AddSingleton(new HttpClient
+{
+    BaseAddress = new Uri(apiBaseAddress)
+});
 
-    // register specific service clients
-    services.AddScoped<ISalesOrderService, SalesOrderServiceClient>();
-    ...
-}
+// register specific service clients
+services.AddScoped<ISalesOrderService, SalesOrderServiceClient>();
 ```
 
 :::note
 The code above uses a singleton `HttpClient` to speed up API connections, but you can also register any function that constructs and configures the `HttpClient` based on your needs.
 :::
 
-To make the `Startup` code cleaner, you can also create a separate extension method that registers all service clients, as shown below.
+To make the startup code cleaner, you can also create a separate extension method that registers all service clients, as shown below.
 
 ```cs
 public static class RestClients
@@ -352,7 +329,7 @@ public static class RestClients
 }
 ```
 
-This would allow you to register your service proxies with a single line of code in the `Startup` class, as follows.
+This would allow you to register your service proxies with a single line of code in the startup class, as follows.
 
 ```cs
 services.AddRestClients();

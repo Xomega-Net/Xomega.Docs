@@ -80,22 +80,13 @@ If you expose your services via REST API, you should also create separate implem
 
 ### Service registrations
 
-The implementation classes for the service interfaces should be instantiated for each request using dependency injection (DI), so you will need to register them with the DI container as scoped services in your application's `Startup` class, as follows.
+The implementation classes for the service interfaces should be instantiated for each request using dependency injection (DI), so you will need to register them with the DI container as scoped services in your application's startup class, as follows.
 
 ```cs
-public class Startup
-{
-    public void ConfigureServices(IServiceCollection services)
-    {
-        ...
-    /* highlight-next-line */
-        services.AddScoped<ISalesOrderService, SalesOrderService>();
-        ...
-    }
-}
+services.AddScoped<ISalesOrderService, SalesOrderService>();
 ```
 
-In order to simplify the `Startup` class, we recommend creating a separate extension method for the service collection, which registers all your business service implementation classes, as illustrated below.
+To simplify the startup class, we recommend creating a separate extension method for the service collection, which registers all your business service implementation classes, as illustrated below.
 
 ```cs
 public static class ServiceImplementations
@@ -110,10 +101,10 @@ public static class ServiceImplementations
 }
 ```
 
-This way you'll be able to register your service implementations in the `Startup` class with a single line, as follows.
+This way you'll be able to register your service implementations in the startup class with a single line, as follows.
 
 ```cs
-    services.AddServiceImplementations();
+services.AddServiceImplementations();
 ```
 
 :::note
