@@ -49,14 +49,15 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       announcementBar: {
-        id: 'doc-progress',
+        id: 'doc-blazor',
         content:
-          'This documentation is still being updated. Follow us on twitter to stay tuned for additional topics.',
+          'Check out new framework documentation on Blazor. Follow us on twitter to stay tuned for additional topics.',
         isCloseable: true,
       },
       docs: {
         sidebar: {
-          autoCollapseCategories: false,
+          autoCollapseCategories: true,
+          hideable: true,
         }
       },
       colorMode: {

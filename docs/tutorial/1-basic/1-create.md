@@ -8,7 +8,7 @@ Xomega.Net adds a new project template to Visual Studio that allows you to creat
 
 ## Xomega project template
 
-To create a new Xomega solution select the *New Project* option in your Visual Studio 2019 and then pick *Xomega* project type or enter *Xomega* in the search box to find the *Xomega Solution* template, as shown below.
+To create a new Xomega solution select the *New Project* option in your Visual Studio and then pick *Xomega* project type or enter *Xomega* in the search box to find the *Xomega Solution* template, as shown below.
 
 ![Solution template](img1/solution-template.png)
 

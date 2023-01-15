@@ -4,7 +4,7 @@ sidebar_label: Xomega Use Cases
 pagination_label: How can I use Xomega
 ---
 
-# How can I use Xomega
+# How can I use Xomega?
 
 Xomega platform is best suited for quickly building standardized data-driven .NET applications that allow browsing and editing structured data from a relational database.
 

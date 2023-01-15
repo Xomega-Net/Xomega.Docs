@@ -1,11 +1,11 @@
 ---
 sidebar_position: 3
 sidebar_label: Why Xomega
-pagination_label: What's unique about Xomega
+pagination_label: What's unique about Xomega?
 pagination_next: null
 ---
 
-# What's unique about Xomega
+# Why Xomega?
 
 Let's take a look at some unique Xomega features that set it apart from other code generators and low-code platforms.
 
@@ -51,7 +51,7 @@ And if you have been in technology long enough, you'd know that it can happen re
 
 Our open-source Xomega Framework has been designed to allow you to write the bulk of your presentation and service logic in a **platform-agnostic** way, which you can then hook into a thin platform-specific layer.
 
-On the presentation layer, the same common logic can be shared not just between web clients, such as Blazor Server, WebAssembly, or even legacy ASP.NET WebForms, but also between **other types of clients**, such as WPF desktop applications or even with the future multi-platform MAUI applications, when they become supported.
+On the presentation layer, the same common logic can be shared not just between web clients, such as Blazor Server, WebAssembly, or even legacy ASP.NET WebForms, but also between **other types of clients**, such as WPF desktop applications or even with the multi-platform MAUI applications, when those become supported.
 
 On the service layer side, the same services that you build can be either invoked directly, e.g., from Blazor Server apps, or exposed via REST API, e.g., for WebAssembly apps, or even through the legacy WCF framework. This also allows you to easily add **another communication layer**, such as gRPC, with little to no changes to your services.
 
@@ -63,7 +63,7 @@ And let's not forget about the learning curve. When you can write your apps the 
 
 There are many great benefits in having standardized screens with a consistent look and feel across your app - from code generation and ease of maintenance to a reduced learning curve for both developers and the users of your application.
 
-At the same time, we all know that every application may have its own unique functional requirements and may need its own distinguished look and feel to meet specific user needs and avoid looking like a cookie-cutter app.
+At the same time, we all know that every application may have its unique functional requirements and may need its own distinguished look and feel to meet specific user needs and avoid looking like a cookie-cutter app.
 
 Also, while Xomega tries to assemble the best technology stacks and use the best development practices for building your apps, we realize that every organization may have its own set of technology standards and requirements.
 
@@ -73,6 +73,6 @@ Xomega provides plenty of ways to customize the generated code - from updating t
 
 With Xomega Framework being **open-source**, it allows you to easily troubleshoot any issues and suggest bug fixes or even new features in order to help both your project and the community at large. The framework is also designed to allow you to substitute standard components with your own, override standard behavior in your custom classes, and otherwise customize your app to your own needs.
 
-For the most **advanced** cases, you can even **extend the Xomega model** with your own custom elements and attributes and leverage Xomega.Net to provide validation, IntelliSense, and collapsing for such elements. Then you can modify the generators to use the new custom elements to generate your artifacts.
+For the most **advanced** cases, you can even **extend the Xomega model** with your custom elements and attributes and leverage Xomega.Net to provide validation, IntelliSense, and collapsing for such elements. Then you can modify the generators to use the new custom elements to generate your artifacts.
 
-Alternatively, you can **create your custom generators**** that could use the standard and your custom model elements to generate new types of artifacts from the model, such as automated unit tests. Because both the models and the generators are built using standard tried-and-true XML technologies, it will help you to easily find the necessary resources for this.
+Alternatively, you can **create your custom generators** that could use both the standard and your custom model elements to generate new types of artifacts from the model, such as automated unit tests. Because both the models and the generators are built using standard tried-and-true XML technologies, it will be easy for you to find the necessary resources for this.

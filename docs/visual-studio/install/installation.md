@@ -41,8 +41,8 @@ If you get any errors when clearing the license, try running Visual Studio under
 For building modern Blazor apps, Xomega.Net requires the following components to be installed:
 
 - Windows 10 or higher
-- Visual Studio 2019 Community or higher
-- .NET 5
+- Visual Studio 2022 Community or higher
+- .NET 7 or .NET 6
 
 For building legacy .NET applications, you may also use the following components (not recommended):
 

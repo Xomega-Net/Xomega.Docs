@@ -29,7 +29,7 @@ This type of generator helps you quickly enrich your XML object model by importi
 These generators create Entity Framework Entities or EDM for ORM and produce DDL scripts that help you build or update your database from the object model.
 
 - [EF Domain Objects](data/entities) generates Entity Framework classes for domain objects, `DbContext`, and entity configurations using Fluent API.
-- [Entity Data Model](data/edm) generates an Entity Data Model to graphically view domain objects on a single or multiple diagrams.
+- [Entity Data Model](data/edm) generates an Entity Data Model to graphically view domain objects on single or multiple diagrams.
 - [Database Schema](data/schema) generates a DDL script for your database if you start building your model from scratch.
 - [Database Change Script](data/migration) generates a rerunnable DDL update script that will make incremental changes to your existing database to bring it in synch with the object model.
 
@@ -96,4 +96,4 @@ These generators create customizable professional Microsoft Word technical desig
 
 ## Custom generators{#custom}
 
-In addition to the standard generators, the Full Edition of Xomega.Net allows you to develop your own custom generators, as described [here](custom).
+In addition to the standard generators, the Full Edition of Xomega.Net allows you to develop your custom generators, as described [here](custom).

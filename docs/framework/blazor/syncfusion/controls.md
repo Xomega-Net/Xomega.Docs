@@ -199,7 +199,7 @@ Selection controls extend the [`XSfOptionsComponent`](#xsfoptionscomponent) and 
 `XSfAutoComplete` control can be bound to an [`EnumProperty`](../../common-ui/properties/enum) that is **not multi-valued** and shows a text box that allows you to type a partial string and select the value from a dropdown list of matching items.
 
 :::caution
-By default, the selection items in the dropdown list are rendered using the [value format](../common-ui/properties/base#value-formats) `DisplayString`. However, the selected item in the text box is displayed using the `DefaultFormat` of that `Header`, which is normally its `Text` field.
+By default, the selection items in the dropdown list are rendered using the [value format](../../common-ui/properties/base#value-formats) `DisplayString`. However, the selected item in the text box is displayed using the `DefaultFormat` of that `Header`, which is normally its `Text` field.
 :::
 
 For example, let's consider that our data property for sales territories is configured to display the value using the "ID - Text" format, as follows.
@@ -293,7 +293,7 @@ With this configuration, our `XSfAutoComplete` control will look as follows.
 `XSfDropDownList` control can be bound to an [`EnumProperty`](../../common-ui/properties/enum) that is **not multi-valued** and allows you to select the value from a dropdown list.
 
 :::note
-By default, the selection items both in the dropdown list and in the field are rendered using the [value format](../common-ui/properties/base#value-formats) `DisplayString`.
+By default, the selection items both in the dropdown list and in the field are rendered using the [value format](../../common-ui/properties/base#value-formats) `DisplayString`.
 :::
 
 For example, let's consider that our data property for sales territories is configured to display the value using the "ID - Text" format, as follows.
@@ -392,7 +392,7 @@ With this configuration, our `XSfDropDownList` control will look as follows.
 `XSfComboBox` control can be bound to an [`EnumProperty`](../../common-ui/properties/enum) that is **not multi-valued** and shows a text box that allows you to type a partial string and jump to the matching value in the dropdown list. You can also open up the dropdown list by clicking on the down arrow on the right or by pressing `Alt+Down` and then selecting the value from that list.
 
 :::caution
-By default, the selection items in the dropdown list are rendered using the [value format](../common-ui/properties/base#value-formats) `DisplayString`. However, the selected item in the text box is displayed using the `DefaultFormat` of that `Header`, which is normally its `Text` field.
+By default, the selection items in the dropdown list are rendered using the [value format](../../common-ui/properties/base#value-formats) `DisplayString`. However, the selected item in the text box is displayed using the `DefaultFormat` of that `Header`, which is normally its `Text` field.
 :::
 
 For example, let's consider that our data property for sales territories is configured to display the value using the "ID - Text" format, as follows.
@@ -503,7 +503,7 @@ With this configuration, our `XSfComboBox` control will look as follows.
 `XSfMultiSelect` control can be bound to a [**multi-valued**](../../common-ui/properties/base#multi-valued-properties) [`EnumProperty`](../../common-ui/properties/enum) and provides a text box where you can type the part of the value and a dropdown list for you to select the matching values.
 
 :::note
-By default, the selection items both in the dropdown list and in the field are rendered using the [value format](../common-ui/properties/base#value-formats) `DisplayString`.
+By default, the selection items both in the dropdown list and in the field are rendered using the [value format](../../common-ui/properties/base#value-formats) `DisplayString`.
 :::
 
 Here is how you can bind an `XSfMultiSelect` control to a data property containing a list of selected sales reasons.
