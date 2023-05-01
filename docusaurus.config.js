@@ -77,16 +77,16 @@ const config = {
             className: 'xomega-link'
           },
           {
-            href: 'https://xomega.net/System/Download.aspx',
+            href: 'https://xomega.net/product/download',
             position: 'left',
             label: 'Download',
             target: null,
             className: 'xomega-link'
           },
           {
-            href: 'https://xomega.net/System/Order.aspx',
+            href: 'https://xomega.net/product/pricing',
             position: 'left',
-            label: 'Order',
+            label: 'Pricing',
             target: null,
             className: 'xomega-link'
           },
@@ -97,14 +97,14 @@ const config = {
             label: 'Learn',
           },
           {
-            href: 'https://xomega.net/Blog.aspx',
+            href: 'https://xomega.net/blog',
             position: 'left',
             label: 'Blog',
             target: null,
             className: 'xomega-link'
           },
           {
-            href: 'https://xomega.net/System/ContactUs.aspx',
+            href: 'https://xomega.net/about/contactus',
             position: 'left',
             label: 'Support',
             target: null,

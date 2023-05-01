@@ -9,7 +9,7 @@ Installing and activating Xomega.Net is a simple process that helps you get star
 ## Installing Xomega.Net
 
 You can download and install Xomega.Net for Visual Studio as a standalone signed `.msi` package using the following simple steps.
-1. [Download Xomega.Net](https://xomega.net/System/Download.aspx) for your version of Visual Studio.
+1. [Download Xomega.Net](https://xomega.net/product/download) for your version of Visual Studio.
 1. Make sure that your Visual Studio is not running.
 1. Run the downloaded `.msi` package to start the installation. The package should be signed by *SIS Consulting, LLC*, so you can accept any warnings regarding 3rd party software that your system may present.
 1. Accept the Xomega.Net license agreement.
@@ -22,7 +22,7 @@ Alternatively, you can open *Extensions > Manage Extensions* dialog, and check t
 
 ## Activating Xomega.Net
 
-To use Xomega.Net you need to [order a license](https://xomega.net/System/Order.aspx) for your version of Visual Studio. Once you order a license, you will receive an email with the license file(s) attached, which you will need to save to your local drive.
+To use Xomega.Net you need to [order a license](https://xomega.net/product/pricing) for your version of Visual Studio. Once you order a license, you will receive an email with the license file(s) attached, which you will need to save to your local drive.
 
 The first time you use Xomega.Net from your Visual Studio, it will ask you for the location of the license file. You will need to select the license file that you saved from your email. Once validated, it will be cached for the current version of Xomega.Net and Visual Studio, so that you won't need to supply it again.
 

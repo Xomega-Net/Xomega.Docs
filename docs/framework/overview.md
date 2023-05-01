@@ -70,7 +70,7 @@ The framework consists of the core package, as well as several additional packag
 These packages are [available via NuGet](http://www.nuget.org/packages?q=xomega.framework), so you can always manually add them to your existing projects and configure them in the application’s startup classes if you like.
 
 :::tip
-The easiest and fastest way to get started with Xomega Framework is to [download and install our free VS extension](https://xomega.net/System/Download.aspx) [**Xomega.Net for Visual Studio**](../visual-studio/overview). It provides a *New Project* template with a solution wizard, where you can configure a new solution for any supported architecture, such as Blazor, WPF, ASP.NET, or SPA, or even pick multiple architectures that will share the same code.
+The easiest and fastest way to get started with Xomega Framework is to [download and install our free VS extension](https://xomega.net/product/download) [**Xomega.Net for Visual Studio**](../visual-studio/overview). It provides a *New Project* template with a solution wizard, where you can configure a new solution for any supported architecture, such as Blazor, WPF, ASP.NET, or SPA, or even pick multiple architectures that will share the same code.
 :::
 
 ## Community and support
