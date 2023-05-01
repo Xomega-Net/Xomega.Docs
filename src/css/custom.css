@@ -82,9 +82,13 @@
   display: none;
 }
 
-.footer__copyright {
+.footer > .container > .footer__links {
   border-top: 1px solid #dee2e6;
   padding: 1rem 0;
+}
+
+span.footer__link-item:hover {
+  color: var(--ifm-footer-link-color);
 }
 
 .theme-doc-sidebar-item-category-level-1 {

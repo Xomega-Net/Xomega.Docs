@@ -48,12 +48,12 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      announcementBar: {
-        id: 'doc-blazor',
-        content:
-          'Check out new framework documentation on Blazor. Follow us on twitter to stay tuned for additional topics.',
-        isCloseable: true,
-      },
+      // announcementBar: {
+      //   id: 'doc-blazor',
+      //   content:
+      //     'Check out new framework documentation on Blazor. Follow us on twitter to stay tuned for additional topics.',
+      //   isCloseable: true,
+      // },
       docs: {
         sidebar: {
           autoCollapseCategories: true,
@@ -114,7 +114,15 @@ const config = {
       },
       footer: {
         style: 'light',
-        copyright: `Copyright © ${new Date().getFullYear()} Xomega.Net. All rights reserved.`,
+        links: [
+          {
+            html: `Copyright © ${new Date().getFullYear()} Xomega.Net. All rights reserved.`
+          },
+          {
+            label: 'Privacy Policy',
+            href: 'https://xomega.net/about/privacy'
+          }
+        ]
       },
       prism: {
         theme: lightCodeTheme,
