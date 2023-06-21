@@ -321,9 +321,20 @@ The *Menu* filter type is invoked from a column menu by clicking on a funnel ico
          AllowFiltering="true">
   <GridFilterSettings Type="FilterType.Menu"></GridFilterSettings>
 <!-- highlight-end -->
+<!-- removed-next-line -->
+  <XSfDataManager></XSfDataManager>
+<!-- added-lines-start -->
+  <SfDataManager Adaptor="Adaptors.CustomAdaptor">
+     <DataListAdaptor List="@VM?.ListObj"></DataListAdaptor>
+  </SfDataManager>
+<!-- added-lines-end -->
   ...
 </XSfGrid>
 ```
+
+:::caution
+To make the Menu-type filtering work for the Syncfusion grid, **do not use the `XSfDataManager`** in the `XSfGrid`. Use the standard `SfDataManager` with a custom adaptor and a nested `DataListAdaptor` that is bound to your data list object, as illustrated above.
+:::
 
 Clicking on the filter icon will pop up a dialog for that column, where you can specify the operator and a filter value, as shown below.
 
