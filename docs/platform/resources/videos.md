@@ -6,15 +6,36 @@ pagination_prev: null
 
 # Xomega Video Tutorials
 
-The following video tutorials are based on the **older version of Xomega** that demonstrates how to build legacy WebForms, WPF and SPA applications. To learn about building modern Blazor applications, you can also check our latest [Walkthrough Tutorial](../../tutorial/get-started).
-
-While some things have been improved in the latest versions, you can still get a good idea of how to use Xomega to model and generate various applications from these videos.
-
 :::tip
 You can click on any link on each video to play the video starting at that section in a new tab. We recommend viewing the videos in **Full screen** mode using **1080p (HD)** quality.
 :::
 
-## Model Driven Development
+## Current Tutorials
+
+The following videos demonstrate Xomega features in the latest releases.
+
+### Generating Blazor Apps in .NET 7
+
+Watch this video to learn about:
+
+- [Creating a new Xomega solution.](https://www.youtube.com/embed/FctOq8dvaYE?start=90&vq=hd1080&rel=0&autoplay=1)
+- [Generic Dictionary model.](https://www.youtube.com/embed/FctOq8dvaYE?start=233&vq=hd1080&rel=0&autoplay=1)
+- [Adding custom service code.](https://www.youtube.com/embed/FctOq8dvaYE?start=553&vq=hd1080&rel=0&autoplay=1)
+- [Adding CRUD operations and views.](https://www.youtube.com/embed/FctOq8dvaYE?start=730&vq=hd1080&rel=0&autoplay=1)
+- [Master-details views.](https://www.youtube.com/embed/FctOq8dvaYE?start=1026&vq=hd1080&rel=0&autoplay=1)
+- [Loading model enums into the DB.](https://www.youtube.com/embed/FctOq8dvaYE?start=1205&vq=hd1080&rel=0&autoplay=1)
+- [Running a WebAssembly app.](https://www.youtube.com/embed/FctOq8dvaYE?start=1420&vq=hd1080&rel=0&autoplay=1)
+
+<iframe width="640" height="360" src="https://www.youtube.com/embed/FctOq8dvaYE?start=0&vq=hd1080&rel=0"
+    frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen="true"></iframe>
+
+## Legacy Tutorials
+
+The following video tutorials are based on the **older version of Xomega**, and demonstrate how to build legacy WebForms, WPF and SPA applications. To learn about building modern Blazor applications, you can also check our latest [Walkthrough Tutorial](../../tutorial/get-started).
+
+While some things have been improved in the latest versions, you can still get a good idea of how to use Xomega to model and generate various applications from these videos.
+
+### Model Driven Development
 
 Watch this video to learn about:
 
@@ -29,7 +50,7 @@ Watch this video to learn about:
 <iframe width="640" height="360" src="https://www.youtube.com/embed/50Kpk2m8RNo?start=0&vq=hd1080&rel=0"
     frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen="true"></iframe>
 
-## Building Desktop Applications
+### Building Desktop Applications
 
 Watch this video to learn about:
 
@@ -41,7 +62,7 @@ Watch this video to learn about:
 <iframe width="640" height="360" src="https://www.youtube.com/embed/JH1XMlD5Co8?start=0&vq=hd1080&rel=0"
     frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen="true"></iframe>
 
-## Building Single Page Applications
+### Building Single Page Applications
 
 Watch this video to learn about:
 
@@ -54,7 +75,7 @@ Watch this video to learn about:
 <iframe width="640" height="360" src="https://www.youtube.com/embed/bRAkv2jPvAU?start=0&vq=hd1080&rel=0"
     frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen="true"></iframe>
 
-## Generating Documentation
+### Generating Documentation
 
 Watch this video to learn about:
 
