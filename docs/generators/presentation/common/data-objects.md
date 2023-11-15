@@ -115,8 +115,8 @@ The following table lists configuration parameters that are set as the generator
 |Folder Name|Presentation Layer\Common|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
 |Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
 |**Output**|
-|Output Path|../MySolution.Client.Common /DataObjects/{Module/}{File}.cs|Relative path where to output files with generated Xomega Data Objects. The path may contain {Module/} and {File} placeholders to output files by module and data object respectively.|
-|Custom Path||Relative path where to output override classes for the generated Xomega Data Objects. If not set, then the *OutputPath* will be used. The path must contain a {File} placeholder to output files by data object.|
+|Output Path|../MySolution.Client.Common /DataObjects/\{Module/\}\{File\}.cs|Relative path where to output files with generated Xomega Data Objects. The path may contain \{Module/\} and \{File\} placeholders to output files by module and data object respectively.|
+|Custom Path||Relative path where to output override classes for the generated Xomega Data Objects. If not set, then the *OutputPath* will be used. The path must contain a \{File\} placeholder to output files by data object.|
 |Registry File|../MySolution.Client.Common /DataObjects/DataObjects.cs|Relative path to the file for data object registration with the DI service container. The registration extension method will be derived from the file name.|
 
 ### Model configuration

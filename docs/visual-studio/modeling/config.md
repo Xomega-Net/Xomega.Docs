@@ -29,7 +29,7 @@ This section configures the generation of [service contracts](../../generators/s
                        cancellation="true"
                        namespace="DemoSolution.Services.Common"
                        implNamespace="DemoSolution.Services.Entities"
-                       tsOutputPath="../DemoSolution.Client.Spa/ServiceContracts/{Module/}{File}"/>
+                       tsOutputPath="../DemoSolution.Client.Spa/ServiceContracts/\{Module/\}\{File\}"/>
 </config>
 ```
 
@@ -51,7 +51,7 @@ This section provides the configuration of WCF endpoints, which is used both on 
     <wcf:endpoint-config binding="ws2007FederationHttpBinding"
                          bindingConfiguration="message"
                          baseLocalAddress=""
-                         baseRemoteAddress="http://localhost:61436/{Module/}{File}.svc"/>
+                         baseRemoteAddress="http://localhost:61436/\{Module/\}\{File\}.svc"/>
   </wcf:config>
 </config>
 ```
@@ -70,7 +70,7 @@ This section configures the [generation of Xomega Framework data objects](../../
   ...
   <xfk:data-objects-config namespace="DemoSolution.Client.Common.DataObjects"
                            assembly="DemoSolution.Client.Common"
-                           tsOutputPath="../DemoSolution.Client.Spa/DataObjects/{Module/}{File}"/>
+                           tsOutputPath="../DemoSolution.Client.Spa/DataObjects/\{Module/\}\{File\}"/>
 </config>
 ```
 

@@ -85,8 +85,8 @@ The following table lists configuration parameters that are set as the generator
 |Folder Name|Presentation Layer\Common|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
 |Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
 |**Output**|
-|Output Path|../MySolution.Client.Common /ViewModels/{Module/}{File}.cs|Relative path where to output files with generated View Models. The path may contain {Module/} and {File} placeholders to output files by module and view model respectively.|
-|Custom Path||Relative path where to output override classes for the generated View Models. If not set, then the *OutputPath* will be used. The path must contain a {File} placeholder to output files by view model.|
+|Output Path|../MySolution.Client.Common /ViewModels/\{Module/\}\{File\}.cs|Relative path where to output files with generated View Models. The path may contain \{Module/\} and \{File\} placeholders to output files by module and view model respectively.|
+|Custom Path||Relative path where to output override classes for the generated View Models. If not set, then the *OutputPath* will be used. The path must contain a \{File\} placeholder to output files by view model.|
 |Registry File|../MySolution.Client.Common /ViewModels/ViewModels.cs|Relative path to the file for view models registration with the DI service container. The registration extension method will be derived from the file name.|
 
 ### Model configuration

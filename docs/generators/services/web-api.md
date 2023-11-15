@@ -82,7 +82,7 @@ The following table lists configuration parameters that are set as the generator
 |Folder Name|Service Layer|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
 |Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
 |**Output**|
-|Output Path|../MySolution.Services.Rest /{Module/}{File}.cs|Relative path where to output files with generated ASP.NET controllers. The path may contain {Module/} and {File} placeholders to output files by module and service respectively.|
+|Output Path|../MySolution.Services.Rest /\{Module/\}\{File\}.cs|Relative path where to output files with generated ASP.NET controllers. The path may contain \{Module/\} and \{File\} placeholders to output files by module and service respectively.|
 |**Parameters**|
 |Namespace||Namespace for the generated classes. If not set, the namespace for service contracts will be used.|
 

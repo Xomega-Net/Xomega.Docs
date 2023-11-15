@@ -121,11 +121,11 @@ The following table lists configuration parameters that are set as the generator
 
 The generator's configuration parameters that need to be also accessible to other generators are specified in the Xomega model in the `xfk:data-objects-config` element under the top-level `config` element, which is conventionally placed in the `global_config.xom` file.
 
-These parameters include the relative output paths for the generated and customized TypeScript data objects, which may contain {Module} and {File} placeholders to output them by module and data object, as follows.
+These parameters include the relative output paths for the generated and customized TypeScript data objects, which may contain {Module} and \{File\} placeholders to output them by module and data object, as follows.
 
 ```xml title="global_config.xom"
-<xfk:data-objects-config tsOutputPath="../MySolution.Client.Spa/DataObjects/{Module/}{File}"
-                         tsCustomPath="../MySolution.Client.Spa/DataObjects/{Module/}{File}"/>
+<xfk:data-objects-config tsOutputPath="../MySolution.Client.Spa/DataObjects/\{Module/\}\{File\}"
+                         tsCustomPath="../MySolution.Client.Spa/DataObjects/\{Module/\}\{File\}"/>
 ```
 
 :::note

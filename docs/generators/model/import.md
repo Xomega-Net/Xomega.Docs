@@ -190,7 +190,7 @@ The following table lists configuration parameters that are set as the generator
 |Folder Name|Model Enhancement|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
 |Include In Build|False|A flag indicating whether or not running this generator should be included in building of the model project.|
 |**Output**|
-|Output Path|Import/{Module/}{File}.xom|Relative path where to output generated .xom files, which will be added to the model project. The path may contain {Module/} and {File} placeholders to output files by database schema and table respectively.|
+|Output Path|Import/\{Module/\}\{File\}.xom|Relative path where to output generated .xom files, which will be added to the model project. The path may contain \{Module/\} and \{File\} placeholders to output files by database schema and table respectively.|
 |**Database**|
 |Database|SQL Server|Database type of the source database. Currently only SQL Server (sqlsrv) is supported. Value 'Use Project Settings' takes this value from the corresponding property of the model project.|
 |Database Version|11.0|The version of the source database. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|

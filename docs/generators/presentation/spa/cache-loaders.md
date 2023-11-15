@@ -91,7 +91,7 @@ The following table lists configuration parameters that are set as the generator
 |Folder Name|Presentation Layer\SPA|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
 |Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
 |**Output**|
-|Output Path|../MySolution.Services.Spa /CacheLoaders/{File}.ts|Relative path where to output files with generated Lookup Cache Loaders. The path may contain {Module/} and {File} placeholders to output files by module and data object respectively.|
+|Output Path|../MySolution.Services.Spa /CacheLoaders/\{File\}.ts|Relative path where to output files with generated Lookup Cache Loaders. The path may contain \{Module/\} and \{File\} placeholders to output files by module and data object respectively.|
 |Add To Project|../MySolution.Services.Spa /MySolution.Services.Spa.csproj|Relative path to the project file to add the generated files to. The project will be reloaded every time you run the generator. Leave it blank if you don't want generated files to be added to your project automatically.|
 
 ### Model configuration
@@ -99,7 +99,7 @@ The following table lists configuration parameters that are set as the generator
 The model configuration parameters that are used by this generator consist of the output path for the TypeScript service contracts. This is specified in the `svc:services-config` element under the top-level `config` model element, which is conventionally placed in the `global_config.xom` file, as follows.
 
 ```xml title="global_config.xom"
-<svc:services-config tsOutputPath="../MySolution.Client.Spa/ServiceContracts/{Module/}{File}"/>
+<svc:services-config tsOutputPath="../MySolution.Client.Spa/ServiceContracts/\{Module/\}\{File\}"/>
 ```
 
 ### Common configurations

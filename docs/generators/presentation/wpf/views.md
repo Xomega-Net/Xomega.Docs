@@ -126,8 +126,8 @@ The following table lists configuration parameters that are set as the generator
 |Folder Name|Presentation Layer\WPF|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
 |Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
 |**Output**|
-|Output Path|../MySolution.Client.Wpf /Views/{Module/}{File}|Relative path where to output files with generated Views. The path must contain a {File} placeholder to output files by view, and may contain a {Module/} placeholder to also group the views by module.|
-|Custom Path||Relative path where to output override classes for the generated code-behind. If not set, then the *OutputPath* will be used. The path must contain a {File} placeholder to output files by view.|
+|Output Path|../MySolution.Client.Wpf /Views/\{Module/\}\{File\}|Relative path where to output files with generated Views. The path must contain a \{File\} placeholder to output files by view, and may contain a \{Module/\} placeholder to also group the views by module.|
+|Custom Path||Relative path where to output override classes for the generated code-behind. If not set, then the *OutputPath* will be used. The path must contain a \{File\} placeholder to output files by view.|
 |Registry File|../MySolution.Client.Wpf /Views/Views.cs|Relative path to the file for views registration with the DI service container. The registration extension method will be derived from the file name.|
 |Menu File|../MySolution.Client.Wpf /Controls/MainMenu|Relative path without extension to the files to output XAML resources and C# handlers for the main menu.|
 |**Parameters**|

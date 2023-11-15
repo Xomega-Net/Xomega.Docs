@@ -123,8 +123,8 @@ The following table lists configuration parameters that are set as the generator
 |Folder Name|Service Layer|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
 |Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
 |**Output**|
-|Output Path|../MySolution.Services.Entities /Services/{Module/}{File}.cs|Relative path where to output files with generated service implementations. The path may contain {Module/} and {File} placeholders to output files by module and service respectively.|
-|Custom Path||Relative path where to output override classes for the generated service implementations. If not set, then the *OutputPath* will be used. The path must contain a {File} placeholder to output files by service.|
+|Output Path|../MySolution.Services.Entities /Services/\{Module/\}\{File\}.cs|Relative path where to output files with generated service implementations. The path may contain \{Module/\} and \{File\} placeholders to output files by module and service respectively.|
+|Custom Path||Relative path where to output override classes for the generated service implementations. If not set, then the *OutputPath* will be used. The path must contain a \{File\} placeholder to output files by service.|
 |Registry File|../MySolution.Services.Entities /Services/Services.cs|Relative path to the file for service implementations registration with the DI service container. The registration extension method will be derived from the file name.|
 
 ### Model configuration

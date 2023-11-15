@@ -157,7 +157,7 @@ The following table lists configuration parameters that are set as the generator
 |Folder Name|Data Layer|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
 |Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
 |**Output**|
-|Output Path|../MySolution.Services.Entities /Entities/{Module/}{File}.cs|Path where to output files with generated Entity Framework Domain Objects. The path may contain {Module/} and {File} placeholders to output files by module and domain object respectively.|
+|Output Path|../MySolution.Services.Entities /Entities/\{Module/\}\{File\}.cs|Path where to output files with generated Entity Framework Domain Objects. The path may contain \{Module/\} and \{File\} placeholders to output files by module and domain object respectively.|
 |Database Config File|../MySolution.Services.Entities /db.config|Application config file to add the entity database connection string to. Leave it blank if you don't want entity database connection string to be added to your config automatically.|
 |**Database**|
 |Database|SQL Server|Database type for the Entity Data Model. Currently only SQL Server (`sqlsrv`) is supported. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|

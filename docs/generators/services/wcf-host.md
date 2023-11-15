@@ -49,7 +49,7 @@ The following table lists configuration parameters that are set as the generator
 |Folder Name|Service Layer|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
 |Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
 |**Output**|
-|Output Path|../MySolution.Services.Wcf /{Module/}{File}.svc|Relative path where to output generated IIS service host files. The path must contain a {File} placeholder to output files by service, and may contain a {Module/} placeholder to also group the services by module.|
+|Output Path|../MySolution.Services.Wcf /\{Module/\}\{File\}.svc|Relative path where to output generated IIS service host files. The path must contain a \{File\} placeholder to output files by service, and may contain a \{Module/\} placeholder to also group the services by module.|
 |Add To Project|../MySolution.Services.Wcf /MySolution.Services.Wcf.csproj|Relative path to the project file to add the generated files to. The project will be reloaded every time you run the generator. Leave it blank if you don't want generated files to be added to your project automatically.|
 
 ### Model configuration
@@ -62,7 +62,7 @@ The generator itself doesn't use any configuration from the model, but the `base
                        bindingConfiguration="message"
                        baseLocalAddress=""
 <!-- highlight-next-line -->
-                       baseRemoteAddress="http://localhost:61436/{Module/}{File}.svc"/>
+                       baseRemoteAddress="http://localhost:61436/\{Module/\}\{File\}.svc"/>
 </wcf:config>
 ```
 

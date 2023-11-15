@@ -28,19 +28,19 @@ Most of the generators that output one or more files, when run, allow specifying
 
 ![Path parameters](img/params-paths.png)
 
-The relative paths oftentimes point to other projects in the solution and allow specifying special placeholders like `{Module}` and `{File}`. This provides you with the maximum flexibility in how you want the generated code to be structured.
+The relative paths oftentimes point to other projects in the solution and allow specifying special placeholders like `{Module}` and `\{File\}`. This provides you with the maximum flexibility in how you want the generated code to be structured.
 
 For instance, if you don't include any of these placeholders, the generated objects will be all output into the same file. This is how some generators used to do it, e.g. the *Entity Data Model*. While it may be convenient in some cases to keep all generated code in one file, that file could become quite large and hard to navigate, when you want to troubleshoot your app.
 
 If you include just the `{Module}` placeholder, then the generator will create one file per module. This could still result in large generated files but falls somewhere in the middle between a single file and individual files.
 
-The recommended practice is to include both the `{Module}` and `{File}` placeholders to output generated code into individual files based on the context. The `{Module}` placeholder will allow you to group generated files by module in separate folders or using a naming convention (e.g. `{Module}_{File}`).
+The recommended practice is to include both the `{Module}` and `\{File\}` placeholders to output generated code into individual files based on the context. The `{Module}` placeholder will allow you to group generated files by module in separate folders or using a naming convention (e.g. `{Module}_\{File\}`).
 
 :::note
-You can move the separator inside the braces, e.g. `{Module/}` to account for an empty module name, which would otherwise result in a double slash (//) in the path, and make the latter invalid.
+You can move the separator inside the braces, e.g. `\{Module/\}` to account for an empty module name, which would otherwise result in a double slash (//) in the path, and make the latter invalid.
 :::
 
-Based on your preferences and development standards, you can configure the generated files to be all completely isolated in a separate folder (e.g. with `Gen/{Module/}/{File}`), have them co-mingled with custom files, or a combination of the two, e.g. with `{Module/}Gen/{File}`, which will result in the generated files being isolated within each module. Each approach has its pros and cons.
+Based on your preferences and development standards, you can configure the generated files to be all completely isolated in a separate folder (e.g. with `Gen/\{Module/\}/\{File\}`), have them co-mingled with custom files, or a combination of the two, e.g. with `\{Module/\}Gen/\{File\}`, which will result in the generated files being isolated within each module. Each approach has its pros and cons.
 
 :::tip
 To check if a specific parameter allows any placeholders, you can view its description in the *Properties* window, as illustrated above for the `Custom Path` parameter, or you can check the [documentation](../../generators/overview) for that generator.

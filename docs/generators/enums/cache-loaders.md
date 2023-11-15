@@ -115,7 +115,7 @@ The following table lists configuration parameters that are set as the generator
 |Folder Name|Static Data|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
 |Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
 |**Output**|
-|Output Path|../MySolution.Services.Common /CacheLoaders/{Module/}{File}.cs|Relative path where to output files with generated Lookup Cache Loaders. The path may contain {Module/} and {File} placeholders to output files by module and data object respectively.|
+|Output Path|../MySolution.Services.Common /CacheLoaders/\{Module/\}\{File\}.cs|Relative path where to output files with generated Lookup Cache Loaders. The path may contain \{Module/\} and \{File\} placeholders to output files by module and data object respectively.|
 |Registry File|../MySolution.Services.Common /CacheLoaders/LookupCacheLoaders.cs|Relative path to the file for registration or cache loaders with the DI service container. The registration extension method will be derived from the file name.|
 |**Parameters**|
 |Namespace||Namespace for the generated classes. If not set, the namespace for service contracts will be used.|

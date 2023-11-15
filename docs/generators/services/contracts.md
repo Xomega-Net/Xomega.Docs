@@ -133,7 +133,7 @@ The following table lists configuration parameters that are set as the generator
 |Folder Name|Service Layer|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
 |Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
 |**Output**|
-|Output Path|../MySolution.Services.Common /ServiceContracts/{Module/}{File}.cs|Relative path where to output files with generated service and data. The path may contain {Module/} and {File} placeholders to output files by module and data object respectively.|
+|Output Path|../MySolution.Services.Common /ServiceContracts/\{Module/\}\{File\}.cs|Relative path where to output files with generated service and data. The path may contain \{Module/\} and \{File\} placeholders to output files by module and data object respectively.|
 
 ### Model configuration
 

@@ -180,8 +180,8 @@ The following table lists configuration parameters that are set as the generator
 |Folder Name|Presentation Layer\Blazor|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
 |Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
 |**Output**|
-|Output Path|../MySolution.Client.Blazor.Common /Views/{Module/}{File}|Relative path where to output files with generated Views. The path must contain a {File} placeholder to output files by view, and may contain a {Module/} placeholder to also group the views by module.|
-|Custom Path||Relative path where to output custom partial classes for the generated views. If not set, then the *OutputPath* will be used. The path must contain a {File} placeholder to output files by view.|
+|Output Path|../MySolution.Client.Blazor.Common /Views/\{Module/\}\{File\}|Relative path where to output files with generated Views. The path must contain a \{File\} placeholder to output files by view, and may contain a \{Module/\} placeholder to also group the views by module.|
+|Custom Path||Relative path where to output custom partial classes for the generated views. If not set, then the *OutputPath* will be used. The path must contain a \{File\} placeholder to output files by view.|
 |Menu File|../MySolution.Client.Blazor.Common /Views/MainMenu.cs|Output path to the C# file where to generate static structure for the main menu.|
 |**Parameters**|
 |Namespace|MySolution.Client.Blazor.Views.Common|Namespace for the generated views.|
