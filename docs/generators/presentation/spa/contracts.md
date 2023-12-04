@@ -122,7 +122,7 @@ The following table lists configuration parameters that are set as the generator
 
 The generator's configuration parameters that need to be also accessible to other generators are specified in the Xomega model in the `svc:services-config` element under the top-level `config` element, which is conventionally placed in the `global_config.xom` file.
 
-These parameters include the output path for the generated TypeScript files, which may contain {Module} and \{File\} placeholders to output them by module and service, as shown below.
+These parameters include the output path for the generated TypeScript files, which may contain \{Module\} and \{File\} placeholders to output them by module and service, as shown below.
 
 ```xml title="global_config.xom"
 <svc:services-config tsOutputPath="../MySolution.Client.Spa/ServiceContracts/\{Module/\}\{File\}"/>
