@@ -147,7 +147,7 @@ The sections below provide some details on how to work with the generator.
 
 You can run this generator for the entire model only.
 
-:::caution
+:::warning
 You should always carefully review the generated script before running it, to make sure it doesn't cause any negative side effects.
 :::
 

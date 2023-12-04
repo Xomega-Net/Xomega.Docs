@@ -162,7 +162,7 @@ foreach (var mmi in MainMenu.Items)
     });
 ```
 
-:::warning
+:::danger
 **Securing the navigation menu is not enough** for client-side security since the user can manually enter the URL for any particular page or pull it up using a bookmark. You also need to secure specific pages using the same policy or roles in the page's `Authorize` attribute, as follows.
 ```razor
 @attribute [Authorize(Policy = "Sales")]

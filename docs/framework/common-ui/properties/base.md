@@ -87,7 +87,7 @@ You can also manually set the label on the property, which will override any def
 
 The data property's values are stored internally as an `object`, which allows storing any type of value, as well as using collections for storing the values of multi-valued properties. Every concrete data property uses a certain data type for its internal values, such as `DateTime?` for the `DateTimeProperty`. Whenever you set the value of the property using the `SetValue` or `SetValueAsync` methods, it will try to convert that value to the target data type.
 
-:::caution
+:::warning
 If the property fails to convert the provided value you are setting to the target data type, it will still store that value "as is" in the data property. However, validating the property will result in errors, which won't let you submit the data to the services. This allows the property to capture the user's input as they type it, even if it's not yet valid.
 :::
 
@@ -243,7 +243,7 @@ List<decimal?> vals = multiProp.Values; // typed list of values
 Generic data properties have additional methods `GetValue` and `GetValues` to access typed value(s), respectively. Those also allow you to pass a `DataRow` to extract the value from when the property is part of a data list object.
 :::
 
-:::caution
+:::warning
 If the internal property value is invalid and not of the proper type, then `Value`/`GetValue` will return `null`, while the `Values`/`GetValues` won't include that value in the returned `List<T>`.
 :::
 
@@ -374,7 +374,7 @@ The `AccessLevel` enum values are ordered in ascending order, so you can use not
 
 When the access level of a property is less than `Full`, then the property will not be editable, and when it's less than `ReadOnly`, the property will not be visible. Therefore, changing the `AccessLevel` on the property will send a [property change event](#property-change-events) for both the `Editable` and `Visible` flags since it may affect either of them.
 
-:::caution
+:::warning
 If the user should have **no access** to a certain property, security best practices recommend that your business services **do not return any data** for that property, e.g., return `null`. Just hiding that property on the UI may not be secure enough when the business services are accessed via REST since one can easily just view the results returned by the REST API.
 :::
 
@@ -472,7 +472,7 @@ async Task OnDataPropertyChangeAsync(object sender, PropertyChangeEventArgs e, C
 }
 ```
 
-:::caution
+:::warning
 Only the async listeners for the **value change** will be awaited, provided that the value was changed via `SetValueAsync`. Any other property changes, such as `Editable`, will also trigger the async listeners, but those will not be awaited.
 :::
 
@@ -509,7 +509,7 @@ A more natural way to define computed properties is to just express the formula 
 
 When the value of your property is computed based on the values of other properties, you can create an `Expression` for a `Func` that accepts arguments needed to get the dependent values and returns the calculated value as an `object`. The arguments can be either the dependent properties or their parent objects. Then you can call `SetComputedValue` on your property and pass that expression and the actual properties or objects for the expression's arguments.
 
-:::caution
+:::warning
 Setting computed value will also make the property neither `Editable` nor `Required` to ensure that the user would not be able to set it manually and to turn off the required validation.
 :::
 
@@ -651,7 +651,7 @@ public class ComputedAccessLevelBinding : ComputedBinding
 
 With that, you can just construct a binding for your property using the desired expression and args, and it will keep its `AccessLevel` computed based on your expression.
 
-:::caution
+:::warning
 Make sure to call the `Dispose` method on your computed binding when you no longer need it, to remove any listeners and prevent possible memory leaks.
 :::
 

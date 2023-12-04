@@ -166,7 +166,7 @@ For objects that represent static data that is stored in the database, but can b
 
 This is done by specifying the *Generate Read Enum* and/or *Generate Subobject Read Enum* generator parameters, which will add a `read enum` operation decorated with a dynamic enumeration specification that tells the Xomega Framework which output parameter is an internal Id, and which one should be used as a user-facing description.
 
-:::caution
+:::warning
 If the generator cannot find a proper object field to use as the Id or a description, then it will just add those as output parameters, and you'll need to manually provide custom code in the services for those parameters, to return proper values.
 :::
 
@@ -270,7 +270,7 @@ You can run this generator for either one file, or for multiple selected files i
 
 You can run a configuration that adds all enhancements at once, or you can create multiple configurations that add different enhancements, and then run them one by one. For example, you can add a `read list` operation first, then CRUD operations, and then data object definitions, views, etc.
 
-:::caution
+:::warning
 The generator is not supposed to be included in the model build process.
 :::
 
@@ -280,7 +280,7 @@ After you have added your operations, data objects, or other enhancements with t
 
 If you re-run the generator after updating the model, your manual changes should be largely preserved.
 
-:::caution
+:::warning
 However, it is still recommended to **check in your model** to your source control before re-running the generator, so that you could easily review the changes from it.
 :::
 

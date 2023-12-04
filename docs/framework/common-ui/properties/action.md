@@ -12,7 +12,7 @@ Action properties represent abstract metadata about the actions that the user ca
 
 Action properties can be bound to various action controls on the UI, such as buttons, menu options, etc. Any changes in the action's enabled state or visibility would be automatically reflected in the bound UI control, which allows you to implement the logic for enabling, disabling and hiding your actions in a **UI-agnostic** way.
 
-:::caution
+:::warning
 Action properties **do not perform the actual action**, but only manage the state of that action. You still need to set the proper handler on the bound UI control, which would invoke your logic for that action.
 :::
 

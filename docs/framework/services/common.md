@@ -30,7 +30,7 @@ When defining service operations for Xomega Framework, you need to follow certai
 
 First of all, you want to make your operations asynchronous in most of the cases to enable using them for remote calls. This means that the method for the operation should return a `Task`, and should usually accept a `CancellationToken` as the last argument to allow cancellations.
 
-:::caution
+:::warning
 If you plan to expose your service via the legacy WCF framework, then you should drop the cancellation token argument since WCF doesn't support those.
 :::
 

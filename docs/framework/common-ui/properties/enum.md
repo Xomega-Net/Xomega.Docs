@@ -108,7 +108,7 @@ When the `EnumProperty` is bound to a type-ahead field, the list of available se
 You can implement custom logic for matching the user input, such as matching any part of the string rather than just the beginning. You can do it by either overriding the `MatchesTerm` function in your subclass or by just setting the `FilterTermFunc` delegate to your custom function.
 :::
 
-:::caution
+:::warning
 The `FilterTermFunc` just filters the list of the available items in the lookup table and **does not make any remote calls** to get those items based on the user input. If you need to query remote services based on the user input, then you should set a custom `AsyncItemsProvider` function.
 :::
 
@@ -215,7 +215,7 @@ If the underlying data type of your enum values is `int`, `long`, `short` or `by
 
 For multi-valued properties, the transport value will be of type `List<T>`, e.g. `List<int>`.
 
-:::caution
+:::warning
 These enum properties assume that the values in their lookup tables have IDs of the proper type.
 
 If the header's `Id` cannot be parsed as the correct type, the transport value will be `null`, or not included in the list when it's multi-valued, which may cause unwanted side effects.
@@ -233,7 +233,7 @@ You can use your own text for the headers in that lookup table, but their IDs sh
 
 If the underlying data type of your enum values is `Guid`, then you should use the `EnumGuidProperty`. For multi-valued properties, the transport value will be of type `List<Guid>`.
 
-:::caution
+:::warning
 `EnumGuidProperty` assumes that the IDs of the values in its lookup tables can be parsed as a `Guid`.
 
 If the header's `Id` cannot be parsed as a `Guid`, the transport value will be `null`, or not included in the list when it's multi-valued, which may cause unwanted side effects.

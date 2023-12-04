@@ -54,7 +54,7 @@ We will start by removing any elements related to the `reason` sub-object, that 
 
 One way to also clean any previously generated artifacts for those removed elements is to run a `Clean` command on the *AdventureWorks.Model* project before the `Build` command. This will delete those generated files and will remove them from their projects.
 
-:::warning
+:::danger
 Before you do anything like that though, you want to absolutely make sure that any generated classes containing custom code will be preserved during the *Clean*.
 
 If you previously set `preserve-on-clean="true"` on the `svc:customize` element for the `sales order` object, as we showed before, then you don't need to do anything now. Otherwise, you can remove some lines in the top comments in your customized files, as described in those comments.

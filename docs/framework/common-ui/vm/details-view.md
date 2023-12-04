@@ -76,7 +76,7 @@ If you open details for an existing entity and pass the key(s) as the parameters
 
 Any error messages from the *Read* operation will be stored in the [`Errors`](view-models#error-list) property and would be shown in the bound *Error List* control on the view.
 
-:::warning
+:::danger
 You can also manually call the `LoadDataAsync` or `LoadData` methods at any other point, in order to refresh the view's data from the service, but it **will not check or prompt for unsaved changes**, which may be dangerous. You would need to override these methods and implement those checks in your subclass if this is needed.
 :::
 

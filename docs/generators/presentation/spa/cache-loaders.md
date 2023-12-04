@@ -71,7 +71,7 @@ The lookup tables are then exposed via a standard REST endpoint, which the Xomeg
 
 This generator creates TypeScript classes for XomegaJS-based local cache loaders that call the specified operation and construct lookup tables from the results, with ID and description of each record according to the configuration, and all other result parameters stored in additional attributes.
 
-:::caution
+:::warning
 The client needs to make sure its method `setParameters` is called with the contextual values to populate the local cache as appropriate.
 :::
 

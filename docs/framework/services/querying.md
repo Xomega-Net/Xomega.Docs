@@ -84,7 +84,7 @@ qry = AddClause(qry, "Status", r => r.Status, new[] { "[1,2]", "[4,7]" });
 qry = AddClause(qry, "Customer", r => r.Customer, "SW", "Micro");
 ```
 
-:::caution
+:::warning
 If you provide either an invalid operator or fewer values than the operator expects (e.g. 1 value for the `Between` operator), then the method will not change the query but will add a corresponding error to the `currentErrors` using the specified property name in the text of the error message.
 :::
 

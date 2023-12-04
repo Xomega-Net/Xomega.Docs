@@ -405,7 +405,7 @@ When you create REST API for your services, you need to configure each operation
 
 The URI template should include all individual input parameters of the operation in curly braces, either in the path or in the query string. However, for `POST`, `PUT`, or `PATCH` methods, you can have one parameter that is not part of the `uri-template`, which means that it will be passed in the body of the request.
 
-:::warning
+:::danger
 To allow using input parameters in the URI template, the input structure should have inline parameters rather than reference any structure and should not have an `arg` attribute. In other words, you normally **don't** want to model your REST operations using either `<input struct="another structure"/>` or  `<input arg="arg name">`.
 :::
 
@@ -450,7 +450,7 @@ If you do need to have an internal service operation in your model, which should
 </object>
 ```
 
-:::caution
+:::warning
 Since the operation not exposed via REST is still part of the service interface, it will be visible to the REST clients. However, calling it from the client will result in a runtime error.
 :::
 
@@ -565,7 +565,7 @@ If you need to have an internal service operation in your model, which should no
 </object>
 ```
 
-:::caution
+:::warning
 Since the operation not exposed via WCF is still part of the service interface, it will be visible to the WCF clients. However, calling it from the client will result in a runtime error.
 :::
 

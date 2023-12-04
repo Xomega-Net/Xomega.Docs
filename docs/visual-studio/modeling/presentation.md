@@ -101,7 +101,7 @@ The specific class of each data property will be determined by the `xfk:property
 
 As mentioned before, you can add properties to a data object from multiple various structures that are defined in your service model. Parameters with the same name in different structures would correspond to the same property, which means that they should map to the same property class and must have consistent `list` attributes that indicate if this is a multi-value property.
 
-:::caution
+:::warning
 **You won't get model validation errors** if parameters with the same name in different structures are added to the same object but map to different property classes or have inconsistent `list` attributes. Instead, you will only get the errors when you run the [Xomega Data Objects generator](../../generators/presentation/common/data-objects).
 :::
 
@@ -423,7 +423,7 @@ The `ui:field` element allows you to specify the following configuration attribu
 
 ### UI panel layout
 
-:::caution
+:::warning
 The following functionality is currently supported only for the modern Blazor views but not for WebForms, WPF, or SPA views.
 :::
 
@@ -611,7 +611,7 @@ However, to preserve your manual markup changes from being erased when the view 
 
 When you mark the view layout as custom like that, Xomega will not overwrite your markup or code-behind when generating the views.
 
-:::caution
+:::warning
 Obviously, this also means that your **view will not be automatically updated** if you add new fields or change your model otherwise, so you'll need to update such a view manually.
 :::
 

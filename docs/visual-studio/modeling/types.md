@@ -183,7 +183,7 @@ In the following example, the `employee` type is a sub-type of `person`, which e
 
 So the `employee` type will inherit all configurations from the `integer` type except for the `xfk:property`, which it will inherit from the `integer key` since it's overridden there.
 
-:::caution
+:::warning
 You cannot inherit a type from multiple base types that are not part of the same hierarchy. If you need to combine configurations from multiple types, you may need to set one of them as the base type and just add the missing configurations from the other base type to your own type.
 :::
 

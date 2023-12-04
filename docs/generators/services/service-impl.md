@@ -171,7 +171,7 @@ if (_salesOrderId != null)
 
 The custom code placeholders for the pieces that the generator doesn't know how to handle properly will have a special `TODO` tag, to allow you to find all such places easily, and provide the necessary implementations.
 
-:::caution
+:::warning
 To make sure that your custom code is preserved during subsequent generator runs, you need to always place it in between the designated markers, and also make sure that the marker text in the comment doesn't change from one run to another, since it's used as an identifier of each custom code.
 :::
 

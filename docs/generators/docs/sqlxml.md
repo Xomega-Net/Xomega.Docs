@@ -62,7 +62,7 @@ The sections below provide some details on how to work with the generator.
 
 To run this generator you need to select it in the model project, and then select *Generate* menu from either the context menu or the top-level *Project* menu.
 
-:::caution
+:::warning
 After you generate the document, you may need to open it and refresh all fields there, such as the table of contents, by selecting all text (Ctrl+A) and pressing F9.
 :::
 

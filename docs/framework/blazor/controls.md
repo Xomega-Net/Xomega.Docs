@@ -109,7 +109,7 @@ If the value of the property [is null](../common-ui/properties/base#null-values)
 
 If your data property is marked as not required, meaning that the users should be able to set the `null` value, the bound `XCheckBox` control will cycle through three states and set the indeterminate state after you click on a checked checkbox.
 
-:::caution
+:::warning
 The label of a required checkbox will not show a red asterisk in front of it, but you can customize its CSS class if you want to highlight required (or optional) checkboxes in some way.
 :::
 
@@ -225,7 +225,7 @@ Selection controls extend the [`XOptionsComponent`](#xoptionscomponent) and are 
 
 `XAutoComplete` control shows a text box that allows you to type a partial string and select the value from a dropdown list of matching items. If the bound property is multi-valued, you'll be able to enter multiple comma-separated values, and the control will adequately show the matching list for the current value under the cursor.
 
-:::caution
+:::warning
 By default, the selection items are rendered using the [value format](../common-ui/properties/base#value-formats) `DisplayString` and inserted into the text box using the `EditString` format, which uses the [`KeyFormat`](../common-ui/properties/enum#value-display) of the `EnumProperty`.
 :::
 
@@ -394,7 +394,7 @@ You can create localized resources for these texts that are translated into the 
 
 Action controls are bound to a special [`ActionProperty`](../common-ui/properties/action) in the view model or any of its data objects. This allows them to use the [action's localized text](../common-ui/properties/action#localized-action-text) as a label and maintain its [visibility](../common-ui/properties/action#control-action-visibility) or [enabled state](../common-ui/properties/action#manage-enabled-state) based on the state of the action property, including when the state of the action property is computed using specific visibility or enabling conditions.
 
-:::caution
+:::warning
 You still need to provide a callback function for the click handler, which is not part of the bound action property.
 :::
 

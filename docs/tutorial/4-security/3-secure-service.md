@@ -99,6 +99,6 @@ public partial class SalesOrderService : BaseService, ISalesOrderService
 
 As before, we are using our custom extension methods from `SecurityManager` to easily retrieve the `storeId` or `personId` for the `CurrentPrincipal`.
 
-:::caution
+:::warning
 To properly secure all business services you'll need to add similar custom security checks to other CRUD operations of the `SalesOrderService`, and report any security errors as appropriate.
 :::

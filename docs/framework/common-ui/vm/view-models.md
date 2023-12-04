@@ -132,7 +132,7 @@ Opening a view in Xomega Framework allows you to pass it a number of named param
 
 After the view model is constructed, you need to activate it by calling the `ActivateAsync` method and passing it a collection of named parameters for the activation. During activation, the view model will store those parameters in its `Params` property, which you'll be able to access at any point thereafter.
 
-:::caution
+:::warning
 There is also a synchronous method `Activate` to activate the view, but we recommend using the `ActivateAsync`, which would allow you to read data using remote service calls.
 :::
 

@@ -64,7 +64,7 @@ The following picture illustrates the results grid for a *Sales Order List* view
   </TabItem>
 </Tabs>
 
-:::caution
+:::warning
 The **current document** describes mostly those aspects of the Syncfusion data grid that are either **related to Xomega Framework or different** from the original `SfGrid` component.
 :::
 
@@ -332,7 +332,7 @@ The *Menu* filter type is invoked from a column menu by clicking on a funnel ico
 </XSfGrid>
 ```
 
-:::caution
+:::warning
 To make the Menu-type filtering work for the Syncfusion grid, **do not use the `XSfDataManager`** in the `XSfGrid`. Use the standard `SfDataManager` with a custom adaptor and a nested `DataListAdaptor` that is bound to your data list object, as illustrated above.
 :::
 
@@ -403,7 +403,7 @@ All columns are included in the search by default, but you can either indicate s
 
 ![Grid search](img/grid-search.png)
 
-:::caution
+:::warning
 The `XSfGrid` will search column values using their **display format**, which means, for instance, that you have to enter `4,357` for the third row above to match the last column since entering just `4357` will not match that display value.
 :::
 
@@ -467,7 +467,7 @@ Alternatively, you can specify a custom `RowSelected` handler on your `XSfGridEv
 
 For example, if selecting a row is supposed to open a details view in the master-details view, then your `RowSelected` handler should check if the current details view can be closed, open the new details view, and then select the new row in the master list object, which will get automatically highlighted in the grid.
 
-:::caution
+:::warning
 Your custom `RowSelected` handler **should always update the data list selection** as appropriate. The grid will not update its selection automatically when a `RowSelected` handler is present to keep its selection in sync with the bound data list object.
 :::
 
@@ -621,6 +621,6 @@ Now, if you edit a row in such a grid, you will see that the *Qty* column uses a
 
 ![Custom edit template](img/grid-edit-template.png)
 
-:::caution
+:::warning
 For field validation messages to be properly displayed in the grid, you should **set the `ID` parameter to the property name** on the custom cell editor control, e.g., `ID="OrderQty"`. It should also match the column's `Field` parameter.
 :::

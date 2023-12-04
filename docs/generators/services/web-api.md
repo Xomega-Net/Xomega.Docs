@@ -170,7 +170,7 @@ public async Task<ActionResult> CreateAsync([FromBody] ErrorLog_CreateInput _dat
 }
 ```
 
-:::caution
+:::warning
 To make sure that your custom code is preserved during subsequent generator runs, you need to make sure that the marker text after the `CUSTOM_CODE_START` comment doesn't change from one run to another, since it's used as your custom code identifier.
 :::
 
@@ -189,6 +189,6 @@ This generator supports cleaning either all generated controllers or only the on
 Normally, cleaning the generated files makes sense if you are planning to change the output path for the generator, or when you have removed some of the services from the model, and want the generated classes deleted and removed from the target project.
 :::
 
-:::caution
+:::warning
 Note, that generated controllers that have REST methods with a `customize="true"` attribute **will not be cleaned** during these operations to prevent any loss of custom code during an accidental run of such actions. Therefore, you may get compilation errors for those classes if you clean your controllers, and will need to delete them manually as needed.
 :::

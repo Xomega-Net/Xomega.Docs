@@ -6,7 +6,7 @@ sidebar_position: 1
 
 Xomega.Net adds a new project template to Visual Studio that allows you to create and configure your solution for a specific architecture.
 
-:::warning
+:::danger
 This documentation applies only to the current versions of Xomega.Net **for Visual Studio 2022 or 2019**.
 
 The older version of *Xomega.Net for Visual Studio 2017* provides multiple pre-configured solution templates to select from without the ability to configure them further interactively.
@@ -14,7 +14,7 @@ The older version of *Xomega.Net for Visual Studio 2017* provides multiple pre-c
 
 ## Xomega project template
 
-:::caution
+:::warning
 Due to a current limitation, you should not try to create a new Xomega solution (or open an existing one) when you have another Xomega solution open in your Visual Studio. You should first restart Visual Studio in this case.
 :::
 

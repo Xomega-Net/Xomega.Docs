@@ -15,7 +15,7 @@ Xomega Framework supports standard .NET claims-based security for securing busin
 1. If the DI container has an `IPrincipalProvider` service, then it will use the `CurrentPrincipal` of that service.
 1. If none of the above is available, the `Thread.CurrentPrincipal` will be used.
 
-:::caution
+:::warning
 Using `Thread.CurrentPrincipal` to get the current principal may not work well in async methods and services.
 :::
 

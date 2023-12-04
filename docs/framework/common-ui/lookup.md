@@ -106,7 +106,7 @@ status.IsCompleted = false; // hdr["IsCompleted"] -> false;
 // highlight-end
 ```
 
-:::caution
+:::warning
 Obviously, the names of the additional attributes must be **valid identifiers** in order to use them as member properties on a dynamic object. Also, these names are **case-sensitive**.
 :::
 
@@ -184,7 +184,7 @@ When your lookup data is sourced from the database and can be changed dynamicall
 
 To provide the header's localization text for each supported language/culture, you need to specify it in additional attributes with special names `lang-<Culture Name>`, e.g., `lang-es`. You can use the two-letter ISO language code for the general translations, but you can also provide overrides for country-specific languages, such as `lang-es-ES`.
 
-:::caution
+:::warning
 Localization texts from the **additional attributes take precedence** over any texts found in the static application resources.
 :::
 
@@ -247,7 +247,7 @@ IEnumerable<Header> statuses = statusTable.GetValues(); // get a copy of all val
 statuses = statusTable.GetValues((hdr, row) => hdr.IsActive, null); // get a copy of filtered values
 ```
 
-:::caution
+:::warning
 Since lookup tables are often cached globally, it **returns copies** of the stored headers here to prevent the calling code from accidentally changing any of their attributes for everybody.
 
 Therefore, if you need a filtered list, you should pass the filter function to the `GetValues` method instead of filtering the result afterward. This will minimize the amount of cloning for each header, which should make your code more performant.
@@ -384,7 +384,7 @@ LookupTable statusTable = await globalCache.GetLookupTableAsync("status", cancel
 
 If the lookup table is not loaded into the cache yet, it will try to load it first using its lookup cache loader(s) that support loading that type. If none of the cache loaders were able to load the table of that type, then you will get a `null` back from that method.
 
-:::caution
+:::warning
 Since loading the lookup cache happens asynchronously and may require remote calls, you should **always use the async method** to get the lookup table, where possible.
 :::
 

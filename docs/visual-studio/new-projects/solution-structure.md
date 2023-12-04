@@ -153,7 +153,7 @@ This project contains the code for the legacy ASP.NET WebForms web client that t
 
 This project contains a web client as a TypeScript-based Single Page Application (SPA). It uses business services exposed via REST API and is implemented with [XomegaJS](https://github.com/Xomega-Net/XomegaJS) framework backed by the `Knockout.js` library, as well as with the `Durandal` framework.
 
-:::caution
+:::warning
 Because this client is implemented with TypeScript and HTML, it cannot reuse any of the shared common C# projects and therefore needs to re-implement all the presentation logic in TypeScript.
 :::
 

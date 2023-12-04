@@ -9,7 +9,7 @@ pagination_next: null
 This page provides an index to some useful guides on how to perform various development and modeling
 tasks using Xomega.Net.
 
-:::caution
+:::warning
 The guides here point to **older topics in our forums**, which also allow you to post your comments or ask for clarifications
 in reply to each topic. These topics will be eventually migrated to the new documentation format.
 :::

@@ -257,7 +257,7 @@ services.AddAuthorization(o => {
 Note that this policy mimics the security check in the `SalesOrderService`. So if we want maximum reusability, then we can create an extension method on the `IPrincipal` specifically for this policy, e.g. `IsSalesUser()`, and then call it from both the Blazor policy assertion and the service security check.
 :::
 
-:::caution
+:::warning
 We can also define this policy in the `AdventureWorks.Client.Blazor.Common` project to make it reusable between the Blazor Server and WebAssembly, but we don't necessarily want to make the service use this policy directly to keep it platform-independent. Otherwise, it will make our `AdventureWorks.Services.Entities` project dependent on the ASP.NET Core.
 :::
 

@@ -6,7 +6,7 @@ sidebar_position: 3
 
 If you selected some projects when creating a new Xomega solution but then decided to include additional supported technologies, then you can use the same Xomega solution wizard to select and add new projects to your solution.
 
-:::caution
+:::warning
 The wizard will configure any new projects that you will add, but it **won't update any existing projects**, specifically the `.Model` project, like it would've had you selected those projects during the initial solution creation.
 
 You will need to make any such updates to the existing projects manually.

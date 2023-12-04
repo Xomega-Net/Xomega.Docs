@@ -48,7 +48,7 @@ You can list the enumeration items in the nested `item` nodes with a unique `nam
 
 This would be very similar to how you define selection lists in HTML or other UI frameworks, where the value is what gets stored in the database and passed around, while the name is what usually gets displayed to the user.
 
-:::caution
+:::warning
 Xomega also generates C# constants for enumeration items, so the **name must be a valid identifier** except for any blank space. If the text you want to display to the user must contain illegal characters, or if it needs to be different from the name, then you should specify it in the inner `text` element as follows.
 ```xml
   <item name="In process" value="1">
@@ -203,7 +203,7 @@ To add a new item, an additional property, or a property value of a specific ite
 Your enumeration will override the existing elements of the base enumeration if you use the same name for an item or a property from the base enumeration or the same `ref` attribute for an item's property unless that property is multi-valued, in which case it will add a new value to the item's property.
 :::
 
-:::caution
+:::warning
 Any new items will be added at the end of the base enumeration's items, and currently, there is no way to enforce a different order.
 :::
 
@@ -574,7 +574,7 @@ The following example illustrates this `read` operation on the `dictionary` obje
 This `read` operation will be automatically included when you add a new dictionary object to your model project from a Visual Studio item template. As usual, you can customize it to change the names of the output parameters or their types.
 :::
 
-:::caution
+:::warning
 Xomega will not be able to automatically generate the service implementation code to populate the list of additional properties from the subobject, so you will need to add a custom implementation, as illustrated below.
 :::
 
@@ -696,7 +696,7 @@ The following example demonstrates the same `error severity` enumeration with Ge
 </enum>
 ```
 
-:::caution
+:::warning
 If your localization process involves sending texts for translation to others, then using **standard resource files may work better** for you since the translators may not be familiar with the structure of the Xomega static data model.
 :::
 

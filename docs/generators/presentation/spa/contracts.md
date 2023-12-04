@@ -88,7 +88,7 @@ The standalone structures can in turn have parameters referencing other standalo
 
 The primitive properties on the generated structures will be of type any, so there is no need to map logical types in the model to the TypeScript types.
 
-:::caution
+:::warning
 This will NOT allow the TypeScript compiler to check the type of the arguments that you pass to the input structures or assign from the output structures, but it will provide you with IntelliSense and compiler checks of the names for input and output parameters used, which is more important.
 :::
 

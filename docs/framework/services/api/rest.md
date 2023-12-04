@@ -95,7 +95,7 @@ public async Task<ActionResult> UpdateAsync([FromRoute] int _salesOrderId,
 }
 ```
 
-:::caution
+:::warning
 While ASP.NET Core does support synchronous methods, make sure that you **use async methods** for both your actions and service operations.
 :::
 
@@ -119,7 +119,7 @@ When exposing your services via a REST API you want to make sure that your WebAP
 
 The token can be created either by a trusted issuer, such as your identity provider or by the WebAPI application itself, which would be able to populate application-specific claims for the current user. Xomega Framework can help you implement authentication endpoints that can issue access tokens, as described below.
 
-:::caution
+:::warning
 For secure production systems we recommend using a certified third-party identity provider and setting up your Web API to trust the tokens issued by that provider, e.g with OAuth or OpenID Connect.
 :::
 
@@ -381,7 +381,7 @@ This way your *Login* dialog will be able to call this method to authenticate th
 For Blazor WebAssembly you can set it on a custom `AuthenticationStateProvider` instead, and register `AuthStatePrincipalProvider` as the `IPrincipalProvider` during startup, as described [here](../security#wasm).
 :::
 
-:::caution
+:::warning
 You may still need to handle token expiration, and the logic of refreshing the token, or redirecting the user to the *Login* screen for re-authentication.
 :::
 
@@ -431,6 +431,6 @@ public async Task<Output<SalesOrder_UpdateOutput>> UpdateAsync(
 }
 ```
 
-:::warning
+:::danger
 You should provide implementations for **all business service operations** here. If any of them are not exposed via REST API, then you will need to throw a `NotSupportedException`.
 :::

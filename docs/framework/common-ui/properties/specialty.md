@@ -60,7 +60,7 @@ protected override void Initialize()
 }
 ```
 
-:::caution
+:::warning
 If you set the additional property names in the data object's overridden `OnInitialized` method instead, then make sure that you do it **before calling the `base.OnInitialized()`** method.
 :::
 

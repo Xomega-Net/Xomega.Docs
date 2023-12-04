@@ -153,7 +153,7 @@ If you set the *Keep Table Names* parameter of the generator to `true`, the gene
 
 This allows renaming generated objects without worrying about affecting the table name.
 
-:::caution
+:::warning
 Without such a configuration, the table name for the object will be implicitly derived from the object's full name using specified database naming conventions (case).
 :::
 
@@ -172,7 +172,7 @@ If you set the `Keep Column Names` parameter of the generator to `true`, the fie
 
 This allows renaming generated objects' fields without worrying about affecting the column name.
 
-:::caution
+:::warning
 Without such a configuration, the column name for the field will be implicitly derived from the field's name using specified database naming conventions (case).
 :::
 
@@ -225,7 +225,7 @@ The sections below provide some details on how to work with the generator.
 
 You can run this generator for the entire database or a subset of tables after configuring the database generator parameters.
 
-:::caution
+:::warning
 The model must contain no objects defined when the generator runs to prevent overwriting any custom changes if you rerun it.
 :::
 

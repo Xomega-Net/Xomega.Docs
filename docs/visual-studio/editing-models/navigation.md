@@ -48,7 +48,7 @@ For example, most of the fields that represent some kind of a name in `Adventure
 
 ![Rename](img/rename.png)
 
-:::caution
+:::warning
 If you don't explicitly specify a table name for a domain object, it will be derived from the object's fully qualified name. So, renaming an object would effectively result in renaming the underlying table, which may or may not be intended.
 
 If you also generate a DB change script after that, it may also result in some issues, where the original table will be dropped, and a new table will be added, instead of just renaming the original table.

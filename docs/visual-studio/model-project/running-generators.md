@@ -18,7 +18,7 @@ Now, to run those generators, you just need to right-click on your `.Model` proj
 
 ![Build menu.png](img/build-menu.png)
 
-:::caution
+:::warning
 By default, the `.Model` project will not be built when you build your solution, since running multiple generators can take some time, and you want to do it only after you change something in the model itself, and not whenever you build your solution. That's why you need to build the model project explicitly through the context menu.
 :::
 
@@ -70,7 +70,7 @@ Cleaning is useful when you are renaming model entities in such a way, that it a
 
 If a generator adds something to a file, such as new model elements in the *Full CRUD with Views* generator, then the *Clean* operation should remove the added elements.
 
-:::caution
+:::warning
 Not all generators support cleaning the generated output. Please check the documentation on the corresponding generator.
 :::
 

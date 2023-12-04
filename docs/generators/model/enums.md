@@ -135,7 +135,7 @@ You can run this generator for the entire model only. Generally, you would run i
 
 This generator doesn't have to be included in the build of the model project in the configuration.
 
-:::caution
+:::warning
 If you rerun the generator to import additional enumerations after changing the configuration of the source objects, it may add enumerations with the same names as the previously imported enumerations, which would result in model validation errors. Therefore, it is better to copy the enumerations you need to other model files and delete the generated `.xom` files afterward to avoid such errors.
 :::
 

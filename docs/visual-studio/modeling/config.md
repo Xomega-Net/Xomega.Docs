@@ -197,6 +197,6 @@ This section allows configuring named layouts that can be referenced from the mo
 </config>
 ```
 
-:::caution
+:::warning
 This configuration is not used by the modern [Blazor Views](../../generators/presentation/blazor/views) generators, as those utilize the latest, more flexible layout configuration on each individual data object.
 :::

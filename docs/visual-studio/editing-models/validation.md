@@ -6,7 +6,7 @@ sidebar_position: 2
 
 When you edit Xomega models with a Xomega.Net editor, they will be validated for being a well-formed XML, for adhering to the corresponding XSD schemas, and for the specific validation rules that are defined for Xomega models, as described below.
 
-:::caution
+:::warning
 Generally, you will not be able to run any generators on a model that has validation errors. However, you can still run them, if there are only warnings, which will be displayed when you run the generators.
 :::
 

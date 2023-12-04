@@ -197,7 +197,7 @@ Let's open the output of the `sales order` object's `read` operation, move the `
     </object>
 ```
 
-:::caution
+:::warning
 For things to work auto-magically, it is important to use the same name (`payment`) for the referenced structure here, as the name that you used to add the child object `SalesOrderPaymentObject` to the `SalesOrderObject`.
 
 Otherwise, you would need to do some custom coding to ensure that the child object is read from the proper output structure.

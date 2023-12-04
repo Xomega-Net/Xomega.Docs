@@ -71,7 +71,7 @@ services.AddErrors(env.IsDevelopment());
 
 The error list for the current service operation is available in each service implementation class through the `currentErrors` field of the base service class.
 
-:::caution
+:::warning
 The error lists used in the presentation logic are created and accessed differently. You can learn about it in the corresponding sections for the common UI logic.
 :::
 
@@ -112,7 +112,7 @@ var msg = new ErrorMessage(ErrorType.Message, msgCode, msgText, ErrorSeverity.In
 currentErrors.Add(msg);
 ```
 
-:::caution
+:::warning
 If the message text cannot be found in the resources by the provided message code, that code will be used as the message text.
 
 This means that you can technically pass the message text directly as the code without any resources. While this may look quick and easy, we still recommend defining proper codes and using them as [resource keys for the messages](#messageCodes), in order to have short message identifiers and support any future [localization](#i18n).
@@ -325,7 +325,7 @@ Finally, you need to make your text template file nested under your resource fil
 
 Now, whenever you add or update your message resources in the `Resources.resx`, you can just right-click on the nested `Messages.tt` file in Visual Studio, and select the *Run Custom Tool* menu to regenerate the message constants.
 
-:::caution
+:::warning
 For Visual Studio 2022 you need to edit the downloaded `Message.t4` file and remove the following line.
 ```
 <#@ assembly name="EnvDTE" #>

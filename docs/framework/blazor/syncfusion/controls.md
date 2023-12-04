@@ -96,7 +96,7 @@ If the value of the property [is null](../../common-ui/properties/base#null-valu
 
 If your data property is marked as not required, meaning that the users should be able to set the `null` value, the bound `XSfCheckBox` control will cycle through three states and set the indeterminate state after you click on a checked checkbox.
 
-:::caution
+:::warning
 The label of a required checkbox will not show a red asterisk in front of it, but you can customize its CSS class if you want to highlight required (or optional) checkboxes in some way.
 :::
 
@@ -198,7 +198,7 @@ Selection controls extend the [`XSfOptionsComponent`](#xsfoptionscomponent) and 
 
 `XSfAutoComplete` control can be bound to an [`EnumProperty`](../../common-ui/properties/enum) that is **not multi-valued** and shows a text box that allows you to type a partial string and select the value from a dropdown list of matching items.
 
-:::caution
+:::warning
 By default, the selection items in the dropdown list are rendered using the [value format](../../common-ui/properties/base#value-formats) `DisplayString`. However, the selected item in the text box is displayed using the `DefaultFormat` of that `Header`, which is normally its `Text` field.
 :::
 
@@ -391,7 +391,7 @@ With this configuration, our `XSfDropDownList` control will look as follows.
 
 `XSfComboBox` control can be bound to an [`EnumProperty`](../../common-ui/properties/enum) that is **not multi-valued** and shows a text box that allows you to type a partial string and jump to the matching value in the dropdown list. You can also open up the dropdown list by clicking on the down arrow on the right or by pressing `Alt+Down` and then selecting the value from that list.
 
-:::caution
+:::warning
 By default, the selection items in the dropdown list are rendered using the [value format](../../common-ui/properties/base#value-formats) `DisplayString`. However, the selected item in the text box is displayed using the `DefaultFormat` of that `Header`, which is normally its `Text` field.
 :::
 
@@ -642,7 +642,7 @@ Action controls are bound to a special [`ActionProperty`](../../common-ui/proper
 
 The action will maintain its [visibility](../../common-ui/properties/action#control-action-visibility) or [enabled state](../../common-ui/properties/action#manage-enabled-state) based on the state of the action property, including when the state of the action property is computed using specific visibility or enabling conditions.
 
-:::caution
+:::warning
 You still need to provide a callback function for the click handler, which is not part of the bound action property.
 :::
 

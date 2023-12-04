@@ -43,7 +43,7 @@ The following picture illustrates the results grid for a *Sales Order List* view
   </TabItem>
 </Tabs>
 
-:::caution
+:::warning
 Currently, the basic `XGrid` component doesn't support resizing, hiding, or reordering columns, nor in-grid editing of the values. For those and other advanced features, please check the [Syncfusion Data Grid](syncfusion/grid).
 :::
 
@@ -165,7 +165,7 @@ Alternatively, you can use a property-bound control, such as [`XDataText`](contr
 
 The `XGrid` component and its `XGridColumn` columns use the bound `DataListObject` to store the currently applied sort criteria and perform [sorting of data list rows](../common-ui/data-lists#sorting-rows), which uses data properties of the data list object. Therefore, to allow sorting by a specific column, it needs to be bound to a data property using the `Property` parameter.
 
-:::caution
+:::warning
 The column tries to sort the values using their internal format when the value type implements `IComparable`, which may result in a different sort order than the one from using a display format.
 
 This may also be the case if you use a [custom template](#custom-template) to display the column values.
@@ -199,7 +199,7 @@ To **remove sorting** by a specific column, you can click on the column's header
 
 If you want to sort the grid by multiple columns, you can click on the header of the first column and then single-click on the header of any additional column while holding the `Ctrl` key down. You can then change the sort direction on any of such columns by clicking on the header again without the `Ctrl` key.
 
-:::caution
+:::warning
 If you click on any column that is not sorted **without** holding the `Ctrl` key, the grid will **remove the multi-column sorting** and will sort just by that new column.
 :::
 
@@ -337,7 +337,7 @@ Paging is enabled on the `XGrid` component by default, but you can disable it by
 </XGrid>
 ```
 
-:::caution
+:::warning
 This will make the `XGrid` display all rows without the pager or scrolling within the grid. Therefore, we **don't recommend disabling paging** for large grids, since it may significantly degrade the UI performance.
 :::
 
@@ -378,7 +378,7 @@ If, however, you need to perform an action **while the row is being selected** w
 </XGrid>
 ```
 
-:::warning
+:::danger
 When you provide a custom selection handler, `XGrid` will not automatically update selection of the corresponding data rows in the bound list object. **Your selection handler will need to update selected rows in the list object** as appropriate.
 
 In some cases you may decide not to update the list selection, such as when the user opts to not discard unsaved changes, which will effectively amount to cancelling of the selection of that row.

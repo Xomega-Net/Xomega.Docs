@@ -148,7 +148,7 @@ You can also set the `width` attribute directly on the field configuration of th
 
 This will apply only to the specific views that use that data object and will override the type-level configuration.
 
-:::caution
+:::warning
 Since it's using CSS-style format, it will apply primarily to web technologies, and may not work for desktop applications. Currently, it's implemented for Blazor views only.
 :::
 

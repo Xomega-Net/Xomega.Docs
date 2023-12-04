@@ -172,6 +172,6 @@ This generator supports cleaning either all generated data objects or only the o
 Normally, cleaning the generated files makes sense if you are planning to change the output path for the generator, or when you have removed some of the data objects from the model, and want the generated classes deleted and removed from the target project.
 :::
 
-:::caution
+:::warning
 The customization subclasses that were generated for data objects with a `customize="true"` attribute will not be cleaned during these operations to prevent any loss of custom code during an accidental run of such actions. Therefore, you may get compilation errors for those classes if you clean your data objects, and will need to delete them manually as needed.
 :::

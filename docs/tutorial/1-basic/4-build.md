@@ -6,7 +6,7 @@ sidebar_position: 4
 
 Now that we have a domain model and a basic service model with views for the sales order object, we need to run all re-runnable generators to generate the actual code for our application. All such generators have the *Include in Build* property set to *True* by default, which you can configure as you like to control which generators are run when you build the model project.
 
-:::caution
+:::warning
 Note that the **model** project will **not** be **built automatically** when you build the entire solution, since it needs to be built only if the model changes, so you need to build it manually.
 :::
 

@@ -77,7 +77,7 @@ await salesOrderList.SalesOrderIdProperty.SetValueAsync(1, row);
 
 This will use the data property's value conversion logic to convert it to the proper internal format or data type, and possibly look it up in the associated [lookup table](lookup#lookup-table).
 
-:::caution
+:::warning
 While data properties also have a synchronous method `SetValue`, it is important to **set the value with the async method** and await the result, since [enum properties](properties/enum) may need to initialize their lookup table using a remote call during the conversion. For the same reason, you should avoid setting row values via the `DynamicObject` interface, as it would be synchronous.
 :::
 
@@ -125,7 +125,7 @@ async Task FinishEditing()
 }
 ```
 
-:::caution
+:::warning
 While `DataRow` also provides a synchronous version of this method `CopyFrom`, you still want to **stick with the async version**.
 :::
 
@@ -216,7 +216,7 @@ ErrorList errors = myProperty.GetValidationErrors(row); // get row's validation 
 
 The bound editable data grid would perform such validations, and prevent updating the row, if there are any validation errors. You can also reset validation errors for each row by calling the method `ResetAllValidation` on your data list object.
 
-:::caution
+:::warning
 Nevertheless, calling `Validate` on the `DataListObject` would not automatically validate its rows, in order to avoid performance issues with non-editable list objects. Nor does the `GetValidationErrors` method return row validation errors by default. However, you can always override those methods in your specific data list to validate each row and return all row errors as needed.
 :::
 

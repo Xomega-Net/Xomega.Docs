@@ -69,7 +69,7 @@ For example, the `authenticate` operation below can be used by the Web API inter
 </objects>
 ```
 
-:::caution
+:::warning
 Whether the REST method is missing or not supported, the generated REST service proxies will still need to have the corresponding operation generated, which will throw a `NotSupportedException` if called.
 :::
 
@@ -157,6 +157,6 @@ This generator supports cleaning either all generated clients or only the ones f
 Normally, cleaning the generated files makes sense if you are planning to change the output path for the generator, or when you have removed some of the services from the model, and want the generated classes deleted and removed from the target project.
 :::
 
-:::caution
+:::warning
 The customization subclasses that were generated for the service clients with a `customize="true"` attribute will not be cleaned during these operations to prevent any loss of custom code during an accidental run of such actions. Therefore, you may get compilation errors for those classes if you clean your service clients, and will need to delete them manually as needed.
 :::

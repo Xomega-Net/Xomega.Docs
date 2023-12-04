@@ -83,7 +83,7 @@ DataProperty statusProperty = salesOrderObject[SalesOrderObject.Status];
 
 You can also call `HasProperty(name)` or list all object's data properties using its `Properties` enumerable.
 
-:::caution
+:::warning
 Make sure that you **add all data properties** in the `Initialize` method. Any [initialization](properties/base#property-initialization) of data properties that requires other data properties to be available will be performed after this method, in the data object's `OnInitialized` method.
 :::
 
@@ -127,7 +127,7 @@ protected override void Initialize()
 }
 ```
 
-:::caution
+:::warning
 Just like with the data properties, make sure that you add all child objects in the `Initialize` method so that they'd be available to any data properties that require access to child objects during [their initialization](properties/base#property-initialization).
 :::
 
@@ -314,7 +314,7 @@ public override async Task FromDataContractAsync(object dataContract, object opt
 }
 ```
 
-:::caution
+:::warning
 Data objects also provide corresponding synchronous methods `FromDataContract`, but we recommend that you use the async methods whenever possible. Setting values asynchronously allows [enum properties](properties/enum) to [load their lookup table from a remote service](lookup#load-table-from-service), and use it to resolve the full value.
 :::
 
@@ -366,7 +366,7 @@ await myObject.ReadAsync(new DataObject.CrudOptions() {
 
 As mentioned [above](#isnew-property), reading the data for the data object like this will automatically set its `IsNew` property to `false`.
 
-:::caution
+:::warning
 `DataObject` also has a legacy synchronous method `Read`, which would call the `DoRead` that you can override and call a service operation synchronously. However, we **do not recommend** using this method, and you should use the async version instead, whenever possible.
 :::
 
@@ -416,7 +416,7 @@ If your child data objects call separate service operations during save in their
 Unlike reading data, it is recommended to **perform the save as a single service call**, so that it's part of the same transaction. If you save using multiple service calls, and some of them fail while others succeed, then you may need to manually revert the changes, or otherwise deal with inconsistent data being saved.
 :::
 
-:::caution
+:::warning
 Just like with the `Read`, the `DataObject` class has legacy methods `Save` and the corresponding `DoSave`. You should **avoid using those synchronous methods**, and use the asynchronous `SaveAsync` and `DoSaveAsync` methods instead, whenever possible.
 :::
 
@@ -441,6 +441,6 @@ protected override async Task<ErrorList> DoDeleteAsync(object options, Cancellat
 
 The `DeleteAsync` method doesn't do anything additional, but the data object also provides an [action property](properties/action) `DeleteAction` that can be bound to the *Delete* button. The `DeleteAction` is set up to be enabled only for existing objects, i.e. if the [`IsNew`](#isnew-property) property is `false`.
 
-:::caution
+:::warning
 The `DataObject` class also has legacy methods `Delete` and `DoDelete`. You should **avoid using those synchronous methods**, and use the asynchronous `DeleteAsync` and `DoDeleteAsync` methods instead, whenever possible.
 :::

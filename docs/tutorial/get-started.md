@@ -22,7 +22,7 @@ To run this tutorial you will need to make sure you have the following installed
 1. Valid Xomega license.
 1. Sample Microsoft database [AdventureWorks](https://github.com/Microsoft/sql-server-samples/releases/tag/adventureworks) installed on your local or network SQL server. See [instructions](https://github.com/Microsoft/sql-server-samples/blob/master/samples/databases/adventure-works/README#install-from-a-backup) on how to restore it from a backup.
 
-:::caution
+:::warning
 This tutorial is based on [version 2016](https://github.com/Microsoft/sql-server-samples/releases/download/adventureworks/AdventureWorks2016.bak) of the AdventureWorks database.
 If you use a different version of the database, you may see some differences from this tutorial.
 :::

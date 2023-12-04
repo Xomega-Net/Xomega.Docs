@@ -7,7 +7,7 @@ sidebar_position: 7
 If you have existing infrastructure and systems that require legacy communication protocols, such as SOAP, then you can expose your business services via WCF.
 
 :::warning
-WCF is a legacy communication framework that is available only on .NET Framework. Apparently, there are no plans by Microsoft to make it available on .NET 6 and ASP.NET Core, so you should use it only if this is required by your legacy systems.
+WCF is a legacy communication framework that is available only on .NET Framework. For .NET Core and up you can use [CoreWCF](https://github.com/CoreWCF/CoreWCF), but it's recommended to be used primarily [for modernization of your legacy systems.](https://devblogs.microsoft.com/dotnet/corewcf-v1-released/#who-should-use-corewcf)
 :::
 
 :::tip
@@ -170,7 +170,7 @@ While WCF was initially designed for synchronous operations, it does support asy
   </appSettings>
 ```
 
-:::warning
+:::danger
 Asynchronous operations in WCF **don't support cancellation tokens**, so you'll need to remove the `CancellationToken` arguments from your operations.
 :::
 
@@ -178,7 +178,7 @@ Asynchronous operations in WCF **don't support cancellation tokens**, so you'll 
 
 Any business services that you expose via WCF should be secured, and allow authenticated users only. WCF uses `System.IdentityModel` as well as the Claims Identity in order to provide authentication and authorization for the requests.
 
-:::caution
+:::warning
 Securing WCF services could be a daunting task, especially if you are not very familiar with the Identity Model.
 :::
 
@@ -601,6 +601,6 @@ principalProvider.CurrentPrincipal = WcfServices.Authenticate(user, password);
 
 This will allow you to check the user's claims on the client side, in order to enable or disable certain functions or UI elements as appropriate.
 
-:::caution
+:::warning
 When the `IssuedToken` expires, any calls to the WCF services will stop working. You may need to provide any code to handle it gracefully, and either pop up the *Login* dialog again or make the user restart the app.
 :::
