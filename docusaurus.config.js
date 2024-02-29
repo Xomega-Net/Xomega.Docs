@@ -11,6 +11,7 @@ const config = {
   tagline: 'The best .NET low-code platform for developers',
   url: 'https://xomega.net',
   baseUrl: '/docs/',
+  trailingSlash: false,
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/Xomega.ico',
