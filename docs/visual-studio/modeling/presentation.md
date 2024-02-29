@@ -424,7 +424,7 @@ The `ui:field` element allows you to specify the following configuration attribu
 ### UI panel layout
 
 :::warning
-The following functionality is currently supported only for the modern Blazor views but not for WebForms, WPF, or SPA views.
+The following functionality is currently fully supported only for the modern Blazor views. WebForms, WPF, or SPA views support only the `field-cols` config, but otherwise use the legacy [`ui:layout`](#legacy-layout-config).
 :::
 
 The main UI panel with the data object fields uses a responsive grid to lay out the controls in a number of grid columns. The number of columns is determined dynamically based on the screen size and the number of open views, but you can set the `field-cols` attribute of the `ui:fields` element to configure the maximum number of columns to use.
@@ -576,7 +576,7 @@ If you need to add or change any behavior for the generated view model, then you
 
 ### Legacy layout config
 
-As we described earlier, Xomega allows you to configure the layout of each individual UI panel on the data object level, which applies to the modern Blazor views. However, that configuration does not apply to the legacy WebForms, WPF, and SPA views, which still use the legacy layout configuration for the entire view.
+As we described earlier, Xomega allows you to configure the layout of each individual UI panel on the data object level, which applies to the modern Blazor views. However, that configuration does not fully apply to the legacy WebForms, WPF, and SPA views, which still use the legacy layout configuration for the entire view.
 
 To configure the layout for legacy views, you need to add a `ui:layout` child element to your `ui:view`, where you can set the `base` attribute to point to one of a saved [global layout configuration](config#legacy-layout-configs) or specify the layout details right inside the `ui:layout` element. If you do both, then what you specify for the view will override the global configuration inherited from the base layout, as illustrated below.
 

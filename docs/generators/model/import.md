@@ -226,7 +226,7 @@ The sections below provide some details on how to work with the generator.
 You can run this generator for the entire database or a subset of tables after configuring the database generator parameters.
 
 :::warning
-The model must contain no objects defined when the generator runs to prevent overwriting any custom changes if you rerun it.
+The model must contain no objects with fields defined when the generator runs to prevent overwriting any custom changes if you rerun it. You may have some services defined though, which are objects with operations but no fields.
 :::
 
 The generated Xomega files will be automatically added to the project under the folder designated by the *Output Path* property.
