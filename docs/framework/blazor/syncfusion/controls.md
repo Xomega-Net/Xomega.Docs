@@ -22,10 +22,21 @@ When such a control gets a focus, the label will float above it like this.
 
 To use custom label text, you can set the `Placeholder` parameter of the control, but you need to localize it as required.
 
-The labels of editable data controls bound to a required property will show a red asterisk in front. An editable data control will set the user-entered or selected value(s) directly to the data property. If the value is invalid, it will highlight it in red and show the [validation errors from the property](../../common-ui/properties/base#property-validation) in the tooltip when you hover over the control, as shown below.
+The labels of editable data controls bound to a required property will show a red asterisk in front. An editable data control will set the user-entered or selected value(s) directly to the data property. If the value is invalid, it will highlight it in red and show the [validation errors from the property](../../common-ui/properties/base#property-validation) under the control, as shown below.
 
 ![Field validation](img/validation-error.png)
 
+<details>
+<summary>Note: you can also configure Syncfusion components to display the validation errors in a tooltip instead.</summary> 
+
+You can do that by setting the static flag `UseTooltipForValidationErrors` during the app initialization as follows.
+```cs
+XSfComponent.UseTooltipForValidationErrors = true;
+```
+The invalid control will be highlighted in red, but the error message will be shown only when the user hovers over the control, as shown below.
+
+![Field validation tooltip](img/validation-error-tooltip.png)
+</details>
 
 ## Base components
 
