@@ -42,12 +42,12 @@ For building modern Blazor apps, Xomega.Net requires the following components to
 
 - Windows 10 or higher
 - Visual Studio 2022 Community or higher
-- .NET 7 or .NET 6
+- .NET 8
 
 For building legacy .NET applications, you may also use the following components (not recommended):
 
 - Windows 7 or higher
 - Visual Studio 2017 Community or higher
-- .NET Framework 4.5 or higher
+- .NET Framework 4.7.2 or higher
 
 To view the notices for licensed third-party software components included within Xomega.Net please [click here](third-party).

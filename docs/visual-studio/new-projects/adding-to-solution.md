@@ -12,13 +12,15 @@ The wizard will configure any new projects that you will add, but it **won't upd
 You will need to make any such updates to the existing projects manually.
 :::
 
-## Example: Adding WebAssembly to Blazor Server
+## Example: Adding WPF client to a Blazor app
 
-For example, let's imagine that you initially created a `DemoSolution` for just the *Blazor Server* technology, which would look as follows.
+For example, let's imagine that you initially created a `DemoSolution` for Blazor Server + WebAssembly, but *with standalone REST API* that is not hosted by the Blazor project. Your solution structure would look as follows.
 
-![DemoSolution](img/blazor-server.png)
+![DemoSolution](img/blazor-auto.png)
 
-Now you decided to add support for *Blazor WebAssembly* to your solution. To add the relevant projects, you can right-click on the *Solution* node, select *Add > New Project*, and pick `Xomega` as the project type, as follows.
+### Adding a new Xomega project
+
+Now you decided to also add a desktop WPF client to your solution, which would use the existing REST API as the backend. To add the relevant projects, you can right-click on the *Solution* node, select *Add > New Project*, and pick `Xomega` as the project type, as follows.
 
 ![Add new project](img/add-new-project.png)
 
@@ -26,32 +28,87 @@ In the next screen, you can leave the project name to be the default value.
 
 ![New project name](img/new-project-name.png)
 
-This *Project name* won't matter since you can specify the project names in the Xomega solution configuration wizard, which will open up after you hit the *Create* button.
+This *Project name* won't matter since the wizard will use the existing solution name to generate a default name for the new project, which you can also update later.
 
-### Adding Web Assembly projects
+### Adding WPF desktop client
 
-The existing solution projects displayed in the Xomega solution configuration will not be editable, but you can add *Blazor Web Assembly* to the selection, which will also automatically select the *REST API* project, as follows.
+The existing solution projects displayed in the Xomega solution configuration will not be editable, but you will be able to add a *WPF* desktop client to the selection and set the *API Tier* to `REST API`, as illustrated below.
 
-![Add wasm & rest](img/add-wasm-rest.png)
+![Add WPF with rest](img/add-wpf-rest.png)
 
 :::note
 Notice how the default project names are automatically generated based on the solution name here, and disregard the project name that you supplied in the previous screen.
 :::
 
-Once you finish adding the projects, you'll see the two new projects in your solution, preconfigured with proper dependencies on any existing projects, as shown below.
+After you hit *Preview* and then *Create*, you'll see the new project in your solution, preconfigured with proper dependencies on any existing projects, as shown below.
 
-![Wasm solution](img/wasm-solution.png)
+![WPF solution](img/wpf-solution.png)
 
 ### Additional manual updates
 
-In order to finish setting up the new projects, you'll need to make the following updates manually.
+Now you have to update and configure any existing projects to support the newly added projects. Normally, when creating a new solution from scratch, those projects are automatically configured for the selected technologies by the solution wizard. However, since we added a new project to an existing solution, we'll need to configure the existing projects manually.
 
-- Open properties of the *Service Layer > Web API Controllers* generator, set `Include In Build` parameter to `True`, and make sure that the output paths match the name of the new `.Services.Rest` project, and then run the generator.
-- Open properties of the *Presentation Layer > Common > REST Service Clients* generator, set `Include In Build` parameter to `True`, and make sure that the output paths match the name of the existing `.Client.Common` project, and then run the generator.
-- Set the `Generate Rest Methods` parameter to `True` on the *Full CRUD with Views* and *Read Enum Operation*, as well as on any other model enhancement generators that have this parameter, for future runs.
+To make this process easier you should open another instance of Visual Studio and [create a new Xomega solution](new-solutions) for the WPF client with REST API in a separate folder, using the same solution name `DemoSolution`, which you'll use as a template. This will allow you to just copy any configuration from that folder into your existing solution.
 
-If you have already run the model enhancement generators and added operations without REST methods, you will need to add `rest:method` configurations to those operations as appropriate.
+#### Adding WPF controls type configs
 
-:::tip
-To easily set up existing operations with a default `rest:method` configuration, you can create a copy of the *Read Enum Operation* generator, set all parameters except for the `Generate Rest Methods` to `False`, and then run that generator on the existing objects with operations.
-:::
+Copy the `DemoSolution.Model\Framework\TypeConfigs\wpf_controls.xom` from the new template WPF solution that you created earlier to your existing solution. Then, in the existing solution, select the `DemoSolution.Model` project in *Solution Explorer*, click *Show All Files*, right-click on the `wpf_controls.xom` that you copied and select *Include In Project*.
+
+#### Adding WPF Views generator
+
+To add any generators to the *Model* project, right-click on that project and select *Unload Project*. This will allow you to edit the `DemoSolution.Model.xomproj` file directly in Visual Studio.
+
+To add a *WPF Views* generator, copy the generator configuration from the template WPF solution project to your existing project, as illustrated below.
+
+```xml title='DemoSolution.Model.xomproj'
+...
+</XomGenerator>
+<!-- added-lines-start -->
+<XomGenerator Include="$(XomegaHome17)Xsl\wpf_views.xsl">
+  <Name>WPF Views</Name>
+  <Folder>Presentation Layer\WPF</Folder>
+  <CustomPath-param>
+  </CustomPath-param>
+  <CustomPath-desc>
+	Path where to output override classes for the generated Views.
+	If not set then the OutputPath will be used. The path must contain {File} placeholder to output files by view.
+  </CustomPath-desc>
+  <CustomPath-category>Output</CustomPath-category>
+  <OutputPath-param>../DemoSolution.Client.Wpf/Views/{Module/}{File}</OutputPath-param>
+  <OutputPath-desc>Path where to output files with generated WPF views. Path must contain {File} placeholder.</OutputPath-desc>
+  <OutputPath-category>Output</OutputPath-category>
+  <RegistryFile-param>../DemoSolution.Client.Wpf/Views/Views.cs</RegistryFile-param>
+  <RegistryFile-desc>A path to the file for views registration.</RegistryFile-desc>
+  <RegistryFile-category>Output</RegistryFile-category>
+  <MenuFile-param>../DemoSolution.Client.Wpf/Controls/MainMenu</MenuFile-param>
+  <MenuFile-desc>Path where to output generated menu resources without extension.</MenuFile-desc>
+  <MenuFile-category>Output</MenuFile-category>
+  <Namespace-param>DemoSolution.Client.Wpf</Namespace-param>
+  <Namespace-desc>Namespace for the generated views.</Namespace-desc>
+  <View-param></View-param>
+  <View-desc>The name of the view from the model to generate a view for.</View-desc>
+  <View-category>Selector</View-category>
+  <IncludeInBuild>true</IncludeInBuild>
+  <IndividualFiles>true</IndividualFiles>
+  <GeneratorGroup>presentation</GeneratorGroup>
+</XomGenerator>
+<!-- added-lines-end -->
+<XomGenerator Include="C:\Program Files\Xomega.Net\9.12\Xsl\enum_cache.xsl">
+...
+```
+
+Save the `DemoSolution.Model.xomproj` file, and then right-click on the `DemoSolution.Model` project in the *Solution Explorer* and select *Reload Project*. You should now be able to see the *WPF Views* generator under the *Generators > Presentation Layer > WPF* folder, as well as the `wpf_controls.xom` that you included earlier, as shown below.
+
+![WPF Views](img/wpf-views.png)
+
+Now you want to right-click on the `DemoSolution.Model` project and select *Build* to generate any additional artifacts for the new project.
+
+#### Other possible updates
+
+If you initially had the REST API hosted by the Blazor application rather than as a standalone service, then you would need to do some additional updates, as described below.
+
+- Copy the `DemoSolution.Services.Rest/Program.cs` file from the template solution to the existing REST API project to allow running it separately.
+- Update the `DemoSolution.Services.Rest/AuthController` class to enable JWT authentication using the corresponding code from the template solution.
+- Copy `DemoSolution.Client.Common/ServiceClients/Auth/JwtLoginServiceClient.cs` from the template solution to handle JWT authentication on the client.
+
+Any other initial configurations or a different configuration of the new project may require additional manual updates, as appropriate.

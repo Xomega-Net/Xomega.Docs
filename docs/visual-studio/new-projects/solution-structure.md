@@ -64,7 +64,7 @@ The project also includes a `DbContextValidation` class that has some helper val
 
 This project allows exposing business services implemented in the `.Services.Entities` project via REST API using ASP.NET Core.
 
-Initially, it will have an `App_Start` folder that contains the startup and configuration code, as well as a sample `AuthenticationController` for password-based authentication.
+Initially, it will have a `Program` file that contains the startup and configuration code, as well as an `AuthController` class for password-based authentication.
 
 Once you define RESTful operations in the Xomega model, it will also have generated controllers for those services and operations.
 
@@ -107,33 +107,31 @@ In addition to the classes, this project also contains the following common reso
 
 ### SolutionName.Client.Blazor.Common
 
-This project contains Blazor views, components, and other resources that can be shared between *Blazor Server* and *Blazor Web Assembly* projects.
+This project contains Blazor views, components, and other resources that can be shared between *Blazor Server* and *Blazor WebAssembly* projects.
 
 :::info
 The project should have **no dependencies** on ASP.NET Core or the specific flavor of the Blazor implementation to remain sharable between different types of Blazor clients.
 :::
 
 The project contains the following folders and files.
-- **Components** folder contains shared Blazor components, such as the `MainLayout`, `LoginDisplay`, and `NotAuthenticated` component.
+- **Components** folder contains shared Blazor components, such as the `MainLayout` and `LoginDisplay` components.
 - **Views** folder contains generated and custom Blazor views and a menu structure, including a home page.
 - **wwwroot** folder contains shared resources such as CSS files, javascript, and images.
 - `App.razor` file defines the main application component.
 
-### SolutionName.Client.Blazor.Server
-
-This project contains ASP.NET Core startup and setup code for a *Blazor Server* client that uses application views and components from the `.Client.Blazor.Common` project.
-
-The **Pages** folder contains the main `_Host.cshtml` razor page for the app, as well as additional razor pages `SignIn.cshtml` and `SignOut.cshtml` that help you with cookie-based Blazor authentication using Xomega Framework support.
-
 ### SolutionName.Client.Blazor.Wasm
 
-This project contains ASP.NET Core Web Assembly startup and setup code for a *Blazor Web Assembly* client that uses application views and components from the `.Client.Blazor.Common` project.
+This project contains WebAssembly startup and setup code for a *Blazor WebAssembly* client that uses application views and components from the `.Client.Blazor.Common` project. It also includes WebAssembly-specific implementation classes for authentication and authorization.
 
-It has the main `index.html` page for the app under the **wwwroot** folder and a custom `AuthenticationStateProvider` implementation that helps configure Blazor Web Assembly authentication for Xomega Framework.
+Standalone WebAssembly projects that are not hosted by the main Blazor app will have a main `index.html` page for the app under the **wwwroot** folder.
+
+### SolutionName.Client.Blazor
+
+This is the main Blazor project that contains ASP.NET Core startup and setup code for a Blazor Server client and hosted REST API, as appropriate. It  uses application views and components from the `.Client.Blazor.Common` project, and references the `.Client.Blazor.Wasm` WebAssembly project when the latter is hosted by this Blazor app.
 
 ### SolutionName.Client.Wpf
 
-This project contains the code for a WPF desktop client for your application that targets .NET5. The root folder contains the main application in the `App.xaml` files, the main window in the `MainView.xaml` files, and other application files in sub-folders, as follows.
+This project contains the code for a WPF desktop client for your application that targets .NET 8. The root folder contains the main application in the `App.xaml` files, the main window in the `MainView.xaml` files, and other application files in sub-folders, as follows.
 
 - **App_Start** folder contains DI-enabled application initialization code.
 - **Controls** folder contains common WPF controls that are used in the application views, e.g., for displaying errors.
