@@ -595,6 +595,19 @@ Similar to the operations, you can configure specific WCF attributes for your en
 </objects>
 ```
 
+If a specific service should not be exposed via WCF at all, you need to set the `not-supported="true"` attribute on the `wcf:service` config element, as follows.
+
+```xml
+<object name="password login">
+  <operations>[...]
+  <config>
+<!-- highlight-next-line -->
+    <wcf:service not-supported="true"/>
+  </config>
+</object>
+```
+
+In this case, the generated service interface will not have a `ServiceContract` attribute, and no WCF bindings or service host files will be generated for it.
 
 ## Types of operations
 
