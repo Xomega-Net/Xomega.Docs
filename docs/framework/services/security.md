@@ -100,6 +100,23 @@ For ASP.NET Core applications, such as Blazor Server or when hosting your busine
 services.AddTransient<IPrincipalProvider, ContextPrincipalProvider>();
 ```
 
+#### Persisting auth state provider
+
+If you have a Blazor Server application hosting a Blazor WebAssembly application, then you may need to also register an `AuthenticationStateProvider` that persists authentication state on the server, so that it could be used on the WebAssembly.
+
+If you store authentication state in a `UserInfo` structure, then you need to register `PersistingAuthStateProvider<UserInfo>` as the `AuthenticationStateProvider`, as well as an implementation of `IPrincipalConverter<UserInfo>` as follows.
+
+```cs
+services.AddScoped<AuthenticationStateProvider, PersistingAuthStateProvider<UserInfo>>();
+services.AddSingleton<IPrincipalConverter<UserInfo>, UserInfoPrincipalConverter>();
+```
+
+#### Revalidating auth state provider{#revalidate}
+
+If you just have a Blazor Server application, then you may also need to revalidate the authentication state periodically, since it would be stored in long-lived circuits and you may need to make sure that the user authentication state is still valid.
+
+In this case, you can create a subclass of the `PersistingAuthStateProvider<UserInfo>` and override its method `ValidateAuthenticationStateAsync`, which returns `true` by default. You can also override the `RevalidationInterval` property (which defaults to 30 minutes) to revalidate authentication state at a different frequency.
+
 ### Principal in WCF apps{#wcf}
 
 WCF services don't support dependency injection by default. If you want to expose your business services via WCF, you'll need to use Xomega Framework [support for WCF](api/wcf), and register a scoped `DefaultPrincipalProvider`, as shown below, which Xomega Framework will use to set the current principal from the current `ServiceSecurityContext`.
@@ -112,11 +129,28 @@ services.AddScoped<IPrincipalProvider, DefaultPrincipalProvider>();
 
 Normally, you would not have your business services running in WebAssembly (Wasm). Instead, your business services would be hosted as an [ASP.NET Core app](#aspnet), which the Blazor Wasm app would access via a REST API from the browser.
 
-However, to provide the current principal to any Xomega Framework objects and services on the client side of the Blazor Wasm app, the framework offers an implementation class `AuthStatePrincipalProvider`, which sets the current principal from the Blazor's `AuthenticationStateProvider`. You can register it with your DI container in the main `Program` class for your Wasm app, as follows.
+However, to provide the current principal to any Xomega Framework objects and services on the client side of the Blazor Wasm app, the framework offers a class `PrincipalAuthStateProvider`, which doubles as both `AuthenticationStateProvider` and `IPrincipalProvider`.
+
+You can register it with your DI container in the main `Program` class of your Wasm app as a concrete implementation for both of those classes, as follows.
 
 ```cs
-services.AddSingleton<IPrincipalProvider, AuthStatePrincipalProvider>();
+services.AddSingleton<AuthenticationStateProvider, PrincipalAuthStateProvider>();
+services.AddSingleton(sp => sp.GetService<AuthenticationStateProvider>() as IPrincipalProvider);
 ```
+
+#### Persisted auth state provider
+
+If your Blazor WebAssembly application is hosted by a Blazor Server application, then you need to register `PersistedAuthStateProvider<UserInfo>` as an `AuthenticationStateProvider` instead, as well as an implementation of `IPrincipalConverter<UserInfo>` as follows.  
+
+```cs
+/* highlight-start */
+services.AddSingleton<AuthenticationStateProvider, PersistedAuthStateProvider<UserInfo>>();
+services.AddSingleton<IPrincipalConverter<UserInfo>, UserInfoPrincipalConverter>();
+/* highlight-end */
+services.AddSingleton(sp => sp.GetService<AuthenticationStateProvider>() as IPrincipalProvider);
+```
+
+This provider extends `PrincipalAuthStateProvider` and uses authentication state persisted by the server, so that it could be transferred seamlessly to the WebAssembly.
 
 ### Principal in WPF apps{#wpf}
 

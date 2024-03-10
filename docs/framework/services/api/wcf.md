@@ -176,7 +176,7 @@ Asynchronous operations in WCF **don't support cancellation tokens**, so you'll 
 
 ## Securing WCF API
 
-Any business services that you expose via WCF should be secured, and allow authenticated users only. WCF uses `System.IdentityModel` as well as the Claims Identity in order to provide authentication and authorization for the requests.
+Any business services that you expose via WCF should be secured, and allow authenticated users only. WCF uses `System.IdentityModel` as well as the `ClaimsIdentity` in order to provide authentication and authorization for the requests.
 
 :::warning
 Securing WCF services could be a daunting task, especially if you are not very familiar with the Identity Model.
@@ -279,10 +279,7 @@ public class AppSts : SecurityTokenService
         {
 /* highlight-next-line */
             // TODO: construct user identity here. Use cfg.ServiceProvider to access any services
-            ClaimsIdentity ci = new ClaimsIdentity(principal.Identity.AuthenticationType);
-            ci.AddClaim(new Claim(ClaimTypes.NameIdentifier, principal.Identity.Name));
-            ci.AddClaim(new Claim(ClaimTypes.Name, principal.Identity.Name));
-            return ci;
+            return new ClaimsIdentity(principal.Identity);
         }
         catch (Exception ex)
         {
@@ -358,7 +355,7 @@ If you place your STS service host `Issuer.svc` in a dedicated folder, e.g. *Sts
 
 In order to implement a custom validation of the user name and password, you would need to create a `UserNameValidator` class that extends `UserNameSecurityTokenHandler` and validates the user and password against your database in the `ValidateToken` method.
 
-You can access your business services registered in the DI container by using the static `DI.DefaultServiceProvider` in Xomega Framework. The following example illustrates an implementation of such a user name validator without the actual validation logic.
+You can access your business services registered in the DI container by using the static `DI.DefaultServiceProvider` in Xomega Framework and creating a separate scope for each validation. The following example illustrates an implementation of such a user name validator, where the actual validation logic is delegated to a separate `IPasswordLoginService`.
 
 ```cs
 /* highlight-next-line */
@@ -377,13 +374,28 @@ public class UserNameValidator : UserNameSecurityTokenHandler
 
         try
         {
+            var scope = DI.DefaultServiceProvider.CreateScope();
+            using (scope)
+            {
+                var loginSvc = scope.ServiceProvider.GetRequiredService<IPasswordLoginService>();
+                var credentials = new PasswordCredentials()
+                {
+                    UserName = userNameToken.UserName,
+                    Password = userNameToken.Password
+                };
 /* highlight-next-line */
-            // TODO: validate UserName and Password from userNameToken here. 
-            // Use DI.DefaultServiceProvider to access any services for that.
-            ClaimsIdentity identity = new ClaimsIdentity(AuthenticationTypes.Password);
-            identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userNameToken.UserName));
-            identity.AddClaim(new Claim(ClaimTypes.Name, userNameToken.UserName));
-            return Array.AsReadOnly(new[] { identity });
+                Output<UserInfo> res = Task.Run(async () => await loginSvc.LoginAsync(credentials)).Result;
+                if (res.Result != null)
+                {
+                    res.Result.AuthenticationType = "STS";
+                    var principalConverter = scope.ServiceProvider
+                                             .GetRequiredService<IPrincipalConverter<UserInfo>>();
+                    var principal = principalConverter.ToPrincipal(res.Result);
+/* highlight-next-line */
+                    return Array.AsReadOnly(new[] { principal.Identity as ClaimsIdentity });
+                }
+                return Array.AsReadOnly(new ClaimsIdentity[] { });
+            }
         }
         catch (Exception ex)
         {

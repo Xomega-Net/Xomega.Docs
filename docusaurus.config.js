@@ -129,7 +129,7 @@ const config = {
       prism: {
         theme: themes.github,
         darkTheme: themes.dracula,
-        additionalLanguages: ['csharp', 'cshtml'],
+        additionalLanguages: ['csharp', 'cshtml', 'json'],
         magicComments : [
           // Remember to extend the default highlight class name as well!
           {

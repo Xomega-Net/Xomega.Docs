@@ -57,6 +57,27 @@ app.MapControllers();
 app.Run();
 ```
 
+### API path prefix
+
+If you host your Web API with your web application, e.g. in the main Blazor project, rather than as a standalone project, then you can also configure a path prefix for all controllers, such as `api/`, so that controller actions would not clash with the routes to the web application views.
+
+For example, you can define the API path prefix in the `RestAPI:Path` configuration and configure the controllers to use that prefix as follows.
+
+```cs
+var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
+
+/* highlight-next-line */
+string apiPath = builder.Configuration.GetValue<string>("RestAPI:Path");
+
+services.AddControllers(o =>
+{
+    o.Filters.Add(new AuthorizeFilter());
+/* highlight-next-line */
+    o.UseGeneralRoutePrefix(apiPath);
+})
+```
+
 ### Controller actions
 
 The action methods on your controller for any operations that you want to expose via REST will look similar to the actual methods for the corresponding service operations, but decorated with the WebAPI attributes, such as `Route`, HTTP verb (e.g. `HttpPut`), and any parameter attributes like `FromRoute` or `FromBody`.
@@ -101,7 +122,7 @@ While ASP.NET Core does support synchronous methods, make sure that you **use as
 
 ## Unhandled errors
 
-While you can properly report any exceptions in the current error list using a `try/catch` in each action, there may be still unhandled exceptions raised by the ASP.NET Core middleware. If you also want to report them in a standardized way through an error list, then Xomega Framework provides a special `ErrorController` for that, which you can register as the global exception handler in your startup class, as follows.
+While you can properly report any exceptions in the current error list using a `try/catch` in each action, there may be still unhandled exceptions raised by the ASP.NET Core middleware. If you also want to report them in a standardized way through an [error list](../errors#list), then Xomega Framework provides a special `ErrorController` for that, which you can register as the global exception handler in your startup class, as follows.
 
 ```cs
 // configure global exception handling using Xomega Framework
@@ -113,66 +134,177 @@ app.UseExceptionHandler(ErrorController.DefaultPath);
 You can also rely on this global exception handler instead of adding a `try/catch` in every controller action, but the latter provides you with more flexibility to handle caught exceptions in a custom way.
 :::
 
-## Token authentication
+## WebAPI authentication
+
+When exposing your services via a REST API you want to make sure that your WebAPI is secured and allows access only to authenticated users. For web-based clients, such as Blazor WebAssembly or a JavaScript-based SPA, you can configure cookie-based authentication, allowing the browser to secure the authentication cookie on the client.
+
+For non-browser clients, such as a WPF desktop client or a mobile app, the typical authentication mechanism for REST APIs is by providing a *Bearer* token in the *Authorization* header, such as a JWT token. The client will need to make sure that the token is secure and is not accessible to unauthorized users or programs.
+
+### Cookie authentication
+
+To enable cookie-based authentication you can create a special `AuthController` with a method `AuthCookieAsync` that validates the users and then signs them in using the cookie authentication scheme.
+
+The following code block demonstrates implementation of an `AuthController` for cookie-based authentication using a password login.
+
+```cs title='AuthController.cs'
+[ApiController]
+[AllowAnonymous]
+[Route("auth")]
+public class AuthController(IPasswordLoginService loginService,
+    IPrincipalConverter<UserInfo> principalConverter,
+    ErrorList errorList, ErrorParser errorParser) : BaseController(errorList, errorParser)
+{
+    [HttpPost]
+    [Route("cookie")]
+    public async Task<ActionResult> AuthCookieAsync(
+        [FromBody] PasswordCredentials credentials, CancellationToken token)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+                currentErrors.AddModelErrors(ModelState);
+            currentErrors.AbortIfHasErrors();
+
+/* highlight-next-line */
+            var res = await loginService.LoginAsync(credentials, token);
+            res.Messages.AbortIfHasErrors();
+            UserInfo userInfo = res.Result;
+            userInfo.AuthenticationType = CookieAuthenticationDefaults.AuthenticationScheme;
+
+            var principal = principalConverter.ToPrincipal(userInfo);
+/* highlight-next-line */
+            await HttpContext.SignInAsync(principal);
+            return StatusCode((int)currentErrors.HttpStatus, new Output<UserInfo>(currentErrors, userInfo));
+        }
+        catch (Exception ex)
+        {
+            currentErrors.MergeWith(errorsParser.FromException(ex));
+        }
+        return StatusCode((int)currentErrors.HttpStatus, new Output(currentErrors));
+    }
+}
+```
+
+The above code calls a separate `IPasswordLoginService` to authenticate the user with `PasswordCredentials`, then converts the resulting `UserInfo` to a `ClaimsPrincipal` using an implementation of the framework's interface `IPrincipalConverter<UserInfo>`, and finally calls the `HttpContext.SignInAsync` to sign in the user with a cookie.
+
+### Token authentication
 
 When exposing your services via a REST API you want to make sure that your WebAPI is secured and allows access only to authenticated users. The typical authentication mechanism for REST APIs is by providing a *Bearer* token in the *Authorization* header, such as a JWT token.
 
 The token can be created either by a trusted issuer, such as your identity provider or by the WebAPI application itself, which would be able to populate application-specific claims for the current user. Xomega Framework can help you implement authentication endpoints that can issue access tokens, as described below.
 
-:::warning
+:::tip
 For secure production systems we recommend using a certified third-party identity provider and setting up your Web API to trust the tokens issued by that provider, e.g with OAuth or OpenID Connect.
 :::
 
-### Authentication controller
+#### AuthToken
 
-To add to your WebAPI an ability to issue access tokens, which would be used to authenticate the users for any subsequent calls, Xomega Framework provides a base class `TokenAuthController`, which you need to subclass in your own authentication controller, as follows.
+Xomega Framework defines a special class `AuthToken` that contains the following two string fields:
+- `AccessToken` - a short-lived JWT that is used to access the WebAPI and is sent in the *Authorization* header as the *Bearer* token.
+- `RefreshToken` - a longer-lived token stored on the user profile, which allows to get a new access token whenever the current access token expires.
 
-```cs
+This allows you to implement **security best practices** for your application, where access tokens are short-lived and therefore are less vulnerable to being compromised. On the other hand, the refresh token stored on the user profile allows you to reset it, thereby forcing authenticated users to login again as soon as their access token expires.
+
+#### JWT auth controller
+
+To help you implement a controller for issuing and refreshing JWT auth tokens, Xomega Framework provides a base class `JwtAuthController`. Below is an example of the implementation of an `AuthController` that authenticates the user with password credentials and issues JWT auth tokens.
+
+```cs title='AuthController.cs'
+[ApiController]
+[AllowAnonymous]
+[Route("auth")]
+public class AuthController(IPasswordLoginService loginService,
+        IPrincipalConverter<UserInfo> principalConverter,
+        IOptionsMonitor<JwtBearerOptions> jwtOptMon, ErrorList errorList, ErrorParser errorParser
 /* highlight-next-line */
-public class AuthenticationController : TokenAuthController
-{    
-    public AuthenticationController(ErrorList errorList, ErrorParser errorParser,
-/* highlight-next-line */
-        IOptionsMonitor<AuthConfig> configOptions, ...) // inject any additional services as needed
-        : base(errorList, errorParser, configOptions)
+    ) : JwtAuthController(jwtOptMon, errorList, errorParser)
+{
+
+    [HttpPost]
+    [Route("jwt")]
+    public async Task<ActionResult> AuthJwtAsync(
+        [FromBody] PasswordCredentials credentials, CancellationToken token)
     {
+        try
+        {
+            if (!ModelState.IsValid)
+                currentErrors.AddModelErrors(ModelState);
+            currentErrors.AbortIfHasErrors();
+
+/* highlight-next-line */
+            var res = await loginService.LoginAsync(credentials, token);
+            res.Messages.AbortIfHasErrors();
+            UserInfo userInfo = res.Result;
+            userInfo.AuthenticationType = JwtBearerDefaults.AuthenticationScheme;
+
+            var principal = principalConverter.ToPrincipal(userInfo);
+/* highlight-next-line */
+            AuthToken authToken = await GenerateAuthTokenAsync(principal.Identity as ClaimsIdentity, token);
+
+            return StatusCode((int)currentErrors.HttpStatus, new Output<AuthToken>(currentErrors, authToken));
+        }
+        catch (Exception ex)
+        {
+            currentErrors.MergeWith(errorsParser.FromException(ex));
+        }
+        return StatusCode((int)currentErrors.HttpStatus, new Output(currentErrors));
     }
 }
 ```
 
-In your controller, you will need to add one or more endpoints that would return an access token, such as JWT, based on the provided credentials. In the basic case, the credentials could contain the user name and password that the user enters in the *Login* dialog. However, it could also use access tokens from other trusted issuers, such as Microsoft, Active Directory, Google, etc, which enables single sign-on (SSO).
+Similar to the [cookie authentication example](#cookie-authentication), our controller uses an injected `IPasswordLoginService` to perform the password authentication, and a `IPrincipalConverter<UserInfo>` to convert the resulting user info to a `ClaimsPrincipal`.
 
-Inside the authentication endpoint, you would typically validate the provided credentials, look up the user info related to the current application, construct a claims identity based on that info, and then build an access token for that identity using the `GetSecurityToken` method, which you will then return to the caller using the standard Xomega Framework protocol with [error reporting](../errors).
+:::note
+We call `res.Messages.AbortIfHasErrors()` just in case the `loginService.LoginAsync` does not abort on authentication errors, so as to ensure that any errors will be added to the `currentErrors`.
+:::
 
-In the following example, the `authentication` endpoint accepts a user name and password credentials and returns a JWT token with the claims for the current user.
+#### Generating auth tokens
 
-```cs
-[AllowAnonymous]
+To generate an `AuthToken` from the principal's identity we call a separate method `GenerateAuthTokenAsync` on the controller as illustrated below.
+
+```cs title='AuthController.cs'
+protected async Task<AuthToken> GenerateAuthTokenAsync(ClaimsIdentity identity, CancellationToken token)
+{
+    string refreshToken = GenerateRefreshToken();
+
+    await Task.CompletedTask; // TODO: store the refreshToken for the current user
+
+    return GenerateAuthToken(identity, refreshToken);
+}
+```
+
+This method leverages the base class' methods to generate a refresh token and use it, along with the passed identity, to generate an auth token. After generating a refresh token you should also store it in the database for the user - whether in the standard ASP.NET Identity tables or in a custom user table.
+
+The base method `GenerateAuthToken` optionally allows you to specify the number of minutes for the access token expiration. The default value is 15 minutes, but you can reduce it for testing purposes or increase it as needed.
+
+#### Refresh tokens
+
+In addition to an action for issuing auth tokens you also need to provide an endpoint for refreshing tokens that have expired or are about to expire. The base class provides a helper method `ValidateExpiredToken` to validate an expired JWT, which allows the client to refresh their JWT after it has expired, such as upon receiving a 401 response from the API.
+
+Below is a sample implementation of a token refresh endpoint.
+
+```cs title='AuthController.cs'
 [HttpPost]
-[Route("authentication")]
-public async Task<ActionResult> AuthenticateAsync([FromBody] Credentials credentials, CancellationToken token)
+[Route("refresh")]
+public async Task<ActionResult> RefreshJwtAsync([FromBody] AuthToken authToken, CancellationToken token)
 {
     try
     {
-        // validate that user name and password are populated
         if (!ModelState.IsValid)
-           currentErrors.AddModelErrors(ModelState);
-        currentErrors.AbortIfHasErrors();
+            currentErrors.AddModelErrors(ModelState);
+
+        // validate expired access token
+/* highlight-next-line */
+        var identity = ValidateExpiredToken(authToken.AccessToken) ??
+            throw new SecurityTokenException("Invalid access token");
+
+        if (!await IsRefreshTokenValidAsync(identity, authToken.RefreshToken, token))
+            throw new SecurityTokenException("Invalid refresh token");
 
 /* highlight-next-line */
-        var user = ValidateUser(credentials.UserName, credentials.Password);
+        AuthToken newAuthToken = await GenerateAuthTokenAsync(identity, token);
 
-        // construct a claims identity for the user
-        ClaimsIdentity identity = new ClaimsIdentity();
-        identity.AddClaim(new Claim(ClaimTypes.Name, credentials.UserName));
-        identity.AddClaim(new Claim(ClaimTypes.Role, user.Role));
-        ...
-
-        // generate a JWT token
-        var jwtTokenHandler = new JwtSecurityTokenHandler();
-/* highlight-next-line */
-        string jwtToken = GetSecurityToken(identity, jwtTokenHandler);
-        return StatusCode((int)currentErrors.HttpStatus, new Output<string>(currentErrors, jwtToken));
+        return StatusCode((int)currentErrors.HttpStatus, new Output<AuthToken>(currentErrors, newAuthToken));
     }
     catch (Exception ex)
     {
@@ -180,54 +312,51 @@ public async Task<ActionResult> AuthenticateAsync([FromBody] Credentials credent
     }
     return StatusCode((int)currentErrors.HttpStatus, new Output(currentErrors));
 }
+
+/* highlight-next-line */
+protected async Task<bool> IsRefreshTokenValidAsync(
+    ClaimsIdentity identity, string refreshToken, CancellationToken token)
+{
+    // TODO: validate the provided refreshToken for the current user
+    return await Task.FromResult(true);
+}
 ```
 
-Any authentication errors should be added to the `currentErrors` list, which is returned in the response.
+The above example validates the refresh token in a separate method `IsRefreshTokenValidAsync`, where you should use the provided identity to find the current refresh token for the user, and then compare it to the provided refresh token.
 
-:::note
-This endpoint should be decorated with the `AllowAnonymous` attribute to allow unauthenticated calls.
-:::
+#### JWT configuration
 
-### Authentication configuration
+To configure the JWT authentication in your WebAPI, you can specify the audience, the issuer and a signing key in the application config using the standard schema, as follows.
 
-To configure the parameters for the issued tokens Xomega Framework uses the `appsettings` configuration under the standard `AuthConfig` element, as follows.
-
-```json title="appsettings.json"
+```json title='appsettings.json'
 {
-  ...
-  "AuthConfig": {
-    "SigningKey": "This is a secret string that is used to encrypt JWT security tokens.",
-    "Issuer": "http://localhost:61621/",
-    "Audience": "Anyone",
-    "ExpiresMin": 720
+  "Authentication": {
+    "Schemes": {
+      "Bearer": {
+        "ValidAudience": "Anyone",
+        "ValidIssuer": "My REST API",
+        "SigningKeys": [
+          {
+            "Issuer": "My REST API",
+            // Base64-encoded signing key for JWT tokens that should be provided by the environment
+            "Value": "D7TMBWn9XGg6ANv6Sswseq2n/TaB0au5MLedSzaXqU4="
+          }
+        ]
+      }
+    }
   }
 }
 ```
 
-To enable this configuration you need to register it in your startup class using the `AddAuthConfig` extension method, and then use it to provide the token validation parameters, as follows.
-
-```cs
-// configure JWT authentication
-/* highlight-next-line */
-var jwtOptions = services.AddAuthConfig(builder.Configuration);
-
-services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(x =>
-{
-    x.RequireHttpsMetadata = false;
-    x.SaveToken = true;
-/* highlight-next-line */
-    x.TokenValidationParameters = jwtOptions.ValidationParameters;
-});
-```
-
-:::note
-As you can see [above](#authentication-controller), the `AuthConfig` is also passed to the base `TokenAuthController`, which uses it to create security tokens.
+:::warning
+You should not store signing keys in the `appsettings.json` for a running API, but provide it from the environment or a key vault.
 :::
+
+The standard configuration above will allow you to set up JWT authentication in your main `Program` file with little to no additional options, as shown below.
+
+```cs title='Program.cs'
+services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+```
 
 ## Cached lookup data
 
@@ -261,7 +390,7 @@ The lookup table `operators` will be reloaded the next time it will be used or r
 
 ## Client REST service proxies
 
-The best way to call your REST API from .NET-based clients is to create proxy implementations of your business service interfaces, which call the corresponding Web API endpoints, and hide the remote communication from the client.
+The best way to call your REST API from .NET-based clients is to create proxy implementations of your business service interfaces, which call the corresponding WebAPI endpoints, and hide the remote communication from the client.
 
 As explained in the [Xomega Framework service architecture](../common#architecture), this would allow you to use a variety of architectures, where the client presentation logic can call either the remote or the local services, or use a different communication protocol, such as gRPC.
 
@@ -269,50 +398,68 @@ As explained in the [Xomega Framework service architecture](../common#architectu
 Just like with the WebAPI controllers, Xomega.Net for Visual Studio allows you to **generate the REST proxies** for your business services from a Xomega model, so you don't need to write them manually.
 :::
 
+### Client REST API config
+
+Xomega Framework provides a class `RestApiConfig` that allows you to configure your REST API clients for calling your WebAPI. You can specify the values for this configuration in your `appsettings.json` as follows.
+
+```json title='appsettings.json'
+{
+  "RemoteApi": {    
+    "ClientName": "remote",
+    "BaseAddress": "https://localhost:44371",
+    "BasePath": "",
+    "Authorization": "true",
+    "RefreshTokenPath": "auth/refresh"
+  }
+}
+```
+
+You can give the API config section any name and specify the following parameters.
+- `ClientName` - to configure a named `HttpClient`.
+- `BaseAddress` - remote API address or blank, if API is co-hosted with the web app.
+- `BasePath` - base path for the API, e.g. "api", if the API is co-hosted with the web app or other APIs.
+- `Authorization` - `true` to use [JWT authorization](#token-authentication) for the API client, `false` for cookie-based auth.
+- `RefreshTokenPath` - path to the endpoint for [refreshing JWT auth tokens](#refresh-tokens).
+
+Once you define your `RestApiConfig`, you can read it from the configuration and call the `AddRestServices` to configure REST service clients. You also need to add it as a singleton to the DI container to allow other services to access API configuration. The following code demonstrates this setup.
+
+```cs title='Program.cs'
+var apiConfig = builder.Configuration.GetSection("RemoteApi").Get<RestApiConfig>();
+if (string.IsNullOrEmpty(apiConfig.BaseAddress))
+    apiConfig.BaseAddress = builder.HostEnvironment.BaseAddress;
+services.AddRestServices(apiConfig);
+services.AddSingleton(apiConfig);
+```
+
+:::note
+If the API base address is blank in the configuration, you need to set it from the `HostEnvironment`, as shown above.
+:::
+
 ### Proxy service clients
 
-To help create service proxies for .NET HTTP clients, Xomega Framework provides a base class `HttpServiceClient` for your service clients, which has a preconfigured instance of the `HttpClient` and provides some utility methods for making REST calls, such as `ToQueryString`.
+To help create service proxies for .NET HTTP clients, Xomega Framework provides a base class `RestApiClient` for your service clients, which provides the `HttpClient` property `Http` for making REST calls, as well as some utility methods, such as `ToQueryString`.
 
-For each business service exposed via REST, you want to create a corresponding service client class that extends `HttpServiceClient` and implements the service's interface, as follows.
+For each business service exposed via REST, you want to create a corresponding service client class that extends `RestApiClient` and implements the service's interface, as follows.
 
 ```cs
 /* highlight-next-line */
-public class SalesOrderServiceClient : HttpServiceClient, ISalesOrderService
+public class SalesOrderServiceClient : RestApiClient, ISalesOrderService
 {
-    protected readonly JsonSerializerOptions SerializerOptions;
-
-    public SalesOrderServiceClient(HttpClient httpClient, IOptionsMonitor<JsonSerializerOptions> options)
-        : base(httpClient)
+    public SalesOrderServiceClient(IHttpClientFactory httpClientFactory, RestApiConfig apiConfig,
+        IOptionsMonitor<JsonSerializerOptions> serializerOptions, ResourceManager resourceManager)
+        : base(httpClientFactory, apiConfig, serializerOptions, resourceManager)
     {
-        SerializerOptions = options.CurrentValue;
     }
     ...
 }
 ```
 
-The `httpClient` and `SerializerOptions` will be injected from the DI container, so you want to configure them in your startup class. You can configure JSON serialization options, set the `BaseAddress` for the `HttpClient`, and register your service clients for each business service, as follows.
+For each business service you need to register your service clients with the DI container, as follows.
 
 ```cs
-// configure serialization options
-services.Configure<JsonSerializerOptions>(o =>
-{
-    o.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-    o.PropertyNameCaseInsensitive = true;
-});
-
-// configure HttpClient
-services.AddSingleton(new HttpClient
-{
-    BaseAddress = new Uri(apiBaseAddress)
-});
-
 // register specific service clients
 services.AddScoped<ISalesOrderService, SalesOrderServiceClient>();
 ```
-
-:::note
-The code above uses a singleton `HttpClient` to speed up API connections, but you can also register any function that constructs and configures the `HttpClient` based on your needs.
-:::
 
 To make the startup code cleaner, you can also create a separate extension method that registers all service clients, as shown below.
 
@@ -323,7 +470,7 @@ public static class RestClients
     public static IServiceCollection AddRestClients(this IServiceCollection services)
     {
         ...
-        services.AddScoped<ISalesOrderService, SalesOrderServiceClient>();
+        services.TryAddScoped<ISalesOrderService, SalesOrderServiceClient>();
         return services;
     }
 }
@@ -335,54 +482,92 @@ This would allow you to register your service proxies with a single line of code
 services.AddRestClients();
 ```
 
-### HTTP client authentication
+### Client cookie authentication
 
-In order to use the registered `HttpClient` for calling secured REST services, it will need to provide an access token. If you use a third-party identity provider, then you can get the token from that provider using its authorization flow, and set it in the *Authorization* header of the registered `HttpClient`.
+If your REST API uses cookie authentication, then before calling any secure endpoints you need to call a [cookie authentication endpoint](#cookie-authentication), which would set the authentication cookie and return the user info for the current user.
 
-If you created a custom authentication controller, such as the one that accepts the user name and password described [above](#authentication-controller), then you can create a utility static method `Authenticate` on the client, which would call the `authentication` endpoint with the supplied user name and password, set the resulting JWT token as the default *Authorization* header on the registered `HttpClient`, and return a `ClaimsPrincipal` constructed from that token, as follows.
+To be able to use the returned user info for security checks on the client, you need to convert it to a `ClaimsPrincipal` using the configured `IPrincipalConverter<UserInfo>`, and then set it as the `CurrentPrincipal` on the current `IPrincipalProvider`. The following class demonstrates cookie authentication on the client side using password credentials.
 
 ```cs
-public async static Task<ClaimsPrincipal> Authenticate(IServiceProvider serviceProvider,
-                                                       string user, string password)
+public class CookieLoginServiceClient : RestApiClient
 {
-    var credentials = new
-    {
-        Username = user,
-        Password = password
-    };
-    var httpClient = serviceProvider.GetRequiredService<HttpClient>();
-    var options = serviceProvider.GetService<IOptionsMonitor<JsonSerializerOptions>>();
-/* highlight-start */
-    using (var resp = await httpClient.PostAsync("authentication", new StringContent(
-        JsonSerializer.Serialize(credentials), Encoding.UTF8, "application/json")))
-/* highlight-end */
-    {
-        var content = await resp.Content.ReadAsStringAsync();
-        var res = JsonSerializer.Deserialize<Output<string>>(content, options?.CurrentValue);
-        res.Messages.AbortIfHasErrors();
+    private readonly IPrincipalConverter<UserInfo> principalConverter;
+    private readonly IPrincipalProvider principalProvider;
 
+    public CookieLoginServiceClient(IHttpClientFactory httpClientFactory, RestApiConfig apiConfig,
+        IOptionsMonitor<JsonSerializerOptions> serializerOptions, ResourceManager resourceManager,
 /* highlight-next-line */
-        httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {res.Result}");
-        var jwtTokenHandler = new JwtSecurityTokenHandler();
-        var token = jwtTokenHandler.ReadJwtToken(res.Result);
-        var claims = token.Claims.Select(c => new Claim(
-            jwtTokenHandler.InboundClaimTypeMap.ContainsKey(c.Type) ?
-                jwtTokenHandler.InboundClaimTypeMap[c.Type] : c.Type,
-            c.Value, c.ValueType, c.Issuer, c.OriginalIssuer));
+        IPrincipalConverter<UserInfo> principalConverter, IPrincipalProvider principalProvider)
+        : base(httpClientFactory, apiConfig, serializerOptions, resourceManager)
+    {
+        this.principalConverter = principalConverter;
+        this.principalProvider = principalProvider;
+    }
+
+    public async Task<Output<UserInfo>> LoginAsync(PasswordCredentials _credentials, CancellationToken token)
+    {
 /* highlight-next-line */
-        return new ClaimsPrincipal(new ClaimsIdentity(claims, "Bearer"));
+        using (var resp = await Http.PostAsync("auth/cookie", new StringContent(
+            JsonSerializer.Serialize(_credentials, SerializerOptions), Encoding.UTF8, "application/json")))
+        {
+            var res = await resp.Content.ReadFromJsonAsync<Output<UserInfo>>(token);
+            if (res.Result != null)
+/* highlight-next-line */
+                principalProvider.CurrentPrincipal = principalConverter.ToPrincipal(res.Result);
+            return res;
+        }
     }
 }
 ```
 
-This way your *Login* dialog will be able to call this method to authenticate the user with a password and set the returned value as the `CurrentPrincipal` on the registered `DefaultPrincipalProvider`.
-
-:::tip
-For Blazor WebAssembly you can set it on a custom `AuthenticationStateProvider` instead, and register `AuthStatePrincipalProvider` as the `IPrincipalProvider` during startup, as described [here](../security#wasm).
+:::note
+If your client is WebAssembly, then you need to configure it to use the same instance of `PrincipalAuthStateProvider` for both the `AuthenticationStateProvider` and `IPrincipalProvider`, as described [here](../security#wasm). This way, setting the current principal above will also refresh the authentication state for WebAssembly.
 :::
 
-:::warning
-You may still need to handle token expiration, and the logic of refreshing the token, or redirecting the user to the *Login* screen for re-authentication.
+### Client JWT authentication
+
+If your REST API uses JWT authentication, then before calling any secure endpoints you need to call a [token authentication endpoint](#jwt-auth-controller), which would return an `AuthToken` consisting of a JWT and a refresh token. To configure the REST clients with the new JWT and to set up security on the client, you need to call the `SetAuthTokenAsync` on the currently configured `ITokenService`.
+
+The `JwtTokenService` implementation of `ITokenService` will use the new JWT for any REST API calls, and also constructs a `ClaimsPrincipal` from it, which it sets on the current `IPrincipalProvider`. It also automatically [refreshes expired JWT tokens](#refresh-tokens) and throws a `Login_SessionExpired` security message if it fails to do so, which should redirect the user to the login screen.
+
+:::tip
+An instance of a `JwtTokenService` will be configured automatically when you call `services.AddRestServices(apiConfig)` and your `apiConfig` has `Authorization` set to `true`. You can also override it with your custom class, such as to provide a custom implementation of the `RedirectToLogin` method.
+:::
+
+The following class demonstrates JWT authentication on the client side using password credentials.
+
+```cs
+public class JwtLoginServiceClient : RestApiClient
+{
+    private readonly ITokenService tokenService;
+
+    public JwtLoginServiceClient(IHttpClientFactory httpClientFactory, RestApiConfig apiConfig,
+        IOptionsMonitor<JsonSerializerOptions> serializerOptions, ResourceManager resourceManager,
+/* highlight-next-line */
+        ITokenService tokenService)
+        : base(httpClientFactory, apiConfig, serializerOptions, resourceManager)
+    {
+        this.tokenService = tokenService;
+    }
+
+    public async Task<Output> LoginAsync(PasswordCredentials _credentials, CancellationToken token)
+    {
+/* highlight-next-line */
+        using (var resp = await Http.PostAsync("auth/jwt", new StringContent(
+            JsonSerializer.Serialize(_credentials, SerializerOptions), Encoding.UTF8, "application/json")))
+        {
+            var res = await resp.Content.ReadFromJsonAsync<Output<AuthToken>>(token);
+            if (res.Result != null)
+/* highlight-next-line */
+                var identity = await tokenService.SetAuthTokenAsync(res.Result);
+            return new Output(res.Messages);
+        }
+    }
+}
+```
+
+:::note
+If your client is WebAssembly, then you need to configure it to use the same instance of `PrincipalAuthStateProvider` for both the `AuthenticationStateProvider` and `IPrincipalProvider`, as described [here](../security#wasm). This way, when the `tokenService` above sets the current principal as part of `SetAuthTokenAsync`, it will also refresh the authentication state for WebAssembly.
 :::
 
 ### Proxy service operations
@@ -399,8 +584,8 @@ public async Task<Output<ICollection<SalesOrder_ReadListOutput>>> ReadListAsync(
                                                     $"sales-order?{ ToQueryString(_criteria) }");
     using (var resp = await Http.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, token))
     {
-        var content = await resp.Content.ReadAsStreamAsync();
-        return await JsonSerializer.DeserializeAsync<Output<ICollection<SalesOrder_ReadListOutput>>>(
+        var content = await ReadOutputContentAsync(resp);
+        return JsonSerializer.Deserialize<Output<ICollection<SalesOrder_ReadListOutput>>>(
             content, SerializerOptions);
     }
 }
@@ -424,9 +609,8 @@ public async Task<Output<SalesOrder_UpdateOutput>> UpdateAsync(
     };
     using (var resp = await Http.SendAsync(msg, HttpCompletionOption.ResponseHeadersRead, token))
     {
-        var content = await resp.Content.ReadAsStreamAsync();
-        return await JsonSerializer.DeserializeAsync<Output<SalesOrder_UpdateOutput>>(
-            content, SerializerOptions);
+        var content = await ReadOutputContentAsync(resp);
+        return JsonSerializer.Deserialize<Output<SalesOrder_UpdateOutput>>(content, SerializerOptions);
     }
 }
 ```
