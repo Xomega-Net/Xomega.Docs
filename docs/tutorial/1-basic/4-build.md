@@ -34,4 +34,4 @@ You can resolve the warning about the `numeric` logical type later by updating t
 
 The warnings from the *EF Domain Objects* generator tell you that some fields in the database and the model use a `hierarchy` type that is not supported by the Entity Framework yet, or a `geography` type, for which there is currently no mapping in the model, and therefore will be skipped in the generated domain classes.
 
-As you can see, the model build process, among other artifacts, also generated Service Implementations and Blazor Views. This allows us to go straight to building the entire solution and running the application.
+As you can see, the model build process, among other artifacts, also generated *Service Implementations* and *Blazor Views*. This allows us to go straight to building the entire solution and running the application.

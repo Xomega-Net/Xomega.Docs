@@ -16,7 +16,7 @@ Double-click on the generator to open its properties, and click on the editor fo
 
 ![Connection dialog](img2/connection-dialog.png)
 
-You will need to provide the connection string, which you can also specify in a separate dialog by clicking the *Configure* button. We will select the *SQL Native Client* provider, and the sample *AdventureWorks2016* database on the local SQL server instance using windows authentication, as shown below.
+You will need to provide the connection string, which you can also specify in a separate dialog by clicking the *Configure* button. We will select the *Microsoft OLE DB Provider for SQL Server*, and the sample *AdventureWorks2022* database on the local SQL server instance using windows authentication, as shown below.
 
 ![Connection provider](img2/connection-provider.png) ![Connection properties](img2/connection-properties.png) 
 
@@ -38,4 +38,4 @@ Once the generator is finished running, you should see the imported model files 
 
 The model objects were imported from the database using the database structure, as well as any model setup that existed before the import, such as the logical types defined.
 
-This is a good start, but it is not enough to build a fully-fledged application beyond just a "database table editor". To model our application and describe different services and views that it will have, we need to further enhance our model with all that information, which is what we're going to do next.
+This is a good start, but it is not enough to build a fully-fledged application beyond just a "database table editor". To model our application and describe different services and views that it will have, we need to further enhance our model with all that information about application views, data objects and services, which is what we're going to do next.
