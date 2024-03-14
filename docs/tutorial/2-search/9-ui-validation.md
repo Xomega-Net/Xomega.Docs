@@ -28,6 +28,14 @@ To regenerate the `Messages.cs` file you need to run the `Messages.tt` generator
 
 ![T4 generator](img9/gen-t4.png)
 
+:::warning
+If this is the first time you run a text template in Visual Studio, you may get the following security warning.
+
+![T4 warning](img9/t4-warning.png)
+
+You can check to not show this warning anymore, and click *OK* to proceed.
+:::
+
 ## Adding custom UI validation
 
 Finally, let's open the `SalesOrderCriteriaCustomized.cs` file, and override the `Validate` function on the customized criteria object, where we check the *From* and *To* values for the *Order Date* criteria, and add a validation error, if the former is greater than the latter, as follows.

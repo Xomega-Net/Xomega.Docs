@@ -8,7 +8,7 @@ If you remember, we added two custom fields to the results list that are not dec
 
 What it does generate though is a set of placeholders in the generated service implementation code, where you can supply your custom code to retrieve these fields. They are marked with `TODO` comments to let you easily find all such places that need custom implementation.
 
-Before we can provide the custom code, we first need to build our model, which runs all the generators. To do that let's right-click on the `AdventureWorks.Model` project, and select the *Build* menu option. Next, we will expand the `AdventureWorks.Services.Entities` project and find the `SalesOrderService` class that implements our service contract.
+Before we can provide the custom code, we first need to build our model, which runs all the generators. To do that let's right-click on the `AdventureWorks.Model` project, and select the *Build* menu option. Next, we will expand the `AdventureWorks.Services.Entities` project and then, under the folder *Services/Sales*, find the `SalesOrderService` class that implements our service contract.
 
 ## Implementing custom result fields
 

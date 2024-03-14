@@ -170,7 +170,7 @@ public virtual async Task<Output<ICollection<SalesOrder_ReadListOutput>>>
     {
         // CUSTOM_CODE_START: add code for GlobalRegion criteria of ReadList operation below
 /* removed-next-line */
-        // TODO: src = AddClause(src, "GlobalRegion", o => ???, _criteria.GlobalRegion);
+        // TODO: src = AddClause(src, "GlobalRegion", o => ???, new [] { _criteria.GlobalRegion });
 /* added-lines-start */
         src = AddClause(src, "GlobalRegion", o => o.TerritoryObject.Group,
                         Operators.IsEqualTo, _criteria.GlobalRegion);
@@ -195,7 +195,7 @@ Finally, let's build and run the application to review our changes for the stati
 
 ![Criteria status](img5/criteria-status.png) ![Criteria region](img5/criteria-region.png)
 
-Also, you'll notice a new *Global Region* dropdown list in the search criteria, which allows filtering sales orders by the specified sales territory group. Since there is no operator for the *Global Region*, its dropdown list will be not required, so it provides a blank option to clear this field.
+Also, you'll notice a new *Global Region* dropdown list in the search criteria, which allows filtering sales orders by the specified sales territory group. Since there is no operator for the *Global Region*, its dropdown list will be not required, so it provides a blank option to clear this field. To remove criteria that do have an operator, you need to just blank out that operator instead.
 
 If you run the search now, the results grid will look like this.
 

@@ -34,13 +34,13 @@ public class SalesOrderCriteriaCustomized : SalesOrderCriteria
 }
 ```
 
-As you see, Xomega Framework allows us to do it in just a few lines.
+As you see, Xomega Framework allows us to do it in just a few lines of code.
 
 Instead of hardcoding names of enumeration attributes that are used for cascading, such as `group` or `territory id`, we were able to specify them using constants, conveniently generated for us by a Xomega generator based on those additional parameters that are returned by our dynamic enumerations. We just needed to add the namespace for these constants in the `using` statement first.
 
 You can also configure the behavior of cascading selection with regard to nulls in the attributes of the possible values or the cascading property. By default, salespersons not assigned to any territory would be shown only when you don't select any territory, and it shows all salespersons, but we configured it to always show such salespersons regardless of the currently selected territory.
 
-Finally, we configured the semicolon to be a separator between salespersons when multiple salespersons are displayed in the applied criteria summary. This is to avoid confusion because the default list separator comma is already used to separate the last name from the first name.
+Finally, we configured the semicolon to be a separator between salespersons when multiple salespersons are displayed in the applied criteria summary. This is to avoid confusion because the default list separator, comma, is already used to separate the last name from the first name.
 
 ## Reviewing the results
 

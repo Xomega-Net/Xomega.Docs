@@ -34,13 +34,13 @@ Next, we will update the configuration of the `sales order status` type in the m
 
 ```xml
     <type name="sales order status" base="tiny int enumeration">
+<!-- added-lines-start -->
       <config>
-        <!-- highlight-start -->
         <ui:blazor-control multi-value="true">
           <XAutoComplete />
         </ui:blazor-control>
-        <!-- highlight-end -->
       </config>
+<!-- added-lines-end -->
       <enum ref="sales order status"/>
     </type>
 ```

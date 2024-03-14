@@ -11,6 +11,8 @@ Now that we have modeled our list results, let's move on to modeling the search 
       <input>
         <!-- highlight-next-line -->
         <struct name="criteria">
+          <param name="sales order id operator" type="operator">[...]
+          <param name="sales order id" required="false"/>
           <param name="revision number operator" type="operator">[...]
           <param name="revision number" required="false"/>
           <param name="revision number2" type="tiny int" required="false">[...]

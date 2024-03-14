@@ -22,7 +22,7 @@ Xomega makes it quite easy by providing a special *Read Enum Operation* generato
 
 Once you have run the generator, you will see that it added a `read enum` operation to the object, and decorated it with the `xfk:enum-cache` specification.
 
-Since the result of the operation will be cached, we'll want to remove any extraneous parameters to minimize the amount of data in the cache. We will leave only the *ID* and *description* parameters, and a couple of other important attributes such as the *territory group*, which will allow us to do cascading selection later on, as illustrated below.
+Since the result of the operation will be cached, we'll want to remove any extraneous parameters to minimize the amount of data in the cache. We will leave only the *ID* and *description* (`name`) parameters, and a couple of other important attributes such as the territory `group`, which will allow us to do cascading selection later on, as illustrated below.
 
 ```xml title="sales_territory.xom"
 <object name="sales territory">
@@ -245,25 +245,25 @@ Finally, we will update the labels for the `sales person id` and `sales territor
 
 ```xml
     <xfk:data-object class="SalesOrderCriteria">
+<!-- added-lines-start -->
       <ui:display>
         <ui:fields>
-          <!-- highlight-start -->
           <ui:field param="sales person id" label="Sales Person"/>
           <ui:field param="territory id" label="Sales Territory"/>
-          <!-- highlight-end -->
         </ui:fields>
       </ui:display>
     </xfk:data-object>
+<!-- added-lines-end -->
     <xfk:data-object class="SalesOrderList" list="true">
       <ui:display>
         <ui:fields>
           <ui:field param="sales order id" hidden="true"/>
           <ui:field param="online order flag" label="Online" width="20px"/>
           <ui:field param="sales order number" label="SO#" width="10%"/>
-          <!-- highlight-start -->
+<!-- added-lines-start -->
           <ui:field param="sales person id" label="Sales Person"/>
           <ui:field param="territory id" label="Sales Territory"/>
-          <!-- highlight-end -->
+<!-- added-lines-end -->
         </ui:fields>
       </ui:display>
 ```
