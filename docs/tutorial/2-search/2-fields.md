@@ -142,7 +142,7 @@ Now any field or parameter that will use this type in the model will be assumed 
 You can also set the `width` attribute directly on the field configuration of the `xfk:data-object` using CSS-style format as follows.
 
 ```xml
-        <ui:field param="online order flag" label="Online" width="20px"/>
+        <ui:field param="online order flag" label="Online" width="4%"/>
         <ui:field param="sales order number" label="SO#" width="10%"/>
 ```
 

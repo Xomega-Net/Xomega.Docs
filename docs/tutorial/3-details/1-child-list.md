@@ -20,7 +20,7 @@ We will start improving the *Sales Order* details screen by updating the child t
 
 ## Product enumeration
 
-We will turn the list of products into a dynamic enumeration, since it does not change very often and is not too large, so it can be cached. Make sure that you set the `Make Key Type Enumerated` property of the * Read Enum Operation* generator to `True` so that it would automatically configure the key type. Next, open up the `product.xom` file in the model, and run that generator on that file, as shown below.
+We will turn the list of products into a dynamic enumeration, since it does not change very often and is not too large, so it can be cached. Make sure that you set the `Make Key Type Enumerated` property of the *Read Enum Operation* generator to `True` so that it would automatically configure the key type. Next, open up the `product.xom` file in the model, and run that generator on that file, as shown below.
 
 ![Product gen enum](img1/product-gen-enum.png)
 
@@ -87,10 +87,11 @@ Since we will display the product name instead of ID, let's configure the typica
 
 ```xml
     <type name="product" base="integer enumeration">
+<!-- added-lines-start -->
       <config>
-        <!-- highlight-next-line -->
         <ui:display-config typical-length="20"/>
       </config>
+<!-- added-lines-end -->
       <enum ref="product"/>
     </type>
 ```
@@ -182,10 +183,11 @@ Since we will display the special offer description instead of ID, let's configu
 
 ```xml
     <type name="special offer" base="integer enumeration">
+<!-- added-lines-start -->
       <config>
-        <!-- highlight-next-line -->
         <ui:display-config typical-length="20"/>
       </config>
+<!-- added-lines-end -->
       <enum ref="special offer"/>
     </type>
 ```
@@ -281,7 +283,7 @@ Note that these parameters will be added to the `SalesOrderDetailList` data obje
 
 For now, let's address the issues with the formatting of the `unit price discount` and `line total` fields. You can see that based on their SQL types the price discount was imported with the type `money` and the line total was imported with a generated type `numeric_38_6`, which even has a warning on its definition saying that it extends a deprecated type `numeric`.
 
-```xml
+```xml title="sales_order.xom"
 <object name="detail">
     ...
     <field name="unit price" type="money" required="true">[...]
@@ -295,7 +297,7 @@ For now, let's address the issues with the formatting of the `unit price discoun
 
 For the `unit price discount` field, we will define a new type `discount` in the `sales_order.xom`, and use it for this field. The `discount` type will inherit from the `percent` base type to format the value as a percent, and also override the data property to use the `PercentFractionProperty`, which validates that the value is a fractional number between 0 and 1, as shown below.
 
-```xml
+```xml title="sales_order.xom"
 <type name="discount" base="percent">
   <config>
     <sql:type name="money" db="sqlsrv"/>
@@ -310,7 +312,7 @@ We will also have to use a SQL type override so that it keeps the mapping to the
 
 Now, if you right-click on the `numeric_38_6` type, and select *Find All References*, you will see that it is used solely on our `line total` field. Therefore, we will just rename this type to be `line total`, move it to the same file `sales_order.xom`, and then make it inherit from the `money` type to make sure that it gets formatted as currency. We'll also keep the SQL type configuration override, as shown below.
 
-```xml
+```xml title="sales_order.xom"
     <!-- highlight-next-line -->
     <type name="line total" base="money">
       <config>

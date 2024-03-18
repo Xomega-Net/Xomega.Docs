@@ -67,7 +67,7 @@ Notice how we append the value of the `SalesOrderNumberProperty` to the base tit
 :::tip
 If you need to display the value of another data property in the title, then you may need to subscribe to that data property's changes in your view model, and then fire a change of the `ViewTitle` property as a result.
 
-But normally, users would not expect the view title to change while you edit the view except for the asterisk at the end, so the default behavior of updating the view title on save should cover most of the cases.
+But, normally, users would not expect the view title to change while you edit the view except for the asterisk at the end, so the default behavior of updating the view title on save should cover most of the cases.
 :::
 
 ## Reviewing the results

@@ -61,7 +61,7 @@ If you previously set `preserve-on-clean="true"` on the `svc:customize` element 
 :::
 
 :::tip
-It is also a good idea to **check everything in **your version control before you run a *Clean* command on the model. This way you will be able to easily review all the changes made by the generators, and revert any unwanted changes.
+It is also a good idea to **check everything in** your version control before you run a *Clean* command on the model. This way you will be able to easily review all the changes made by the generators, and revert any unwanted changes.
 :::
 
 ## Sales Reason enumeration
@@ -297,7 +297,7 @@ Similar to [what we did in the previous section](group-fields#custom-update-for-
 
 |Name|Value|Comment|
 |-|-|-|
-|SalesRequired|Sales information is required for order {0}.|{0}=Order ID|
+|SalesRequired|Sales information is required for order \{0}.|\{0}=Order ID|
 
 Next let's add a custom `UpdateSalesInfo` method to our extended service, which will update the specified `SalesOrder` with the provided `SalesInfo` structure as follows.
 

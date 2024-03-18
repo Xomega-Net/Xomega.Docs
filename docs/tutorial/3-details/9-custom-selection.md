@@ -14,7 +14,7 @@ If we take another look at the *Customer* tab, we will notice that we still have
 
 This is clearly not how we want the users to enter these values. Normally, we would want the user to select the stored address from a list of addresses for the current customer, which is defined in the `BusinessEntityAddress` association table.
 
-However, there are tens of thousands of records in that table, and we don't want to load them all into a cache as we did with dynamic enumerations previously. It would also not be too user-friendly to make the user select the address from a separate look-up form, as we did for the customer selection.
+However, there are tens of thousands of records in that table, and we don't want to load them all into a cache as we did with dynamic enumerations previously. It would also be not too user-friendly to make the user select the address from a separate look-up form, as we did for the customer selection.
 
 What we want is a contextual dropdown list, which would use the currently selected customer to read the list of associated addresses. To implement the population of such a contextual list, we can leverage many of the existing Xomega features, but we will need to write some custom code to glue it all together, as you'll see below.
 
@@ -313,6 +313,12 @@ Therefore, we need to add an async listener `OnCustomerChanged` to both of these
 using AdventureWorks.Services.Common;
 /* added-next-line */
 using AdventureWorks.Services.Common.Enumerations;
+...
+/* added-lines-start */
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+/* added-lines-end */
 ...
 
 public class SalesOrderCustomerObjectCustomized : SalesOrderCustomerObject
@@ -674,4 +680,4 @@ As you see, we have turned it into a fully-fledged customer panel, where you can
 
 You can also see that the *Customer* panel uses our custom layout, where all panels have proper titles and are arranged in two columns. Both the main panel *Customer Info* and the child panel *Lookup Customer* have their fields arranged in two columns, while *Billing Address* and *Shipping Address* child panels lay out their fields in three columns.
 
-We had to write some custom code to handle contextual selection here since the *Customer* tab is a little non-standard, where the input parameter for the list of addresses is sourced from one of two fields - store ID or person ID, and the same list of addresses is used on two fields - bill-to and ship-to address IDs. In a more standard case, when the value for each parameter comes from a single property, Xomega Framework minimizes the custom code you need to write, as you will see in the following section.
+We had to write some custom code to handle contextual selection here since the *Customer* tab is a bit non-standard, where the input parameter for the list of addresses is sourced from one of two fields - store ID or person ID, and the same list of addresses is used on two fields - bill-to and ship-to address IDs. In a more standard case, when the value for each parameter comes from a single property, Xomega Framework minimizes the custom code you need to write, as you will see in the following section.

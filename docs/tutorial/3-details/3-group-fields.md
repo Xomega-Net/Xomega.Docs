@@ -402,7 +402,7 @@ In the custom Update method for the payment input structure, we'll want to valid
 
 |Name|Value|Comment|
 |-|-|-|
-|PaymentRequired|Payment information is required for order {0}.|{0}=Order ID|
+|PaymentRequired|Payment information is required for order \{0}.|\{0}=Order ID|
 
 Then we will run the custom tool on the [`Messages.tt`](../../framework/services/errors#message-constants-generator) T4 template file nested under it to generate the constants, similar to how we did it for the [UI validation messages](../search/ui-validation#generating-message-constants) earlier.
 

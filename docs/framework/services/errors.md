@@ -257,9 +257,9 @@ We also recommend that you specify the description of the parameters that are ex
 
 |Name|Value|Comment|
 |-|-|-|
-|EntityNotFoundByKey|{0} with id {1} not found.|{0}=Entity Type, {1}=Entity ID|
-|Operator_NotSupported|Unsupported operator {0} for the {1}.|{0}=Operator, {1}=Field name|
-|Validation_NumberMaximum|{0} cannot be greater than {1}.|{0}=Property name, {1}=Maximum value|
+|EntityNotFoundByKey|\{0} with id \{1} not found.|\{0}=Entity Type, \{1}=Entity ID|
+|Operator_NotSupported|Unsupported operator \{0} for the \{1}.|\{0}=Operator, \{1}=Field name|
+|Validation_NumberMaximum|\{0} cannot be greater than \{1}.|\{0}=Property name, \{1}=Maximum value|
 
 By default, resource files added through Visual Studio use a custom tool `ResXFileCodeGenerator`, which generates a nested code file `MyResources.Designer.cs` and a class that gives you access to the `ResourceManager` for those resources, and allows you to get the values of each resource using static access members. The limitation of those generated members is that you won't have programmatic access to the resource names, and they only use resources defined in the current resource set, so you cannot use hierarchical resources.
 

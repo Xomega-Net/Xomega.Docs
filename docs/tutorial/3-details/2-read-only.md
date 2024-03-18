@@ -12,7 +12,7 @@ If we look at the details screen generated for us by default, we will notice tha
 
 ![Readonly TODO](img2/readonly-todo.png)
 
-Other fields, such as the ones highlighted in yellow, are set internally by the system and should be read only on the screen.
+Other fields, such as the ones highlighted in yellow, are set internally by the system and should be read-only on the screen.
 
 ## Updating CRUD operations
 
@@ -202,7 +202,7 @@ Similarly, we will remove all those parameters (including `rowguid`) from the in
 :::tip
 As you update operations' inputs and outputs, make sure to insert the `config` section with an `xfk:add-to-object` element as needed.
 
-This will allow the data object to set the input parameters from its properties when calling the operation and to update its properties from the output parameters when handling the operation result.
+This will allow the data object to set the input parameters from its properties when calling the operation, and to update its properties from the output parameters when handling the operation result.
 :::
 
 ## Custom code for read-only fields

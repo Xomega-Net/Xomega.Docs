@@ -28,7 +28,7 @@ And entering the *Order Quantity* should recalculate the *Line Total*, taking in
 
 ## Updating Detail CRUD operations
 
-Let's start by updating the CRUD operations for the `details` sub-object of the `sales order` object, to return all the necessary information, and to only update fields that can be updated.
+Let's start by updating the CRUD operations for the `detail` sub-object of the `sales order` object, to return all the necessary information, and to only update fields that can be updated.
 
 ### Configuring the Read operation
 
@@ -397,7 +397,7 @@ Now we are ready to finish up the *Line Item* view with the UI updates.
 
 Let's start with updating the view title, and making it dynamically include the order number.
 
-We will set the `title` of our `SalesOrderDetailView` to be "*Line Item for Sales Order {0}*", where the placeholder will contain the order number. We'll implement the dynamic title in the custom view model, so we'll need to set the `customize="true"` on its `ui:view-model` element, as follows.
+We will set the `title` of our `SalesOrderDetailView` to be "*Line Item for Sales Order \{0}*", where the placeholder will contain the order number. We'll implement the dynamic title in the custom view model, so we'll need to set the `customize="true"` on its `ui:view-model` element, as follows.
 
 ```xml title="sales_order.xom"
 <!-- highlight-next-line -->
@@ -501,7 +501,7 @@ public class SalesOrderDetailObjectCustomized : SalesOrderDetailObject
 
 ### Configuring computed properties
 
-Finally, let's configure computed properties on the UI to have them automatically update whenever the values of the underlying properties change. You can set it up manually using property listeners, but Xomega Framework makes it extremely easy with using LINQ expressions.
+Finally, let's configure computed properties on the UI to have them automatically update whenever the values of the underlying properties change. You can set it up manually using property listeners, but Xomega Framework makes it extremely easy by using LINQ expressions.
 
 All you have to do is to create an expression that returns the computed value based on the provided arguments and pass it to the `SetComputedValue` method along with the instances of those arguments. You can pass the entire data object or individual properties as the arguments, or any combination thereof. To make the expression easier to write, you can also define and use helper functions, such as the `GetLineTotal` for calculating the line total from nullable values, as illustrated below.
 

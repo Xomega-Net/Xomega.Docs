@@ -427,7 +427,7 @@ The strings that the `Pager` component uses to display on the screen or as a too
 |Pager_Next|Next Page||
 |Pager_Prev|Previous Page||
 |Pager_PageSize|Items per page||
-|Pager_Summary|Showing {0} to {1} of {2} items.|{0}=Lower range boundary, {1}=Upper range boundary, {2}=Total number of items|
+|Pager_Summary|Showing \{0} to \{1} of \{2} items.|\{0}=Lower range boundary, \{1}=Upper range boundary, \{2}=Total number of items|
 
 You can create localized resources for these texts that are translated into the desired language(s). Also, if you would like to change the wording for these default resources, e.g. say *rows* instead of *items*, then you can redefine them in a new resource file using [hierarchical resources](../services/errors#hierarchical-resourcesresources).
 
@@ -444,4 +444,4 @@ This will allow you to set the text of the labels specifically for that view, sa
 |Name|Value|Comment|
 |-|-|-|
 |SalesOrderListPager_PageSize|Orders per page||
-|SalesOrderListPager_Summary|Showing {0} to {1} of {2} orders.|{0}=Lower range boundary, {1}=Upper range boundary, {2}=Total number of items|
+|SalesOrderListPager_Summary|Showing \{0} to \{1} of \{2} orders.|\{0}=Lower range boundary, \{1}=Upper range boundary, \{2}=Total number of items|

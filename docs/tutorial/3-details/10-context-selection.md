@@ -47,7 +47,9 @@ However, that table does not have a *cascade* delete on its foreign key to the p
   </objects>
 ```
 
-In order to make it a subobject of a `person` object, we'll move its `object` element to the `person.xom` file under a `subobjects` element. We will also rename it to be just `credit card`, since its name is automatically qualified with the parent object's name, and will change the key field to be just the `credit card id` from the above field set since the `business entity id` will be already inherited from the parent `person` object, as shown below.
+In order to make it a subobject of a `person` object, we'll move its `object` element to the `person.xom` file under a `subobjects` element. We'll rename it to be just `credit card`, since its name is automatically qualified with the parent object's name.
+
+Additionally, since the `business entity id` will be already inherited from the parent `person` object, we will change the key field to be just the `credit card id` by copying it from the `person credit card` field-set above, and deleting the old key field-set reference. As a result, your `credit card` subobject should look as follows.
 
 
 ```xml title="person.xom"
@@ -88,7 +90,9 @@ In order to make it a subobject of a `person` object, we'll move its `object` el
 Since the `credit card id` field references a separate `credit card` object, we need to set the `key` attribute to `reference`. Also, if we want to keep the `delete` action for the parent foreign key, instead of using the default *cascade* action, then we'll need to set it on the `sql:parent-foreign-key` element.
 :::
 
-At this point, we can delete the `person_credit_card.xom` file from the *Sales* folder, since there will be nothing useful left in it. Also, to rebuild the entity classes using the new structure, we will run a *Clean* command on the *EF Domain Objects* generator under the *Data Layer* folder, followed by the *Generate* command on that generator.
+At this point, we can delete the `person_credit_card.xom` file from the *Sales* folder, since there will be nothing useful left in it.
+
+Since the new `PersonCreditCard` entity will be now in the *Person* module rather than *Sales*, we need to rebuild the entity classes using the new structure. For that we will run a *Clean* command on the *EF Domain Objects* generator under the *Data Layer* folder, followed by the *Generate* command on that generator.
 
 ### Configuring credit card types
 
@@ -246,7 +250,7 @@ To group credit card fields into a child panel, let's define a new data object `
 
 Next, we will add a generic `credit card info` structure for this object to add fields to it, as shown below.
 
-```xml
+```xml title="sales_order.xom"
 <!-- added-lines-start -->
   <struct name="credit card info" object="credit card">
     <param name="credit card id"/>
@@ -264,7 +268,7 @@ Next, we will add a generic `credit card info` structure for this object to add 
 
 Now we can configure our data object to make credit card non-key fields read-only, and to set a proper label for the `credit card id`, as follows.
 
-```xml
+```xml title="sales_order.xom"
   <xfk:data-object class="CreditCardPaymentObject">
 <!-- added-lines-start -->
     <ui:display>
@@ -282,7 +286,7 @@ Now we can configure our data object to make credit card non-key fields read-onl
 
 Next, we will move the `credit card id` and `credit card approval code` parameters from the `payment info` and `payment update` structures to a new structure `sales order credit card`, and will update both payment structures to use a reference to this new structure instead, as follows.
 
-```xml
+```xml title="sales_order.xom"
 <!-- highlight-next-line -->
     <struct name="payment info" object="sales order">
       ...

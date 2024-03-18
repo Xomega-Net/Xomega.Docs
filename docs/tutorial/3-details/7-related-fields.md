@@ -270,7 +270,7 @@ Just like we did before, we are going to add a validation message for the custom
 
 |Name|Value|Comment|
 |-|-|-|
-|CustomerRequired|Customer information is required for order {0}.|{0}=Order ID|
+|CustomerRequired|Customer information is required for order \{0}.|\{0}=Order ID|
 
 Next, we will add `UpdateCustomer` method to the extended `SalesOrderService` service, to update the customer and address objects on the `SalesOrder` object from the provided `CustomerUpdate` structure, as follows.
 

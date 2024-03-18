@@ -381,8 +381,8 @@ The strings that the `XPickList` component uses to display on the screen or as a
 
 |Name|Value|Comment|
 |-|-|-|
-|PickList_Available|Available {0}|{0}=Property name|
-|PickList_Selected|Selected {0}|{0}=Property name|
+|PickList_Available|Available \{0}|\{0}=Property name|
+|PickList_Selected|Selected \{0}|\{0}=Property name|
 |PickList_Add|Add Selected||
 |PickList_AddAll|Add All|
 |PickList_Remove|Remove Selected||

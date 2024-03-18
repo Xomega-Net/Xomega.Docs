@@ -45,6 +45,8 @@ As for the criteria, we'll just allow filtering by the same parameters using ope
           <input>
             <struct name="criteria">
 <!-- removed-lines-start -->
+              <param name="customer id operator" type="operator">[...]
+              <param name="customer id" required="false"/>
               <param name="person id operator" type="operator">[...]
               <param name="person id" required="false"/>
               <param name="store id operator" type="operator">[...]
@@ -216,7 +218,7 @@ If we build the model now and run the application, then we will see that the *Cu
 
 ![Lookup link](img8/lookup-link.png)
 
-Notice how the child *Customer List* screen automatically allows a single selection in the grid, and provides a *Select* button to confirm your selection, thanks to the selection parameters that we configured on our `look up` link.
+Notice how, thanks to the selection parameters that we configured on our `look up` link, the child *Customer List* screen automatically allows a single selection in the grid, and provides a *Select* button to confirm your selection.
 
 Technically, this fulfills our requirements for allowing us to select a customer, but this process could be a little cumbersome since you always have to pull up the customer list screen, populate the criteria, and run the search, to select a customer.
 
@@ -301,11 +303,11 @@ Now that we have added the `store name` and `person name` properties to our look
     </xfk:data-object>
 ```
 
-With `CN` value for the operators, the search will automatically look for customers, whose store or person name contains the string entered by the user.
+With `CN` value for the operators, the search will automatically look for customers, whose store or person name contain the string entered by the user.
 
 ### Disabling modification tracking
 
-With the `SalesCustomerLookupObject` object being a child of the `SalesOrderCustomerObject`, which, in turn, is a child of the main `SalesOrderObject`, any changes to the fields of the lookup object will automatically make the entire sales order modified, which will cause a confirmation prompt for unsaved changes. This would be undesirable though since this object is not really a part of the sales order.
+With the `SalesCustomerLookupObject` object being a child of the `SalesOrderCustomerObject`, which, in turn, is a child of the main `SalesOrderObject`, any changes to the fields of the lookup object will automatically make the entire sales order modified, which will cause a confirmation prompt for unsaved changes. This would be undesirable though, since this object is not really a part of the sales order.
 
 We can disable modification tracking for this object in its customized subclass. For this, we'll set the `customize="true"` attribute on the data object declaration as follows.
 

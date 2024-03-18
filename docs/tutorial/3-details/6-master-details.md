@@ -70,7 +70,7 @@ You may have noticed that when a details panel is open, taking half the screen o
 The idea is that you'd put the most important columns in the first half of the master grid, which would allow the user to easily identify the record to select it to view its details. And for any selected record, the details panel will presumably already include all of the original fields from the master grid in addition to the other details.
 
 :::note
-If you don't like the default behavior of showing only the first columns in the master grid, you can override this behavior in the customized list object.
+If you don't like the default behavior of showing only the first columns in the master grid, you can override this behavior in a customized search view model.
 :::
 
 ### Responsive layout
