@@ -555,6 +555,21 @@ For object details views, the navigation menu will include only the option to cr
 
 The generated view will be for the specific UI framework, such as Blazor, WebForms, or WPF, but they will use common framework-agnostic view models. If you need to apply **UI framework-specific customizations** to a view, then you can add a `customize="true"` attribute to the view, and Xomega will generate a subclass or partial class for the view, where you can add your custom code.
 
+### Security policy
+
+To configure security access for a specific top-level view (i.e. without the `child="true"` attribute) you can define an authorization policy and set it in the `policy` attribute of the `ui:view` element, as follows.
+
+```xml
+<ui:view name="SalesOrderView" title="Sales Order" policy="Sales">[...]
+<ui:view name="SalesOrderListView" title="Sales Order List" policy="Sales">[...]
+```
+
+The [Blazor Views generator](../../generators/presentation/blazor/views) will use this policy to secure both the navigation [menu items](../../framework/blazor/components#menu-security) and the corresponding page using an `Authorize` attribute.
+
+:::warning
+Authorization policy is an ASP.NET Core concept, so this is only applicable to Blazor applications.
+:::
+
 ### View model
 
 Inside each view, you need to specify a `ui:view-model` child element, where you must set the main data object for the view in the `data-object` attribute, as follows.

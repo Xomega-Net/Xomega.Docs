@@ -65,7 +65,7 @@ Creating a solution with all the projects may take a while as all the dependency
 - **AdventureWorks.Client.Blazor.Wasm** project contains the Blazor WebAssembly client.
 - **AdventureWorks.Client.Blazor** project is the main application project for the Blazor client.
 
-## Review the empty application
+## Review the empty application{#login}
 
 Now that you understand the solution structure, let's build the solution and run the application that we got out of the box. Our solution template created an empty application that is secured with a user name and password, so you should see the following login screen.
 
@@ -76,7 +76,7 @@ The basic classes for the login screen and its supporting services are actually 
 :::
 
 :::warning
-The template also added some code to **pre-populate the user name and password** with some default values to make it easier for you to run the app during the development. You should **remove this code** after you implement proper security for your app.
+The template also added some code to **pre-populate the user name and password** with some default values to make it easier for you to run the app during the development. You should [**remove this code**](../security/authentication#remove-default-credentials) after you implement proper security for your app.
 :::
 
 Given that the login screen has been generated from the model as a details view, you can immediately see some standard features of the details views that you get for free.
@@ -85,7 +85,7 @@ For example, all required fields are automatically marked with a red asterisk in
 
 ![Login no password](img1/login-nopassword.png)
 
-Furthermore, the initial solution template has set up all the plumbing for checking the security, where you just need to implement the last bit of the actual check for the user name and password in a special login service, which we will do at the end of this tutorial.
+Furthermore, the initial solution template has set up all the plumbing for checking the security, where you just need to implement the last bit of the actual check for the user name and password in a special login service, which we will do [at the end of this tutorial](../security/authentication).
 
 By default, it allows any user name and the word `password` as the password. If you enter a different password, you'll see the following error from the login service, which gives you an idea of how an invalid login will look and feel in the real app.
 
