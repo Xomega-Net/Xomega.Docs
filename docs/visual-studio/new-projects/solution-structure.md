@@ -12,13 +12,17 @@ For example, if you specify *SolutionName* as the initial project name, pick all
 
 Let's review the default structure of each project in the Xomega solution.
 
-## Xomega model project
+## Model projects
 
-In the middle of the solution, between client and services projects, you'll find a special Xomega model project that ends with `.Model`.
+In the middle of the solution, between client and services projects, you'll find a couple of special projects for modeling the application.
 
 ### SolutionName.Model
 
-The model project combines `.xom` files that store Xomega model elements and configurations, as well as various generators that you can run on your model. We discuss the structure of the model project in the [next chapter](../model-project/project-structure).
+Xomega model project combines `.xom` files that store Xomega model elements and configurations, as well as various generators that you can run on your model. We discuss the structure of the model project in the [next chapter](../model-project/project-structure).
+
+### SolutionName.Model.Diagrams
+
+This project exists solely for the purpose of creating diagrams of your entity data model. The Entity Data Model (EDM) is generated from the Xomega domain model, so that you could use the entities you define to create visual diagrams that help you to better understand the structure of your domain model, which, in turn, helps you build your applications faster and more efficient.
 
 ## Shared project
 

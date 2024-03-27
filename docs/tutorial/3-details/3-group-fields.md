@@ -302,7 +302,7 @@ The easiest way to do it is to set the `extend="true"` attribute on the `svc:cus
       <fields>[...]
       <operations>[...]
       <config>
-        <sql:table name="Sales.SalesOrderHeader"/>
+        <sql:table name="Sales.SalesOrderHeader">[...]
 <!-- highlight-next-line -->
         <svc:customize extend="true" preserve-on-clean="true"/>
       </config>

@@ -256,6 +256,26 @@ The following example illustrates this configuration.
 </object>
 ```
 
+If your table has triggers, you can list them under the `sql:trigger` elements nested under the `sql:table` element as follows.
+
+```xml
+<object name="work order">
+  <fields>[...]
+  <config>
+    <sql:table name="Production.WorkOrder">
+<!-- highlight-start -->
+      <sql:trigger name="iWorkOrder"/>
+      <sql:trigger name="uWorkOrder"/>
+<!-- highlight-end -->
+    </sql:table>
+  </config>
+</object>
+```
+
+:::note
+The `sql:trigger` specification helps configure generated *EF Core* entities for certain querying behavior.
+:::
+
 Another configuration allows you to customize generated EF entities in a separate partial class by adding `edm:customize` element, as follows.
 
 ```xml

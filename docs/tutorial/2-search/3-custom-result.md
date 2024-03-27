@@ -70,7 +70,7 @@ For the service implementations, you can also configure that in the model in the
 
 ```xml title="sales_order.xom"
       <config>
-        <sql:table name="Sales.SalesOrderHeader"/>
+        <sql:table name="Sales.SalesOrderHeader">[...]
 <!-- added-next-line -->
         <svc:customize preserve-on-clean="true"/>
       </config>

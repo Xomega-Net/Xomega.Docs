@@ -88,6 +88,8 @@ Below is the full list of parameters that you can configure for different soluti
   - *Project* - the name of the project to use.
 - **Xomega Model** - project for modeling your domain and service models, from which application layers are generated.
   - *Project* - the name of the project to use.
+- **Entity Model Diagrams** - project for creating entity data model diagrams.
+  - *Project* - the name of the project to use.
 - **Shared Code between Services and Clients** - DTOs, service interfaces and other shared code.
   - *Project* - the name of the project to use.
   - *Use Async operations* - use asynchronous service operations. Synchronous operations should be used in very special legacy cases.

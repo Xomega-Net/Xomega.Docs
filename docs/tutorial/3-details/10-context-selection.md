@@ -224,7 +224,7 @@ In order to make sure that your inline customizations are [preserved if you run 
 
 ```xml title="person.xom"
     <config>
-      <sql:table name="Person.Person"/>
+      <sql:table name="Person.Person">[...]
       <edm:customize extend="true"/>
 <!-- added-next-line -->
       <svc:customize preserve-on-clean="true"/>

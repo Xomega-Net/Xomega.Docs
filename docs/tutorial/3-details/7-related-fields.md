@@ -190,7 +190,7 @@ As we did before, we can simply set the `extend="true"` attribute on the `edm:cu
     <object name="person">
       <fields>[...]
       <config>
-        <sql:table name="Person.Person"/>
+        <sql:table name="Person.Person">[...]
 <!-- added-next-line -->
         <edm:customize extend="true"/>
       </config>
