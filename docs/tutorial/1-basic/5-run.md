@@ -28,7 +28,7 @@ These architectures are substantially different under the hood, where Blazor Ser
 
 ## Reviewing new screens
 
-To review the new *Sales Order* screens that we generated from the model, let's run the application and click the *Login* button on the [login screen](create#review-the-empty-application) using default *Guest* credentials.
+To review the new *Sales Order* screens that we generated from the model, let's run the application and click the *Login* button on the [login screen](create#login) using default *Guest* credentials.
 
 ### Sidebar menu
 

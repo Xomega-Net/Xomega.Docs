@@ -388,7 +388,7 @@ The strings that the `XPickList` component uses to display on the screen or as a
 |PickList_Remove|Remove Selected||
 |PickList_RemoveAll|Remove All||
 
-You can create localized resources for these texts that are translated into the desired language(s). Also, if you would like to change the wording for these default resources, then you can redefine them in a new resource file using [hierarchical resources](../services/errors#hierarchical-resourcesresources).
+You can create localized resources for these texts that are translated into the desired language(s). Also, if you would like to change the wording for these default resources, then you can redefine them in a new resource file using [hierarchical resources](../services/errors#resources).
 
 ## Action controls
 

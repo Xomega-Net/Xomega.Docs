@@ -237,7 +237,7 @@ protected override async Task OnChildEventAsync(object childViewModel, ViewEvent
 ```
 
 :::note
-As an example of handling child view events, the Blazor views bound to the view model listen to the opening and closing of the child views, and then update the `OpenInlineViews` property on the view model to track the number of open child views in the `Inline` mode. This property, in turn, helps the view model to [reconfigure the number of visible elements](search-view#showing--hiding-columns) on the screen based on the presumably available real estate.
+As an example of handling child view events, the Blazor views bound to the view model listen to the opening and closing of the child views, and then update the `OpenInlineViews` property on the view model to track the number of open child views in the `Inline` mode. This property, in turn, helps the view model to [reconfigure the number of visible elements](search-view#showinghiding-columns) on the screen based on the presumably available real estate.
 :::
 
 ## View model navigation

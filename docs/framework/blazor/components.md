@@ -11,7 +11,7 @@ Xomega Framework provides a number of components that are dependent on or used b
 
 ## NavMenu
 
-Xomega Framework provides a Bootstrap-styled, **security-enabled** `NavMenu` component with hierarchical grouping to let you navigate to [top-level views](views#top-level-views). Typically, you would use it within a layout component, where you can add the `NavMenu` menu component to your sidebar or top-level header for a dropdown menu, as described below.
+Xomega Framework provides a Bootstrap-styled, **security-enabled** `NavMenu` component with hierarchical grouping to let you navigate to [top-level views](views#top-level-page-views). Typically, you would use it within a layout component, where you can add the `NavMenu` menu component to your sidebar or top-level header for a dropdown menu, as described below.
 
 <Tabs>
   <TabItem value="sidebar" label="Sidebar collapsible menu">
@@ -429,7 +429,7 @@ The strings that the `Pager` component uses to display on the screen or as a too
 |Pager_PageSize|Items per page||
 |Pager_Summary|Showing \{0} to \{1} of \{2} items.|\{0}=Lower range boundary, \{1}=Upper range boundary, \{2}=Total number of items|
 
-You can create localized resources for these texts that are translated into the desired language(s). Also, if you would like to change the wording for these default resources, e.g. say *rows* instead of *items*, then you can redefine them in a new resource file using [hierarchical resources](../services/errors#hierarchical-resourcesresources).
+You can create localized resources for these texts that are translated into the desired language(s). Also, if you would like to change the wording for these default resources, e.g. say *rows* instead of *items*, then you can redefine them in a new resource file using [hierarchical resources](../services/errors#resources).
 
 If you want to override these labels for a specific grid or view, then you can set the `ResourceKey` parameter on the pager. For example, the following code sets the `ResourceKey` parameter to the base name of the view model's class (*SalesOrderList*).
 

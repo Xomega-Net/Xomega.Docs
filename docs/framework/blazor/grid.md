@@ -305,7 +305,7 @@ The strings that the `Pager` component uses to display on the screen or as a too
 |Pager_PageSize|Items per page||
 |Pager_Summary|Showing \{0} to \{1} of \{2} items.|\{0}=Lower range boundary, \{1}=Upper range boundary, \{2}=Total number of items|
 
-You can create localized resources for these texts that are translated into the desired language(s). Also, if you would like to change the wording for these default resources, e.g. say *rows* instead of *items*, then you can redefine them in a new resource file using [hierarchical resources](../services/errors#hierarchical-resourcesresources).
+You can create localized resources for these texts that are translated into the desired language(s). Also, if you would like to change the wording for these default resources, e.g. say *rows* instead of *items*, then you can redefine them in a new resource file using [hierarchical resources](../services/errors#resources).
 
 If you want to override these labels for a specific grid or view, then you can set the `ResourceKey` parameter on the grid. For example, the following code sets the `ResourceKey` parameter to the base name of the view model's class (*SalesOrderList*).
 

@@ -90,7 +90,7 @@ enumProp.SortField = h => h["sort order"];
 
 ### Filtered list
 
-`EnumProperty` filters the value selection list from the lookup table using its delegate `FilterFunc`, which by default is initialized to the property's method `IsAllowed`. This method filters out inactive headers unless the header is one of the current property values. When [cascading selection](#cascading-static-items) is set up, it also filters only the headers that match the current values of the cascading properties.
+`EnumProperty` filters the value selection list from the lookup table using its delegate `FilterFunc`, which by default is initialized to the property's method `IsAllowed`. This method filters out inactive headers unless the header is one of the current property values. When [cascading selection](#cascading-selection) is set up, it also filters only the headers that match the current values of the cascading properties.
 
 You can set a custom filtering function, which can also utilize the default behavior of the `IsAllowed` method, as follows.
 
