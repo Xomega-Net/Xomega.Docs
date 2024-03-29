@@ -1,0 +1,46 @@
+{
+  "index_name": "xomega",
+  "start_urls": [
+    "https://xomega.net/docs/"
+  ],
+  "sitemap_urls": [
+    "https://xomega.net/docs/sitemap.xml"
+  ],
+  "sitemap_alternate_links": true,
+  "stop_urls": [
+    "/tests"
+  ],
+  "selectors": {
+    "lvl0": {
+      "selector": "(//span[@class ='breadcrumbs__link'])[text()='Xomega Modeling' or text()='Release Notes' or position()=1][last()]",
+      "type": "xpath",
+      "global": true,
+      "default_value": "Docs"
+    },
+    "lvl1": "article h1",
+    "lvl2": "article h2",
+    "lvl3": "article h3",
+    "lvl4": "article h4",
+    "lvl5": "article h5, article td:first-child",
+    "lvl6": "article h6",
+    "text": "article p, article li, article td:last-child"
+  },
+  "strip_chars": " .,;:#",
+  "custom_settings": {
+    "separatorsToIndex": "_",
+    "attributesForFaceting": [
+      "language",
+      "version",
+      "type",
+      "docusaurus_tag"
+    ],
+    "attributesToRetrieve": [
+      "hierarchy",
+      "content",
+      "anchor",
+      "url",
+      "url_without_anchor",
+      "type"
+    ]
+  }
+}
