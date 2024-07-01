@@ -62,6 +62,8 @@ In order to declare scalar parameters in a structure, you should use a `param` e
 </struct>
 ```
 
+#### Multi-value parameters
+
 If your structure must have an array of scalar values, you just need to set the `list="true"` attribute on the `param` element. For example, to be able to filter by multiple statuses, you can make the `status` a multi-value parameter on the `order criteria` structure, as follows.
 
 ```xml
@@ -70,6 +72,8 @@ If your structure must have an array of scalar values, you just need to set the 
   <param name="status" type="order status" list="true"/>
 </struct>
 ```
+
+#### Referenced object
 
 If most of your structure parameters represent fields of some domain object, then you can specify the dot-separated fully qualified name of the object on the structure, e.g., `object="sales order.line item"` for the `line item` subobject of the `sales order` parent object.
 

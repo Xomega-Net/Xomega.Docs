@@ -8,7 +8,7 @@ pagination_prev: null
 
 Currently, Xomega.Net is geared towards the Microsoft technology stack:
 
-- **SQL Server** database for the persistence layer;
+- **SQL Server** or **PostgreSQL** databases for the persistence layer;
 - **Entity Framework Core** or **Entity Framework 6.x** for the domain model and ORM;
 - Service layer in C# that can be exposed through **Web API** (REST) or **WCF** (SOAP);
 - C#-based presentation layer for modern **Blazor Server** or **Blazor WebAssembly** web app, or classic **ASP.NET WebForms** or **WPF** desktop apps, powered by our open-source Xomega Framework that helps you build robust multi-tier applications faster and with less code.
@@ -20,7 +20,7 @@ Xomega comes with a set of built-in generators that can help you hit the ground 
 
 This type of generator helps you quickly enrich your XML object model by importing it from a database, or by adding new layers or aspects to the model.
 
-- [Import from Database](model/import) creates an object model from your existing SQL Server database schema.
+- [Import from Database](model/import) creates an object model from your existing database schema.
 - [Full CRUD with Views](model/crud) allows you to quickly add configurable `create`, `update`, `read`, `delete` and `read list` operations to any object and its sub-objects in the model, as well as to define and configure any necessary data objects and views in the model for UI generation.
 - [Enumerations from Database](model/enums) imports static enumerations and their values into the model from existing database tables.
 

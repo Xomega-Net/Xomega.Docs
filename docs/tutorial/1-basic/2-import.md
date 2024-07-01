@@ -12,19 +12,19 @@ Expand the *Generators* node in the *AdventureWorks.Model* project, and find the
 
 ![Import generator](img2/import-generator.png) ![Import connection](img2/import-connection.png)
 
-Double-click on the generator to open its properties, and click on the editor for the *Database Connection* property, which will pop up a *Database Connection Configuration* dialog as follows.
+Double-click on the generator to open its properties, and click on the editor for the *Connection String* property, which will pop up a standard *Connection Properties* dialog that uses the default `SqlClient` connection provider for SQL Server. To use a provider for the latest features you can change the data source and select the `Microsoft SqlClient` provider as follows.
 
-![Connection dialog](img2/connection-dialog.png)
+![Connection provider](img2/connection-provider.png)
 
-You will need to provide the connection string, which you can also specify in a separate dialog by clicking the *Configure* button. We will select the *Microsoft OLE DB Provider for SQL Server*, and the sample *AdventureWorks2022* database on the local SQL server instance using windows authentication, as shown below.
+Next, we will configure connection to the sample *AdventureWorks2022* database on the local SQL Server instance using windows authentication, as shown below.
 
-![Connection provider](img2/connection-provider.png) ![Connection properties](img2/connection-properties.png) 
+![Connection properties](img2/connection-properties.png)
 
-Once you set up the connection string and click *Next*, you will be prompted to exclude any tables from the import. We'll include all tables in the import, so you can just click *Next* again to view the summary of the connection settings, as follows.
+Once you click OK, you'll be prompted whether you want to save this configuration as the default for the project as follows.
 
-![Connection summary](img2/connection-summary.png)
+![Save default](img2/save-default.png)
 
-Verify the database information, select the option to save it as a project default configuration, and then click *Finish*.
+Click *Yes* to save it as a project default configuration.
 
 ## Run the import from a database
 

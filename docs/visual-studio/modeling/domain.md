@@ -44,7 +44,7 @@ You can also supply a description and detailed documentation for the field in th
 
 Any additional field configuration is specified under the nested `config` element in a separate namespace.
 
-For example, you can configure some properties of the corresponding SQL Server column for any field by setting the following attributes on its `sql:column` element:
+For example, you can configure some properties of the corresponding database column for any field by setting the following attributes on its `sql:column` element:
 - `name` - the name of the database column for the field when not derived from the field's name.
 - `mode` - field persistence mode. Set to `none` to indicate the field is not persisted in the database.
 - `default` - the default value or expression for the database column for generating a DB script.
@@ -329,6 +329,8 @@ The following example illustrates how the key field `customer id` of the `custom
 If you define a subtype of the `customer` type, e.g., `internal customer`, and use that subtype on the `customer id` field, then Xomega will still define an association to the `customer` object unless, of course, that subtype is also used on a key field of another object.
 :::
 
+#### Foreign key configuration
+
 If you need to configure the properties of the underlying foreign key, you can do it in the `sql:foreign-key` config element of the field, as follows.
 
 ```xml
@@ -349,8 +351,8 @@ If you need to configure the properties of the underlying foreign key, you can d
 The `sql:foreign-key` element allows you to specify the following attributes.
 - `name` - custom foreign key name, if not derived from the names of the field and related objects.
 - `mode` - set to `none` to suppress the foreign key constraint.
-- `update` - specifies the "on update" action: `no action`, `cascade`, `set null`, or `set default`.
-- `delete` - specifies the "on delete" action: `no action`, `cascade`, `set null`, or `set default`.
+- `update` - specifies the "on update" action: `no action`, `cascade`, `restrict`, `set null`, or `set default`.
+- `delete` - specifies the "on delete" action: `no action`, `cascade`, `restrict`, `set null`, or `set default`.
 
 ### Complex associations
 
@@ -407,11 +409,13 @@ If you need to configure the properties of the underlying foreign key, you can d
   </object>
 ```
 
+#### Foreign key configuration
+
 The `sql:composite-foreign-key` element allows you to specify the following attributes.
 - `name` - custom foreign key name, if not derived from the names of the fields and related objects.
 - `mode` - set to `none` to suppress the foreign key constraint.
-- `update` - specifies the "on update" action: `no action`, `cascade`, `set null`, or `set default`.
-- `delete` - specifies the "on delete" action: `no action`, `cascade`, `set null`, or `set default`.
+- `update` - specifies the "on update" action: `no action`, `cascade`, `restrict`, `set null`, or `set default`.
+- `delete` - specifies the "on delete" action: `no action`, `cascade`, `restrict`, `set null`, or `set default`.
 
 ### Subtype associations
 

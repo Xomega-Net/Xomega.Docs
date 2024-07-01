@@ -40,10 +40,13 @@ The following table lists configuration parameters that are set as the generator
 |**Output**|
 |Output Path|../database/db_update.sql|Relative path where to output generated DDL update script.|
 |**Database**|
-|Database|SQL Server|Database type of the target database. Currently only SQL Server (`sqlsrv`) is supported. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Version|11.0|The version of the target database. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Case|CamelCase|The database case for the database objects' names: `UPPER_CASE`, `lower_case` or `CamelCase`. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Connection|Use Project Settings|Database connection string for the target database. Edited via a *Database Connection Configuration* dialog, which also sets the other *Database* parameters of the generator, and allows selecting tables to exclude from the model, as well as saving all this configuration for the entire project. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
+|Connection String|Use Project Setting|Database connection string for the target database. Edited via the standard VS *Connection Properties* dialog, which also sets the other *Database* parameters of the generator, and allows saving it for the entire project. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Data Provider|.NET Framework Data Provider for SQL Server|Name of the data provider selected for the connection string. Value '*Use Project Setting*' takes this value from the corresponding property of the model project. Option *Reset Connection Info* allows resetting the connection string.|
+|Database|SQL Server|Database type of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Database Version|16.0|The version of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|**Parameters**|
+|Rerunnable|True|Specifies whether to make the generated SQL script rerunnable. Default is False.|
 
 ### Model configuration
 

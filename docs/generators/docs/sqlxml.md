@@ -35,11 +35,12 @@ The following table lists configuration parameters that are set as the generator
 |**Output**|
 |Output Path|../Docs/SqlXmlReport.docx|Relative path where to output the generated document.|
 |**Database**|
-|Database|SQL Server|Database type of the target database. Currently only SQL Server (`sqlsrv`) is supported. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Version|11.0|The version of the target database. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Case|CamelCase|The database case for the database objects' names: `UPPER_CASE`, `lower_case` or `CamelCase`. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Connection|Use Project Settings|Database connection string for the target database. Edited via a *Database Connection Configuration* dialog, which also sets the other *Database* parameters of the generator, and allows saving all this configuration for the entire project. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Sql Query|SELECT ... FOR XML ..., TYPE, ROOT('root')|SQL query that returns rooted typed XML using `FOR XML`, `TYPE` and `ROOT` directives.|
+|Connection String|Use Project Setting|Database connection string for the source database. Edited via the standard VS *Connection Properties* dialog, which also sets the other *Database* parameters of the generator, and allows saving it for the entire project. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Data Provider|.NET Framework Data Provider for SQL Server|Name of the data provider selected for the connection string. Value '*Use Project Setting*' takes this value from the corresponding property of the model project. Option *Reset Connection Info* allows resetting the connection string.|
+|Database|SQL Server|Database type of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Database Version|16.0|The version of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Sql Query|SELECT ... FOR XML ..., TYPE, ROOT('root')|SQL query that returns rooted typed XML using syntax appropriate for the current database, e.g. `FOR XML`, `TYPE` and `ROOT` directives.|
 |**Parameters**|
 |Title|SQLXML Report|Title to use for the generated document.|
 |Subject|Custom report generated from SQL XML|Subject (subtitle) to use for the generated document.|

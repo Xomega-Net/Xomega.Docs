@@ -192,10 +192,11 @@ The following table lists configuration parameters that are set as the generator
 |**Output**|
 |Output Path|Import/\{Module/\}\{File\}.xom|Relative path where to output generated .xom files, which will be added to the model project. The path may contain \{Module/\} and \{File\} placeholders to output files by database schema and table respectively.|
 |**Database**|
-|Database|SQL Server|Database type of the source database. Currently only SQL Server (sqlsrv) is supported. Value 'Use Project Settings' takes this value from the corresponding property of the model project.|
-|Database Version|11.0|The version of the source database. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Case|CamelCase|The database case for the database objects' names: `UPPER_CASE`, `lower_case` or `CamelCase`. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Connection|Use Project Settings|Database connection string for the source database. Edited via a *Database Connection Configuration* dialog, which also sets the other *Database* parameters of the generator, and saving all this configuration for the entire project. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
+|Connection String|Use Project Setting|Database connection string for the source database. Edited via the standard VS *Connection Properties* dialog, which also sets the other *Database* parameters of the generator, and allows saving it for the entire project. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Data Provider|.NET Framework Data Provider for SQL Server|Name of the data provider selected for the connection string. Value '*Use Project Setting*' takes this value from the corresponding property of the model project. Option *Reset Connection Info* allows resetting the connection string.|
+|Database|SQL Server|Database type of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Database Version|16.0|The version of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
 |**Naming&nbsp;Convention**|
 |Keep Table Names|True|Whether or not to preserve table names in generated objects.|
 |Keep Column Names|True|Whether or not to preserve column names in generated objects.|
@@ -211,7 +212,7 @@ The generator doesn't use any other configuration parameters from the model.
 
 When importing the model from a database you should, first of all, define the database connection for the generator. You can do it via the *Database Connection Configuration* dialog that pops up from the generator's *Properties* page. In that dialog, you should specify an OLE DB connection string to your database, which Xomega will validate and will use to read your database metadata.
 
-On the next tab of the dialog, you can specify which database tables you would like to exclude from the model. Next, the system will try to determine if your database names are case-sensitive and will set the *Database Case* to `CamelCase` or your choice of `UPPER_CASE` or `lower_case` respectively, which will be used for generating tables for all new objects as well.
+On the next tab of the dialog, you can specify which database tables you would like to exclude from the model. Next, the system will try to determine if your database names are case-sensitive and will set the *Database Case* to `PascalCase` or your choice of `UPPER_SNAKE` or `lower_snake` respectively, which will be used for generating tables for all new objects as well.
 
 It makes sense to save this database configuration as default project settings, which will be one of the options in the dialog so that all other database-related generators could reuse the same settings. This way, for example, the *Database Change Script* generator won't try to remove the tables that have been explicitly excluded from the model.
 

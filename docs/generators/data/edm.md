@@ -159,9 +159,9 @@ The following table lists configuration parameters that are set as the generator
 |**Output**|
 |Output Path|../MySolution.Services.Entities /Entities/EntityModel.edmx|Relative path where to output generated Entity Data Model file.|
 |**Database**|
-|Database|SQL Server|Database type for the Entity Data Model. Currently only SQL Server (`sqlsrv`) is supported. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Case|CamelCase|The database case for the database objects' names: `UPPER_CASE`, `lower_case` or `CamelCase`. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Version|11.0|The version of the database for the Entity Data Model. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
+|Database|SQL Server|Database type for the Entity Data Model. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Database Version|16.0|The version of the database for the Entity Data Model. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
 |**Parameters**|
 |Model Name|MySolution|The base name to use when generating the Entity Data Model.|
 

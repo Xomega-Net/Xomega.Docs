@@ -96,7 +96,7 @@ On top of that, if the key on the subobject is not "serial" (i.e. not unique), t
 
 ### SQL configurations
 
-A lot of information that is needed to generate the database schema for the Xomega model will be derived directly from the model. By default, the names of the generated tables and columns will be based on the names of the corresponding objects and fields, using the specified DB naming case convention (i.e. `UPPER_CASE`, `lower_case`, or `CamelCase`).
+A lot of information that is needed to generate the database schema for the Xomega model will be derived directly from the model. By default, the names of the generated tables and columns will be based on the names of the corresponding objects and fields, using the specified DB naming case convention (i.e. `UPPER_SNAKE`, `lower_snake`, or `PascalCase`).
 
 The primary key is derived from the object's key, whether or not the column is required comes from the `required` attribute on the field, and the maximum length of the character columns is determined based on the `size` attribute of the field's type or its base types.
 
@@ -181,9 +181,11 @@ The following table lists configuration parameters that are set as the generator
 |**Output**|
 |Output Path|../database/db_schema.sql|Relative path where to output the generated DDL script.|
 |**Database**|
-|Database|SQL Server|Database type for the DDL script. Currently only SQL Server (`sqlsrv`) is supported. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Version|11.0|The version of the database for the DDL script. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Case|CamelCase|The database case for the database objects' names: `UPPER_CASE`, `lower_case` or `CamelCase`. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
+|Database|SQL Server|Database type for the DDL script. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Database Version|16.0|The version of the database for the DDL script. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|**Parameters**|
+|Rerunnable|True|Specifies whether to make the generated SQL script rerunnable. Default is False.|
 
 ### Model configuration
 

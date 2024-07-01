@@ -333,7 +333,7 @@ In addition to associating an enumeration with a logical type, you would also ty
 
 The following snippet shows base types available in Xomega for enumerations by default, along with their short descriptions.
 
-```xml title="base_types.xom"
+```xml title="enum_types.xom"
 <types>
   <!-- string-based enumeration with value selection from a fixed list -->
   <type name="enumeration" base="selection" size="25">[...]
@@ -346,6 +346,9 @@ The following snippet shows base types available in Xomega for enumerations by d
   
   <!-- boolean-based enumeration with value selection from a fixed list -->
   <type name="boolean enumeration" base="selection">[...]
+
+  <!-- guid-based enumeration with value selection from a fixed list -->
+  <type name="guid enumeration" base="selection">[...]
 
   <!-- string value that is typed in, with a suggestion list available -->
   <type name="suggest string" base="enumeration">[...]
@@ -390,26 +393,66 @@ In large projects refactoring core logical types that are used extensively in ma
 
 To facilitate this process, you can declare a logical type as deprecated and indicate another logical type that should be used instead of the current one by setting the `replaced-by` attribute on the `usage` element.
 
-For example, the type `numeric` has been deprecated in SQL Server in favor of the `decimal` type. However, to allow importing models from the databases that still use it, the model has a generic `numeric` type defined that is marked with the `replaced-by="decimal"` attribute, as follows.
+For example, the type `image` has been [deprecated in SQL Server](https://learn.microsoft.com/en-us/sql/t-sql/data-types/ntext-text-and-image-transact-sql?view=sql-server-ver16) in favor of the `varbinary(max)` type. However, to allow importing models from the databases that still use it, the model has a generic `image` type defined that is marked with the `replaced-by="large binary"` attribute, as follows.
 
 ```xml
-<type name="numeric" base="decimal">
+<type name="image" base="binary">
   <config>
 <!-- highlight-next-line -->
-    <sql:type name="numeric" db="sqlsrv"/>
+    <sql:type name="image" db="sqlsrv"/>
   </config>
 <!-- highlight-next-line -->
-  <usage generic="true" replaced-by="decimal"/>
+  <usage generic="true" replaced-by="large binary"/>
   <doc>
-    <summary>Same as decimal. Defined to allow a mapping for the corresponding SQL Server type.</summary>
+    <summary>Large binary data that can exceed 8000 bytes.</summary>
   </doc>
 </type>
 ```
 
-If you try to use the `numeric` logical type in your model now, Xomega will show you a warning, advising you to use the `decimal` type instead, as follows.
+If you try to use the `image` logical type in your model now, Xomega will show you a warning, advising you to use the `large binary` type instead, as follows.
 
 ![Deprecated type](img/type-deprecated.png)
 
 :::note
 This is similar to the `Obsolete` attribute that you can put on C# members, which would then display a warning wherever those members are used.
 :::
+
+## List types
+
+If a field in your object stores an array of values, then you can define a special list type in the model (or use one of the predefined types from the `list_types.xom` file included under the *Framework* folder of the Model project). You can inherit your type from the base `list` type and set the `clr:type` to a collection, such as `List<string>`, as shown below.
+
+```xml title="list_types.xom"
+<type name="list" base="string">[...]
+<type name="string list" base="list">
+  <config>
+<!-- highlight-next-line -->
+    <clr:type name="List&lt;string&gt;" namespace="System.Collections.Generic"/>
+    <xfk:property class="TextProperty" namespace="Xomega.Framework.Properties" tsModule="xomega"
+<!-- highlight-next-line -->
+                  multi-value="true" />
+  </config>
+  <usage generic="true"/>
+  <doc>
+    <summary>Unlimited list of strings.</summary>
+  </doc>
+</type>
+```
+
+You should also configure your `xfk:property` with the `multi-value="true"` attribute, as illustrated above. This will automatically configure the generated properties as [multi-valued](../../framework/common-ui/properties/base#multi-valued-properties).
+
+:::warning
+When using list types, **don't to set the `list="true"`** attribute on the corresponding [parameters](services#multi-value-parameters) of your operations. Otherwise, you'll get a list of lists for those parameters.
+:::
+
+### SQL types for arrays
+
+You should also configure the `sql:type` for your list type to allow storing the values as an array. For databases that support array types natively, such as PostgreSQL, you can specify the corresponding native type as follows.
+
+```xml title="pgsql_config.xom"
+<type-config type="string list">
+<!-- highlight-next-line -->
+  <sql:type name="text[]" db="pgsql"/>
+</type-config>
+```
+
+For databases that don't have native support for arrays, such as SQL Server, the base `list` type uses `nvachar(max)` to allow storing a JSON array, which is what [EF Core 8 uses for array types](https://devblogs.microsoft.com/dotnet/array-mapping-in-ef-core-8/).

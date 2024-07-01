@@ -160,10 +160,11 @@ The following table lists configuration parameters that are set as the generator
 |Output Path|../MySolution.Services.Entities /Entities/\{Module/\}\{File\}.cs|Path where to output files with generated Entity Framework Domain Objects. The path may contain \{Module/\} and \{File\} placeholders to output files by module and domain object respectively.|
 |Database Config File|../MySolution.Services.Entities /db.config|Application config file to add the entity database connection string to. Leave it blank if you don't want entity database connection string to be added to your config automatically.|
 |**Database**|
-|Database|SQL Server|Database type for the Entity Data Model. Currently only SQL Server (`sqlsrv`) is supported. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Version|11.0|The version of the database for the Entity Data Model. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Case|CamelCase|The database case for the database objects' names: `UPPER_CASE`, `lower_case` or `CamelCase`. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Connection|Use Project Settings|Database connection string for the `DbContext`. Edited via a *Database Connection Configuration* dialog, which also sets the other *Database* parameters of the generator, and allows saving them for the entire project. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
+|Connection String|Use Project Setting|Database connection string for the `DbContext`. Edited via the standard VS *Connection Properties* dialog, which also sets the other *Database* parameters of the generator, and allows saving it for the entire project. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Data Provider|.NET Framework Data Provider for SQL Server|Name of the data provider selected for the connection string. Value '*Use Project Setting*' takes this value from the corresponding property of the model project. Option *Reset Connection Info* allows resetting the connection string.|
+|Database|SQL Server|Database type of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Database Version|16.0|The version of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
 
 ### Model configuration
 

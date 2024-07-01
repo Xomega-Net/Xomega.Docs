@@ -10,10 +10,6 @@ When you are building a real application, you will pretty much know what kind of
 
 Let's go ahead and open up the imported `sales_order_header.xom` file, which contains the XML for our Xomega object model. To make reading and browsing this XML much easier, Xomega allows you to collapse it to definitions of different model entities. So go ahead and select the *Outlining > Collapse To Definitions* in the context menu for that XML to see it better, or just press the Ctrl+M, Ctrl+O shortcut.
 
-:::tip
-If the editor for the `sales_order_header.xom` doesn't show XML syntax highlighting or the *Collapse To Definitions* command, then try closing and reopening that file, as the Xomega Editor may not have been loaded on the initial open.
-:::
-
 Based on the special relationships (with cascading delete) between the `SalesOrderHeader` table and its child tables (`SalesOrderDetails` and `SalesReason`), the latter have been imported as subobjects of the sales order object, and automatically include its keys implicitly. The following picture demonstrates this.
 
 ![Sales order](img3/sales-order.png)

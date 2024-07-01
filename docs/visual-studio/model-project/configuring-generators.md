@@ -52,13 +52,39 @@ Some generators that require a connection to the database, e.g. to read the data
 
 ![Database parameters](img/params-db.png)
 
-The `Database Connection` is edited via a separate dialog that allows specifying connection properties, as well as which tables to exclude from the model. It will also auto-populate other database parameters based on the properties of your database, but you can change them independently after that. The following picture illustrates the *Database Connection Configuration* dialog.
+#### Configuring connection info
 
-![Database configuration](img/db-config-summary.png)
+The `Connection String` is edited via the standard VS *Connection Properties* dialog, where you can specify the connection parameters, including any advanced properties, as illustrated below.
 
-Since generators that need DB connection may need to share the same DB configuration, you can save these parameters as the project default, rather than for the specific generator, so that other generators could also use it. In this case, the actual values from the first picture will be displayed on the properties of the *Model* project, while the properties of the generator will show the following.
+![Connection properties](img/connection-properties.png)
+
+Initially it will use the default data provider of the data source for the selected database, but you can change the data source and/or the data provider by clicking the *Change* button, as follows.
+
+![Data sources](img/data-source.png)
+
+:::warning
+To enable the `PostgreSQL Database` data source you need to install VS extension [*Npgsql PostgreSQL Integration*](https://marketplace.visualstudio.com/items?itemName=RojanskyS.NpgsqlPostgreSQLIntegration).
+:::
+
+#### Saving database config as default
+
+Since generators that need DB connection may need to share the same DB configuration, you can save these parameters as the project default, rather than for the specific generator, so that other generators could also use it. After you select the database connection parameters for a generator, you will be asked if you want to save them as default for the model project as follows.
+
+![Save as default](img/save-default.png)
+
+If you choose *Yes*, the connection parameters will be displayed on the properties of the *Model* project, while the properties of the generator will show the *Use Project Setting*, as shown below.
 
 ![Database parameters](img/params-use-project.png)
+
+#### Resetting connection info
+
+To reset the connection info you can select the *Reset Connection Info* option under the `Data Provider` property. On the *Model* project it will be the only option, as shown below.
+
+![Reset project connection](img/reset-connection-model.png)
+
+On the generators you will also have an option to reset it to the *Model* project's default parameters by selecting the *Use Project Setting* option, as shown bellow.
+
+![Reset generator connection](img/reset-connection-generator.png)
 
 ## Creating multiple configurations
 

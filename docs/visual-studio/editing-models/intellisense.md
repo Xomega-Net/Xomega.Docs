@@ -65,7 +65,6 @@ This description is taken from the documentation tag that you specify on your mo
 ```xml title="base_types.xom"
 <type name="money" base="decimal">
   <config>
-    <sql:type name="money" db="sqlsrv"/>
     <xfk:property class="MoneyProperty" namespace="Xomega.Framework.Properties" tsModule="xomega"/>
     <ui:display-config typical-length="12"/>
   </config>

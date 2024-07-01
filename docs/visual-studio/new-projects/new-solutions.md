@@ -98,6 +98,9 @@ Below is the full list of parameters that you can configure for different soluti
   - *ORM* - Object-Relational Mapping framework to use, as follows.
     - `EF Core` - use newer Entity Framework Core.
     - `EF 6.x` - use older Entity Framework 6.x.
+  - *Database* - database system to use for the solution, as follows.
+    - `SQL Server` - use Microsoft SQL Server.
+    - `PostgreSQL` - use PostgreSQL database (available only with `EF Core`).
 - **REST API** - controllers for exposing business services via REST API.
   - *Project* - the name of the project to use.
 - **WCF API** - business services exposed via legacy WCF API.

@@ -112,10 +112,11 @@ The following table lists configuration parameters that are set as the generator
 |**Output**|
 |Output Path|ImportedEnums/ \{Module\}_enums.xom|Relative path where to output generated .xom files with enumerations, which will be added to the model project. The path may contain \{Module/\} and \{File\} placeholders to output files by database schema and enumeration respectively.|
 |**Database**|
-|Database|SQL Server|Database type of the source database. Currently only SQL Server (`sqlsrv`) is supported. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Version|11.0|The version of the source database. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Case|CamelCase|The database case for the database objects' names: `UPPER_CASE`, `lower_case` or `CamelCase`. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
-|Database Connection|Use Project Settings|Database connection string for the source database. Edited via a *Database Connection Configuration* dialog, which also sets the other Database parameters of the generator, and saving all this configuration for the entire project. Value '*Use Project Settings*' takes this value from the corresponding property of the model project.|
+|Connection String|Use Project Setting|Database connection string for the source database. Edited via the standard VS *Connection Properties* dialog, which also sets the other *Database* parameters of the generator, and allows saving it for the entire project. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Data Provider|.NET Framework Data Provider for SQL Server|Name of the data provider selected for the connection string. Value '*Use Project Setting*' takes this value from the corresponding property of the model project. Option *Reset Connection Info* allows resetting the connection string.|
+|Database|SQL Server|Database type of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Database Version|16.0|The version of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
 
 ### Model configuration
 
