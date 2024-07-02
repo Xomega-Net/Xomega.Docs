@@ -14,6 +14,19 @@ You can click on any link on each video to play the video starting at that secti
 
 The following videos demonstrate Xomega features in the latest releases.
 
+### Unified Blazor Architecture in .NET 8
+
+Watch this video to learn about:
+
+- [Blazor render modes in .NET 8.](https://www.youtube.com/embed/X6DWEK6BkuU?start=94&vq=hd1080&rel=0&autoplay=1)
+- [Unified Xomega Blazor solution.](https://www.youtube.com/embed/X6DWEK6BkuU?start=366&vq=hd1080&rel=0&autoplay=1)
+- [Login view with Blazor Server.](https://www.youtube.com/embed/X6DWEK6BkuU?start=601&vq=hd1080&rel=0&autoplay=1)
+- [Generating Search/Details views from DB.](https://www.youtube.com/embed/X6DWEK6BkuU?start=795&vq=hd1080&rel=0&autoplay=1)
+- [Login and Search/Details views in WebAssembly.](https://www.youtube.com/embed/X6DWEK6BkuU?start=1050&vq=hd1080&rel=0&autoplay=1)
+
+<iframe width="640" height="360" src="https://www.youtube.com/embed/X6DWEK6BkuU?start=0&vq=hd1080&rel=0"
+    frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen="true"></iframe>
+
 ### Generating Blazor Apps in .NET 7
 
 Watch this video to learn about:
