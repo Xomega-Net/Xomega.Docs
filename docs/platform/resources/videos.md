@@ -14,6 +14,21 @@ You can click on any link on each video to play the video starting at that secti
 
 The following videos demonstrate Xomega features in the latest releases.
 
+### PostgreSQL DB to a Blazor app in 15 min
+
+Watch this video to learn about:
+
+- [Creating a Blazor solution for PostgreSQL](https://www.youtube.com/embed/X6DWEK6BkuU?start=0&vq=hd1080&rel=0&autoplay=1)
+- [PostgreSQL sample database](https://www.youtube.com/embed/X6DWEK6BkuU?start=138&vq=hd1080&rel=0&autoplay=1)
+- [Issues with EF Core scaffolding](https://www.youtube.com/embed/X6DWEK6BkuU?start=242&vq=hd1080&rel=0&autoplay=1)
+- [Import model from a PostgreSQL database](https://www.youtube.com/embed/X6DWEK6BkuU?start=316&vq=hd1080&rel=0&autoplay=1)
+- [Generating Search & Details views](https://www.youtube.com/embed/X6DWEK6BkuU?start=470&vq=hd1080&rel=0&autoplay=1)
+- [Customizing Search views](https://www.youtube.com/embed/X6DWEK6BkuU?start=720&vq=hd1080&rel=0&autoplay=1)
+- [Changing domain model for static data](https://www.youtube.com/embed/X6DWEK6BkuU?start=984&vq=hd1080&rel=0&autoplay=1)
+
+<iframe width="640" height="360" src="https://www.youtube.com/embed/K6DkNx7OFMI?start=0&vq=hd1080&rel=0"
+    frameBorder="0" allow="autoplay; encrypted-media" allowFullScreen="true"></iframe>
+
 ### Unified Blazor Architecture in .NET 8
 
 Watch this video to learn about:
