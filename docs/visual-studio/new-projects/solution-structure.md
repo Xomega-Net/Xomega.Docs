@@ -131,11 +131,24 @@ Standalone WebAssembly projects that are not hosted by the main Blazor app will 
 
 ### SolutionName.Client.Blazor
 
-This is the main Blazor project that contains ASP.NET Core startup and setup code for a Blazor Server client and hosted REST API, as appropriate. It  uses application views and components from the `.Client.Blazor.Common` project, and references the `.Client.Blazor.Wasm` WebAssembly project when the latter is hosted by this Blazor app.
+This is the main Blazor project that contains ASP.NET Core startup and setup code for a Blazor Server client and hosted REST API, as appropriate. It uses application views and components from the `.Client.Blazor.Common` project, and references the `.Client.Blazor.Wasm` WebAssembly project when the latter is hosted by this Blazor app.
+
+### SolutionName.Client.Maui
+
+This project contains the code for a MAUI desktop/mobile client for your application. The root folder contains the main program `MauiProgram` with DI-enabled application initialization code, `App.xaml` for the main application and the `MainPage.xaml` with the `BlazorWebView` that shows application views and components from the `.Client.Blazor.Common` project.
+
+The MAUI project also contains the following sub-folders.
+
+- **wwwroot** folder contains static Blazor resources, such as `index.html` for the `HostPage` of the `BlazorWebView`.
+- **Components** folder contains additional Blazor components specific to the MAUI project, such as `SignOut.razor`.
+- **Platforms** folder contains code and resources for each individual platform: `Android`, `iOS`, `MacCatalyst`, `Tizen` and `Windows`.
+- **Resources** folder contains resources that are shared between all platforms: `AppIcon`, `Fonts`, `Images`, `Raw` and `Splash`.
+
+
 
 ### SolutionName.Client.Wpf
 
-This project contains the code for a WPF desktop client for your application that targets .NET 8. The root folder contains the main application in the `App.xaml` files, the main window in the `MainView.xaml` files, and other application files in sub-folders, as follows.
+This project contains the code for a WPF desktop client for your application. The root folder contains the main application in the `App.xaml` files, the main window in the `MainView.xaml` files, and other application files in sub-folders, as follows.
 
 - **App_Start** folder contains DI-enabled application initialization code.
 - **Controls** folder contains common WPF controls that are used in the application views, e.g., for displaying errors.

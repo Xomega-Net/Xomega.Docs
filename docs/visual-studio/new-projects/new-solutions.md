@@ -28,7 +28,7 @@ Set the project name, enter the location folder to create the solution in, optio
 
 ## Selecting solution components
 
-You should see a *Xomega Solution Configuration* screen, which allows you to pick and configure client-side and server-side technologies and projects that you want to use in your solution.
+You should see a *Xomega Solution Configuration* screen, which allows you to set the target framework (.NET 9.0, if installed, or .NET 8.0), and then pick and configure client-side and server-side technologies and projects that you want to use in your solution.
 
 Usually, you just need to pick the main client-side technology, and any other projects that are required for your selection will be automatically included in the solution as well.
 
@@ -78,6 +78,12 @@ Below is the full list of parameters that you can configure for different soluti
   - *Project* - the name of the project to use.
 - **ASP.NET WebForms** - legacy ASP.NET web client.
   - *Project* - the name of the project to use.
+- **MAUI** - desktop/mobile client for MAUI applications.
+  - *Project* - the name of the project to use.
+  - *Blazor Hybrid* - use Blazor components for the MAUI app (currently the only option, so it's always on).
+  - *API Tier* - the way the app will access business services, as follows.
+    - `2-Tier App` - business services are built into the app, which will access the DB directly.
+    - `REST API` - business services are hosted separately and accessed via REST API.
 - **WPF** - desktop client for WPF applications.
   - *Project* - the name of the project to use.
   - *API Tier* - the way the app will access business services, as follows.
