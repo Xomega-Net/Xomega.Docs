@@ -170,12 +170,13 @@ The following table lists configuration parameters that are set as the generator
 
 The configuration parameters for the generator that need to be also accessible to other generators are specified in the Xomega model in the `edm:entities-config` element under the top-level `config` element, which is conventionally placed in the `global_config.xom` file.
 
-A boolean parameter `efCore` indicates whether to generate classes for Entity Framework Core (`true`) or Entity Framework 6.x (`false`).
+A boolean parameter `efCore` indicates whether to generate classes for Entity Framework Core (`true`) or Entity Framework 6.x (`false`). The `efCoreVer` parameter specifies the major/minor versions of the EF Core framework being used to allow generating proper code for legacy EF Core versions (i.e. 2.1-3.1) that support .NET Standard 2.0.
 
 Other parameters include the namespace for the generated entity classes, as well as the name of the `DbContext` subclass to use, as shown below.
 
 ```xml title="global_config.xom"
-<edm:entities-config efCore="true" namespace="MySolution.Services.Entities" context="MySolutionEntities"/>
+<edm:entities-config efCore="true" efCoreVer="9.0"
+                     namespace="MySolution.Services.Entities" context="MySolutionEntities"/>
 ```
 
 ### Common configurations

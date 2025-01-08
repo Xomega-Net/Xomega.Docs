@@ -28,7 +28,7 @@ Set the project name, enter the location folder to create the solution in, optio
 
 ## Selecting solution components
 
-You should see a *Xomega Solution Configuration* screen, which allows you to set the target framework (.NET 9.0, if installed, or .NET 8.0), and then pick and configure client-side and server-side technologies and projects that you want to use in your solution.
+You should see a *Xomega Solution Configuration* screen, which allows you to set the target framework (.NET 9.0, if installed, or .NET 8.0), select an [authentication option](#authentication-options), and then pick and configure client-side and server-side technologies and projects that you want to use in your solution.
 
 Usually, you just need to pick the main client-side technology, and any other projects that are required for your selection will be automatically included in the solution as well.
 
@@ -39,6 +39,39 @@ The following picture shows the required projects for the *Blazor* technology th
 If you want to target several technologies at the same time, such as WPF, you can select additional projects here, and they'll share most of the presentation and business logic of your solution.
 
 Similarly, you can pick additional service layer projects, e.g., to expose your services via WCF API to some legacy clients that cannot consume REST API for some reason.
+
+### Authentication options
+
+Xomega solution wizard allows you to pick one of the following supported authentication options.
+
+#### Password (Custom)
+
+This is the default option that sets up your solution with custom password-based authentication and configures all the plumbing for securing your services and UI for each of your selected technologies. This is a good option if you already store (or planning to store) all user authentication and authorization information in your application's database.
+
+The default stubbed implementation for the authentication accepts any user name and just checks that the password is "password". It constructs a user identity with the only claim populated from the supplied user name. To implement your custom authentication you basically need do the following after creating your solution.
+
+1. Open the `login.xom` under the *Auth* folder of  the `.Model` project, and update `user info` structure to add parameters for any additional claims that you want for the user. Build the `.Model` project after that to regenerate all the code.
+1. Update `UserInfoPrincipalConverter` class in the *ServiceContracts/Auth* folder of the `.Services.Common` project to use those new parameters when converting `UserInfo` to/from the `ClaimsPrincipal`.
+1. Update `LoginAsync` method of the `PasswordLoginServiceCustomized` class under the *Services/Auth* folder of the `.Services.Entities` project to validate the user name and password, as per the *TODO* comment in there.
+1. Also, add code to the `LoginAsync` method to read and populate all fields of the updated `UserInfo` structure, as per the *TODO* comment in there.
+
+You can learn more about details of the default password-based security plumbing, as well as see an example of how to implement authentication and authorization logic, in our [walkthrough tutorial](../../tutorial/security/overview).
+
+#### ASP.NET Core Identity
+
+This is a variation of the password-based authentication, where, instead of custom storage of the user authentication and authorization data, you want to use standard structures based on the ASP.NET Core Identity. This will allow you to leverage ASP.NET Core Identity framework to add standard web-based screens for managing user profiles and passwords.
+
+The tables for ASP.NET Core Identity objects can reside either in your application database or in a separate database. In the latter case, you will be able to use that separate database as a central storage of user authentication and authorization data across multiple applications.
+
+In either case, after you create the solution, you need to open the `db.config` file under the `.Services.Entities` project and update the `IdentityDB` connection string to point to the database that stores your ASP.NET Core Identity data. You can also refactor the startup code to pull the connection string from a different source, such as `appsettings.json` or an environment variable.
+
+To create a separate web application for the users to manage their passwords and profile info, you can just add a new project using the standard template "ASP.NET Core Web App (Razor Pages)" and select "Individual Accounts" as the *Authentication Type* there. Then you can update the "DefaultConnection" there to point to your database with ASP.NET Core Identity data. If you don't have identity data set up yet, this project will allow you to create such a database using a migration.
+
+If you don't want a separate web application for managing identity, you can just add identity to one of the ASP.NET Core projects of your solution, such as `.Client.Blazor` or `.Services.Rest`, by calling `services.AddDefaultIdentity<IdentityUser>()` in the corresponding startup code.
+
+#### None
+
+This authentication option allows you to create a solution without any authentication and authorization plumbing code. You can select this option if you are planning to add your own authentication code using third-party identity providers, of if you just want to explore Xomega solutions without any authentication.
 
 ## Reviewing solution configuration
 

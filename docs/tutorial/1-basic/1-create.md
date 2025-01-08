@@ -28,9 +28,9 @@ If you haven't done it yet, you'll need to download the license file from your o
 
 ## Xomega solution configuration
 
-You should see a *Xomega Solution Configuration* screen, which allows you to pick and configure client-side and server-side technologies and projects that you want to use in your solution. Any other projects that are required for your selection will be automatically included in the solution as well.
+You should see a *Xomega Solution Configuration* screen, which allows you to select an authentication option, as well as to pick and configure client-side and server-side technologies and projects that you want to use in your solution. Any other projects that are required for your selection will be automatically included in the solution as well.
 
-We are going to start with the Blazor technology in this tutorial, so let's select *ASP.NET Core Blazor* project, as shown below.
+As you'll see [later in this tutorial](../security/overview), we'll use custom data stored in our sample database for authentication, which means that we should keep the default *Password (Custom)* as the authentication option. For the client-side technology, we are going to start with the Blazor in this tutorial, so let's select *ASP.NET Core Blazor* project, as shown below.
 
 ![Solution projects](img1/solution-projects.png)
 

@@ -10,16 +10,16 @@ Let's go ahead and build the solution. If everything has been set up and run cor
 
 The way we configured our solution initially was to use the `InteractiveAuto` render mode for Blazor pages. This means that **while Blazor WebAssembly libraries are being loaded** by the browser, any interactivity on the screens will be provided by the *Blazor Server*. Once the WebAssembly is loaded, the screens will transition to being rendered by the Blazor WebAssembly technology.
 
-However, you can easily change the render mode in the `App.razor` file under the `AdventureWorks.Client.Blazor.Common` project. For example, if you want to run the application exclusively using Blazor Server, you can change the `RenderModeForPage` to be `InteractiveServer` as follows.
+However, you can easily change the render mode in the `Program.cs` file under the `AdventureWorks.Client.Blazor` project. For example, if you want to run the application exclusively using Blazor Server, you can change the `RenderModeForPage` to be `InteractiveServer` as follows.
 
-```razor title='App.razor'
-...
-@code {
+```cs title='Program.cs'
 <!-- removed-next-line -->
-    private IComponentRenderMode RenderModeForPage => InteractiveAuto;
+App.RenderModeForPage = RenderMode.InteractiveAuto;
 <!-- added-next-line -->
-    private IComponentRenderMode RenderModeForPage => InteractiveServer;
-}
+App.RenderModeForPage = RenderMode.InteractiveServer;
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode()
+    .AddInteractiveWebAssemblyRenderMode();
 ```
 
 Similarly, you can change it to `InteractiveWebAssembly` to have the screens rendered by Blazor WebAssembly only. The only difference for this mode with the `InteractiveAuto` would be that the app will show a *loading* screen while WebAssembly libraries are being loaded, instead of rendering it with Blazor Server.
