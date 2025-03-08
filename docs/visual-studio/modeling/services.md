@@ -282,7 +282,7 @@ Instead of defining input and output structures inline, you can also define them
 Whether you use a referenced or inline structure, if your operation returns or accepts a list of objects, then you need to set the `list="true"` attribute on your `output` or `input` elements, respectively, just like you do on regular structures or parameters, as illustrated above.
 
 :::note
-The operation output must always be a structure or a list of structures, even if it has a single parameter. You cannot return a  scalar value or a list of values from an operation.
+The operation output must always be a structure or a list of structures, even if it has a single parameter. You cannot return a scalar value or a list of values from an operation.
 :::
 
 ### Subobject operations

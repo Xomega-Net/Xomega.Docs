@@ -587,7 +587,7 @@ Inside each view, you need to specify a `ui:view-model` child element, where you
 
 The generated view models will contain platform-independent logic and actions for the view, as supported by the Xomega Framework. If the main data object for the view has a `list="true"` attribute set, then Xomega will generate a standard *Search View* with an optional criteria panel and a results grid. Otherwise, Xomega will generate a *Details View* for editing object details.
 
-If you need to add or change any behavior for the generated view model, then you can set the `customize="true"` attribute on the `ui:`view-model` element, and Xomega will create and use a subclass of the generated view model, where you can add **custom platform-independent code**, or override any of the methods from the generated view model.
+If you need to add or change any behavior for the generated view model, then you can set the `customize="true"` attribute on the `ui:view-model` element, and Xomega will create and use a subclass of the generated view model, where you can add **custom platform-independent code**, or override any of the methods from the generated view model.
 
 ### Legacy layout config
 
@@ -720,7 +720,7 @@ In addition to just invoking the target view with parameters, you can also confi
 
 In this case, you need to add a `ui:result` element to your link, where you map the output parameters of the target view to the fields in the current data object, or any object in its hierarchy, as indicated by the `data-object` attribute relative path. If all fields to be updated are not on the current object, then you can also specify the `data-object` on the entire `ui:result` element.
 
-In the following example, the `look up` link on the `SalesCustomerLookupObject` invokes a child `CustomerListView` for selecting a single customer and passes its entered values for the store and person name, as well as the default *Contains* (`CN`) operators. The resulting fields of the selected customer are then copied to the corresponding fields of its parent data object (`data-object=".."`).
+In the following example, the `look up` link on the `SalesCustomerLookupObject` invokes a child `CustomerListView` for selecting a single customer and passes its entered values for the store and person name, as well as the default *Contains* (`CN`) operator. The resulting fields of the selected customer are then copied to the corresponding fields of its parent data object (`data-object=".."`).
 
 ```xml
 <xfk:data-object class="SalesCustomerLookupObject">
