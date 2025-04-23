@@ -54,6 +54,10 @@ public interface ISalesOrderService
 }
 ```
 
+If your `ReadList` operation returns a [limited number of results](querying#limiting-results), then you can also populate the `TotalCount` property on the `Output` class to indicate the total number of records that match the criteria, which the client can use for paging or to display the total number of records.
+
+
+
 ### Operation input
 
 When declaring the input parameters of the operation's method, you want to make sure they would be compatible with the REST API, or with any other communication framework that you want to support.

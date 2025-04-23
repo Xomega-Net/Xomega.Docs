@@ -381,7 +381,7 @@ If you need to define service operations that don't belong to any of the domain 
 Object with no fields will not be considered as a domain entity and will not have an associated database table.
 :::
 
-The following example illustrates a  simple general service `calculator` that has an `add` operation for two decimal values.
+The following example illustrates a simple general service `calculator` that has an `add` operation for two decimal values.
 
 ```xml
 <object name="calculator">
@@ -621,16 +621,15 @@ The following sections describe some types of service operations for which Xomeg
 
 The `readlist` operation with criteria is one of the most common types of service operations, where you pass the user-supplied criteria as an input and get a list of objects with any related fields as the output.
 
-The typical structure of such an operation in the Xomega model is where the input structure has an inline child structure `criteria`, which in turn contains the search field parameters, as well as an operator for each field, where appropriate.
+#### Filter criteria
 
-If you want Xomega to generate most of the code on the service and UI layers that require minimum customization, then your `readlist` operation needs to adhere to the following naming conventions.
+The typical structure of such an operation in the Xomega model is where the input structure has an inline child structure `criteria`, which in turn contains the search parameters for the fields to filter by.
 
-1. If a result or criteria parameter is for one of the object's fields, then you should use the name of the field for the name of that parameter. You can also omit the `type` attribute unless you want to override the field's type.
-1. Criteria parameters are typically not required, so if it matches a required field, you may need to explicitly set the `required="false"` attribute on the parameter to override it.
-1. If a search parameter applies to a specific output field, then they both should use the same name, even when there is no object field with that name.
-1. The name of the operator parameter for each criterion should be a combination of the criteria parameter and the suffix " operator", e.g., `sales order number operator` for the `sales order number` criteria.
-1. The type of the operator parameter should be `operator` or any subtype thereof.
-1. For any criteria that support ranges for the `Is Between` operator, you need to add a second parameter with the same name plus a suffix "2", e.g., `order date2` for the `order date` criteria.
+Here are some rules for the structure of `readlist` operations that you need to follow in order to make sure that Xomega can generate the proper code for the service and UI layers.
+
+1. **Matching object's field name.** If an output or criteria parameter corresponds to one of the object's fields, then you should use the name of the field for the name of that parameter. You can also omit the `type` attribute unless you want to override the field's type.
+1. **Configuring value type nullability.** Criteria parameters are not required by default. If criteria parameter's type is a value type, such as `integer`, whether or not the generated criteria type should be nullable (i.e. `int?`) should be based on whether the underlying field it applies to is not required. When the criteria parameter matches an object's field, Xomega will use the field's `required` flag to determine that. Otherwise, you can set the `required="true"` attribute on the parameter, if the underlying field is required.
+1. **Filtering by output parameters.** If a search parameter applies to a specific output parameter, then you should use the same name for both of them, even when there is no object field with that name.
 
 The following example demonstrates these criteria conventions.
 
@@ -641,22 +640,16 @@ The following example demonstrates these criteria conventions.
     <operation name="read list" type="readlist">
       <input>
         <struct name="criteria">
-          <!-- order number criteria that allows using an operator -->
-<!-- highlight-start -->
-          <param name="sales order number operator" type="operator">
-          <param name="sales order number" required="false"/>
-<!-- highlight-end -->
-          
-          <!-- status criteria that allows filtering by multiple statuses -->
+          <!-- overriding type on a field criteria to show as a date without time -->
 <!-- highlight-next-line -->
-          <param name="status" required="false" list="true"/>
-
-          <!-- order date criteria with from/to range to support the Is Between operator -->
-<!-- highlight-start -->
-          <param name="order date operator" type="operator"/>
-          <param name="order date" type="date" required="false"/>
-          <param name="order date2" type="date" required="false"/>
-<!-- highlight-end -->
+          <param name="order date" type="date"/>
+          <!-- setting "required" attribute on non-field criteria to "true"
+               to use "int" instead of "int?" as the generated type  -->
+<!-- highlight-next-line -->
+          <param name="product id" type="integer" required="true"/>
+          <!-- setting "list" attribute to "true" to filter by multiple values -->
+<!-- highlight-next-line -->
+          <param name="status" list="true"/>
         </struct>
       </input>
       <output list="true">[...]
@@ -665,17 +658,88 @@ The following example demonstrates these criteria conventions.
 </object>
 ```
 
-The list of operators for each field in the generated app will be different based on the type of the underlying criteria, whether the criteria accepts multiple values or a single value, and whether there exists a second parameter for the ranges.
+#### Criteria operators
 
-:::note
-If you don't provide an operator parameter, then the service will assume the default `Is Equal To` operator or `Is Between` operator when a range is supplied or `Is One Of` operator when the parameter is multi-value.
-:::
+The list of operators for each field in the generated app will be different based on the type of the underlying criteria and whether the criteria accepts multiple values or a single value.
 
 For example, if the criteria field is a string, the operators will be `Is Equal To`, `Starts With`, or `Contains` along with the corresponding `Does Not Start With` or `Does Not Contain`. For dates, it may be `Is Earlier Than`, `Is Later Than`, `Is Between`, etc., and for multi-value criteria, the operators may be `Is One Of` or `Is None Of`.
 
 The standard set of operators comes from the static enumeration `operators` associated with the `operator` type. That enumeration is defined in the model, and you can adjust it as you see fit.
 
-For specialized criteria, you can also define your own enumeration with custom operators and associate it with your own subtype of the `operator` type, which you will use for your criteria. For example, you can define predefined custom periods for date ranges, such as `This Week` or `Last 14 Days`, or custom price ranges, such as `$0 - $100`, `$100 - $500`, etc.
+For specialized criteria, you can also define your own enumeration with custom operators and associate it with your own subtype of the `operator` type, which you will use for your criteria by setting the `op-type` attribute on the [criteria object's config](presentation#criteria-config).
+
+For example, you can define predefined custom periods for date ranges, such as `This Week` or `Last 14 Days`, or custom price ranges, such as `$0 - $100`, `$100 - $500`, etc. The following example illustrates how to define a custom enumeration and type for the `generation operator`.
+
+```xml
+<types>
+  <type name="generation operator" base="operator">
+<!-- highlight-next-line -->
+    <enum ref="generation operator"/>
+  </type>
+</types>
+<enums>
+<!-- highlight-next-line -->
+  <enum name="generation operator" base="base operators">
+    <item name="Baby Boomers" value="[1946-01-01,1965-01-01)"/>
+    <item name="Generation X" value="[1965-01-01,1981-01-01)"/>
+    <item name="Millennials" value="[1981-01-01,1997-01-01)"/>
+    <item name="Generation Z" value="[1997-01-01,2013-01-01)"/>
+    <item name="Generation Alpha" value="[2010-01-01,ct)"/>
+    <item name="Is Between" value="BW">
+      <prop ref="addl props" value="2"/>
+    </item>
+  </enum>
+</enums>
+```
+
+In the same [criteria object's config](presentation#criteria-config), you can also configure a custom default operator for each field using the `op-default` attribute, or suppress operator selection for all or some fields using the `op-none` attribute, as illustrated below.
+
+```xml
+<xfk:data-object class="EmployeeCriteria">
+  <ui:display>
+    <ui:fields>
+/* highlight-start */
+      <ui:field param="birth date" op-type="generation operator"/>
+      <ui:field param="job title" op-default="CN"/>
+      <ui:field param="marital status" op-none="true" static="true"/>
+      <ui:field param="gender" op-none="true"/>
+/* highlight-end */
+    </ui:fields>
+  </ui:display>
+</xfk:data-object>
+```
+
+#### Paging configuration
+
+If your `read list` operation has [filter criteria](#filter-criteria), then it will have support for [server-side paging and sorting](../../framework/services/querying#sorting-limiting-and-paging) automatically enabled in the services, since the generated criteria structure will be a subclass of the base `SearchCriteria` class that supports it. However, the [paging mode](../../framework/common-ui/data-lists#paging-mode) in your generated data list object will be set to `Paging.Client` by default, unless you override it in a custom subclass.
+
+To enable server-side paging for your `read list` operation, regardless of whether it has criteria or not, you can add the `xfk:paging` element under the operation's `config` element, and set the `mode="server"` attribute, as shown below.
+
+```xml
+<operation name="read list" type="readlist">
+  <output list="true">[...]
+  <config>
+/* highlight-next-line */
+    <xfk:paging mode="server" page-size="20"/>
+  </config>
+</operation>
+```
+
+You can also configure additional paging options, such as `page-size` to be used as the default page size in the generated data list object, as shown above.
+
+#### Configuring result limiting
+
+If you don't use server-side paging, the generated service operation will still [limit the number of rows returned](../../framework/services/querying#limiting-results) to 1000 by default, in order to avoid performance issues caused by large result sets. You can override this limit either using custom code in the generated service class or by setting the `max-rows` attribute on the `xfk:paging` element, as shown below.
+
+```xml
+<operation name="read list" type="readlist">
+  <output list="true">[...]
+  <config>
+/* highlight-next-line */
+    <xfk:paging mode="client" max-rows="2000"/>
+  </config>
+</operation>
+```
 
 ### Dynamic enumerations
 

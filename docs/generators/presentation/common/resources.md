@@ -110,9 +110,18 @@ For each view declared in the model the generator will create resources for thei
 
 ### Navigation menus
 
-For each primary view declared in the model without the `child` attribute, the generator will create resources for their navigation menu titles using the view's name or the `title` attribute.
+For each [`ui:main-link`](../../../visual-studio/modeling/presentation#main-menu-links) element declared in the model, the generator will create resources for the menu titles using the link's name or the `title` attribute under the `ui:display` element, if provided. The generator will also create resources for the group menu item using either the view's module name or the `group` attribute on the `ui:display` element, if specified, as shown below.
 
-The titles for details views, which would be for creating new details objects when opened from a top-level navigation menu, will be prefixed with the word "*New* ".
+```xml
+<ui:view name="SalesOrderListView" title="Sales Order List">
+  <ui:view-model data-object="SalesOrderList"/>
+<!-- highlight-start -->
+  <ui:main-link name="sales orders">
+    <ui:display title="Browse Sales Orders" icon="card-checklist" group="Sales Orders"/>
+  </ui:main-link>
+<!-- highlight-end -->
+</ui:view>
+```
 
 :::tip
 You can always override specific resources in your own set of resources using the same key, or you can update the menu options to use a different resource key.
@@ -145,6 +154,10 @@ In this case, the generator will add the following resources to the output file.
 |Enum_error severity.1|Error!|
 |Enum_error severity.2|Warning|
 |Enum_error severity.3|Info|
+
+:::note
+If an `enum` [inherits from another `enum`](../../../visual-studio/modeling/static-data#inheriting-static-enums), the generator will also create resources for the inherited items.
+:::
 
 ## Generator outputs
 

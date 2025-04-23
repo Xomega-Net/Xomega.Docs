@@ -291,6 +291,10 @@ You can customize which columns will be available in the column chooser menu by 
 
 To retrieve the data in [Search Views](../views#search-views) and populate the main data list object, you can use flexible criteria defined in your [CriteriaObject](../../common-ui/data-lists#criteria-object). The `XSfGrid` component provides additional **in-grid filtering** that allows you to further filter the data in the results list object or large child lists by setting the `AllowFiltering="true"` parameter.
 
+:::warning
+In-grid filtering works on the client side only. So, with [server-side paging](../../common-ui/data-lists#paging-mode), the filtering will apply only to the currently displayed page, making it display less than the full page of data.
+:::
+
 Syncfusion data grid implements several types of in-grid filtering, as described below.
 
 <Tabs>
@@ -398,6 +402,10 @@ The `XSfGrid` component allows you to enable searching for a specific text acros
   ...
 </XSfGrid>
 ```
+
+:::warning
+Just like [in-grid filtering](#filtering), searching works on the client side only. So, with [server-side paging](../../common-ui/data-lists#paging-mode), the searching will apply only to the currently displayed page, making it display less than the full page of data.
+:::
 
 All columns are included in the search by default, but you can either indicate specific columns to search by in the `Fields` parameter of the `GridSearchSettings` or exclude a particular column from being searched by setting its `AllowSearching="false"` parameter. The search toolbar item will look as follows.
 

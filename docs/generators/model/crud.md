@@ -57,13 +57,11 @@ After you add the CRUD operations to an object, you can update their input and o
 
 ### Read List Operation
 
-If you set the *Generate Read List* or *Generate Subobject Read List* parameters of the generator to `True`, the generator will add `read list` operations to the selected objects and/or their subobjects.
+If you set the *Generate Read List* or *Generate Subobject Read List* parameters of the generator to `True`, the generator will add [`read list` operations](../../visual-studio/modeling/services#read-list-with-criteria) to the selected objects and/or their subobjects.
 
 The output of the operation will have a `list="true"` attribute and will contain all the object's fields. The input parameters for a `read list` operation on a subobject will contain just the parent object's key fields.
 
-For primary objects that don't have a parent though, the input parameters will contain all the object's fields as criteria, if the *Generate Read List Criteria* parameter is set. Additionally, if *Generate Read List Operators* parameter is set, then the criteria input structure will have a special comparison operator parameter for each field, and there will be a second parameter added for fields that allow for a `BETWEEN` operator, such as for dates or numbers, to let you supply a range.
-
-The following example illustrates such a setup.
+For primary objects that don't have a parent though, the input parameters will contain all the object's fields as criteria, if the *Generate Read List Criteria* parameter is set, as illustrated below.
 
 ```xml
 <object name="sales order">
@@ -73,15 +71,9 @@ The following example illustrates such a setup.
       <input>
 <!-- highlight-next-line -->
         <struct name="criteria">
-          <param name="sales order number operator" type="operator"/>
-          <param name="sales order number" required="false"/>
-          <param name="status operator" type="operator"/>
-          <param name="status" required="false" list="true"/>
-<!-- highlight-next-line -->
-          <param name="order date operator" type="operator"/>
-          <param name="order date" type="date" required="false"/>
-<!-- highlight-next-line -->
-          <param name="order date2" type="date" required="false"/>
+          <param name="sales order number"/>
+          <param name="status" list="true"/>
+          <param name="order date" type="date"/>
         </struct>
       </input>
       <output list="true">...</output>
@@ -152,13 +144,21 @@ The following snippet illustrates such a view setup.
 <!-- highlight-next-line -->
   <ui:view name="SalesOrderView" title="Sales Order">
     <ui:view-model data-object="SalesOrderObject"/>
+    <ui:main-link name="new sales order">
+      <ui:params>
+        <ui:param name="_action" value="create"/>
+      </ui:params>
+    </ui:main-link>
   </ui:view>
 <!-- highlight-next-line -->
   <ui:view name="SalesOrderListView" title="Sales Order List">
     <ui:view-model data-object="SalesOrderList"/>
+    <ui:main-link name="sales order list"/>
   </ui:view>
 </ui:views>
 ```
+
+For the [primary object (aka aggregate root)](../../visual-studio/modeling/domain#sub-objects-and-aggregates), the generator will also add a [main menu](../../visual-studio/modeling/presentation#main-menu-links) for the search view to browse objects, and a main menu for the details view to create new objects. The *Search View Auto Run* parameter can be set to `True` to auto-run the search view from the main menu.
 
 ### Dynamic Enumeration
 
@@ -223,7 +223,6 @@ The following table lists configuration parameters that are set as the generator
 |**Operation Read List**|
 |Generate Read List|True|Whether to generate `Read List` operation.|
 |Generate Read List Criteria|True|Whether to generate criteria for `Read List` operation.|
-|Generate Read List Operators|True|Whether to generate operators for search criteria.|
 |Generate Subobject Read List|True|Whether to generate `Read List` operation on sub-objects.|
 |**Operation Read Enum**|
 |Generate Read Enum|False|Whether to generate `Read Enum` operation.|
@@ -237,7 +236,10 @@ The following table lists configuration parameters that are set as the generator
 |Make Serial Keys Hidden|True|Whether to configure serial key fields as hidden on views.|
 |**Views**|
 |Generate Search View|True|Whether to generate a search view for list objects.|
+|Search View Menu|True|Whether to add a main menu for search view to browse objects.|
+|Search View Auto Run|False|Whether to auto-run the search view from the main menu.|
 |Generate Details View|True|Whether to generate a details view for CRUD objects.|
+|Details View Menu|True|Whether to add a main menu for details view to create new objects.|
 |View Name Postfix|View|Postfix to use for view names.|
 
 ### Model configuration

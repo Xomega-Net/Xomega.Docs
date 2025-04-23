@@ -132,10 +132,6 @@ in a Fragment component, and assign it to the ModifyFragment member for better p
 <SalesOrderView @ref="MainView" ActivateFromQuery="true" Visible="true"></SalesOrderView>
 ```
 
-:::warning
-You need to **target the .NET 7 framework** or higher to use the `NavigationLock` component, which enables the prompt for unsaved changes during the internal navigation to another top-level view or external browser navigation.
-:::
-
 With the above setup, if your view or **any of its child views** are modified, the app will prompt you to confirm losing any unsaved changes whenever you try to navigate away to another top-level view or an external URL.
 
 ### Child views
@@ -420,7 +416,9 @@ To display the list of current validation or service errors, you can add the [`E
                 <XActionButton Action="VM?.List?.SearchAction" OnClick="OnSearchAsync"
                                IsPrimary="true" Class="float-end"></XActionButton>
             </div>
-            <!-- search criteria fields -->
+            <CriteriaDisplay Class="mt-3" Criteria="@VM?.CritObj"></CriteriaDisplay>
+            <CriteriaEdit Class="mt-4" Criteria="@VM?.CritObj"
+                          ValueComponentType="@(() => GetValueComponentType())"></CriteriaEdit>
         </Panel>
     </div>
     <div class="col">
@@ -433,7 +431,7 @@ To display the list of current validation or service errors, you can add the [`E
                     Title="@CriteriaText" OnRefresh="@OnRefreshAsync"></CriteriaBar>
 
         <!-- the results grid -->
-        <XGrid List="@VM?.ListObj" @bind-CurrentPage="CurrentPage">[...]
+        <XGrid List="@VM?.ListObj" ResourceKey="@Model?.GetResourceKey()">[...]
     </div>
 </div>
 <div class="@FooterClass">

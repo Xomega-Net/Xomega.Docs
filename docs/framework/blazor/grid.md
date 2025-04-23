@@ -21,7 +21,6 @@ The following picture illustrates the results grid for a *Sales Order List* view
 
 ```razor
 <XGrid List="@VM.ListObj" ResourceKey="@Model.GetResourceKey()"
-        @bind-CurrentPage="CurrentPage"
         AllowSelection="true"
         RowSelected="async (arg) => await LinkDetails_ClickAsync(arg)">
   <GridColumns>
@@ -163,7 +162,7 @@ Alternatively, you can use a property-bound control, such as [`XDataText`](contr
 
 ## Sorting
 
-The `XGrid` component and its `XGridColumn` columns use the bound `DataListObject` to store the currently applied sort criteria and perform [sorting of data list rows](../common-ui/data-lists#sorting-rows), which uses data properties of the data list object. Therefore, to allow sorting by a specific column, it needs to be bound to a data property using the `Property` parameter.
+The `XGrid` component and its `XGridColumn` columns use the bound `DataListObject` to store the currently applied sort criteria and perform [sorting of data list rows](../common-ui/data-lists#sorting-and-paging), which uses data properties of the data list object. Therefore, to allow sorting by a specific column, it needs to be bound to a data property using the `Property` parameter.
 
 :::warning
 The column tries to sort the values using their internal format when the value type implements `IComparable`, which may result in a different sort order than the one from using a display format.
@@ -231,45 +230,26 @@ You can also disable sorting for the entire grid by setting its `AllowSorting` p
 
 ## Paging
 
-The `XGrid` uses a [`Pager`](components#pager) component in the grid's footer to allow the user to control the grid paging.
-
-### Controlling current page
-
-If you would like to control or have access to the currently displayed page of your `XGrid`, then you need to bind its `CurrentPage` parameter to a property on your view, as shown below.
-
-```razor
-<XGrid List="@VM.ListObj"
-<!-- highlight-next-line -->
-       @bind-CurrentPage="CurrentPage">
-...
-</XGrid>
-```
-
-For example, if you have a results grid in a search view, then you should bind it to the `CurrentPage` property that is declared on the base [`BlazorSearchView`](views#search-views) class. This will allow the base class to reset the grid to the first page when you run a new search.
+The `XGrid` uses a [`Pager`](components#pager) component in the grid's footer to allow the user to control the grid paging, which is displayed if the [`PagingMode`](../common-ui/data-lists#paging-mode) of the underlying `DataListObject` is not set to `Paging.None`. To implement paging `XGrid` uses [paging properties of the data list object](../common-ui/data-lists#paging), such as `CurrentPage`, `PageSize`, and `TotalRowCount`.
 
 ### Customizing page sizes
 
-The user can change the number of rows to display on each page using a dropdown list with the page sizes at the bottom right. By default, the list of page sizes is set to the following values: 7, 14, 25, 50, and 100. You can explicitly set the `PageSize` parameter to indicate the initial page size to use. Otherwise, when available, the grid will default to the second option (e.g., 14).
+The user can change the number of rows to display on each page using a dropdown list with the page sizes at the bottom right. By default, the list of page sizes is set to the following values: 7, 14, 25, 50, and 100. You can set the `PageSize` property on the data list object to indicate the initial page size to use, which by default is set to 14.
 
 You can customize the list of page sizes from which the user can select by setting the `PageSizes` attribute to an array of integers, as illustrated below.
 
 ```razor
 <XGrid List="@VM.ListObj"
 <!-- highlight-start -->
-       PageSizes="new [] { 10, 25, 50, 100}"
-       PageSize="10">
+       PageSizes="new [] { 10, 25, 50, 100}">
 <!-- highlight-end -->
 ...
 </XGrid>
 ```
 
-The above example will result in the following selection of page sizes, with the initial page size being set to 10 (first option).
+If you also set the initial `PageSize` to 10 on the data list object, then the above example will result in the following selection of page sizes.
 
 ![Page sizes](img/page-sizes.png)
-
-:::tip
-If you need to have access to (or control) the page size that is currently selected by the user, then you can also bind it to your own property on the view, e.g., `@bind-PageSize="CurrentPageSize"`.
-:::
 
 ### Customizing page navigation
 
@@ -327,15 +307,7 @@ This will allow you to set the text of the labels specifically for that view, sa
 
 ### Disabling paging
 
-Paging is enabled on the `XGrid` component by default, but you can disable it by setting the `AllowPaging` parameter to `false` as follows.
-
-```razor
-<XGrid List="@VM.ListObj"
-<!-- highlight-next-line -->
-       AllowPaging="false">
-...
-</XGrid>
-```
+You can disable paging for the `XGrid` component by setting the `PagingMode` of the bound data list object to `Paging.None`.
 
 :::warning
 This will make the `XGrid` display all rows without the pager or scrolling within the grid. Therefore, we **don't recommend disabling paging** for large grids, since it may significantly degrade the UI performance.

@@ -19,10 +19,10 @@ Xomega Framework provides a Bootstrap-styled, **security-enabled** `NavMenu` com
 For using `NavMenu` in a sidebar, you need to set its `Items` parameter to the list of your top-level [menu items](#menuitem-class).
 
 ```razor title="MainLayout.razor"
-<div class="sidebar bg-dark navbar-dark"
-     style="width: @(sbWidth)px; margin-left: @(SidebarOpen ? 0 : -sbWidth)px; transition: margin 0.3s">
+@inject MainMenu menu
+<div class="sidebar-pane sidebar collapse bg-dark navbar-dark">
 <!-- highlight-next-line -->
-    <NavMenu Class="navbar-nav" Items="MainMenu.Items"/>
+    <NavMenu Class="navbar-nav" Items="menu.Items" />
 </div>
 ```
 
@@ -36,9 +36,10 @@ The menu will display as a hierarchical collapsible tree view, as shown below.
 When adding your `NavMenu` to the top-level header to be displayed as a dropdown menu, you need to set the `IsDropdown="true"` parameter. If you use a dark-themed header, you may also want to set the `dropdown-menu-dark` CSS class in the `DropdownClass` parameter as follows.
 
 ```razor title="MainLayout.razor"
+@inject MainMenu menu
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
     <nav class="navbar-expand">
-        <NavMenu Class="navbar-nav" Items="MainMenu.Items"
+        <NavMenu Class="navbar-nav" Items="menu.Items"
 <!-- highlight-next-line -->
                  IsDropdown="true" DropdownClass="dropdown-menu-dark" />
     </nav>
@@ -55,9 +56,10 @@ The menu will display as a hierarchical dropdown menu with sub-menus opening up 
 When your `NavMenu` is at the end of your top header bar, you may want to make the dropdown menus open up to the left by setting the `dropdown-menu-end dropdown-submenu-left` additional styles in the `DropdownClass` parameter.
 
 ```razor title="MainLayout.razor"
+@inject MainMenu menu
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
     <nav class="navbar-expand">
-        <NavMenu Class="navbar-nav" Items="MainMenu.Items"
+        <NavMenu Class="navbar-nav" Items="menu.Items"
 <!-- highlight-start -->
                  IsDropdown="true"
                  DropdownClass="dropdown-menu-dark dropdown-menu-end dropdown-submenu-left" />
@@ -86,8 +88,8 @@ using Xomega.Framework.Blazor.Components;
 
 public class MainMenu
 {
-    public static List<MenuItem> Items = new List<MenuItem>()
-    {
+    public List<MenuItem> Items =>
+    [
         new MenuItem()
         {
 /* highlight-start */
@@ -114,7 +116,7 @@ public class MainMenu
                 ...
             }
         }, ...
-    };
+    ];
 }
 ```
 
@@ -149,7 +151,7 @@ services.AddAuthorization(o => {
 To apply it to your menu items, you can either assign it directly on each item using the `Policy` property or call a recursive function `ForEachItem` on each top-level item, where you can configure your security based on the `Href` value, as illustrated below.
 
 ```cs
-foreach (var mmi in MainMenu.Items)
+foreach (var mmi in menu.Items)
 /* highlight-next-line */
     mmi.ForEachItem(mi =>
     {
@@ -241,11 +243,13 @@ While individual data controls will also show their client validation error(s), 
 
 ![Error list](img/errors.png)
 
-The color of the control will be based on the maximum severity of the messages in the current error list. So, if it contains only warnings or only info messages, then the color will be yellow or light blue respectively, as per the Bootstrap styles. The icon next to each text will be based on the actual severity of that message though.
-
 :::note
 If you noticed, the text of the validation errors includes the field label, rather than a generic message, such as *This field is required.* This allows displaying those errors in the summary `Errors` control, and point the user to the specific field in error.
 :::
+
+The icon next to each text and the color of each message is based on the severity of the message, as per the Bootstrap styles. For example, errors will be displayed in red, as shown above, while warnings will be in yellow, as illustrated below.
+
+![Warning list](img/errors-warning.png)
 
 To add the `Errors` component to your view, put it at the top of the view or in any other place that is always visible, and set the `ErrorList` parameter to the `@Model?.Errors` value, as follows.
 
@@ -254,12 +258,10 @@ To add the `Errors` component to your view, put it at the top of the view or in 
   <div class="row g-0">
 <!-- highlight-next-line -->
     <Errors Class="mb-3" ErrorList="@Model?.Errors" ViewKey="@Model?.GetResourceKey()"></Errors>
-    <fieldset class="@GetPanelCol(1, 4)">
-      <div class="row @GetRowCol(4)">
-        <XDataLabel Class="mb-3" Property="@VM?.MainObj?.SalesOrderNumberProperty"></XDataLabel>
-        <XDataLabel Class="mb-3" Property="@VM?.MainObj?.OrderDateProperty"></XDataLabel>
-        <XSelect Class="mb-3" Property="@VM?.MainObj?.StatusProperty"></XSelect>
-        <XCheckBox Class="mb-3" Property="@VM?.MainObj?.OnlineOrderFlagProperty"></XCheckBox>
+    <fieldset>
+      <div class="row @GetRowCol(2)">
+        <XInputText Class="mb-3" Property="@VM?.MainObj?.UserNameProperty"></XInputText>
+        <XInputText Class="mb-3" Property="@VM?.MainObj?.PasswordProperty" Type="password"></XInputText>
         ...
 </div>
 ```
@@ -279,12 +281,12 @@ The title text displayed at the top of the error summary comes from the framewor
 |View_Message|Please review the following message.||
 |View_Messages|Please review the following messages.||
 
-You can customize these strings in your application resources or localize it for different languages. You can also define custom resources for your specific view by setting the resource prefix in the `ViewKey` parameter. For example, if you set it to `@Model?.GetResourceKey()` from the example above, you'll be able to override the title text for your view as follows.
+You can customize these strings in your application resources or localize it for different languages. You can also define custom resources for your specific view by setting the resource prefix in the `ViewKey` parameter. For example, if you set it to `@Model?.GetResourceKey()` from the example above, which evaluates to "Login", you'll be able to override the title text for your view as follows.
 
 |Name|Value|Comment|
 |-|-|-|
-|SalesOrderView_Error|Cannot save sales order due to the following error.||
-|SalesOrderView_Errors|Cannot save sales order due to the following errors.||
+|LoginView_Error|Cannot login due to the following error.||
+|LoginView_Errors|Cannot login due to the following errors.||
 
 
 ## Panel
@@ -307,6 +309,64 @@ You can set the title text via the `Title` parameter and also bind the `Collapse
 </Panel>
 ```
 
+## CriteriaEdit
+
+The `CriteriaEdit` component allows you to [dynamically edit criteria](../common-ui/data-lists#editing-criteria-dynamically) in your `CriteriaObject` by selecting the criteria field from a dropdown list and entering the operator and criteria value(s), as illustrated below.
+
+![Criteria edit](img/criteria-edit.png)
+
+The dropdown list is bound to the `FieldSelectorProperty` of the `CriteriaObject`, while the operator and value controls are bound to the `CriteriaEditObject`, which holds a copy of selected criteria's values for editing. This allows you to cancel your edits when clicking the *Cancel* button, or apply them after successful validation by clicking the *Add* or *Update* button. You can also blank out the criteria by clicking the *Reset* button.
+
+To add the `CriteriaEdit` component to your view, you need to set the `Criteria` parameter to your `CriteriaObject`, and also provide a function that returns the component type for the currently selected criteria field in the `ValueComponentType` parameter, as illustrated below.
+
+```razor
+<!-- highlight-start -->
+<CriteriaEdit Class="mt-4" Criteria="@VM?.CritObj"
+              ValueComponentType="@(() => GetValueComponentType())"></CriteriaEdit>
+<!-- highlight-end -->
+@code {
+    private Type GetValueComponentType()
+    {
+        var fieldName = VM?.CritObj?.FieldSelectorProperty?.EditStringValue;
+        switch (fieldName)
+        {
+            case EmployeeCriteria.JobTitle:
+                return typeof(XInputText);
+            case EmployeeCriteria.OrganizationLevel:
+                return typeof(XNumericBox);
+            case EmployeeCriteria.HireDate:
+<!-- highlight-start -->
+            case EmployeeCriteria.ModifiedDate:
+                return typeof(XDatePicker);
+<!-- highlight-end -->
+            case EmployeeCriteria.MaritalStatus:
+                return typeof(XOptions);
+            case EmployeeCriteria.Gender:
+                return typeof(XSelect);
+        }
+        return null;
+    }
+}
+```
+
+## CriteriaDisplay
+
+The `CriteriaDisplay` component is typically coupled with the `CriteriaEdit` component to show the currently selected [dynamic criteria](../common-ui/data-lists#editing-criteria-dynamically) and their values with operators, as applicable. The selected criteria are displayed in separate panel stacked one on top of the other, as shown below.
+
+![Criteria display](img/criteria-display.png)
+
+![Criteria display multi](img/criteria-display-multi.png)
+
+If selected criteria uses a multi-value property and has multiple values entered or selected, then, to save the screen space, the panel will only show the first two values and a count of the remaining values, as needed. The user can click on the count to see the remaining values in a popover tooltip, as shown in the second image above. 
+
+Clicking the X button on the panel will reset the corresponding criteria, thereby removing it from the display. Clicking on the value or an operator will open the [`CriteriaEdit`](#criteriaedit) component with the selected criteria, and will also highlight the corresponding panel in the `CriteriaDisplay` component.
+
+To add the `CriteriaDisplay` component to your view, you just need to set the `Criteria` parameter to your `CriteriaObject`, as shown below.
+
+```razor
+<CriteriaDisplay Class="mt-3" Criteria="@VM?.CritObj"></CriteriaDisplay>
+```
+
 ## CriteriaBar
 
 `CriteriaBar` is a specialized component that shows the summary of the [currently applied criteria](../common-ui/data-lists#applied-criteria) in your search views. It also provides a button to open up the collapsed criteria panel and a button to refresh the data in the results grid by rerunning the current criteria. You would typically place it right above the results grid, as shown below.
@@ -324,12 +384,18 @@ You can bind parameters of the `CriteriaBar` directly to the corresponding metho
 <XGrid List="@VM?.ListObj" @bind-CurrentPage="CurrentPage" AllowSelection="true">[...]
 ```
 
-### Applied criteria
+Just like the [`CriteriaDisplay`](#criteriadisplay) component, the `CriteriaBar` component will also show only the first two values of the multi-value criteria and the count of the remaining values to save space. The user can click on the count to see the remaining values in a popover tooltip, as illustrated above.
 
-The actual summary of applied criteria in the `CriteriaBar` is rendered using a separate `Criteria` component. You can use it independently, if you don't want to use the `CriteriaBar` component and want to implement custom buttons for opening the criteria panel or refreshing the grid. All you need to do is to set the `AppliedCriteria` and `Title` parameters as follows.
+:::note
+While the currently applied criteria are usually the same as the criteria selected in the criteria panel, technically they can be different in cases when the user has modified the criteria in the panel but hasn't applied them yet by clicking on the *Search* button. Refresh and server-side paging or sorting will use the [currently applied criteria](../common-ui/data-lists#applied-criteria), rather than the ones selected in the criteria panel. 
+:::
+
+### CriteriaSummary
+
+The actual summary of applied criteria in the `CriteriaBar` is rendered using a separate `CriteriaSummary` component. You can use it independently, if you don't want to use the `CriteriaBar` component and want to implement custom buttons for opening the criteria panel or refreshing the grid. All you need to do is to set the `AppliedCriteria` and `Title` parameters as follows.
 
 ```razor
-<Criteria AppliedCriteria="@ListObject?.AppliedCriteria" Title="@CriteriaText" />
+<CriteriaSummary AppliedCriteria="@ListObject?.AppliedCriteria" Title="@CriteriaText" />
 ```
 
 The localized text for the title comes from the resources using the key `View_Criteria`. You can also customize it for a specific view by prefixing it with the view model's resource key, as follows.
@@ -339,42 +405,30 @@ The localized text for the title comes from the resources using the key `View_Cr
 |View_Criteria|Search Criteria||
 |SalesOrderView_Criteria|Sales Order Criteria||
 
-By default, the field names in the applied criteria are highlighted with underline, while the values use bold font, as shown below. 
-
-```css
-/* criteria summary styles */
-.cs-field {
-  text-decoration: underline
-}
-
-.cs-value {
-  font-weight: 700
-}
-```
-
-You can customize this behavior by configuring the corresponding CSS classes, such as `cs-field`, `cs-operator`, `cs-value`, etc.
-
 ## Pager
 
 The `Pager` component is used as part of the `XGrid` to display the [grid page navigation](grid#paging) at the bottom. However, you can also use it to add paging to other list controls, or to add (another) pager at the top of `XGrid`, as shown below.
 
 ![Pager](img/pager-top.png)
 
-All you need is to set the `ItemsCount` on the pager and bind the `CurrentPage` and `CurrentPageSize` parameters to your properties.
+All you need is to bind the `ItemsCount`, `CurrentPage` and `PageSize` parameters, as well as the `CurrentPageChanged` and `PageSizeChanged` methods to the properties and methods on your data list object, as illustrated below.
 
 ```razor
 <CriteriaBar Title="@CriteriaText" @bind-CriteriaCollapsed="@CriteriaCollapsed"
-             AppliedCriteria="@ListObject?.AppliedCriteria"
+             AppliedCriteria="@VM.List?.AppliedCriteria"
              OnRefresh="@OnRefreshAsync"></CriteriaBar>
 <div class="mb-2">
 <!-- highlight-start -->
-    <Pager ItemsCount="@VM.List.RowCount" ResourceKey="@Model?.GetResourceKey()"
-           @bind-CurrentPage="CurrentPage" @bind-PageSize="CurrentPageSize"/>
+    <Pager ItemsCount="@((VM.List?.PagingMode == DataListObject.Paging.Server ?
+                          VM.List?.TotalRowCount : VM.List?.RowCount) ?? 0)"
+           CurrentPage="@(VM.List?.CurrentPage ?? 0)"
+           CurrentPageChanged="async (page) => await VM.List?.SetCurrentPage(page)"
+           PageSize="@(VM.List?.PageSize ?? 0)"
+           PageSizeChanged="async (size) => await VM.List?.SetPageSize(size)"
+           ResourceKey="@Model?.GetResourceKey()"/>
 <!-- highlight-end -->
 </div>
-<XGrid List="@VM?.ListObj" ResourceKey="@Model?.GetResourceKey()"
-       @bind-CurrentPage="CurrentPage" @bind-PageSize="CurrentPageSize"
-       AllowSelection="true">[...]
+<XGrid List="@VM?.List" ResourceKey="@Model?.GetResourceKey()">[...]
 ```
 
 :::tip
@@ -383,14 +437,12 @@ If you want to use a different pagination style, you can create a custom compone
 
 ### Customizing page sizes
 
-The user can change the number of rows to display on each page using a dropdown list with the page sizes at the bottom right. By default, the list of page sizes is set to the following values: 7, 14, 25, 50, and 100. You can explicitly set the `CurrentPageSize` to indicate the initial page size to use. Otherwise, when available, the grid will default to the second option (e.g., 14).
+The user can change the number of rows to display on each page using a dropdown list with the page sizes at the bottom right. By default, the list of page sizes is set to the following values: 7, 14, 25, 50, and 100. You can set the `PageSize` property on the data list object to indicate the initial page size to use, which by default is set to 14.
 
 You can customize the list of page sizes from which the user can select by setting the `PageSizes` attribute to an array of integers, as illustrated below.
 
 ```razor
-<Pager List="@VM.List.RowCount" @bind-CurrentPage="CurrentPage" @bind-PageSize="CurrentPageSize"
-<!-- highlight-next-line -->
-       PageSizes="new [] { 10, 25, 50, 100}"/>
+<Pager PageSizes="new [] { 10, 25, 50, 100}" .../>
 ```
 
 The above example will result in the following selection of page sizes, with the initial page size being set to 10 (first option).
@@ -406,10 +458,7 @@ The pager shows a navigation panel at the bottom center of the grid to allow the
 The number of pages around the current page you can jump to is determined by the `PagesToShow` parameter, which is defaulted to 7. If you want to show more pages, or if your pager doesn't have enough space and you want to show fewer pages, then you can customize this parameter in your pager as follows.
 
 ```razor
-<Pager List="@VM.List.RowCount" @bind-CurrentPage="CurrentPage" @bind-PageSize="CurrentPageSize"
-<!-- highlight-start -->
-       PagesToShow="5"/>
-<!-- highlight-end -->
+<Pager PagesToShow="5" .../>
 ```
 
 :::tip
@@ -434,9 +483,7 @@ You can create localized resources for these texts that are translated into the 
 If you want to override these labels for a specific grid or view, then you can set the `ResourceKey` parameter on the pager. For example, the following code sets the `ResourceKey` parameter to the base name of the view model's class (*SalesOrderList*).
 
 ```razor title="SalesOrderListView.razor"
-<Pager List="@VM.List.RowCount" @bind-CurrentPage="CurrentPage" @bind-PageSize="CurrentPageSize"
-<!-- highlight-next-line -->
-       ResourceKey="@Model?.GetResourceKey()"/>
+<Pager ResourceKey="@Model?.GetResourceKey()" .../>
 ```
 
 This will allow you to set the text of the labels specifically for that view, saying *orders* instead of *items*, as follows.

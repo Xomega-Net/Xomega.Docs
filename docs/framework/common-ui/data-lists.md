@@ -149,11 +149,13 @@ If you need to call a service operation when inserting or deleting a row to pers
 
 #### Collection events
 
-`DataListObject` implements the `INotifyCollectionChanged`, which means that you can subscribe to its `CollectionChanged` event, and get notified of the updates to its row collection.
+`DataListObject` exposes an event `AsyncCollectionChanged` for notifying async listeners when the collection of rows is changed. This event is invoked by calling `OnCollectionChangedAsync` method, which is called by the `FromOutputAsync` and other async methods that modify the collection. If you manually modify the collection in an async method, you should call this method to notify the listeners.
 
-You can also manually trigger a collection changed event by calling the `FireCollectionChange` method to notify the listeners, such as the bound data grid. If any listener code needs to know if a collection change event is currently in progress, they can check the data list object's `CollectionChangeFiring` flag.
+`DataListObject` also implements the `INotifyCollectionChanged`, which means that you can subscribe to its synchronous `CollectionChanged` event, and get notified of the updates to its row collection. You can also manually trigger a collection changed event by calling the `FireCollectionChange` method to notify the listeners, such as the bound data grid.
 
-Some methods, such as `InsertAsync` and `RemoveRows` allow you to suppress the collection notification, to prevent other listeners from interfering with the caller's logic. In this case, they can manually call the `FireCollectionChange` later, if desired.
+If any listener code needs to know if a collection change event is currently in progress, they can check the data list object's `CollectionChangeFiring` flag.
+
+Some methods, such as `InsertAsync` and `RemoveRows` allow you to suppress the collection notification, to prevent other listeners from interfering with the caller's logic. In this case, they can manually call the `OnCollectionChangedAsync` or `FireCollectionChange` later, as needed.
 
 ### Modification tracking
 
@@ -240,11 +242,168 @@ However, sometimes you may need to display different selection lists in each row
 1. Set up [cascading client-side filtering](properties/enum#cascading-by-attributes) of a globally cached static lookup table by a specific attribute using `SetCascadingProperty`.
 1. If the complete list is too large to be cached on the client side, you can [set up a `LocalCacheLoader`](properties/enum#local-cache) for the property, and call the `SetCacheLoaderParameters` to provide values from other data properties in the same row. The local cache loader will then populate a local cache from a remote service and will store it in the current data row for that property.
 
+## Criteria object
+
+When a data list object is a primary object on your view, rather than a child list, you typically want to provide some filter criteria for the service operation, so that you don't retrieve the entire list, but only the relevant records. Such criteria are also usually specified by the users on the screen, and validated before running the search and retrieving the results.
+
+To hold the values for the search criteria, `DataListObject` has a special member `CriteriaObject`, which you can set to your custom data object, as shown below, and then bind its data properties to the fields on your search criteria panel.
+
+```cs
+salesOrderList.CriteriaObject = ServiceProvider.GetService<SalesOrderCriteria>();
+```
+
+The custom data object needs to inherit from the `CriteriaObject` base class and initialized slightly differently than regular data objects. For each field to filter by, you need to add a `CriteriaPropertyGroup` with data properties for the actual filter value(s) and an [`OperatorProperty`](properties/specialty#operatorproperty), as needed. The following snippet illustrates this configuration.
+
+```cs
+// highlight-next-line
+public class SalesOrderCriteria : CriteriaObject
+{
+    public const string OrderDate = "OrderDate";
+    ...
+    protected override void Initialize()
+    {
+        // add criteria property group by order date with operator and two value properties for the range
+/* highlight-next-line */
+        AddCriteriaPropertyGroup(new CriteriaPropertyGroup
+        {
+            FieldName = OrderDate,
+            ValueProperty = new DateProperty(this, OrderDate),
+            Value2Property = new DateProperty(this, OrderDate + V2),
+            OperatorProperty = new OperatorProperty(this, OrderDate + Operator)
+            {
+                EnumType = "operators",
+            }
+        });
+    }
+}
+```
+
+:::note
+Using `CriteriaPropertyGroup` will help you to convert the criteria values to `FieldCriteria` properties of the [criteria DTO](../services/querying#criteria-dto) for  service calls, as well as to add and edit criteria fields dynamically.
+:::
+
+### Editing criteria statically
+
+To allow the user to edit criteria values statically, you can add all the appropriate UI controls to your search criteria panel, and bind them to the properties of your `CriteriaObject`. To get individual properties of the criteria object, you can either access them through the corresponding `CriteriaPropertyGroup`, or directly by their names, as shown below.
+
+```cs
+CriteriaObject critObj = salesOrderList.CriteriaObject;
+
+// getting criteria properties via the property group
+/* highlight-next-line */
+CriteriaPropertyGroup orderDateGrp = critObj.CriteriaFieldGroups[SalesOrderCriteria.OrderDate];
+DataProperty orderDate = orderDateGrp.ValueProperty;
+DataProperty orderDate2 = orderDateGrp.Value2Property;
+DataProperty orderDateOperator = orderDateGrp.OperatorProperty;
+
+// getting criteria properties directly by their names
+orderDate = critObj[SalesOrderCriteria.OrderDate];
+orderDate2 = critObj[SalesOrderCriteria.OrderDate + CriteriaObject.V2];
+orderDateOperator = critObj[SalesOrderCriteria.OrderDate + CriteriaObject.Operator];
+```
+
+Editing criteria statically on the search criteria panel may work well when the number of criteria fields is relatively small.
+
+However, if you want to allow flexible searches by a large number of filter criteria, showing them all statically on the criteria panel will make it too busy and less user-friendly. It's going to take up more screen real estate, the users may have difficulties finding the fields they need, and it may be harder to see which criteria actually have values.
+
+### Editing criteria dynamically
+
+To help the users work with large criteria objects, the `CriteriaObject` provides support for editing criteria fields dynamically.
+
+First of all, it defines a special data property `FieldSelectorProperty`, which has criteria field groups of the current criteria object as the list of possible values. You can bind this properly to a drop down list or a combo box, and allow the user to select the criteria field they want to add or edit.
+
+When the value of the `FieldSelectorProperty` changes, it will construct a new `CriteriaEditObject` from the current values of the selected criteria group, and will set it as the `FieldEditObject` property of the `CriteriaObject`. You can bind this edit object to a separate panel for editing the values for the currently selected criteria group.
+
+:::warning
+You need to be able to dynamically construct UI controls of appropriate types for the selected criteria group, and bind them to the properties of the `CriteriaEditObject`.
+:::
+
+That separate edit panel can have the `Cancel`, `Reset` and `Add/Update` buttons bound to the `CancelAction`, `ResetAction` and `AddAction` of the `CriteriaEditObject`, which are calling the `CancelEditAsync`, `ResetEditAsync` and `ApplyEditAsync` methods of the `CriteriaObject` respectively.
+
+When applying the edits, the `CriteriaEditObject` will validate the values and will store any errors in its `Errors` property, which you can use to display validation errors in the same panel. For example, when both `ValueProperty` and `Value2Property` are set for the `Between` operator, it will validate that the first value is not greater than the second one.
+
+:::tip
+To implement custom validation logic, you can override the `CreateEditObject` method in your `CriteriaObject`, and return a subclass of the `CriteriaEditObject` with any customizations as needed.
+:::
+
+### Displaying selected criteria
+
+When the users edit criteria fields dynamically using the separate edit panel, they need to be able to see the criteria fields that they have already added, and the values that they have set for them.
+
+To support this, the `CriteriaObject` provides a method `GetCriteriaDisplays` that returns a list of `FieldCriteriaDisplay` objects, which contain the field name and label, operator and the field criteria values that are formatted for display.
+
+You can use this method to display a list of selected criteria fields along with their operators and values. Each field can also provide additional actions to edit or clear its values by calling either the `EditCriteria` or `ResetCriteria` methods on the `CriteriaObject` for that field.
+
+### Mixing static and dynamic
+
+For user convenience, you can also show some criteria fields statically, such as the most commonly used ones, and the rest ones dynamically. To do this, you need to override the property `StaticFields` in your `CriteriaObject`, and return the names of the properties that you want to show statically, as shown below.
+
+```cs
+public class SalesOrderCriteria : CriteriaObject
+{
+/* highlight-next-line */
+    public override string[] StaticFields => new string[] { OrderDate };
+}
+```
+
+This will ensure that the `FieldSelectorProperty` will not include the static fields in the list of possible values. To make sure that static fields that have values are not also displayed with the dynamic fields that have values, you need to call `GetCriteriaDisplays(true)` when [displaying the selected criteria](#displaying-selected-criteria) fields. 
+
 ## Populating data
+
+Populating data list objects by reading the data from a service operation is typically done by implementing the `DoReadAsync` method, and may depend on the type of criteria or parameters that the operation takes. The `DoReadAsync` method accepts an `options` parameter, which is of type `DataListObject.ReadOptions`, and can be used to pass the context of the read operation, such as the following flags.
+- `PreserveSelection` - if set to `true`, the current row [selection is preserved](#preserving-selection) after the read, if possible.
+- `IsReload` - if set to `true`, the read operation is a reload of the data and should use the currently [applied criteria](#applied-criteria).
+- `IsPaging` - if set to `true`, the read operation is a paging operation when [server-side paging](#sorting-and-paging) is used.
+- `IsSorting` - if set to `true`, the read operation is a sorting operation when [server-side paging](#sorting-and-paging) is used.
+
+### Reading with criteria
+
+When the service operation to read the data for your list object takes a [criteria DTO](../services/querying#criteria-dto) as an input parameter, you should construct it by calling the `GetCriteriaDataContract` method, and pass it to the service call. Then you should populate the data list object from the output by calling the `FromOutputAsync` method, as shown below.
+
+```cs
+protected override async Task<ErrorList> DoReadAsync(object options, CancellationToken token = default)
+{
+// highlight-next-line
+    SalesOrderCriteriaDTO criteria = GetCriteriaDataContract<SalesOrderCriteriaDTO>(options);
+    using (var s = ServiceProvider.CreateScope())
+    {
+        var salesOrderService = s.ServiceProvider.GetService<ISalesOrderService>();
+/* highlight-start */
+        var output = await salesOrderService.ReadListAsync(criteria, token);
+        await FromOutputAsync(output, options, token);
+/* highlight-end */
+        return output.Messages;
+    }
+}
+```
+
+If you're calling the read operation as a result of a new search, rather than a reload or a page request, then `GetCriteriaDataContract` will construct a new criteria DTO from the current values of the `CriteriaObject`, which would be validated before this call. In this case, it will also set the [current page](#paging) to 1, so that any new search will always start from the first page.
+
+If applicable, the `FromOutputAsync` method will also set the `TotalRowCount` property of the data list object to the [`TotalCount`](../services/querying#returning-total-count) value of the `Output` object, which is the total number of records that match the criteria.
+
+### Applied criteria
+
+Once a new search successfully runs and the data list object is populated with the results, the list object will call `GetCriteriaDisplays(false)` to get all populated criteria values and operators of the `CriteriaObject` in the display format, and will store them in the `AppliedCriteria` property as a list of  `FieldCriteriaDisplay` structures.
+
+You can use the `AppliedCriteria` to display a summary of the applied criteria on the screen, and refresh it whenever it changes, as changing it will fire the regular `INotifyPropertyChanged` event.
+
+Separately, the data list object will store the criteria DTO that was used in the service call in another property `AppliedCriteriaValues`. If, later on, you try to reload the data or request a new page during server-side paging, the `GetCriteriaDataContract` method will use the value from this property to return the criteria DTO for the service call, rather than constructing a new one from the `CriteriaObject`.
+
+This will avoid subtle issues when the user might change the current criteria without applying them, and then try to reload the data or request a new page.
+
+### Client filtering
+
+If your data grid bound to your data list object needs to perform additional filtering on the client side by one or more columns, then `DataListObject` provides a handy utility method `PropertyValueMatches`, which checks if the value of a specified data property in a given row matches the specified criteria value using the supplied [operator](../services/querying#operators).
+
+:::tip
+You may need to translate the data grid's client-side filter criteria to a number of operator/value clauses, and combine the results of the calls to `PropertyValueMatches` for each clause, to determine whether each row matches those filter criteria.
+:::
+
+### Reading child lists
 
 When your data list object is a child of a parent data object, and the `Read` service operation for the parent object also returns the data for your data list as a nested collection, then your child list object will be automatically populated whenever you call `ReadAsync` on the parent object, provided that the names of the properties in the nested collection match the names of the list object's properties.
 
-Otherwise, if you need to populate the data in your data list object using a separate service call, then you can override the `DoReadAsync` method, call the service in there, and populate the list from the result using the `FromDataContractAsync` method. For example, reading and populating a list of line items on a sales order object from a service call would look as follows.
+Otherwise, if you need to populate the data in your data list object using a separate service call, then you can override the `DoReadAsync` method, call the service in there, and populate the list from the result using the `FromOutputAsync` method. For example, reading and populating a list of line items on a sales order object from a service call would look as follows.
 
 ```cs title="LineItemListObject.cs"
 protected override async Task<ErrorList> DoReadAsync(object options, CancellationToken token = default)
@@ -256,7 +415,7 @@ protected override async Task<ErrorList> DoReadAsync(object options, Cancellatio
 
 // highlight-start
         var output = await salesOrderService.ReadLineItemsAsync(salesOrderId, token);
-        await FromDataContractAsync(output?.Result, options, token);
+        await FromOutputAsync(output, options, token);
 // highlight-end
         return output.Messages;
     }
@@ -264,30 +423,33 @@ protected override async Task<ErrorList> DoReadAsync(object options, Cancellatio
 ```
 
 :::note
-You can also pass the `FromDataContractAsync` method a `CrudOptions` parameter configured to [preserve the current row selection](#preserving-selection) if desired.
+You can also pass the `FromOutputAsync` method a `ReadOptions` parameter configured with the context of this call, such as whether to [preserve the current row selection](#preserving-selection).
 :::
 
-### DTO conversion
+### Row DTO conversion
 
 If your data properties don't fully line up with the properties of the returned DTOs, then you can override the `FromDataContractAsync` method, construct a `List<DataRow>` manually, and pass it to the `data.ReplaceData()` method.
 
 In order to populate each row from the corresponding item in your DTO, you can leverage the version of the `FromDataContractAsync` method that takes a row argument, and then set the values of any custom properties, as follows.
 
 ```cs
-public override void FromDataContract(object dataContract, object options)
+public override async Task FromDataContractAsync(object dataContract, object options,
+                                                 CancellationToken token = default)
 {
     IList<DataRow> rows = new List<DataRow>();
-    foreach (DTOItem dtoItem in (IEnumerable<DTOItem>)dto)
+    foreach (RowDTO rowDTO in (IEnumerable<RowDTO>)dataContract)
     {
         DataRow row = new DataRow(this);
         rows.Add(row);
 // highlight-next-line
-        await FromDataContractAsync(dtoItem, options, row, token);
+        await FromDataContractAsync(rowDTO, options, row, token);
         // set custom properties
 // highlight-next-line
-        await MyProperty.SetValueAsync(dtoItem.CustomValue, row, token);
+        await MyProperty.SetValueAsync(rowDTO.CustomValue, row, token);
     }
+    rows.Sort();
     data.ReplaceData(rows);
+    SetAppliedCriteria(options);
 }
 ```
 
@@ -297,104 +459,32 @@ In your overridden `FromDataContractAsync` method, you may also need to [restore
 
 Similarly, when you need to send the entire list to a service operation, you can convert the data from your data list object to a DTO using the standard [`ToDataContract`](data-objects#conversion-to-dtos) method, provided that the property names in your list object and DTO match up. Otherwise, you can override it and populate the DTO list manually, leveraging the `ToDataContractProperties` method for each data row.
 
-### Criteria object
-
-When a data list object is a primary object on your view, rather than a child list, you typically want to provide some filter criteria for the service operation, so that you don't retrieve the entire list, but only the relevant records. Such criteria are also usually specified by the users on the screen, and validated before running the search and retrieving the results.
-
-To hold the values for the search criteria, `DataListObject` has a special member `CriteriaObject`, which you can set to your custom data object, as shown below, and then bind its data properties to the fields on your search criteria panel.
-
-```cs
-salesOrderList.CriteriaObject = ServiceProvider.GetService<SalesOrderCriteria>();
-```
-
-The custom data object needs to inherit from the `CriteriaObject` base class and [add data properties](data-objects#data-properties-initialization) for each filter criteria as needed. For any field, you can use an [`OperatorProperty`](properties/specialty#operatorproperty) to give the users extra flexibility when specifying the criteria. In this case, you will need to define additional properties that hold the actual criteria value(s), as follows.
-
-```cs
-// highlight-next-line
-public class SalesOrderCriteria : CriteriaObject
-{
-    protected override void Initialize()
-    {
-        // add filter criteria by order date with operator and two value properties for the range
-        OrderDateOperatorProperty = new OperatorProperty(this, OrderDateOperator)
-        {
-            EnumType = "operators",
-        };
-        OrderDateProperty = new DateProperty(this, OrderDate);
-        OrderDate2Property = new DateProperty(this, OrderDate2);
-    }
-}
-```
-
-:::note
-If you use the `OperatorProperty`, your service operation should accept and implement the specified filter operators, such as by using [query operators supported by Xomega Framework services](../services/querying#dynamic-linq-criteria).
-:::
-
-With the `CriteriaObject` being part of the base class `DataListObject`, view models in Xomega Framework will automatically validate its values before running the search.
-
-When implementing the `DoReadAsync` method for retrieving the filtered data using a service operation, you can convert the data of your `CriteriaObject` to the input DTO for the operation, and pass it to the service call, as follows.
-
-```cs
-protected override async Task<ErrorList> DoReadAsync(object options, CancellationToken token = default)
-{
-// highlight-next-line
-    SalesOrderCriteriaDTO criteria = CriteriaObject?.ToDataContract<SalesOrderCriteriaDTO>(options);
-    using (var s = ServiceProvider.CreateScope())
-    {
-        var salesOrderService = s.ServiceProvider.GetService<ISalesOrderService>();
-// highlight-next-line
-        var output = await salesOrderService.ReadListAsync(criteria, token);
-        await FromDataContractAsync(output?.Result, options, token);
-        return output.Messages;
-    }
-}
-```
-
-### Applied criteria
-
-Once the search successfully runs, and the data list object is populated with the results, it will extract the actual criteria that were used for the search from the `CriteriaObject`, and will store it in a separate property `AppliedCriteria`, which is a list of structures of type `FieldCriteriaSetting`.
-
-You can use it to display a summary of the applied criteria on the screen, and refresh it whenever it changes, since changing `AppliedCriteria` will fire a regular `INotifyPropertyChanged` event. `FieldCriteriaSetting` structure stores the field, operator and the value(s) separately, so that you could style them on the screen individually.
-
-:::note
-Even though your `CriteriaObject` may have many properties, the `AppliedCriteria` will have only the criteria that have values, which creates a nice and short summary. You also don't want to generate that summary directly from the `CriteriaObject`, since it will be different when the user has changed the criteria without having applied them yet, which could be misleading.
-:::
-
-### Client filtering
-
-If your data grid bound to your data list object needs to perform additional filtering on the client side by one or more columns, then `DataListObject` provides a handy utility method `PropertyValueMatches`, which checks if the value of a specified data property in a given row matches the specified criteria value using the supplied [operator](../services/querying#operators).
-
-:::tip
-You may need to translate the data grid's client-side filter criteria to a number of operator/value clauses, and combine the results of the calls to `PropertyValueMatches` for each clause, to determine whether each row matches those filter criteria.
-:::
-
 ### Resetting data
 
-To reset the data in your data list object, as well as the `AppliedCriteria`, you can call the `ResetData` method. If you also want to clear the values in the `CriteriaObject`, then you should call `ResetData` on that object too, as follows.
+To reset the data in your data list object, as well as the [applied criteria](#applied-criteria), you can call the `ResetDataAsync` method. If you also want to clear the values in the `CriteriaObject`, then you should call `ResetDataAsync` on that object too, as follows.
 
 ```cs
-myListObject.ResetData();
-myListObject.CriteriaObject.ResetData();
+await myListObject.ResetDataAsync();
+await myListObject.CriteriaObject.ResetDataAsync();
 ```
 
 :::note
 This is what the *Reset* action usually does on the standard Xomega Framework search forms.
 :::
 
-## Sorting rows
+## Sorting and paging
 
-`DataListObject` allows you to sort its rows locally using standard or custom sort criteria. In order to sort the data with a custom row comparison function, you can pass it to the `Sort` method, as follows.
-
-```cs
-Comparison<DataRow> compareRows = (r1, r2) => CompareRows(r1, r2); // custom comparison function
-myListObject.Sort(compareRows);
-```
+`DataListObject` allows you to create and set sort criteria by certain data properties, and then sort the rows of the data list locally using these criteria and/or send this criteria to the service operation that populates the list object's data, so that the data is sorted on the server side. You can also sort the list data locally without storing the applied sort criteria, or sort it using a custom comparison function.
 
 ### Sort criteria
 
-To help you sort a data list object, Xomega Framework provides a class `ListSortCriteria`, which is an *ordered* list of `ListSortField` objects. Each of those defines a sort order by a specific data property in the list object, as well as the sort direction.
+Xomega Framework provides a class `ListSortCriteria`, which is an *ordered* list of `ListSortField` objects. Each of those defines a sort order by a specific data property in the list object, as well as the sort direction.
 
-You can construct it and store it in the `SortCriteria` property of your list object, which is intended to keep track of the currently applied sort criteria, and it will be used whenever you call the `Sort` method without parameters, as follows.
+:::note
+The `ListSortField` class is very similar to the `SortField` class that is used for [passing sort criteria to the service operations](../services/querying#server-side-sorting), but it's designed specifically for data list objects. `ListSortCriteria` class has a method `ToSortFields` to convert it to an array of `SortField` structures.
+:::
+
+Normally, the `ListSortCriteria` object is created and set by the bound data grid when you click on the headers of its columns. You can also create it manually in your code and apply it to your data list object by calling the `SetSortCriteria` method, as shown below.
 
 ```cs
 var sortField = new ListSortField()
@@ -402,12 +492,24 @@ var sortField = new ListSortField()
     PropertyName = "MyProperty",
     SortDirection = ListSortDirection.Ascending
 };
+var sortCriteria = new ListSortCriteria() { sortField };
 // highlight-next-line
-list.SortCriteria = new ListSortCriteria() { sortField };
-list.Sort();
+await myListObject.SetSortCriteria(sortCriteria);
 ```
 
-If you want to sort a data list object using temporary sort criteria, without storing it in the `SortCriteria`, then you can do it using a custom comparison function, as follows.
+### Client-side sorting
+
+If the [`PagingMode`](#paging-mode) property of your data list object is not set to `Paging.Server`, then calling the `SetSortCriteria` method will sort the data locally with the specified sort criteria using the `Sort` method on the data list object. Sorting on the client side is performed as follows.
+
+If the internal values of your sort properties at each row implement `IComparable`, then it will use that interface for comparing the values. This allows you to compare typed properties, such as numeric or date/time, using the underlying data type. In all other cases, it will compare the values converted to the `DisplayString` format, which is how the user sees them on the screen. Null values will be sorted first in ascending order, and last in descending order.
+
+:::note
+[Populating the data list object](#populating-data) from the service operation will also sort it locally using the currently applied sort criteria, if any.
+:::
+
+#### Custom client sorting
+
+If you want to sort a data list object using temporary sort criteria, without storing it in the `SortCriteria` property, then you can do it by calling the `Sort` method of the `DataListObject`, and passing it the `Compare` function from that temporary `ListSortCriteria` object, as shown below.
 
 ```cs
 var sortCriteria = new ListSortCriteria() { ... };
@@ -415,11 +517,43 @@ var sortCriteria = new ListSortCriteria() { ... };
 myListObject.Sort(sortCriteria.Compare);
 ```
 
-If the internal values of your sort properties at each row implement `IComparable`, then it will be used for comparing the rows. This allows you to compare typed properties, such as numeric or date/time, using the underlying data type. In all other cases, it will compare the values converted to the `DisplayString` format, which is how the user sees them on the screen.
+For the maximum flexibility, you can also pass any custom row comparison function to the `Sort` method, as follows.
+
+```cs
+Comparison<DataRow> compareRows = (r1, r2) => CompareRows(r1, r2); // custom comparison function
+myListObject.Sort(compareRows);
+```
+
+:::warning
+Sorting the list data using a custom comparison function that is different from the `SortCriteria` property may be misleading, if the data list object is bound to a data grid that displays the applied sort criteria using the `SortCriteria` property.
+:::
+
+### Server-side sorting
+
+When reading data for a primary data list object from a service operation [with criteria](#reading-with-criteria) that supports [server-side sorting](../services/querying#server-side-sorting), the `GetCriteriaDataContract` method will automatically convert the currently applied sort criteria to the `SortField` array, and set it to the `Sort` property of the `SearchCriteria` DTO, in order to pass it to the service operation.
+
+This way, the service will return the data sorted by the specified sort criteria, which is essential when the results from the service are limited either by the maximum number of records or by the paging parameters, since you cannot reliably sort the data on the client side in this case.
+
+Also, if the [`PagingMode`](#paging-mode) property of your data list object is set to `Paging.Server`, then calling the `SetSortCriteria` method with new sort criteria will store the provided criteria in the `SortCriteria` property, and will call the `ReadAsync` method to automatically reload the data from the service with the new sort criteria.
+
+### Paging
+
+`DataListObject` supports paging of the data in the list by allowing to keep track of the `CurrentPage` and `PageSize` properties. These properties are defined as read-only, but you can set them by calling the async methods `SetCurrentPage` and `SetPageSize` respectively.
 
 :::note
-Null values will be sorted first in ascending order, and last in descending order.
+Internally, the `DataListObject` stores the `firstRowIndex` for the `CurrentPage` to allow setting it via the `SkipTakeAsync` method by certain bound data grids.
 :::
+
+The data list also provides a `CurrentPageData` property, which returns a subset of the data for the current page if the `PagingMode` is set to `Paging.Client`, and all the list data otherwise.
+
+Coupled with the `TotalRowCount` property, which is populated by the [`FromOutputAsync`](#reading-with-criteria) method using the [total counts returned by the service](../services/querying#returning-total-count), the above properties can be used to implement paging in the bound data grid.
+
+#### Paging mode
+
+`DataListObject` defines a `PagingMode` property using the `DataListObject.Paging` enum. Following are the possible values for this enum and their meanings.
+- `Paging.Server` - the data list object is populated from the service operation that supports [server-side paging](../services/querying#server-side-paging) and contains only data for the current page. The `CurrentPage` and `PageSize` properties, as well as the currently applied sort criteria, are passed to the service operation to read the data for the current page. Changing the page, page size or sort criteria will automatically call the `ReadAsync` method to automatically reload the data from the service.
+- `Paging.Client` - the data list object contains all the data (possibly [limited by the maximum number of rows](../services/querying#limiting-results) from the server), but the bound data grid can use the paging properties of the list object to implement paging on the client side. This is the default value.
+- `Paging.None` - the data list object contains all the data, but the paging properties are not used. The bound data grid may display no paging controls in this case.
 
 ## Row selection
 
@@ -501,11 +635,11 @@ dataListObject.FireSelectionChanged();
 
 ### Preserving selection
 
-When refreshing the data in a data list object from the backend, it is often desirable to preserve the currently selected row, if it still exists in the new dataset. To support this, the data list object's `FromDataContractAsync` method handles options passed as `CrudOptions` with a `PreserveSelection` parameter set. You would typically pass it through the `ReadAsync` method as follows.
+When refreshing the data in a data list object from the backend, it is often desirable to preserve the currently selected row, if it still exists in the new dataset. To support this, the data list object's `FromDataContractAsync` method handles options passed as `ReadOptions` with a `PreserveSelection` parameter set. You would typically pass it through the `ReadAsync` method as follows.
 
 ```cs
 // highlight-next-line
-var options = new DataObject.CrudOptions { PreserveSelection = true };
+var options = new DataListObject.ReadOptions { PreserveSelection = true };
 var errors = await dataListObject.ReadAsync(options, token);
 ```
 

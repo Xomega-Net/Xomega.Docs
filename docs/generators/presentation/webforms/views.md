@@ -31,11 +31,14 @@ The following snippet shows an example of a search view definition in the Xomega
          xmlns:ui="http://www.xomega.net/ui">
   <ui:view-model data-object="SalesOrderList"/>
   <ui:layout base="master-details"/>
+  <ui:main-link name="sales order list"/>
 </ui:view>
 ```
 
+To generate a [main menu item for the view](../../../visual-studio/modeling/presentation#main-menu-links), you need to add a `ui:main-link` element under the `ui:view` element.
+
 :::tip
-If you need to change the ASP.NET markup, you can set a `custom="true"` attribute on the nested `ui:layout` element for the view after generating the view initially, and it won't be updated during subsequent runs of the generator to preserve your changes.
+If you need to [change the ASP.NET markup](../../../visual-studio/modeling/presentation#custom-view-layout), you can set a `custom="true"` attribute on the nested `ui:layout` element for the view after generating the view initially, and it won't be updated during subsequent runs of the generator to preserve your changes.
 :::
 
 ### Controls

@@ -33,11 +33,14 @@ The following snippet shows an example of a search view definition in the Xomega
 <ui:view name="SalesOrderListView" title="Sales Order List" customize="true"
          xmlns:ui="http://www.xomega.net/ui">
   <ui:view-model data-object="SalesOrderList"/>
+  <ui:main-link name="sales order list"/>
 </ui:view>
 ```
 
+To generate a [main menu item for the view](../../../visual-studio/modeling/presentation#main-menu-links), you need to add a `ui:main-link` element under the `ui:view` element.
+
 :::tip
-If you need to change the generated Razor markup, you can set a `custom="true"` attribute on the nested `ui:layout` element for the view after generating the view initially, and it won't be updated during subsequent runs of the generator to preserve your changes.
+If you need to [change the generated Razor markup](../../../visual-studio/modeling/presentation#custom-view-layout), you can set `custom="true"` attribute on the nested `ui:layout` element for the view after generating the view initially, and it won't be updated during subsequent runs of the generator to preserve your changes.
 :::
 
 ### Controls
@@ -190,6 +193,7 @@ The following table lists configuration parameters that are set as the generator
 |Menu File|../MySolution.Client.Blazor.Common /Views/MainMenu.cs|Output path to the C# file where to generate static structure for the main menu.|
 |**Parameters**|
 |Namespace|MySolution.Client.Blazor.Views.Common|Namespace for the generated views.|
+|UseAuth|True|Whether or not to add an `[Authorize]` attribute to secure the pages.|
 |**Selector**|
 |View||The name of the view from the model to generate a view for. Can be used to set up a separate generator configuration for a single view.|
 

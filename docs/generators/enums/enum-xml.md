@@ -8,7 +8,7 @@ Exports static enumerations defined in the Xomega model along with their items a
 
 ##  Generator inputs
 
-The generator takes static enumerations declared in the model using `enum` element and outputs them into the specified XML file using the same format, as the one that is used in the model. If an enumeration inherits from another enumeration, the list of items will be merged with the base enumeration.
+The generator takes [non-abstract](../../visual-studio/modeling/static-data#abstract-enumerations) static enumerations declared in the model using `enum` element and outputs them into the specified XML file using the same format, as the one that is used in the model. If an enumeration inherits from another enumeration, the list of items will be merged with the base enumeration.
 
 The snippet below illustrates how the `sales order status` enumeration extends from the base `order status` enumeration, removes the `New` item, changes the value for the `Rejected` and `Cancelled` items, and adds new `Backordered` and `Shipped` items.
 

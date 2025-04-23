@@ -417,9 +417,17 @@ The `ui:field` element allows you to specify the following configuration attribu
 - `access-key` - access key for the field. Generated to the default resource file and can be customized for other languages. 
 - `hidden` - specifies if the field should not appear on the data object's views.
 - `editable` - specifies whether the field should be displayed as a regular or a read-only control. Overrides Xomega logic for determining read-only fields based on the types of operations it appears in.
-- `is-trigger` - specifies whether the field triggers updates in other controls. Used in WebForms to set the AutoPostBack attribute.
+- `is-trigger` - specifies whether the field triggers updates in other controls. Used in WebForms to set the `AutoPostBack` attribute.
 - `typical-length` - specifies the typical length of the field's values used for sizing columns. Overrides typical length derived from the field's logical type.
 - `width` - explicit width string for the field that is technology-specific, e.g., CSS-style. Used for web-based data grids, overrides the width calculated from the typical length of the field.
+
+#### Criteria config
+
+For [criteria objects](../../framework/common-ui/data-lists#criteria-object), you can also specify the following additional attributes in the `ui:field` element to customize the criteria fields.
+- `static` - specifies whether the field criteria are [statically displayed](../../framework/common-ui/data-lists#editing-criteria-statically) in the criteria panel, or can be added and [edited dynamically](../../framework/common-ui/data-lists#editing-criteria-dynamically). You can also set the `static` attribute on the parent `ui:fields` element to apply it to all fields in the criteria panel, and then override it for individual fields as needed.
+- `op-none` - set to indicate that the field should have no operator selection. An appropriate default operator for the field will be used, e.g. `Equals` for scalar fields and `Is One Of` for multi-value fields. You can also set the `op-none` attribute on the parent `ui:fields` element to apply it to all fields in the criteria panel, and then override it for individual fields as needed.
+- `op-default` - a custom default operator for the field instead of the `Equals` and `Is One Of` operators for scalar and multi-value fields, respectively. If you add dynamic field criteria with an operator, the operator will be pre-populated with the default operator. If the field criteria has no operator, then the default operator will be used when passing that criteria to the service operation.
+- `op-type` - custom logical type to use for the operator. By default, the `operator` type is used for criteria operators, but you can create a new `enum` with your own set of operators and define a logical type for it, so that you can override it for individual fields.
 
 ### UI panel layout
 
@@ -455,6 +463,11 @@ To customize the main panel, you can set corresponding attributes on the `ui:fie
 - `panel-cols` - the number of columns that the parent panel has for the current panel. For example, the value "1" means that the panel takes the full width, value "2" means that it takes half of the parent panel's width, value "3" takes a third of the parent, etc.
 - `field-cols` - the maximum number of columns the panel uses to lay out its fields. For child panels, this value overrides the default value specified on the `ui:fields` of that child object for this particular child.
 - `field-width` - the preferred column width for the panel fields, which is used to calculate the number of columns in runtime. For child panels, this value overrides the default value specified on the `ui:fields` of that child object for this particular child.
+
+For criteria panels bound to a [criteria object](../../framework/common-ui/data-lists#criteria-object), you can also specify the following additional attributes in the `ui:fields` element to customize all criteria fields.
+- `static` - the default value for whether all field criteria are [statically displayed](../../framework/common-ui/data-lists#editing-criteria-statically) in the criteria panel, or can be added and [edited dynamically](../../framework/common-ui/data-lists#editing-criteria-dynamically). You can override this value on individual fields as needed.
+- `op-none` - set to indicate whether all criteria fields should have no operator selection. An appropriate default operator for each field will be used, e.g. `Equals` for scalar fields and `Is One Of` for multi-value fields. You can override this value on individual fields as needed.
+
 
 The following example illustrates custom configurations of the main and child panels for the `SalesOrderCustomerObject`.
 
@@ -542,22 +555,16 @@ You can also set a custom localizable base title for the view in the `title` att
     <ui:view name="SalesOrderView" title="Sales Order">[...]
     <ui:view name="SalesOrderListView" title="Sales Order List" customize="true">[...]
 <!-- highlight-next-line -->
-    <ui:view name="SalesOrderDetailView" title="Line Item for Sales Order {0}" child="true">[...]
+    <ui:view name="SalesOrderDetailView" title="Line Item for Sales Order {0}">[...]
   </ui:views>
 </module>
 ```
-
-If a view should be opened only from another view and not from the top-level navigation menu, then you need to set the `child="true"` attribute. In this case, the view will not be included in the generated navigation menu, which includes only the top-level views that you can open without parameters to start a new workflow.
-
-:::note
-For object details views, the navigation menu will include only the option to create a new object that requires no parameters. The view to open and edit details of an existing object that requires object ID parameters will be invoked as a child view from another view.
-:::
 
 The generated view will be for the specific UI framework, such as Blazor, WebForms, or WPF, but they will use common framework-agnostic view models. If you need to apply **UI framework-specific customizations** to a view, then you can add a `customize="true"` attribute to the view, and Xomega will generate a subclass or partial class for the view, where you can add your custom code.
 
 ### Security policy
 
-To configure security access for a specific top-level view (i.e. without the `child="true"` attribute) you can define an authorization policy and set it in the `policy` attribute of the `ui:view` element, as follows.
+To configure security access for a specific view, you can define an authorization policy and set it in the `policy` attribute of the `ui:view` element, as follows.
 
 ```xml
 <ui:view name="SalesOrderView" title="Sales Order" policy="Sales">[...]
@@ -636,9 +643,86 @@ It's best to **stick to the auto-generated views** as much as possible during th
 
 ## Navigation
 
-Navigation between UI views is modeled in the Xomega presentation model by configuring links to one of the defined views on the appropriate data objects.
+Xomega presentation model allows you to define both the navigation from the main menu to the top-level views and the navigation between the views. The main menu is generated based on the `ui:main-link` elements defined in the `ui:view` elements, while the navigation between views is modeled by [configuring object links](#object-links-to-views) to one of the defined views on the appropriate data objects of the original view.
+
+### Main menu links
+
+To allow opening a view from the main menu, you need to add a `ui:main-link` element to the `ui:view` element of the target view. The `name` attribute of the link should be unique across all views and will be used as the text of the menu item by default.
+
+The main menu items will be grouped into submenus based on the name of the view's module. For the views under the module that has no name (i.e. the default module), the menu items will be grouped under the "Views" submenu.
+
+You can also override the menu item text and the name of the menu group by adding a `ui:display` element under the `ui:main-link` element, and setting one of the following attributes on it.
+- `title` - custom text for the menu item instead of the `name` attribute of the `ui:main-link` element.
+- `icon` - custom Bootstrap icon name to use for the menu item.
+- `group` - custom name of the menu group to use instead of the module name.
+
+The following example illustrates a main menu link for the `SalesOrderListView` view with a custom name, icon and group name.
+
+```xml
+<ui:view name="SalesOrderListView" title="Sales Order List">
+  <ui:view-model data-object="SalesOrderList"/>
+<!-- highlight-start -->
+  <ui:main-link name="sales orders">
+    <ui:display title="Browse Sales Orders" icon="card-checklist" group="Sales Orders"/>
+  </ui:main-link>
+<!-- highlight-end -->
+</ui:view>
+```
+
+:::note
+The text for the menu item and group name will be generated to the default resource file, which can be translated into other languages.
+:::
+
+#### Opening views with auto-search
+
+If you want your menu item to open the view and automatically run the search, instead of displaying the view with an empty grid and waiting for the user to enter the search criteria, then you can add a `ui:params` element under the `ui:main-link` element and set the `_action` parameter to `search`. You can also set other parameters to pre-populate the search criteria, as shown in the following example.
+
+```xml
+<ui:view name="SalesOrderListView" title="Sales Order List">
+  <ui:view-model data-object="SalesOrderList"/>
+  <ui:main-link name="current sales orders">
+<!-- highlight-start -->
+    <ui:params>
+      <ui:param name="_action" value="search"/>
+      <ui:param name="status" value="1"/>
+    </ui:params>
+<!-- highlight-end -->
+  </ui:main-link>
+</ui:view>
+```
+
+:::tip
+Use auto-search with pre-populated criteria only when the user does not need to change the criteria in most cases. If the user will mostly need to change the criteria, then you can still pre-populate some of the criteria parameters, but without the auto-search, in order to avoid running an expensive search operation initially.
+:::
+
+#### Opening details views from the main menu
+
+Typically, opening a details view for an existing entity is done from other screens, where you have the ID of the entity to open, so it does not make much sense to open it from the main menu. However, you may still want to allow opening a details view for creating a new entity from the main menu.
+
+To add a main menu item for creating a new entity, you can set the `_action` parameter to `create` in the `ui:params` element under the `ui:main-link` element. You can also set other parameters to pre-populate the details view, as shown in the following example.
+
+```xml
+<ui:view name="SalesOrderView" title="Sales Order">
+  <ui:view-model data-object="SalesOrderObject"/>
+<!-- highlight-start -->
+  <ui:main-link name="express sales order">
+    <ui:params>
+      <ui:param name="_action" value="create"/>
+      <ui:param name="type" value="EXPRESS"/>
+    </ui:params>
+    <ui:display title="Add Express Order"/>
+  </ui:main-link>
+<!-- highlight-end -->
+</ui:view>
+```
+
+:::note
+You can still fine-tune or completely override the structure of the generated main menu in the code as needed.
+:::
 
 ### Object links to views
+
+Navigation from one UI view to another is modeled in the Xomega presentation model by configuring links to one of the defined views on the appropriate data objects.
 
 You can add links to any data object by adding a `ui:link` element, giving it a unique name within the object using the `name` attribute, and specifying the target view in the `view` attribute.
 
@@ -670,6 +754,8 @@ For the parameter name, Xomega can suggest you a list of framework parameters th
   - `select` - open search view to select one or multiple objects.
 - `_selection` - selection mode for the target view: `single` or `multiple`.
 - `_source` - ID of the source link when more than one link invokes the same view.
+
+#### Parameter values from properties
 
 Instead of a fixed value, you can also source the parameter value from one of the properties of the current data object or any of the child or parent objects in its hierarchy. For that, instead of the `value` attribute, you should set the `field` attribute to one of the data object properties and optionally set a `data-object` attribute to the data object's path relative to the current object.
 

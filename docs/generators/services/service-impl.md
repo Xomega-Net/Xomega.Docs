@@ -69,7 +69,7 @@ An operation to read a list of objects will have the `type="readlist"` attribute
 
 For reading a list of child subobjects, the input parameters may be just the key(s) of the parent object.
 
-An operation to read a list of primary objects will typically have a special `criteria` structure that contains the fields to filter by, an optional comparison operator parameter for each field, whose name consists of the field name and a postfix " operator", and possibly a second parameter for the field to allow supplying a range for the `BETWEEN` operator, as follows.
+An operation to read a list of primary objects will typically have a special `criteria` structure that contains the fields to filter by, as follows.
 
 ```xml
 <object name="sales order">
@@ -79,13 +79,9 @@ An operation to read a list of primary objects will typically have a special `cr
       <input>
 <!-- highlight-next-line -->
         <struct name="criteria">
-          <param name="sales order number operator" type="operator"/>
-          <param name="sales order number" required="false"/>
-          <param name="status operator" type="operator"/>
-          <param name="status" required="false" list="true"/>
-          <param name="order date operator" type="operator"/>
-          <param name="order date" type="date" required="false"/>
-          <param name="order date2" type="date" required="false"/>
+          <param name="sales order number"/>
+          <param name="status" list="true"/>
+          <param name="order date" type="date"/>
         </struct>
       </input>
 <!-- highlight-next-line -->
