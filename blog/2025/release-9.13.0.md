@@ -69,6 +69,10 @@ Client-side paging is still used by default, but you can [configure the model](/
 You can also set the [`PagingMode.Server`](/docs/framework/common-ui/data-lists#paging-mode) in your customized data list object, but if your `read list` operation has no input criteria, then you need to configure it in the model as described above, so that the operation could be generated to properly accept the paging and sorting parameters. 
 :::
 
+:::warning
+Server-side paging and sorting is currently available only in the generated **Blazor** search screens. Legacy technologies such as **ASP.NET**, **SPA** and **WPF** should continue to use client-side paging and sorting.
+:::
+
 ## Powerful search criteria
 
 Adding many different criteria to search your data by can help you build really powerful search screens. So far, Xomega allowed you to define any needed criteria in the model and generate the search screens based on those. However, this process was quite cumbersome, and the generated screens could get pretty unwieldy with many criteria.
@@ -188,7 +192,7 @@ The latter allows selecting multiple values to filter by, but, to save space, on
 ![Static dynamic criteria](img/static-dynamic-criteria.png)
 
 :::warning
-Selecting dynamic criteria is currently available only in the generated **Blazor** search screens. Legacy technologies such as **ASP.NET** and **WPF** still have all the criteria displayed statically in the criteria panel above the results grid.
+Selecting dynamic criteria is currently available only in the generated **Blazor** search screens. Legacy technologies such as **ASP.NET**, **SPA** and **WPF** still have all the criteria displayed statically in the criteria panel above the results grid.
 :::
 
 ### Applied criteria display
