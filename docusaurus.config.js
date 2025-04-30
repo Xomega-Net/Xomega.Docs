@@ -36,6 +36,13 @@ const config = {
             }
           }
         },
+        blog: {
+          showReadingTime: true,
+          readingTime: ({content, frontMatter, defaultReadingTime}) =>
+            frontMatter.hide_reading_time
+              ? undefined
+              : defaultReadingTime({content}),
+        },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
@@ -99,11 +106,9 @@ const config = {
             label: 'Learn',
           },
           {
-            href: 'https://xomega.net/blog',
+            to: 'blog',
             position: 'left',
             label: 'Blog',
-            target: null,
-            className: 'xomega-link'
           },
           {
             href: 'https://xomega.net/about/contactus',
