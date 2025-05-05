@@ -3,9 +3,9 @@ date: 2025-04-30
 tags: [Release]
 ---
 
-# What's new in Xomega 9.13.0
+# What's new in Xomega 9.13
 
-We are happy to announce the new major release 9.13.0 of Xomega.Net. Thanks to your feedback, it's loaded with some cool new features, improvements, and bug fixes.
+We are happy to announce the new major release 9.13 of Xomega.Net. Thanks to your feedback, it's loaded with some cool new features, improvements, and bug fixes.
 
 
 The main improvements are around building powerful search screens, consisting of the following:
@@ -273,7 +273,7 @@ As you can see, the new release of Xomega.Net 9.13.0 is packed with some great n
 
 The new features are largely driven by your feedback, so we would like to thank you for your continued support and suggestions.
 
-Please [download the new version](https://xomega.net/product/download), and **let us know what you think** about these new features in the [comments on our discussion](https://github.com/orgs/Xomega-Net/discussions) board, or [contact us directly](https://xomega.net/about/contactus) with any questions or suggestions.
+Please [download the new version](https://xomega.net/product/download), and **let us know what you think** about these new features in the [comments](https://github.com/orgs/Xomega-Net/discussions/23). You can also [contact us directly](https://xomega.net/about/contactus) with any questions or suggestions.
 
 ### Other changes
 
