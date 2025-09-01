@@ -155,7 +155,7 @@ Since we have dynamic enumerations for all of these fields, which can decode IDs
 :::
 
 Now that we have properties on the `SalesOrderSalesObject` data object, we can configure proper labels for our fields.
-Also, since the `XPickList` control for the *Sales Reasons* selection contains two list boxes and would be pretty wide, we will set the [`field-cols="1"`](../../visual-studio/modeling/presentation#ui-panel-layout) attribute on the `ui:fields` element to stack all our sales fields in a single column.
+Also, since the `XPickList` control for the *Sales Reasons* selection contains two list boxes and would be pretty wide, we will set the [`field-cols="1"`](../../visual-studio/modeling/presentation#panel-layout) attribute on the `ui:fields` element to stack all our sales fields in a single column.
 
 The following snippet demonstrates this configuration.
 

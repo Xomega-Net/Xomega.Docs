@@ -7,23 +7,27 @@ sidebar_position: 5
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Xomega presentation model describes UI views, their view models, and the underlying presentation data objects that they are composed of. All these presentation model entities have corresponding supporting classes in the Xomega Framework, which powers the application generated from the model.
+The Xomega presentation model defines UI views, their view models, and the underlying presentation data objects they comprise. Each of these entities has corresponding supporting classes in the Xomega Framework, which powers the generated application.
 
-The unique feature of Xomega modeling is that you build your presentation model on top of the structure of your service model, which not only eliminates the need for you to manually build out the elements of your views and view models, but it also automatically ties your views to the corresponding service operations, and therefore allows Xomega to generate a fully functional application with minimal effort.
+A unique feature of Xomega modeling is that you build your presentation model on top of your service model's structure. This approach eliminates the need to manually construct view and view model elements, automatically ties views to their corresponding service operations, and enables Xomega to generate a fully functional application with minimal effort.
 
-The views that you define in the presentation model can be used in your application both as individual screens or as building blocks for more complex screens and workflows.
+Views defined in the presentation model can be used as individual screens or as building blocks for more complex screens and workflows within your application.
 
 ## Data objects
 
-Xomega Framework data objects serve as data models for some parts of your view, such as a panel or a data grid, which get bound to the data object and its properties. This means that any changes in the data properties, including their states, such as visibility or editability, get automatically reflected in the bound UI controls, and any updates that you make in the editable bound controls are automatically applied to the data properties.
 
-Data objects can contain other child objects, which is typically mirrored on the UI, where a panel bound to the parent object contains sub-panels or data grids bound to its child objects. This allows you to build out the general structure of your UI view by defining composable parent and child data objects.
+Xomega Framework data objects serve as data models for parts of your view, such as panels or data grids, which are bound to the data object and its properties. Any changes to data properties—including their states, such as visibility or editability—are automatically reflected in the bound UI controls. Updates made in editable controls are also automatically applied to the data properties.
 
-You can declare data objects in your model using `xfk:data-object` element under the `xfk:data-objects` node, which should go at the end of the top-level `module` element. You must set the `class` attribute to a unique class for the data object and set the `list="true"` for list objects that represent tabular data and are typically bound to a data grid.
+Data objects can contain child objects, which is typically mirrored in the UI: a panel bound to a parent object contains sub-panels or data grids bound to its child objects. This allows you to build the general structure of your UI view by defining composable parent and child data objects.
 
-If you want to use a custom subclass of the generated data object, where you can override methods and add functionality, then you can add a `customize="true"` attribute to the data object declaration, and Xomega will create such a custom subclass for you, which will be preserved whenever you regenerate data objects.
 
-The following snippet illustrates declarations of data objects, as well as their possible content elements, which should follow the order they are listed here.
+Declare data objects in your model using the `xfk:data-object` element under the `xfk:data-objects` node, which should be placed at the end of the top-level `module` element. Set the `class` attribute to a unique class name for the data object, and use `list="true"` for list objects that represent tabular data typically bound to a data grid.
+
+
+To use a custom subclass of the generated data object—allowing you to override methods and add functionality—add the `customize="true"` attribute to the data object declaration. Xomega will create and preserve this custom subclass whenever you regenerate data objects.
+
+
+The following snippet illustrates data object declarations and their possible content elements, which should follow the order listed here.
 
 ```xml
 <module xmlns="http://www.xomega.net/omodel"
@@ -54,7 +58,8 @@ The following snippet illustrates declarations of data objects, as well as their
 </module>
 ```
 
-If you declare a new data object, as illustrated in the snippet above, the Xomega model will show you a warning that your data object doesn't have any properties. However, you may have noticed that the definition of a data object in the model doesn't really support the ability to list its data properties explicitly. Instead, those are included in the data object implicitly based on your service model, as explained below.
+
+If you declare a new data object as shown above, the Xomega model will warn you if your data object doesn't have any properties. Note that the data object definition in the model does not support listing its data properties explicitly; instead, properties are included implicitly based on your service model, as explained below.
 
 ### Data object properties
 
@@ -242,19 +247,11 @@ If the nested structure does not map to a child object with the same name, then 
 
 ## Data object display
 
-The UI display of a data object in the generated views will be based on its structure. This means that the UI fields bound to the data object properties will appear on the screen in the same order that the corresponding data object parameters are first listed in the model.
+The UI display of a data object in the generated views will be based on its structure. Unless you organize data object's fields in [field groups](#ui-field-groups), the UI fields bound to the data object properties will appear on the screen in the same order that the corresponding data object parameters are first listed in the model.
 
-For example, if the **first structure** that you add to your data object in the model file is an output structure of a `read` operation, and it returns all of the fields that you display on the screen, then you can just list those output parameters in the same order as you want them to be shown on the screen. This is a typical and the most common scenario.
+For example, if the first structure that you add to your data object in the model file is an output structure of a `read` operation, and it returns all of the fields that you display on the screen, then the order of these parameters will determine the default order of the corresponding UI fields.
 
-:::tip
-If for some reason you cannot change the order of your operation parameters, or if parameters are added to the object from different structures, and you cannot coordinate the order of the combined parameters, then you can try to define a special auxiliary structure before all of the other structures for that object, and then add the required parameters to it using the desired order, and specify the `xfk:add-to-object` configuration for your object there.
-
-If you don't use that structure in any operation or another structure, then you may want to also [mark it as generic](services#generic-structures).
-:::
-
-The child data objects will be shown as nested panels or tabs on the screen, which will go in the order that you list them under the data object declaration.
-
-You can further configure various display options for your fields and panels in the presentation model, as described below.
+By default, data object's field groups and child objects will be displayed in vertically stacked panels under the main data object panel in the order they are listed in the model, unless you configure a specific [layout using panels and tabs](#panel-and-tab-layout) in the `ui:panel-layout` element of the data object.
 
 ### UI controls
 
@@ -429,15 +426,57 @@ For [criteria objects](../../framework/common-ui/data-lists#criteria-object), yo
 - `op-default` - a custom default operator for the field instead of the `Equals` and `Is One Of` operators for scalar and multi-value fields, respectively. If you add dynamic field criteria with an operator, the operator will be pre-populated with the default operator. If the field criteria has no operator, then the default operator will be used when passing that criteria to the service operation.
 - `op-type` - custom logical type to use for the operator. By default, the `operator` type is used for criteria operators, but you can create a new `enum` with your own set of operators and define a logical type for it, so that you can override it for individual fields.
 
-### UI panel layout
+### UI field groups
 
 :::warning
-The following functionality is currently fully supported only for the modern Blazor views. WebForms, WPF, or SPA views support only the `field-cols` config, but otherwise use the legacy [`ui:layout`](#legacy-layout-config).
+Field groups are currently supported only for Blazor views.
 :::
 
-The main UI panel with the data object fields uses a responsive grid to lay out the controls in a number of grid columns. The number of columns is determined dynamically based on the screen size and the number of open views, but you can set the `field-cols` attribute of the `ui:fields` element to configure the maximum number of columns to use.
+If your non-list data object that is bound to a details view has many fields, you can define named field groups under the `ui:display` element of the data object. This will allow you to organize these field groups into panels or tabs on the details view in a way that makes sense for your users. To define named field groups, you can add `ui:fields` elements with the `group` attribute set to the name of the group, as illustrated below.
 
-You can also set the `field-width` attribute to customize the preferred width of the columns in pixels, which is used for calculating the number of grid columns to use for the layout. In the following example, the fields of the `AddressObject` are laid out in up to 3 columns with the preferred width of 100px.
+```xml
+<xfk:data-object class="EmployeeObject">
+  <ui:display>
+    <ui:fields>
+      <ui:field param="business entity id" hidden="true"/>
+    </ui:fields>
+    <ui:fields group="name" title="Employee Name">
+      <ui:field param="first name"/>
+      <ui:field param="middle name"/>
+      <ui:field param="last name"/>
+    </ui:fields>
+    <ui:fields group="personal" title="Personal Info">
+      <ui:field param="birth date"/>
+      <ui:field param="gender"/>
+      <ui:field param="national id number"/>
+      <ui:field param="marital status"/>
+    </ui:fields>
+    <ui:fields group="email phone" title="Email / Phone">
+      <ui:field param="email address"/>
+      <ui:field param="phone number"/>
+      <ui:field param="phone number type id" label="Phone Number Type"/>
+    </ui:fields>
+  </ui:display>
+</xfk:data-object>
+```
+
+The `ui:fields` element without the `group` attribute is used to configure the fields that are not part of any group. The `ui:display` section cannot have more than one default `ui:fields` element without the `group` attribute.
+
+While the default `ui:fields` element contains only the fields that you want to configure, a named field group has all its fields listed explicitly, which allows you to **control the order of the fields** on the panels. For all other fields that are not part of any group, the order will be determined by the order of the corresponding parameters in the service operations (typically the output of the `read` operation).
+
+Each `ui:field` element in the field group can have the same attributes as described in the [UI field config](#ui-field-config) section above, such as `label`, `editable`, etc, although some attributes, such as `hidden`, may not make sense for fields in a group.
+
+You can also set the `title` attribute on the `ui:fields` element to specify a custom title for the corresponding panel or tab. If you don't set the `title`, then the title will be derived from the group name. The value you set for the `title` will be added to a common resource file that can be localized to other languages.
+
+### Responsive layout
+
+In the generated Blazor views, UI panels bound to field groups of a data object use a responsive grid to lay out the controls in a number of grid columns. The number of columns is determined dynamically based on the screen size and the number of open views side by side.
+
+By default, the maximum number of columns for a field group is 4, but you can configure it by setting the `field-cols` attribute of the `ui:fields` element.
+
+You can also set the `field-width` attribute to customize the preferred width of the columns in pixels, which is used for calculating the number of grid columns to use for the layout. The default value for the `field-width` is 150px.
+
+In the following example, the fields of the `AddressObject` are laid out in up to 3 columns with the preferred width of 100px.
 
 ```xml
 <xfk:data-object class="AddressObject" customize="true">
@@ -455,90 +494,148 @@ You can also set the `field-width` attribute to customize the preferred width of
 </xfk:data-object>
 ```
 
-If a data object has child objects, then in addition to the main panel with data object fields, the top-level data object panel will also contain the panels for its child objects. By default, the main panel and the child panels will also be laid out using a responsive grid with one column that is stacked up, but you can customize it for each panel.
+If you have multiple UI panels to display your data object fields, those panels will be stacked up vertically by default, meaning that each panel will take the full width of its container. If you want to display the panels side by side instead, you can set the `panel-cols` attribute to indicate the fraction of the parent panel's width that the current panel should take.
 
-To customize the main panel, you can set corresponding attributes on the `ui:fields` element. To customize individual child panels, you need to add a `ui:panel` for that child under the `ui:child-panels` element and set the following attributes there.
-- `child` - the name of the child object for the child panel.
-- `title` - a custom title for the child or main panel. By default, the main panel will have no title, and the title of the child panel will be derived from the child's name. The title provided will be added to a resource file that can be localized to other languages.
-- `panel-cols` - the number of columns that the parent panel has for the current panel. For example, the value "1" means that the panel takes the full width, value "2" means that it takes half of the parent panel's width, value "3" takes a third of the parent, etc.
-- `field-cols` - the maximum number of columns the panel uses to lay out its fields. For child panels, this value overrides the default value specified on the `ui:fields` of that child object for this particular child.
-- `field-width` - the preferred column width for the panel fields, which is used to calculate the number of columns in runtime. For child panels, this value overrides the default value specified on the `ui:fields` of that child object for this particular child.
+For example, if you set `panel-cols="2"`, then the panel will take half of the parent panel's width, and if you set `panel-cols="3"`, then it will take a third of the parent panel's width, etc.
 
-For criteria panels bound to a [criteria object](../../framework/common-ui/data-lists#criteria-object), you can also specify the following additional attributes in the `ui:fields` element to customize all criteria fields.
-- `static` - the default value for whether all field criteria are [statically displayed](../../framework/common-ui/data-lists#editing-criteria-statically) in the criteria panel, or can be added and [edited dynamically](../../framework/common-ui/data-lists#editing-criteria-dynamically). You can override this value on individual fields as needed.
-- `op-none` - set to indicate whether all criteria fields should have no operator selection. An appropriate default operator for each field will be used, e.g. `Equals` for scalar fields and `Is One Of` for multi-value fields. You can override this value on individual fields as needed.
-
-
-The following example illustrates custom configurations of the main and child panels for the `SalesOrderCustomerObject`.
+In the following configuration, field groups "name" and "personal" of the `EmployeeObject` will each take half of the parent panel's width. If displayed in the same row, then they will appear side by side.
 
 ```xml
-<xfk:data-object class="SalesOrderCustomerObject">
-  <xfk:add-child name="lookup" class="SalesCustomerLookupObject"/>
-  <xfk:add-child name="billing address" class="AddressObject"/>
-  <xfk:add-child name="shipping address" class="AddressObject"/>
-  <ui:display>
-<!-- highlight-next-line -->
-    <ui:fields field-cols="2" panel-cols="2" title="Customer Info">[...]
-    <ui:child-panels>
-<!-- highlight-start -->
-      <ui:panel child="lookup" panel-cols="2" field-cols="2" title="Lookup Customer"/>
-      <ui:panel child="billing address" panel-cols="2"/>
-      <ui:panel child="shipping address" panel-cols="2"/>
-<!-- highlight-end -->
-    </ui:child-panels>
-  </ui:display>
-</xfk:data-object>
-```
-
-:::note
-From the examples above, both `billing address` and `shipping address` panels will be laid out in 3 columns based on the `field-cols` configuration in the `ui:fields` of the `AddressObject` declaration, but you can override this and other attributes for either of these child panels.
-:::
-
-### Tabbed children
-
-If you don't want to show all child objects on the same panel as the main object's fields, you can place all or some of the child objects in one or more tab groups. To display all child objects in one tab group below the main fields, you can just add a `ui:tabs` element to the object's `ui:display`, as follows.
-
-```xml
-<xfk:data-object class="SalesOrderObject">
-  <xfk:add-child name="customer" class="SalesOrderCustomerObject"/>
-  <xfk:add-child name="detail" class="SalesOrderDetailList"/>
-  <xfk:add-child name="payment" class="SalesOrderPaymentObject"/>
-  <xfk:add-child name="sales" class="SalesOrderSalesObject"/>
+<xfk:data-object class="EmployeeObject" customize="true">
   <ui:display>
     <ui:fields>[...]
-<!-- highlight-next-line -->
-    <ui:tabs/>
-  </ui:display>
-</xfk:data-object>
-```
-
-You can also put some child objects in a tab group, while others will remain as panels by including both the `ui:child-panels` and the `ui:tabs` display elements and listing specific children under one or another. If your tabs should not use the entire width of the view, then you can set the `panel-cols` attribute on the `ui:tabs` element.
-
-For example, if we want to put billing and shipping addresses in the `SalesOrderCustomerObject` under a dedicated tab group while the `lookup` child remains in a panel, then you can do it as follows.
-
-```xml
-<xfk:data-object class="SalesOrderCustomerObject">
-  <xfk:add-child name="lookup" class="SalesCustomerLookupObject"/>
-  <xfk:add-child name="billing address" class="AddressObject"/>
-  <xfk:add-child name="shipping address" class="AddressObject"/>
-  <ui:display>
-    <ui:fields field-cols="2" panel-cols="2" title="Customer Info">[...]
-    <ui:child-panels>
-      <ui:panel child="lookup" panel-cols="2" field-cols="2" title="Lookup Customer"/>
-    </ui:child-panels>
 <!-- highlight-start -->
-    <ui:tabs panel-cols="1">
-      <ui:tab child="billing address" title="Billing"/>
-      <ui:tab child="shipping address" title="Shipping"/>
-    </ui:tabs>
+    <ui:fields group="name" panel-cols="2">[...]
+    <ui:fields group="personal" panel-cols="2">[...]
 <!-- highlight-end -->
   </ui:display>
 </xfk:data-object>
 ```
 
+Since neither of these field groups has the `field-cols` attribute set, they will each use the default value of 4 columns for the layout of their fields. If there is not enough space to display 4 columns in each panel side by side, considering configured field widths, then the panels will be stacked up vertically, taking the full width of their parent panel. If there's still not enough space to display even 4 columns in such a stacked layout, then fields in each panel will start wrapping around using fewer columns, down to 1 column if necessary.
+
 :::note
-As you can see above, you can also set a localizable custom title for each child tab in the `title` attribute of the corresponding `ui:tab` element.
+UI views generated for WebForms, WPF, or HTML SPA frameworks do not use responsive layout. The `field-cols` attribute is used as the exact number of columns to use for the layout there, and the `field-width` and `panel-cols` attributes are ignored.
 :::
+
+### Panel and tab layout
+
+:::warning
+Panel layout is currently supported only for the modern Blazor views. WebForms, WPF, or SPA views use the legacy [`ui:layout`](#legacy-layout-config).
+:::
+
+#### Default layout
+
+If your data object has field groups and child objects, but no explicit layout to arrange them on the details view, then the generated view will have them laid out in vertically stacked panels. The first panel will contain all the fields that are not part of any field group. Stacked below that panel will be the panels for each field group followed by the panels for each child object. The order of the field groups and child objects will be based on the order they are declared in the model.
+
+#### Panel layout
+
+To explicitly configure the layout of field groups and child objects on the details view, you can add the `ui:panel-layout` element under the `ui:display` element of your data object after any `ui:fields` elements. In this element, you can specify the field groups and child objects that you want to display in the panels, the order of those panels, and how they should be arranged on the screen or grouped into tabs.
+
+To show a panel for a specific field group or a child object, you can add a `ui:panel` element in the appropriate place under the `ui:panel-layout` element and set the `group` or `child` attribute to the name of the field group or child object, respectively. 
+
+To display a panel for all fields that are not part of any field group, you can add a `ui:panel` element without the `group` or `child` attribute. Such a panel may have no title, in which case it's better to add it as the first panel.
+
+You can also configure a specific title for the panel, as well as attributes for [responsive layout](#responsive-layout) described above. Here is the full list of attributes that you can set on the `ui:panel` element.
+
+- `group` - the name of the field group to show in this panel.
+- `child` - the name of the child object to show in this panel. Cannot be used together with the `group` attribute.
+- `title` - a custom title for the panel, will be added to a resource file that can be localized to other languages. If this attribute is not specified, the title will be determined as follows.
+  - For field groups, the title will either come from the `title` attribute of the field group, or be derived from the name of the field group.
+  - For child objects, the title will be derived from the name of the child for this panel.
+  - For the main panel, the title will be blank if neither `group` nor `child` attribute is specified.
+- `visible-flag` - The name of the flag to use for conditional visibility check. When blank, the name is generated.
+- `field-cols` - the maximum number of columns the panel uses to lay out its fields.
+  - For panels bound to a child object, set it to the maximum number of columns that the child object can use, which helps to calculate the desired width of the panel.
+  - For panels bound to a field group, this value overrides the default value specified on the `ui:fields` of that field group, if any. 
+- `field-width` - the preferred column width for the panel fields, which is used to calculate the number of columns in runtime.
+  - For panels bound to a child object, it should match the preferred field width for that child object.
+  - For panels bound to a field group, this value overrides the default value specified on the `ui:fields` of that field group, if any.
+- `panel-cols` - the fraction of the parent container that the current panel should take, e.g. 1 for full width, 2 for half, etc.
+  - For panels bound to a field group, this value overrides the default value specified on the `ui:fields` of that field group, if any.
+
+In the following example, the `EmployeeObject` has a main panel with all fields that are not part of any field group, followed by panels `name` and `personal` panels that show their fields in a single column side by side. Stacked below those panels is the `address` panel that shows the `EmployeeAddressObject` child object using the title "Home Address".
+
+```xml
+<xfk:data-object class="EmployeeObject">
+  <xfk:add-child name="address" class="EmployeeAddressObject"/>
+  <ui:display>
+    <ui:fields>[...]
+    <ui:fields group="name" title="Employee Name">[...]
+    <ui:fields group="personal" title="Personal Info">[...]
+    <ui:fields group="email phone" title="Email / Phone">[...]
+    <ui:panel-layout>
+<!-- highlight-start -->
+      <ui:panel/>
+      <ui:panel group="name" field-cols="1" panel-cols="2"/>
+      <ui:panel group="personal" field-cols="1" panel-cols="2"/>
+      <ui:panel child="address" field-cols="2" title="Home Address"/>
+<!-- highlight-end -->
+    </ui:panel-layout>
+  </ui:display>
+</xfk:data-object>
+```
+
+Note that the `email phone` field group is not going to be displayed on the details view, because it's not included in the `ui:panel-layout`. Also, the `field-cols` for the childe `address` panel is set to 2, assuming that the `EmployeeAddressObject` is configured to use 2 columns for its fields.
+
+:::tip
+We recommend that you set the title for field groups on the `ui:fields` element, and the title for child panels on the `ui:panel` element. Also, while you can set the `field-cols` and `panel-cols` attributes on the `ui:fields` element, we recommend that you set them on the corresponding `ui:panel` element to keep all the layout configuration for field groups under the `ui:panel-layout` element.
+:::
+
+#### Tabs layout
+
+To be able to show more panels on the details view without making it too cluttered, you can group some of the panels into tabs. To do that, you can add a `ui:tabs` element under the `ui:panel-layout` element and then add `ui:tab` elements for each tab that you want to show.
+
+By default, the `ui:tabs` element will take the full width of the parent panel, but you can set the `panel-cols` attribute to specify how many columns it should take, as well as the `field-cols` and `field-width` attributes for the maximum number of columns and the preferred width of the fields in the tabs, respectively.
+
+Under the `ui:tabs` element, you can add a number of `ui:tab` elements and specify the following attributes for each tab.
+- `title` - the title of the tab, which will be added to a resource file that can be localized to other languages.
+- `group` - the name of the field group to show in this tab. Cannot be used together with the `child` attribute.
+- `child` - the name of the child object to show in this tab. Cannot be used together with the `group` attribute.
+- `visible-flag` - the name of the flag to use for conditional visibility check. When blank, the name is generated.
+
+Instead of the `group` or `child` attribute, you can also add a `ui:panel` element (without a `title` attribute) inside the `ui:tab` element to show a panel for a specific field group or child object. To display more than one panel or other nested tabs in a tab, you can add `ui:panel` and `ui:tabs` elements inside the `ui:tab` element as needed.
+
+Let's consider the following example of a layout for the `EmployeeObject`. Under the main panel with all fields that are not part of any field group and the `name` panel, there is a tab group with two tabs. The first tab shows the `personal` field group, while the second tab shows the `email phone` field group and a panel for the `address` child object.
+
+```xml
+<xfk:data-object class="EmployeeObject">
+  <xfk:add-child name="address" class="EmployeeAddressObject"/>
+  <ui:display>
+    <ui:fields>[...]
+    <ui:fields group="name" title="Employee Name">[...]
+    <ui:fields group="personal" title="Personal Info">[...]
+    <ui:fields group="email phone" title="Email / Phone">[...]
+    <ui:panel-layout>
+      <ui:panel/>
+      <ui:panel group="name" field-cols="3"/>
+<!-- highlight-start -->
+      <ui:tabs>
+        <ui:tab title="Basic Info" group="personal"/>
+        <ui:tab title="Contact" visible-flag="">
+          <ui:panel group="email phone" field-cols="3"/>
+          <ui:panel child="address" title="Home Address"/>
+        </ui:tab>
+      </ui:tabs>
+<!-- highlight-end -->
+    </ui:panel-layout>
+  </ui:display>
+</xfk:data-object>
+```
+
+:::note
+The "Contact" tab also has a `visible-flag` attribute, which generates a flag that can be used to control its visibility, as described below.
+:::
+
+#### Conditional panel visibility
+
+Typically, you control the visibility of UI controls bound to data object properties by setting the [`Visible` flag](../../framework/common-ui/properties/base#property-visibility) of the underlying data property either directly or using an expression for [computed visibility](../../framework/common-ui/properties/base#computed-visibility).
+
+However, panels and tabs don't have their visibility tied to any particular property in the view model, which makes it difficult to control their visibility based on security privileges, the state of the data object, or other criteria.
+
+To address this, you can set the `visible-flag` attribute on the `ui:panel` or `ui:tab` element, which will generate a boolean property in the view model that you can use to control the visibility of that panel or tab. If you leave the `visible-flag` attribute blank, then Xomega will generate a name for the property based on the name of the field group or child object for that panel or tab.
+
+The generated flag property is read-only and always returns `true` by default in the generated view model. To implement your own logic for that flag, you need to customize the view model by setting the `customize="true"` attribute on the `ui:view-model` element of the view, and then override the generated flag property in the customized subclass of the view model.
 
 ## UI views
 
@@ -564,6 +661,10 @@ The generated view will be for the specific UI framework, such as Blazor, WebFor
 
 ### Security policy
 
+:::warning
+Authorization policy is an ASP.NET Core concept, so this is only applicable to Blazor applications.
+:::
+
 To configure security access for a specific view, you can define an authorization policy and set it in the `policy` attribute of the `ui:view` element, as follows.
 
 ```xml
@@ -571,11 +672,16 @@ To configure security access for a specific view, you can define an authorizatio
 <ui:view name="SalesOrderListView" title="Sales Order List" policy="Sales">[...]
 ```
 
-The [Blazor Views generator](../../generators/presentation/blazor/views) will use this policy to secure both the navigation [menu items](../../framework/blazor/components#menu-security) and the corresponding page using an `Authorize` attribute.
+The [Blazor Views generator](../../generators/presentation/blazor/views) will use this policy to secure both the navigation [menu items](../../framework/blazor/components#menu-security) and the corresponding page using an `Authorize` attribute. You can also specify a different [policy for individual main menu links](../../visual-studio/modeling/presentation#security-policy-for-main-menu-links) within the view.
 
-:::warning
-Authorization policy is an ASP.NET Core concept, so this is only applicable to Blazor applications.
-:::
+#### Conditional security policy
+
+Sometimes the same view may require different security policies based on the parameters passed to it in the URL. For example, the `EmployeeView` view may accept an `EmployeeId` query parameter to view a specific employee or the `action=create` query parameter to create a new employee. In this case, you may need to use the following security policies based on the activation parameters.
+- `Employee_Create` - when the `action=create` parameter is present.
+- `Employee_View` - when the `EmployeeId` parameter is for the currently logged-in user.
+- `Employee_View_Others` - when the `EmployeeId` parameter is for another user.
+
+The `EmployeeViewPage.razor` file generated by the [Blazor Views generator](../../generators/presentation/blazor/views) will include a field `AuthPolicy` set to the view's `policy` attribute, as well as a partial method `SetAuthPolicy()`. To implement conditional security policies, you can add a partial class `EmployeeViewPage` in the `EmployeeViewPage.razor.cs` file and override the `SetAuthPolicy()` method to set the `AuthPolicy` field based on the parameters passed to the view.
 
 ### View model
 
@@ -673,6 +779,25 @@ The following example illustrates a main menu link for the `SalesOrderListView` 
 The text for the menu item and group name will be generated to the default resource file, which can be translated into other languages.
 :::
 
+#### Security policy for main menu links
+
+By default, the main menu links will use the security policy defined for the view, if any. However, you can set a different security policy for a view's main menu link by adding a `policy` attribute to the `ui:main-link` element, as shown below.
+
+```xml
+<!-- highlight-next-line -->
+<ui:view name="EmployeeView" title="Employee" policy="Employee_View">
+  <ui:view-model data-object="EmployeeObject"/>
+<!-- highlight-next-line -->
+  <ui:main-link name="new employee" policy="Employee_Create">
+    <ui:params>
+      <ui:param name="_action" value="create"/>
+    </ui:params>
+  </ui:main-link>
+</ui:view>
+```
+
+In this example, the `EmployeeView` view, which allows both viewing and creating employees, has a policy set to `Employee_View`, while the main menu link for creating a new employee has a different, more strict, policy set to `Employee_Create`.
+
 #### Opening views with auto-search
 
 If you want your menu item to open the view and automatically run the search, instead of displaying the view with an empty grid and waiting for the user to enter the search criteria, then you can add a `ui:params` element under the `ui:main-link` element and set the `_action` parameter to `search`. You can also set other parameters to pre-populate the search criteria, as shown in the following example.
@@ -728,7 +853,7 @@ You can add links to any data object by adding a `ui:link` element, giving it a 
 
 If you want the target view to open as a child of the current view, then you need to set the `child="true"` attribute. Otherwise, the link will open the view in a new workflow and may replace the current view when navigating to the new view. You can also set the `mode` attribute to either `inline` for a master-detail view or a `popup` for opening the view in a popup dialog.
 
-To specify custom localizable text and access key for the link button, you can set the `title` and `access-key` attributes on the nested `ui:display` element as follows.
+To specify custom localizable text and access key for the link button, you can set the `title` and `access-key` attributes on the nested `ui:display` element, as shown below.
 
 ```xml
 <xfk:data-object class="SalesOrderList" list="true">
@@ -744,6 +869,13 @@ To specify custom localizable text and access key for the link button, you can s
   </ui:link>
 </xfk:data-object>
 ```
+
+:::tip
+If the link is on a non-list data object with [field groups](#ui-field-groups) defined, and you want to have the link displayed on a specific field group, then you can also set the `group` attribute on the `ui:display` element.
+Note: this is a **Blazor-specific** feature, and it is not supported in the legacy WebForms, WPF, or SPA views.
+:::
+
+#### Link parameters
 
 In order to pass parameters to the target view, you need to add them as `ui:param` elements nested under the link's `ui:params` node, as shown above. For fixed-value parameters, you can set the parameter's `name` and the fixed `value` in the corresponding attributes.
 
@@ -766,9 +898,9 @@ Xomega will provide Intellisense for both the relative paths in the `data-object
 For example, in the following snippet, the parameter `type` is sourced from the field `order type` of a sibling data object named `child`, assuming that it exists in the data object hierarchy.
 
 ```xml
-    <ui:params>
-      <ui:param name="type" field="order type" data-object="../child"/>
-    </ui:params>
+<ui:params>
+  <ui:param name="type" field="order type" data-object="../child"/>
+</ui:params>
 ```
 
 ### Links from a list
