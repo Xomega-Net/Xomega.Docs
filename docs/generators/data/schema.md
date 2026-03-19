@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Database Schema
 
-This generator helps you build a DDL script that creates a SQL Server database from your Xomega object model. It generates all the necessary tables, columns, primary keys, and foreign key relationships.
+This generator helps you build a DDL script that creates a SQL Server or PostgreSQL database from your Xomega object model. It generates all the necessary tables, columns, primary keys, and foreign key relationships.
 
 The generated script will be rerunnable and would not create the tables if they have already been created.
 

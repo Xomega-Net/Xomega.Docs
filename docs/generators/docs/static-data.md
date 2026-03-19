@@ -12,7 +12,7 @@ The generated document is based on a customizable Word template that you can upd
 This can save you countless hours on developing and maintaining high-quality design documentation and will allow you to be more agile by sharing the design with other stakeholders at any point.
 
 Plus, you'll never have to worry about the technical design being out of sync with the actual implementation.
-:::tip
+:::
 
 ## Generator inputs
 

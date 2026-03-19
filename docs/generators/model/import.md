@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Import from Database
 
-This generator helps you jump-start Xomega object modeling by importing the model from an existing SQL Server database. The generator builds the objects and fields from the corresponding database tables and columns, declares logical types and field sets for object keys to preserve relationships between objects, and declares reusable types for all other object fields.
+This generator helps you jump-start Xomega object modeling by importing the model from an existing SQL Server or PostgreSQL database. The generator builds the objects and fields from the corresponding database tables and columns, declares logical types and field sets for object keys to preserve relationships between objects, and declares reusable types for all other object fields.
 
 Before running the generator though, you need to make sure you pre-configure the model as described below.
 
