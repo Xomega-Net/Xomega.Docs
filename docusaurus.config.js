@@ -1,6 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
+const { name } = require('file-loader');
 const {themes} = require('prism-react-renderer');
 const lightTheme = themes.github;
 const darkTheme = themes.dracula;
@@ -13,7 +14,11 @@ const config = {
   baseUrl: '/docs/',
   trailingSlash: false,
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
+  },
   favicon: 'img/Xomega.ico',
   organizationName: 'Xomega.Net', // Usually your GitHub org/user name.
   projectName: 'Xomega.Net Docs', // Usually your repo name.
@@ -167,13 +172,19 @@ const config = {
         indexName: 'xomega',
   
         // Optional: see doc section below
-        contextualSearch: true,
+        contextualSearch: false,
   
         // Optional: Specify domains where the navigation should occur through window.location instead on history.push. Useful when our Algolia config crawls multiple documentation sites and we want to navigate with window.location.href to them.
         //externalUrlRegex: 'external\\.com|domain\\.com',
   
-        // Optional: Algolia search parameters
-        searchParameters: {},
+        searchParameters: {
+          facetFilters: [
+            [
+              "docusaurus_tag:docs-default-current",
+              "docusaurus_tag:blog_posts_list"
+            ]
+          ]
+        },
   
         // Optional: path for search page that enabled by default (`false` to disable it)
         searchPagePath: 'search',
