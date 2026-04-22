@@ -141,30 +141,48 @@ The following example illustrates EF configuration for the logical type `city na
 
 This generator creates C# classes for EF entities, their configurations using Fluent API, and a subclass of the `DbContext` that contains all those entities and registers their configurations.
 
-The classes for entities and configurations can be placed in separate files by domain object, grouped by module, or output to a single file, depending on how you set up your *Output Path* parameter. The generated files for the entity configuration will be nested under the files for the corresponding entities according to the rules specified in the `.filenesting.json` file for the target project.
+The classes for entities and configurations can be placed in separate files by domain object, grouped by module, or output to a single file, depending on how you set up the `Path` parameter in the `cls:Output` config. The generated files for the entity configuration will be nested under the files for the corresponding entities according to the rules specified in the `.filenesting.json` file for the target project.
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Data Layer` folder in the model project as follows.
+
+```xml title="EF Domain Objects.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:cls="http://schemas.xomega.net/v10/xgen/classes">
+
+  <Generator Xsl="Services/Impl/entities.xsl"
+             GeneratorGroup="services"
+             IndividualFiles="true"
+             IncludeInBuild="true"/>
+  
+  <cls:Output Path="../MySolution.Services.Entities/Entities/{Module/}{File}.cs"/>
+  
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|EF Domain Objects|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Data Layer|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Services.Entities /Entities/\{Module/\}\{File\}.cs|Path where to output files with generated Entity Framework Domain Objects. The path may contain \{Module/\} and \{File\} placeholders to output files by module and domain object respectively.|
-|Database Config File|../MySolution.Services.Entities /db.config|Application config file to add the entity database connection string to. Leave it blank if you don't want entity database connection string to be added to your config automatically.|
-|**Database**|
-|Connection String|Use Project Setting|Database connection string for the `DbContext`. Edited via the standard VS *Connection Properties* dialog, which also sets the other *Database* parameters of the generator, and allows saving it for the entire project. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Data Provider|.NET Framework Data Provider for SQL Server|Name of the data provider selected for the connection string. Value '*Use Project Setting*' takes this value from the corresponding property of the model project. Option *Reset Connection Info* allows resetting the connection string.|
-|Database|SQL Server|Database type of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Database Version|16.0|The version of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Xsl|Services/Impl/entities.xsl|Relative path to the XSLT file used by the generator to generate the entity classes.|
+|GeneratorGroup|services|The group to which this generator belongs based on the type of the generated files.|
+|IndividualFiles|true|Specifies whether this generator can be run on individual files.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**cls:Output**|
+|Path|../MySolution.Services.Entities /Entities/\{Module/\}\{File\}.cs|Path where to output files with generated Entity Framework Domain Objects. The path may contain \{Module/\} and \{File\} placeholders to output files by module and domain object respectively.|
+
+### Model project parameters
+
+The generator will also use the following parameters from the model project settings, which are set automatically when you save database connection as the default connection for the model project, or you can set them manually in the model project properties.
+
+|Parameter|Value Example|Description|
+|-|-|-|
+|Database|SQL Server|Database type for the DDL script: `SQL Server` or `PostgreSQL`.|
+|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`.|
+|Database Version|16.0|The version of the database for the DDL script.|
 
 ### Model configuration
 
@@ -175,13 +193,11 @@ A boolean parameter `efCore` indicates whether to generate classes for Entity Fr
 Other parameters include the namespace for the generated entity classes, as well as the name of the `DbContext` subclass to use, as shown below.
 
 ```xml title="global_config.xom"
-<edm:entities-config efCore="true" efCoreVer="9.0"
-                     namespace="MySolution.Services.Entities" context="MySolutionEntities"/>
+<edm:entities-config efCore="true"
+                     efCoreVer="10.0"
+                     namespace="MySolution.Services.Entities"
+                     context="MySolutionEntities"/>
 ```
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

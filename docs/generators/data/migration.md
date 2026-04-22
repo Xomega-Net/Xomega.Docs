@@ -6,15 +6,11 @@ sidebar_position: 4
 
 Once you already have a database populated with data you will typically want to apply changes to the database by running an update script against your database to preserve your data.
 
-This generator helps you build such a script based on your changes to the Xomega object model. The script will be rerunnable, meaning that it will check if the necessary changes have already been made in the database before making a change.
+This generator helps you build such a script based on your changes to the Xomega object model. The script can be made rerunnable, meaning that it will check if the necessary changes have already been made in the database before making a change.
 
 ## Generator inputs
 
 The generator uses the structure of the target database and the current state of the Xomega model to generate a DDL update script that will bring the database in sync with the model.
-
-:::tip
-If certain database tables have been specifically excluded from the object model, you need to make sure that they are excluded in the database connection configuration as well. Otherwise, the generator will assume that they have been deleted from the model and will add statements to drop those tables into the script.
-:::
 
 ## Generator outputs
 
@@ -26,27 +22,46 @@ This is similar to using standard Entity Framework migration tools.
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Data Layer` folder in the model project as follows.
+
+```xml title="Database Change Script.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:dbs="http://schemas.xomega.net/v10/xgen/db-script">
+
+  <Generator Xsl="Database/diff.xsl"
+             DbSchemaNeeded="true"
+             DbTimeout="30"/>
+  
+  <dbs:Output Path="Sql/db_update.sql"/>
+  
+  <dbs:Parameters Rerunnable="false"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|Database Change Script|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Data Layer|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|False|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../database/db_update.sql|Relative path where to output generated DDL update script.|
-|**Database**|
-|Connection String|Use Project Setting|Database connection string for the target database. Edited via the standard VS *Connection Properties* dialog, which also sets the other *Database* parameters of the generator, and allows saving it for the entire project. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Data Provider|.NET Framework Data Provider for SQL Server|Name of the data provider selected for the connection string. Value '*Use Project Setting*' takes this value from the corresponding property of the model project. Option *Reset Connection Info* allows resetting the connection string.|
-|Database|SQL Server|Database type of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Database Version|16.0|The version of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|**Parameters**|
-|Rerunnable|True|Specifies whether to make the generated SQL script rerunnable. Default is False.|
+|Xsl|Database/diff.xsl|Relative path to the XSLT file used by the generator to generate the DDL update script.|
+|DbSchemaNeeded|true|Indicates that the generator requires a database schema, which in turn requires a valid database connection. If no default connection is available, running the generator will prompt for one. The value should be always set to `true`.|
+|DbTimeout|30|Specifies the timeout in seconds for the database connection.|
+|**dbs:Output**|
+|Path|../database/db_update.sql|Relative path where to output generated DDL update script.|
+|**dbs:Parameters**|
+|Rerunnable|true|Specifies whether to make the generated SQL script rerunnable. Default is false.|
+
+### Model project parameters
+
+The generator will also use the following parameters from the model project settings, which are set automatically when you save database connection as the default connection for the model project, or you can set them manually in the model project properties.
+
+|Parameter|Value Example|Description|
+|-|-|-|
+|Database|SQL Server|Database type for the DDL script: `SQL Server` or `PostgreSQL`.|
+|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`.|
+|Database Version|16.0|The version of the database for the DDL script.|
 
 ### Model configuration
 

@@ -6,7 +6,7 @@ sidebar_position: 3
 
 This generator helps you build a DDL script that creates a SQL Server or PostgreSQL database from your Xomega object model. It generates all the necessary tables, columns, primary keys, and foreign key relationships.
 
-The generated script will be rerunnable and would not create the tables if they have already been created.
+The generated script can be made rerunnable, so that it would not create the tables if they have already been created.
 
 ## Generator inputs
 
@@ -167,33 +167,46 @@ A similar script can be generated from the Entity Data Model using standard Enti
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Data Layer` folder in the model project as follows.
+
+```xml title="Database Schema.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:dbs="http://schemas.xomega.net/v10/xgen/db-script">
+
+  <Generator Xsl="Database/schema.xsl"/>
+  
+  <dbs:Output Path="Sql/db_schema.sql"/>
+  
+  <dbs:Parameters Rerunnable="false"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|Database Schema|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Data Layer|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|False|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../database/db_schema.sql|Relative path where to output the generated DDL script.|
-|**Database**|
-|Database|SQL Server|Database type for the DDL script. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Database Version|16.0|The version of the database for the DDL script. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|**Parameters**|
-|Rerunnable|True|Specifies whether to make the generated SQL script rerunnable. Default is False.|
+|Xsl|Database/schema.xsl|Relative path to the XSLT file used by the generator to generate the DDL script.|
+|**dbs:Output**|
+|Path|../database/db_schema.sql|Relative path where to output the generated DDL script.|
+|**dbs:Parameters**|
+|Rerunnable|true|Specifies whether to make the generated SQL script rerunnable. Default is false.|
+
+### Model project parameters
+
+The generator will also use the following parameters from the model project settings, which are set automatically when you save database connection as the default connection for the model project, or you can set them manually in the model project properties.
+
+|Parameter|Value Example|Description|
+|-|-|-|
+|Database|SQL Server|Database type for the DDL script: `SQL Server` or `PostgreSQL`.|
+|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`.|
+|Database Version|16.0|The version of the database for the DDL script.|
 
 ### Model configuration
 
 The generator doesn't use any other global configurations in the model.
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

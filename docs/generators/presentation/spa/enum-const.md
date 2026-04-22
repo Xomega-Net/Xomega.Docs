@@ -148,28 +148,36 @@ This generator creates a single file with TypeScript classes for all static and 
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Presentation Layer\SPA` folder in the model project as follows.
+
+```xml title="TS Enumeration Constants.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:cls="http://schemas.xomega.net/v10/xgen/classes">
+
+  <Generator Xsl="UI/TypeScript/enum_constants.xsl"
+             IncludeInBuild="true"/>
+
+  <cls:Output Path="../MySolution.Client.Spa/Enumerations/Enumerations.ts"
+              TargetProject="../MySolution.Client.Spa/MySolution.Client.Spa.csproj"/>
+  
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|TS Enumeration Constants|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Presentation Layer\SPA|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Services.Spa /Enumerations/Enumerations.ts|Relative path where to output generated file with enumeration constants.|
-|Add To Project|../MySolution.Services.Spa /MySolution.Services.Spa.csproj|Relative path to the project file to add the generated file to. The project will be reloaded every time you run the generator. Leave it blank if you don't want generated files to be added to your project automatically.|
+|Xsl|UI/TypeScript/enum_constants.xsl|Relative path to the XSLT file used by the generator to generate the TypeScript enumeration constants.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**cls:Output**|
+|Path|../MySolution.Services.Spa /Enumerations/Enumerations.ts|Relative path where to output generated file with enumeration constants.|
+|TargetProject|../MySolution.Services.Spa /MySolution.Services.Spa.csproj|Relative path to the project file to add the generated file to. The project will be reloaded every time you run the generator. Leave it blank if you don't want generated files to be added to your project automatically.|
 
-## Model configuration
+### Model configuration
 
 This generator doesn't use any other parameters from the model configuration.
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

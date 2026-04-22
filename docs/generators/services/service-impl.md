@@ -107,21 +107,38 @@ The customized and extended classes will be nested under the corresponding gener
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Service Layer` folder in the model project as follows.
+
+```xml title="Service Implementations.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:cls="http://schemas.xomega.net/v10/xgen/classes">
+
+  <Generator Xsl="Services/Impl/services.xsl"
+             GeneratorGroup="services"
+             IndividualFiles="true"
+             IncludeInBuild="true"/>
+
+  <cls:Output Path="../MySolution.Services.Entities/Services/{Module/}{File}.cs"
+              CustomPath=""
+              RegistryFile="../MySolution.Services.Entities/Services/ServiceImplementations.cs"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|Service Implementations|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Service Layer|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Services.Entities /Services/\{Module/\}\{File\}.cs|Relative path where to output files with generated service implementations. The path may contain \{Module/\} and \{File\} placeholders to output files by module and service respectively.|
-|Custom Path||Relative path where to output override classes for the generated service implementations. If not set, then the *OutputPath* will be used. The path must contain a \{File\} placeholder to output files by service.|
-|Registry File|../MySolution.Services.Entities /Services/Services.cs|Relative path to the file for service implementations registration with the DI service container. The registration extension method will be derived from the file name.|
+|Xsl|Services/Impl/services.xsl|Relative path to the XSLT file used by the generator to generate the service implementations.|
+|GeneratorGroup|services|The group to which this generator belongs based on the type of the generated files.|
+|IndividualFiles|true|Specifies whether this generator can be run on individual files.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**cls:Output**|
+|Path|../MySolution.Services.Entities /Services/\{Module/\}\{File\}.cs|Relative path where to output files with generated service implementations. The path may contain \{Module/\} and \{File\} placeholders to output files by module and service respectively.|
+|CustomPath||Relative path where to output override classes for the generated service implementations. If not set, then the `Path` will be used. The path must contain a \{File\} placeholder to output files by service.|
+|RegistryFile|../MySolution.Services.Entities /Services/Services.cs|Relative path to the file for service implementations registration with the DI service container. The registration extension method will be derived from the file name.|
 
 ### Model configuration
 
@@ -132,10 +149,6 @@ These parameters include the namespace for the generated classes, as shown below
 ```xml title="global_config.xom"
 <svc:services-config implNamespace="MySolution.Services.Entities" />
 ```
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

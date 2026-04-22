@@ -33,23 +33,38 @@ For server-side configuration, it adds the endpoints to configurations of the ac
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+The generator configuration for server-side WCF configurations is defined under the `.Generators\Service Layer` folder in the model project as follows.
+
+```xml title="WCF Server Configuration.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:wcfCfg="http://schemas.xomega.net/v10/xgen/wcf-config">
+
+  <Generator Xsl="Services/WCF/configs.xsl"
+             IncludeInBuild="true"/>
+
+  <wcfCfg:Output Path="../MySolution.Services.Wcf/serviceModel.services.config"/>
+
+  <wcfCfg:Parameters IsClient="false"/>
+
+</XomGeneratorConfig>
+```
+
+The generator configuration for client-side WCF configurations is typically defined under the `.Generators\Presentation Layer\Common` folder in the model project.
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|WCF Configuration|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Service Layer|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Services.Wcf /serviceModel.services.config|Relative path to the config file to add WCF configurations to.|
-|**Parameters**|
-|Is Client|False|Specify whether to generate a client or a server configuration.|
-|Endpoint Behavior||Endpoint behavior to set for all service endpoints.|
-|Service Behavior||Service behavior to set for all services. Applicable only if *Is Client* is set to False.|
+|Xsl|Services/WCF/configs.xsl|Relative path to the XSLT file used by the generator to generate the WCF configurations.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**wcfCfg:Output**|
+|Path|../MySolution.Services.Wcf /serviceModel.services.config|Relative path to the config file to add WCF configurations to.|
+|**wcfCfg:Parameters**|
+|IsClient|false|Specify whether to generate a client or a server configuration.|
+|EndpointBehavior||Endpoint behavior to set for all service endpoints.|
+|ServiceBehavior||Service behavior to set for all services. Applicable only if *IsClient* is set to false.|
 
 ### Model configuration
 

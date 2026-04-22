@@ -61,7 +61,7 @@ For example, the `authenticate` operation below can be used by the Web API inter
 ```
 
 :::note
-This REST configuration for standard CRUD and `ReadList` operations can be added automatically to the model by a special [model enhancement CRUD generator](../model/crud) with the *Generate Rest Methods* parameter set to `true`.
+This REST configuration for standard CRUD and `ReadList` operations can be added automatically to the model by a special [model enhancement CRUD generator](../model/crud) with the `GenerateRestMethods` parameter set to `true`.
 :::
 
 ## Generator outputs
@@ -70,33 +70,46 @@ This generator creates C# classes for ASP.NET controllers that wrap the business
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Service Layer` folder in the model project as follows.
+
+```xml title="Web API Controllers.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:cls="http://schemas.xomega.net/v10/xgen/classes">
+
+  <Generator Xsl="Services/controllers.xsl"
+             GeneratorGroup="services"
+             IndividualFiles="true"
+             IncludeInBuild="true"/>
+
+  <cls:Output Path="../MySolution.Services.Rest/{Module/}{File}.cs"/>
+
+  <cls:Parameters Namespace="MySolution.Services.Rest"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|Web API Controllers|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Service Layer|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Services.Rest /\{Module/\}\{File\}.cs|Relative path where to output files with generated ASP.NET controllers. The path may contain \{Module/\} and \{File\} placeholders to output files by module and service respectively.|
-|**Parameters**|
+|Xsl|Services/controllers.xsl|Relative path to the XSLT file used by the generator to generate the ASP.NET controllers.|
+|GeneratorGroup|services|The group to which this generator belongs based on the type of the generated files.|
+|IndividualFiles|true|Specifies whether this generator can be run on individual files.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**cls:Output**|
+|Path|../MySolution.Services.Rest /\{Module/\}\{File\}.cs|Relative path where to output files with generated ASP.NET controllers. The path may contain \{Module/\} and \{File\} placeholders to output files by module and service respectively.|
+|**cls:Parameters**|
 |Namespace||Namespace for the generated classes. If not set, the namespace for service contracts will be used.|
 
 ### Model configuration
 
-The model configuration parameters that are used by this generator consist of just the namespace for the service contracts, in the case when the *Namespace* generator parameter is not set. This is specified in the `svc:services-config` element under the top-level `config` model element, which is conventionally placed in the `global_config.xom` file, as illustrated by the following snippet.
+The model configuration parameters that are used by this generator consist of just the namespace for the service contracts, in the case when the `Namespace` generator parameter is not set. This is specified in the `svc:services-config` element under the top-level `config` model element, which is conventionally placed in the `global_config.xom` file, as illustrated by the following snippet.
 
 ```xml title="global_config.xom"
 <svc:services-config namespace="MySolution.Services.Common" />
 ```
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

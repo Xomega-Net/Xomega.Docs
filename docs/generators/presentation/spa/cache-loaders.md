@@ -79,20 +79,36 @@ The generator also adds the generated classes to the specified project as needed
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Presentation Layer\SPA` folder in the model project as follows.
+
+```xml title="TS Lookup Cache Loaders.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:cls="http://schemas.xomega.net/v10/xgen/classes">
+
+  <Generator Xsl="UI/TypeScript/cache_loaders.xsl"
+             GeneratorGroup="presentation"
+             IndividualFiles="true"
+             IncludeInBuild="true"/>
+
+  <cls:Output Path="../MySolution.Client.Spa/CacheLoaders/{File}.ts"
+              TargetProject="../MySolution.Client.Spa/MySolution.Client.Spa.csproj"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|TS Lookup Cache Loaders|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Presentation Layer\SPA|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Services.Spa /CacheLoaders/\{File\}.ts|Relative path where to output files with generated Lookup Cache Loaders. The path may contain \{Module/\} and \{File\} placeholders to output files by module and data object respectively.|
-|Add To Project|../MySolution.Services.Spa /MySolution.Services.Spa.csproj|Relative path to the project file to add the generated files to. The project will be reloaded every time you run the generator. Leave it blank if you don't want generated files to be added to your project automatically.|
+|Xsl|UI/TypeScript/cache_loaders.xsl|Relative path to the XSLT file used by the generator to generate the TypeScript cache loaders.|
+|GeneratorGroup|presentation|The group to which this generator belongs based on the type of the generated files.|
+|IndividualFiles|true|Specifies whether this generator can be run on individual files.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**cls:Output**|
+|Path|../MySolution.Services.Spa /CacheLoaders/\{File\}.ts|Relative path where to output files with generated Lookup Cache Loaders. The path may contain \{Module/\} and \{File\} placeholders to output files by module and data object respectively.|
+|TargetProject|../MySolution.Services.Spa /MySolution.Services.Spa.csproj|Relative path to the project file to add the generated files to. The project will be reloaded every time you run the generator. Leave it blank if you don't want generated files to be added to your project automatically.|
 
 ### Model configuration
 
@@ -101,10 +117,6 @@ The model configuration parameters that are used by this generator consist of th
 ```xml title="global_config.xom"
 <svc:services-config tsOutputPath="../MySolution.Client.Spa/ServiceContracts/\{Module/\}\{File\}"/>
 ```
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

@@ -117,27 +117,32 @@ This generator creates a single SQL file with a script that loads static enumera
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Static Data` folder in the model project as follows.
+
+```xml title="Enumeration Reload SQL.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:dbs="http://schemas.xomega.net/v10/xgen/db-script">
+
+  <Generator Xsl="Enums/load_sql.xsl"/>
+
+  <dbs:Output Path="Sql/reload_enumerations.sql"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|Enumeration Reload SQL|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Static Data|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|False|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../database/reload_enumerations.sql|Relative path where to output generated XML file with enumerations.|
+|Xsl|Enums/load_sql.xsl|Relative path to the XSLT file used by the generator to generate the SQL script for reloading enumerations.|
+|**dbs:Output**|
+|Path|../database/reload_enumerations.sql|Relative path where to output generated SQL file with enumerations.|
 
 ### Model configuration
 
 The generator doesn't use any other configuration parameters from the model.
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

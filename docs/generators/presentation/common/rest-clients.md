@@ -74,7 +74,7 @@ Whether the REST method is missing or not supported, the generated REST service 
 :::
 
 :::note
-This REST configuration for standard CRUD, `read list` and `read enum` operations can be added automatically to the model by a special [model enhancement CRUD generator](../../model/crud) with the *Generate Rest Methods* parameter set to true.
+This REST configuration for standard CRUD, `read list` and `read enum` operations can be added automatically to the model by a special [model enhancement CRUD generator](../../model/crud) with the `GenerateRestMethods` parameter set to true.
 :::
 
 ## Generator outputs
@@ -85,21 +85,38 @@ For objects that have a `rest:client` element under their `config` element with 
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Presentation Layer\Common` folder in the model project as follows.
+
+```xml title="REST Service Clients.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:cls="http://schemas.xomega.net/v10/xgen/classes">
+
+  <Generator Xsl="Services/rest_clients.xsl"
+             GeneratorGroup="presentation"
+             IndividualFiles="true"
+             IncludeInBuild="true"/>
+
+  <cls:Output Path="../MySolution.Client.Common/ServiceClients/{Module/}{File}.cs"
+              CustomPath=""
+              RegistryFile="../MySolution.Client.Common/ServiceClients/RestClients.cs"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|REST Service Clients|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Presentation Layer\Common|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Client.Wpf /ServiceClients/\{Module/\}\{File\}.cs|Relative path where to output files with generated REST service clients. The path may contain \{Module/\} and \{File\} placeholders to output files by module and service respectively.|
-|Custom Path||Relative path where to output override classes for the generated service clients. If not set, then the *OutputPath* will be used. The path must contain a \{File\} placeholder to output files by service.|
-|Registry File|../MySolution.Client.Wpf /ServiceClients/RestClients.cs|Relative path to the file for service clients registration with the DI service container. The registration extension method will be derived from the file name.|
+|Xsl|Services/rest_clients.xsl|Relative path to the XSLT file used by the generator to generate the Xomega REST service clients.|
+|GeneratorGroup|presentation|The group to which this generator belongs based on the type of the generated files.|
+|IndividualFiles|true|Specifies whether this generator can be run on individual files.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**cls:Output**|
+|Path|../MySolution.Client.Wpf /ServiceClients/\{Module/\}\{File\}.cs|Relative path where to output files with generated REST service clients. The path may contain \{Module/\} and \{File\} placeholders to output files by module and service respectively.|
+|CustomPath||Relative path where to output override classes for the generated service clients. If not set, then the `Path` will be used. The path must contain a \{File\} placeholder to output files by service.|
+|RegistryFile|../MySolution.Client.Wpf /ServiceClients/RestClients.cs|Relative path to the file for service clients registration with the DI service container. The registration extension method will be derived from the file name.|
 
 ### Model configuration
 
@@ -108,10 +125,6 @@ The model configuration parameters that are used by this generator consist of ju
 ```xml title="global_config.xom"
 <svc:services-config namespace="MySolution.Services.Common" />
 ```
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

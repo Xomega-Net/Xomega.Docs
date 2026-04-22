@@ -79,7 +79,7 @@ You can either
 - manually subscribe to the changes of the input parameters, and then call the `SetParameters` method of the generated cache loader directly with the new values,
 - or you can set that cache loader on the `EnumProperty`, for which it will serve as a local source of possible values, and then set the source property for each input parameter, as follows.
 
-```ts
+```cs
 SpecialOfferIdProperty.LocalCacheLoader = new SpecialOfferProductReadListCacheLoader(ServiceProvider);
 // highlight-start
 SpecialOfferIdProperty.SetCacheLoaderParameters(Enumerations.SpecialOfferProduct.Parameters.ProductId,
@@ -103,36 +103,50 @@ For cache loaders that don't have input parameters, and are not configured to sk
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Static Data` folder in the model project as follows.
+
+```xml title="Lookup Cache Loaders.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:cls="http://schemas.xomega.net/v10/xgen/classes">
+
+  <Generator Xsl="Enums/cache_loaders.xsl"
+             GeneratorGroup="services"
+             IndividualFiles="true"
+             IncludeInBuild="true"/>
+
+  <cls:Output Path="../MySolution.Services.Common/CacheLoaders/{Module/}{File}.cs"
+              RegistryFile="../MySolution.Services.Common/CacheLoaders/LookupCacheLoaders.cs"/>
+
+  <cls:Parameters Namespace="MySolution.Services.Common"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|Lookup Cache Loaders|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Static Data|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Services.Common /CacheLoaders/\{Module/\}\{File\}.cs|Relative path where to output files with generated Lookup Cache Loaders. The path may contain \{Module/\} and \{File\} placeholders to output files by module and data object respectively.|
-|Registry File|../MySolution.Services.Common /CacheLoaders/LookupCacheLoaders.cs|Relative path to the file for registration or cache loaders with the DI service container. The registration extension method will be derived from the file name.|
-|**Parameters**|
+|Xsl|Enums/cache_loaders.xsl|Relative path to the XSLT file used by the generator to generate the Lookup Cache Loaders.|
+|GeneratorGroup|services|The group to which this generator belongs based on the type of the generated files.|
+|IndividualFiles|true|Specifies whether this generator can be run on individual files.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**cls:Output**|
+|Path|../MySolution.Services.Common /CacheLoaders/\{Module/\}\{File\}.cs|Relative path where to output files with generated Lookup Cache Loaders. The path may contain \{Module/\} and \{File\} placeholders to output files by module and data object respectively.|
+|RegistryFile|../MySolution.Services.Common /CacheLoaders/LookupCacheLoaders.cs|Relative path to the file for registration or cache loaders with the DI service container. The registration extension method will be derived from the file name.|
+|**cls:Parameters**|
 |Namespace||Namespace for the generated classes. If not set, the namespace for service contracts will be used.|
 
 ### Model configuration
 
-The parameters specified in the model configuration that is used by this generator consist of just the namespace for the service contracts, in the case when the *Namespace* generator parameter is not set.
+The parameters specified in the model configuration that is used by this generator consist of just the namespace for the service contracts, in the case when the `Namespace` generator parameter is not set.
 
 This is specified in the `svc:services-config` element under the top-level `config` model element, which is conventionally placed in the `global_config.xom` file, as illustrated by the following snippet.
 
 ```xml title="global_config.xom"
 <svc:services-config namespace="MySolution.Services" />
 ```
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

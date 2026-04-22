@@ -20,11 +20,11 @@ This generator updates single or multiple `.xom` files that contain model object
 
 ### CRUD Operations
 
-When *Generate CRUD* or *Generate Subobject CRUD* parameters are set to `True`, the generator will add `create`, `read`, `update` and `delete` operations to the selected objects and/or their subobjects.
+When `Generate` or `GenerateForSubobjects` parameters are set to `true` on the `mod:Operations/mod:CRUD` config, the generator will add `create`, `read`, `update` and `delete` operations to the selected objects and/or their subobjects.
 
 The input parameters of the CRUD operations will be based on the object key fields. Non-key fields will be also in the input of the `create` and `update` operations, as well as in the output of the `read` operation.
 
-The input structures will be generated such that it would be easy to expose them via REST services. And if *Generate Rest Methods* parameter is set, then the generator will also configure the operations with annotations for the REST method, as illustrated below.
+The input structures will be generated such that it would be easy to expose them via REST services. And, if `GenerateRestMethods` parameter is set, then the generator will also configure the operations with annotations for the REST method, as illustrated below.
 
 ```xml
 <objects>
@@ -57,11 +57,11 @@ After you add the CRUD operations to an object, you can update their input and o
 
 ### Read List Operation
 
-If you set the *Generate Read List* or *Generate Subobject Read List* parameters of the generator to `True`, the generator will add [`read list` operations](../../visual-studio/modeling/services#read-list-with-criteria) to the selected objects and/or their subobjects.
+If you set the `Generate` or `GenerateForSubobjects` parameters of the generator to `true` on the `mod:Operations/mod:ReadList` config, the generator will add [`read list` operations](../../visual-studio/modeling/services#read-list-with-criteria) to the selected objects and/or their subobjects.
 
 The output of the operation will have a `list="true"` attribute and will contain all the object's fields. The input parameters for a `read list` operation on a subobject will contain just the parent object's key fields.
 
-For primary objects that don't have a parent though, the input parameters will contain all the object's fields as criteria, if the *Generate Read List Criteria* parameter is set, as illustrated below.
+For primary objects that don't have a parent though, the input parameters will contain all the object's fields as criteria, if the `GenerateCriteria` parameter is set, as illustrated below.
 
 ```xml
 <object name="sales order">
@@ -86,11 +86,11 @@ For primary objects that don't have a parent though, the input parameters will c
 If you generate a `read list` operation without criteria first, then you can add them later by setting the corresponding parameters, and rerunning the generator.
 :::
 
-As with the CRUD operations, specifying *Generate Rest Methods* parameter will also add a REST method configuration to the `read list` operations.
+As with the CRUD operations, specifying `GenerateRestMethods` parameter will also add a REST method configuration to the `read list` operations.
 
 ### Data Objects
 
-When you set the *Generate Data Objects* parameter of the generator to `True`, the generator will add declarations of "details" or "list" objects for the corresponding CRUD or `read list` operations and will add such data objects to the configuration of those operations, which determines the set of data object's properties, as follows.
+When you set the `Generate` parameter of the generator to `true` on the `mod:DataObjects` config, the generator will add declarations of "details" or "list" objects for the corresponding CRUD or `read list` operations and will add such data objects to the configuration of those operations, which determines the set of data object's properties, as follows.
 
 ```xml
 <operation name="read list" type="readlist">
@@ -106,7 +106,7 @@ When you set the *Generate Data Objects* parameter of the generator to `True`, t
 </operation>
 ```
 
-In addition, the generator can configure the data objects to make a serial key field hidden when you specify the *Make Serial Keys Hidden* parameter. If the UI views are also being added, and the *Generate Links* parameter is set, then it will also add link configurations to list objects, which would open the corresponding details view, as illustrated below.
+In addition, the generator can configure the data objects to make a serial key field hidden when you specify the `MakeSerialKeysHidden` parameter. If the UI views are also being added, and the `GenerateLinks` parameter is set, then it will also add link configurations to list objects, which would open the corresponding details view, as illustrated below.
 
 ```xml
 <xfk:data-objects xmlns:xfk="http://www.xomega.net/framework">
@@ -133,9 +133,9 @@ The data objects serve as view models for search or details views and are the ma
 
 ### Search/Details Views
 
-When you set the *Generate Search View* or *Generate Details View* parameters of the generator to `True`, the generator will add declarations of search and/or details views based on the corresponding data objects as view models.
+When you set the `Generate` parameter of the generator to `true` on the `mod:Views/mod:SearchView` or `mod:Views/mod:DetailsView` configs, the generator will add declarations of search and/or details views based on the corresponding data objects as view models.
 
-The view name should be unique, so it will be built from the object name, with the word "List" added for search views, and a postfix specified by the *View Name Postfix*, which is typically set to "*View*".
+The view name should be unique, so it will be built from the object name, with the word "List" added for search views, and a postfix specified by the `ViewNamePostfix` parameter, which is typically set to `"View"`.
 
 The following snippet illustrates such a view setup.
 
@@ -158,19 +158,19 @@ The following snippet illustrates such a view setup.
 </ui:views>
 ```
 
-For the [primary object (aka aggregate root)](../../visual-studio/modeling/domain#sub-objects-and-aggregates), the generator will also add a [main menu](../../visual-studio/modeling/presentation#main-menu-links) for the search view to browse objects, and a main menu for the details view to create new objects. The *Search View Auto Run* parameter can be set to `True` to auto-run the search view from the main menu.
+For the [primary object (aka aggregate root)](../../visual-studio/modeling/domain#sub-objects-and-aggregates), the generator will also add a [`ui:main-link`](../../visual-studio/modeling/presentation#main-menu-links) main menu for the search view to browse objects, and a main menu for the details view to create new objects if you set the `ViewMenu` parameter. The `AutoRun` parameter on the `mod:Views/mod:SearchView` config can be set to `true` to auto-run the search view from the main menu.
 
 ### Dynamic Enumeration
 
 For objects that represent static data that is stored in the database, but can be cached on the client, it makes sense to add a `read enum` operation to allow the client to read and cache that static data.
 
-This is done by specifying the *Generate Read Enum* and/or *Generate Subobject Read Enum* generator parameters, which will add a `read enum` operation decorated with a dynamic enumeration specification that tells the Xomega Framework which output parameter is an internal Id, and which one should be used as a user-facing description.
+This is done by specifying the `Generate` and/or `GenerateForSubobjects` parameters on the  `mod:Operations/mod:ReadEnum` config, which will add a `read enum` operation decorated with a dynamic enumeration specification that tells the Xomega Framework which output parameter is an internal Id, and which one should be used as a user-facing description.
 
 :::warning
 If the generator cannot find a proper object field to use as the Id or a description, then it will just add those as output parameters, and you'll need to manually provide custom code in the services for those parameters, to return proper values.
 :::
 
-You can also set the *Make Key Type Enumerated* parameter to update the key type for the object, and link it to the new enumeration, which would provide a selection control for any field that is using that type, as illustrated below.
+You can also set the `MakeKeyTypeEnumerated` parameter to update the key type for the object, and link it to the new enumeration, which would provide a selection control for any field that is using that type, as illustrated below.
 
 ```xml
 <types>
@@ -205,42 +205,81 @@ You can also set the *Make Key Type Enumerated* parameter to update the key type
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Model Enhancement` folder in the model project as follows.
+
+```xml title="Full CRUD with Views.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:mod="http://schemas.xomega.net/v10/xgen/model-ops">
+  
+  <Generator Xsl="Model/crud_ops_views.xsl"
+             GeneratorGroup="model"
+             IndividualFiles="true"/>
+
+  <mod:Operations GenerateRestMethods="true">
+    <mod:CRUD Generate="true"
+              GenerateForSubobjects="true"
+              UseYesNoSubstitution="true"/>
+  
+    <mod:ReadList Generate="true"
+                  GenerateCriteria="true"
+                  GenerateForSubobjects="true"/>
+
+    <mod:ReadEnum Generate="false"
+                  MakeKeyTypeEnumerated="true"/>
+  </mod:Operations>
+
+  <mod:DataObjects Generate="true"
+                   GenerateLinks="true"
+                   MakeSerialKeysHidden="true"/>
+
+  <mod:Views ViewNamePostfix="View">
+    <mod:SearchView Generate="true"
+                    ViewMenu="true"
+                    AutoRun="false"/>
+
+    <mod:DetailsView Generate="true"
+                     ViewMenu="true"/>
+  </mod:Views>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|Full CRUD with Views|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Model Enhancement|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|False|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Operations CRUD**|
-|Generate CRUD|True|Whether to generate `Create`, `Read`, `Update` and `Delete` operations.|
-|Generate Subobject CRUD|True|Whether to generate `Create`, `Read`, `Update` and `Delete` operations on sub-objects.|
-|Use Yes/No Substitution|True|Whether to substitute `boolean` type with `yesno` type for non-required parameters of CRUD operations.|
-|**Operation Read List**|
-|Generate Read List|True|Whether to generate `Read List` operation.|
-|Generate Read List Criteria|True|Whether to generate criteria for `Read List` operation.|
-|Generate Subobject Read List|True|Whether to generate `Read List` operation on sub-objects.|
-|**Operation Read Enum**|
-|Generate Read Enum|False|Whether to generate `Read Enum` operation.|
-|Generate Subobject Read Enum|False|Whether to generate `Read Enum` operation on sub-objects.|
-|Make Key Type Enumerated|False|Whether to update the key type to reference generated enumeration.|
-|**Rest API**|
-|Generate Rest Methods|True|Whether to generate REST API methods on operations.|
-|**Data&nbsp;Objects**|
-|Generate Data Objects|True|Whether to generate Xomega.Framework Data Object definitions for operations.|
-|Generate Links|True|Whether to generate links to corresponding details views on list objects.|
-|Make Serial Keys Hidden|True|Whether to configure serial key fields as hidden on views.|
-|**Views**|
-|Generate Search View|True|Whether to generate a search view for list objects.|
-|Search View Menu|True|Whether to add a main menu for search view to browse objects.|
-|Search View Auto Run|False|Whether to auto-run the search view from the main menu.|
-|Generate Details View|True|Whether to generate a details view for CRUD objects.|
-|Details View Menu|True|Whether to add a main menu for details view to create new objects.|
-|View Name Postfix|View|Postfix to use for view names.|
+|Xsl|Model/crud_ops_views.xsl|Relative path to the XSLT file used by the generator to add CRUD operations and views to the model objects in the selected file(s).|
+|GeneratorGroup|model|The group to which this generator belongs based on the type of the generated files.|
+|IndividualFiles|true|Specifies whether this generator can be run on individual files.|
+|**mod:Operations**|
+|GenerateRestMethods|true|Whether to generate REST API methods on operations.|
+|**mod:Operations/mod:CRUD**|
+|Generate|true|Whether to generate `Create`, `Read`, `Update` and `Delete` operations.|
+|GenerateForSubobjects|true|Whether to generate `Create`, `Read`, `Update` and `Delete` operations on sub-objects.|
+|UseYesNoSubstitution|true|Whether to substitute `boolean` type with `yesno` type for non-required parameters of CRUD operations.|
+|**mod:Operations/mod:ReadList**|
+|Generate|true|Whether to generate `Read List` operation.|
+|GenerateCriteria|true|Whether to generate criteria for `Read List` operation.|
+|GenerateForSubobjects|true|Whether to generate `Read List` operation on sub-objects.|
+|**mod:Operations/mod:ReadEnum**|
+|Generate|false|Whether to generate `Read Enum` operation.|
+|GenerateForSubobjects|false|Whether to generate `Read Enum` operation on sub-objects.|
+|MakeKeyTypeEnumerated|false|Whether to update the key type to reference generated enumeration.|
+|**mod:DataObjects**|
+|Generate|true|Whether to generate Xomega.Framework Data Object definitions for operations.|
+|GenerateLinks|true|Whether to generate links to corresponding details views on list objects.|
+|MakeSerialKeysHidden|true|Whether to configure serial key fields as hidden on views.|
+|**mod:Views**|
+|ViewNamePostfix|View|Postfix to use for view names.|
+|**mod:Views/mod:SearchView**|
+|Generate|true|Whether to generate a search view for list objects.|
+|ViewMenu|true|Specifies whether to add the search view to the application menu.|
+|AutoRun|false|Whether to auto-run the search view from the main menu.|
+|**mod:Views/mod:DetailsView**|
+|Generate|true|Whether to generate a details view for CRUD objects.|
+|ViewMenu|true|Whether to add a main menu for details view to create new objects.|
 
 ### Model configuration
 

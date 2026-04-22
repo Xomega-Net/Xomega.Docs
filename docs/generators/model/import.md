@@ -139,7 +139,7 @@ For sub-objects, the primary key of the parent object will be dropped from the l
 
 ### Fixed Table Names
 
-If you set the *Keep Table Names* parameter of the generator to `true`, the generated objects will have a configuration element with a `sql:table` element that provides a mapping to the DB table name, as follows.
+If you set the `KeepTableNames` parameter of the generator to `true`, the generated objects will have a configuration element with a `sql:table` element that provides a mapping to the DB table name, as follows.
 
 ```xml
 <object name="person">
@@ -159,7 +159,7 @@ Without such a configuration, the table name for the object will be implicitly d
 
 ### Fixed Column Names
 
-If you set the `Keep Column Names` parameter of the generator to `true`, the fields on generated objects will have a configuration element with a `sql:column` element that provides a mapping to the DB column name, as follows.
+If you set the `KeepColumnNames` parameter of the generator to `true`, the fields on generated objects will have a configuration element with a `sql:column` element that provides a mapping to the DB column name, as follows.
 
 ```xml
 <field name="business entity id" type="person" key="supplied" required="true">
@@ -178,45 +178,49 @@ Without such a configuration, the column name for the field will be implicitly d
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Model Enhancement` folder in the model project as follows.
+
+```xml title="Import from Database.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:dbi="http://schemas.xomega.net/v10/xgen/db-import">
+  
+  <Generator Xsl="Model/import_from_db.xsl"
+             DbSchemaNeeded="true"
+             DbTimeout="30"/>
+
+  <dbi:Output Path="Import/{Module/}{File}.xom"/>
+
+  <dbi:NamingConventions
+    KeepTableNames="true"
+    KeepColumnNames="true"
+    KeepConstraintNames="false"
+    NamingCase="lower"
+    NamingDelimiter="space"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|Import from Database|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Model Enhancement|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|False|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|Import/\{Module/\}\{File\}.xom|Relative path where to output generated .xom files, which will be added to the model project. The path may contain \{Module/\} and \{File\} placeholders to output files by database schema and table respectively.|
-|**Database**|
-|Connection String|Use Project Setting|Database connection string for the source database. Edited via the standard VS *Connection Properties* dialog, which also sets the other *Database* parameters of the generator, and allows saving it for the entire project. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Data Provider|.NET Framework Data Provider for SQL Server|Name of the data provider selected for the connection string. Value '*Use Project Setting*' takes this value from the corresponding property of the model project. Option *Reset Connection Info* allows resetting the connection string.|
-|Database|SQL Server|Database type of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Database Version|16.0|The version of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|**Naming&nbsp;Convention**|
-|Keep Table Names|True|Whether or not to preserve table names in generated objects.|
-|Keep Column Names|True|Whether or not to preserve column names in generated objects.|
-|Keep Constraint Names|False|Whether or not to preserve constraint names in generated objects.|
-|Naming Case|lower|The case to use for logical names: `lower`, `upper` or `camel`. Leave empty to use DB names as is.|
-|Naming Delimiter|space|The delimiter to use for logical names: `space`, `underscore` or `dash`. Leave empty to use DB names as is.|
+|Xsl|Model/import_from_db.xsl|Relative path to the XSLT file used by the generator to transform the database schema into the model.|
+|DbSchemaNeeded|true|Indicates that the generator requires a database schema, which in turn requires a valid database connection. If no default connection is available, running the generator will prompt for one. The value should be always set to `true`.|
+|DbTimeout|30|Specifies the timeout in seconds for the database connection.|
+|**dbi:Output**|
+|Path|Import/\{Module/\}\{File\}.xom|Relative path where to output generated .xom files, which will be added to the model project. The path may contain \{Module/\} and \{File\} placeholders to output files by database schema and table respectively.|
+|**dbi:NamingConventions**|
+|KeepTableNames|true|Whether or not to preserve table names in generated objects.|
+|KeepColumnNames|true|Whether or not to preserve column names in generated objects.|
+|KeepConstraintNames|false|Whether or not to preserve constraint names in generated objects.|
+|NamingCase|lower|The case to use for logical names: `lower`, `upper` or `camel`. Leave empty to use DB names as is.|
+|NamingDelimiter|space|The delimiter to use for logical names: `space`, `underscore` or `dash`. Leave empty to use DB names as is.|
 
 ### Model configuration
 
 The generator doesn't use any other configuration parameters from the model.
-
-### Common configurations
-
-When importing the model from a database you should, first of all, define the database connection for the generator. You can do it via the *Database Connection Configuration* dialog that pops up from the generator's *Properties* page. In that dialog, you should specify an OLE DB connection string to your database, which Xomega will validate and will use to read your database metadata.
-
-On the next tab of the dialog, you can specify which database tables you would like to exclude from the model. Next, the system will try to determine if your database names are case-sensitive and will set the *Database Case* to `PascalCase` or your choice of `UPPER_SNAKE` or `lower_snake` respectively, which will be used for generating tables for all new objects as well.
-
-It makes sense to save this database configuration as default project settings, which will be one of the options in the dialog so that all other database-related generators could reuse the same settings. This way, for example, the *Database Change Script* generator won't try to remove the tables that have been explicitly excluded from the model.
-
-If you save it as a default configuration then it will be available on the model project's *Properties* page, and the corresponding generator properties will be set to the '*Use Project Setting*' value.
 
 ## How to use the generator
 
@@ -224,13 +228,13 @@ The sections below provide some details on how to work with the generator.
 
 ### Running the generator
 
-You can run this generator for the entire database or a subset of tables after configuring the database generator parameters.
+You can run this generator for the entire database only. If there is no default database connection available, you will be prompted to specify connection properties, and then whether to save the connection as default in the model project. You can always edit or reset the default connection in the model project properties.
 
 :::warning
 The model must contain no objects with fields defined when the generator runs to prevent overwriting any custom changes if you rerun it. You may have some services defined though, which are objects with operations but no fields.
 :::
 
-The generated Xomega files will be automatically added to the project under the folder designated by the *Output Path* property.
+The generated Xomega files will be automatically added to the project under the folder designated by the `dbi:Output/Path` property.
 
 :::tip
 You can make it output to the project folder, but initially, you may want to consider generating it in some project sub-folder (such as the default `Import/` folder). This will allow you to review the generated files, and clean them all easily if you realize that you need to make any adjustments in the database or the configuration, and then rerun the generator.

@@ -24,7 +24,7 @@ The generator uses view definitions in the Xomega model to generate the correspo
 
 The generator will create search or details views based on whether or not the data object is a list object, as specified by its `list` attribute.
 
-In addition to a unique view `name`, you can specify a `title` for the view, and a `child` attribute, which determines if the view should be added to the main menu. To add custom logic to the generated view you need to set the `customize="true"` attribute on the `ui:view` element, which will create a partial class for the generated view with a *Customized* postfix that will be nested under the view.
+In addition to a unique view `name`, you can specify a `title` for the view, and a `child` attribute. To add custom logic to the generated view you need to set the `customize="true"` attribute on the `ui:view` element, which will create a partial class for the generated view with a *Customized* postfix that will be nested under the view.
 
 The following snippet shows an example of a search view definition in the Xomega model.
 
@@ -70,7 +70,7 @@ The snippet below shows how to associate a Blazor component with a logical type 
 
 ### Layout
 
-To customize the layout of the data object's fields and child objects on the view, you can provide additional configurations in the model under the data object's `ui:display/ui:fields` element.
+To [customize the layout](../../../visual-studio/modeling/presentation#ui-field-config) of the data object's fields and child objects on the view, you can provide additional configurations in the model under the data object's `ui:display/ui:fields` element.
 
 You can set a custom title for the group of the object's immediate fields here, and also indicate how many columns to use for the layout of the fields within the panel using `field-cols` attribute. Similarly, you can also set the `panel-cols` attribute to indicate how many columns the parent panel uses to lay out the panel with the object's fields along with other panels for the child objects, which you can also configure separately in the `ui:child-panels` element.
 
@@ -165,31 +165,53 @@ For each list data object, you can specify custom settings for the generated gri
 
 ## Generator outputs
 
-This generator creates Razor files for the views with C# code-behind classes, and optionally a static class for the main menu structure based on the views that are not marked with a `child` attribute grouped by module.
+This generator creates Razor files for the views with C# code-behind classes, and optionally a static class for the main menu structure based on the views that have [`ui:main-link`](../../../visual-studio/modeling/presentation#main-menu-links) elements.
 
 For views that are decorated with a `customize="true"` attribute, it also creates a partial class for the generated view with a postfix *Customized* appended to the class name, if one does not exist yet. The customized classes will be nested under the corresponding generated view Razor file, according to the rules specified in the `.filenesting.json` file for the target client project.
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Presentation Layer\Blazor` folder in the model project as follows.
+
+```xml title="Blazor Views.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:view="http://schemas.xomega.net/v10/xgen/views">
+
+  <Generator Xsl="UI/Blazor/blazor_views.xsl"
+             GeneratorGroup="presentation"
+             IndividualFiles="true"
+             IncludeInBuild="true"/>
+
+  <view:Output Path="../MySolution.Client.Blazor.Common/Views/{Module/}{File}"
+               CustomPath=""
+               MenuFile="../MySolution.Client.Blazor.Common/Views/MainMenu.cs"/>
+
+  <view:Parameters Namespace="MySolution.Client.Blazor.Common.Views"
+                   UseAuth="true"/>
+
+  <view:Selector View=""/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|Blazor Views|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Presentation Layer\Blazor|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Client.Blazor.Common /Views/\{Module/\}\{File\}|Relative path where to output files with generated Views. The path must contain a \{File\} placeholder to output files by view, and may contain a \{Module/\} placeholder to also group the views by module.|
-|Custom Path||Relative path where to output custom partial classes for the generated views. If not set, then the *OutputPath* will be used. The path must contain a \{File\} placeholder to output files by view.|
-|Menu File|../MySolution.Client.Blazor.Common /Views/MainMenu.cs|Output path to the C# file where to generate static structure for the main menu.|
-|**Parameters**|
+|Xsl|UI/Blazor/blazor_views.xsl|Relative path to the XSLT file used by the generator to generate the Blazor views.|
+|GeneratorGroup|presentation|The group to which this generator belongs based on the type of the generated files.|
+|IndividualFiles|true|Specifies whether this generator can be run on individual files.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**view:Output**|
+|Path|../MySolution.Client.Blazor.Common /Views/\{Module/\}\{File\}|Relative path where to output files with generated Views. The path must contain a \{File\} placeholder to output files by view, and may contain a \{Module/\} placeholder to also group the views by module.|
+|CustomPath||Relative path where to output custom partial classes for the generated views. If not set, then the `Path` will be used. The path must contain a \{File\} placeholder to output files by view.|
+|MenuFile|../MySolution.Client.Blazor.Common /Views/MainMenu.cs|Output path to the C# file where to generate static structure for the main menu.|
+|**view:Parameters**|
 |Namespace|MySolution.Client.Blazor.Views.Common|Namespace for the generated views.|
 |UseAuth|True|Whether or not to add an `[Authorize]` attribute to secure the pages.|
-|**Selector**|
+|**view:Selector**|
 |View||The name of the view from the model to generate a view for. Can be used to set up a separate generator configuration for a single view.|
 
 ### Model configuration

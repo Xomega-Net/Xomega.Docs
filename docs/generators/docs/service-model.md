@@ -83,21 +83,36 @@ This generator creates a Microsoft Word service model design document at the spe
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Documentation` folder in the model project as follows.
+
+```xml title="Service Model Design.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:doc="http://schemas.xomega.net/v10/xgen/docx">
+
+  <Generator Xsl="Docs/docx_model.xsl"/>
+  
+  <doc:Output Path="../Docs/ServiceModelDesign.docx"/>
+  
+  <doc:Document Template=".Generators/Documentation/Templates/ServiceModel.docx"
+                Title="MySolution's Service Model"
+                Subject="Technical design for the MySolution's service model"
+                Creator="[User]"
+                Company="[Company]"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|Service Model Design|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Documentation|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|False|A flag indicating whether or not running this generator should be included in building of the model project.|
-|Document Template|C:\Program Files (x86)\Xomega.Net\8.11\ Templates\ServiceModel.docx|Path to the MS Word document that will be used as a template for the generated document.|
-|**Output**|
-|Output Path|../Docs/ServiceModelDesign.docx|Relative path where to output the generated document.|
-|**Parameters**|
+|Xsl|Docs/docx_model.xsl|Relative path to the XSLT file used by the generator to generate the Word document.|
+|**doc:Output**|
+|Path|../Docs/ServiceModelDesign.docx|Relative path where to output the generated document.|
+|**doc:Document**|
+|Template|.Generators/Documentation /Templates/ServiceModel.docx|Path to the MS Word document that will be used as a template for the generated document. The path is relative to the model project.|
 |Title|MySolution's Service Model|Title to use for the generated document.|
 |Subject|Technical design for the MySolution's service model|Subject (subtitle) to use for the generated document.|
 |Creator|[User]|Creator (author) of the generated document. Value `[User]` indicates the user of the current Xomega license.|
@@ -106,10 +121,6 @@ The following table lists configuration parameters that are set as the generator
 ### Model configuration
 
 The generator doesn't use any other global configurations in the model.
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

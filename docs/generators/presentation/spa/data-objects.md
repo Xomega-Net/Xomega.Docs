@@ -102,20 +102,39 @@ For data objects that are decorated with a `customize="true"` attribute, it also
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Presentation Layer\SPA` folder in the model project as follows.
+
+```xml title="XomegaJS Data Objects.xgen" 
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:cls="http://schemas.xomega.net/v10/xgen/classes">
+
+  <Generator Xsl="UI/TypeScript/data_objects.xsl"
+             GeneratorGroup="presentation"
+             IndividualFiles="true"
+             IncludeInBuild="true"/>
+
+  <!--NOTE: output path is specified in the model's global config
+            under xfk:data-objects-config/@tsOutputPath
+            so that it's shared with other generators -->
+  <cls:Output TargetProject="../MySolution.Client.Spa/MySolution.Client.Spa.csproj"
+              NestCustomFile="true"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|XomegaJS Data Objects|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Presentation Layer\SPA|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Nest Custom File|True|Whether or not to nest custom file under the auto-generated base file in the project. Applies only if both files are output to the same directory.|
-|Add To Project|../MySolution.Client.Spa /MySolution.Client.Spa.csproj|Relative path to the project file to add the generated files to. The project will be reloaded every time you run the generator. Leave it blank if you don't want generated files to be added to your project automatically.|
+|Xsl|UI/TypeScript/data_objects.xsl|Relative path to the XSLT file used by the generator to generate the XomegaJS Data Objects.|
+|GeneratorGroup|presentation|The group to which this generator belongs based on the type of the generated files.|
+|IndividualFiles|true|Specifies whether this generator can be run on individual files.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**cls:Output**|
+|NestCustomFile|true|Whether or not to nest custom file under the auto-generated base file in the project. Applies only if both files are output to the same directory.|
+|TargetProject|../MySolution.Client.Spa /MySolution.Client.Spa.csproj|Relative path to the project file to add the generated files to. The project will be reloaded every time you run the generator. Leave it blank if you don't want generated files to be added to your project automatically.|
 
 ### Model configuration
 
@@ -137,10 +156,6 @@ To be able to use the generated classes in other TypeScript files requires impor
 :::tip
 You can omit the `tsCustomPath` attribute, in which case the customized data objects will be output into the same folder as the generated data objects.
 :::
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

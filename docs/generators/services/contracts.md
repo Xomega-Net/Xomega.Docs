@@ -6,10 +6,6 @@ sidebar_position: 1
 
 Generates C# service interfaces with methods for all operations on an object or its subobjects, as well as data structures for input and output of such operations, and for any standalone reusable structures declared in the model.
 
-:::note
-To allow exposing the services through WCF, those interfaces and data structures can be also decorated with `ServiceContract` or `DataContract` attributes, or other WCF attributes as needed.
-:::
-
 ## Generator inputs
 
 Any object in the Xomega model that has operations, or subobjects with operations, represents a service. Configuration of such operations and any supporting structures in the model is used to generate the service and data contracts.
@@ -111,7 +107,7 @@ Standard CRUD and `read list` operations for an object can be easily added autom
 
 ## Generator outputs
 
-This generator creates C# classes for service and data contracts, which can be placed in separate files by service, grouped by module, or output to a single file, depending on how you set up your *Output Path* parameter.
+This generator creates C# classes for service and data contracts, which can be placed in separate files by service, grouped by module, or output to a single file, depending on how you set up the `Path` parameter on the `cls:Output` config.
 
 The standalone structures will be output in a separate file by module with a "Structures" postfix.
 
@@ -121,19 +117,38 @@ Usually you want to output generated classes to a separate shared project that c
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Service Layer` folder in the model project as follows.
+
+```xml title="Service Contracts.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:cls="http://schemas.xomega.net/v10/xgen/classes">
+
+  <Generator Xsl="Services/contracts.xsl"
+             GeneratorGroup="services"
+             IndividualFiles="true"
+             IncludeInBuild="true"/>
+
+  <cls:Output Path="../MySolution.Services.Common/ServiceContracts/{Module/}{File}.cs"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|Service Contracts|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Service Layer|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Services.Common /ServiceContracts/\{Module/\}\{File\}.cs|Relative path where to output files with generated service and data. The path may contain \{Module/\} and \{File\} placeholders to output files by module and data object respectively.|
+|Xsl|Services/contracts.xsl|Relative path to the XSLT file used by the generator to generate the service contracts.|
+|GeneratorGroup|services|The group to which this generator belongs based on the type of the generated files.|
+|IndividualFiles|true|Specifies whether this generator can be run on individual files.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**cls:Output**|
+|Path|../MySolution.Services.Common /ServiceContracts/\{Module/\}\{File\}.cs|Relative path where to output files with generated service and data. The path may contain \{Module/\} and \{File\} placeholders to output files by module and data object respectively.|
+
+:::note
+To allow exposing the services through WCF, you can set the `Xsl` attribute to "Services/WCF/contracts.xsl", which will generate interfaces and data structures decorated with `ServiceContract` or `DataContract` attributes, or other WCF attributes as needed.
+:::
 
 ### Model configuration
 
@@ -143,7 +158,8 @@ These parameters include whether the service operations are `async`, whether the
 
 ```xml title="global_config.xom"
 <!-- highlight-start -->
-<svc:services-config async="true" cancellation="true"
+<svc:services-config async="true"
+                     cancellation="true"
                      namespace="MySolution.Services.Common"
 <!-- highlight-end -->
                      xmlns:svc="http://www.xomega.net/svc"/>
@@ -154,10 +170,6 @@ You should make the service operations async and support cancellation tokens whe
 :::
 
 The generated service interface and structures will be decorated with WCF attributes for service and data contracts only if WCF configuration is defined in the `wcf:config` element of the global model configuration under the top-level `config` element, as described [here](../../visual-studio/modeling/config#wcf-config).
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

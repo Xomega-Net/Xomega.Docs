@@ -50,27 +50,34 @@ This generator creates a single XML file with all static enumerations and their 
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Static Data` folder in the model project as follows.
+
+```xml title="Enumeration Data XML.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:res="http://schemas.xomega.net/v10/xgen/resources">
+
+  <Generator Xsl="Enums/xml_resources.xsl"
+             IncludeInBuild="true"/>
+
+  <res:Output Path="../MySolution.Services.Common/Enumerations/enumerations.xres"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|Enumeration Data XML|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Static Data|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Services.Common /Enumerations/enumerations.xml|Relative path where to output generated XML file with enumerations.|
+|Xsl|Enums/xml_resources.xsl|Relative path to the XSLT file used by the generator to generate the enumeration XML.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**res:Output**|
+|Path|../MySolution.Services.Common /Enumerations/enumerations.xres|Relative path where to output generated XML file with enumerations.|
 
 ### Model configuration
 
 The generator doesn't use any other configuration parameters from the model.
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

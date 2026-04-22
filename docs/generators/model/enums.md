@@ -79,7 +79,7 @@ The following example illustrates such a configuration for a generic `dictionary
 
 ## Generator outputs
 
-This generator creates single or multiple `.xom` files with enumerations, as defined by the *OutputPath* parameter, and adds them to the model project.
+This generator creates single or multiple `.xom` files with enumerations, as defined by the `Path` parameter on the `dbi:Output` element, and adds them to the model project.
 
 The generated enumerations will be automatically configured to point to their source objects so that you could easily generate a separate SQL script that reloads them in the database should you need to make any updates to them in the model, as follows.
 
@@ -98,33 +98,36 @@ The generated enumerations will be automatically configured to point to their so
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Model Enhancement` folder in the model project as follows.
+
+```xml title="Enumerations from Database.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:dbi="http://schemas.xomega.net/v10/xgen/db-import">
+
+  <Generator Xsl="Model/enums_from_db.xsl"
+             DbConnectionNeeded="true"
+             DbTimeout="30"/>
+
+  <dbi:Output Path="ImportedEnums/{Module/}{File}.xom"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|Enumerations from Database|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Model Enhancement|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|False|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|ImportedEnums/ \{Module\}_enums.xom|Relative path where to output generated .xom files with enumerations, which will be added to the model project. The path may contain \{Module/\} and \{File\} placeholders to output files by database schema and enumeration respectively.|
-|**Database**|
-|Connection String|Use Project Setting|Database connection string for the source database. Edited via the standard VS *Connection Properties* dialog, which also sets the other *Database* parameters of the generator, and allows saving it for the entire project. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Data Provider|.NET Framework Data Provider for SQL Server|Name of the data provider selected for the connection string. Value '*Use Project Setting*' takes this value from the corresponding property of the model project. Option *Reset Connection Info* allows resetting the connection string.|
-|Database|SQL Server|Database type of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Database Version|16.0|The version of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
+|Xsl|Model/enums_from_db.xsl|Relative path to the XSLT file used by the generator to import static data from the database as model enums.|
+|DbConnectionNeeded|true|Indicates that the generator requires a database connection. If no default connection is available, running the generator will prompt for one. The value should be always set to `true`.|
+|DbTimeout|30|Specifies the timeout in seconds for the database connection.|
+|**dbi:Output**|
+|Path|ImportedEnums/\{Module/\}\{File\}.xom|Relative path where to output generated .xom files with enumerations, which will be added to the model project. The path may contain \{Module/\} and \{File\} placeholders to output files by database schema and enumeration respectively.|
 
 ### Model configuration
 
 The generator doesn't use any other configuration parameters from the model.
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

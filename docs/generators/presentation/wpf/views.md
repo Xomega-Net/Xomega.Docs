@@ -20,7 +20,7 @@ The generator uses view definitions in the Xomega model to generate the correspo
 
 The generator will create search or details views based on whether or not the data object is a list object, as specified by its `list` attribute.
 
-In addition to a unique view name, you can specify a title for the view, and a `child` attribute, which determines if the view should be added to the main menu.
+In addition to a unique view name, you can specify a title for the view, and a `child` attribute.
 
 To add custom logic to the generated view you need to set the `customize="true"` attribute on the `ui:view` element, which will create and use a subclass of the generated code-behind class with a *Customized* postfix.
 
@@ -111,31 +111,53 @@ Most of this setup for standard details and search views in the Xomega model can
 
 This generator creates XAML files for the views with C# code-behind classes, as well as a static class for registering these views for Dependency Injection (DI) with the service container.
 
-If configured, it also generates main menu XAML resources for the views that are not marked with a `child` attribute, and a C# class with static handlers and other configurations for the menu resources.
+If configured, it also generates main menu XAML resources for the views that have [`ui:main-link`](../../../visual-studio/modeling/presentation#main-menu-links) elements, and a C# class with static handlers and other configurations for the menu resources.
 
 For views that are decorated with a `customize="true"` attribute, it also creates a subclass of the generated code-behind class with a postfix *Customized* appended to the class name, if one does not exist yet, and will use this subclass in the DI registration. The customized classes will be nested under the corresponding generated view XAML file, according to the rules specified in the `.filenesting.json` file for the target client project.
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Presentation Layer\WPF` folder in the model project as follows.
+
+```xml title="WPF Views.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:view="http://schemas.xomega.net/v10/xgen/views">
+
+  <Generator Xsl="UI/WPF/wpf_views.xsl"
+             GeneratorGroup="presentation"
+             IndividualFiles="true"
+             IncludeInBuild="true"/>
+
+  <view:Output Path="../MySolution.Client.Wpf/Views/{Module/}{File}"
+               CustomPath=""
+               RegistryFile="../MySolution.Client.Wpf/Views/Views.cs"
+               MenuFile="../MySolution.Client.Wpf/Controls/MainMenu"/>
+
+  <view:Parameters Namespace="MySolution.Client.Wpf"/>
+
+  <view:Selector View=""/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|WPF Views|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Presentation Layer\WPF|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Client.Wpf /Views/\{Module/\}\{File\}|Relative path where to output files with generated Views. The path must contain a \{File\} placeholder to output files by view, and may contain a \{Module/\} placeholder to also group the views by module.|
-|Custom Path||Relative path where to output override classes for the generated code-behind. If not set, then the *OutputPath* will be used. The path must contain a \{File\} placeholder to output files by view.|
-|Registry File|../MySolution.Client.Wpf /Views/Views.cs|Relative path to the file for views registration with the DI service container. The registration extension method will be derived from the file name.|
-|Menu File|../MySolution.Client.Wpf /Controls/MainMenu|Relative path without extension to the files to output XAML resources and C# handlers for the main menu.|
-|**Parameters**|
+|Xsl|UI/WPF/wpf_views.xsl|Relative path to the XSLT file used by the generator to generate the WPF views.|
+|GeneratorGroup|presentation|The group to which this generator belongs based on the type of the generated files.|
+|IndividualFiles|true|Specifies whether this generator can be run on individual files.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**view:Output**|
+|Path|../MySolution.Client.Wpf /Views/\{Module/\}\{File\}|Relative path where to output files with generated Views. The path must contain a \{File\} placeholder to output files by view, and may contain a \{Module/\} placeholder to also group the views by module.|
+|CustomPath||Relative path where to output override classes for the generated code-behind. If not set, then the `Path` will be used. The path must contain a \{File\} placeholder to output files by view.|
+|RegistryFile|../MySolution.Client.Wpf /Views/Views.cs|Relative path to the file for views registration with the DI service container. The registration extension method will be derived from the file name.|
+|MenuFile|../MySolution.Client.Wpf /Controls/MainMenu|Relative path without extension to the files to output XAML resources and C# handlers for the main menu.|
+|**view:Parameters**|
 |Namespace|MySolution.Client.Wpf|Namespace for the generated views.|
-|**Selector**|
+|**view:Selector**|
 |View||The name of the view from the model to generate a view for. Can be used to set up a separate generator configuration for a single view.|
 
 ### Model configuration

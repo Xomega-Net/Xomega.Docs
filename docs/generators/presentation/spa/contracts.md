@@ -104,19 +104,37 @@ The standalone structures will be output in a separate file by module with a "*S
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Presentation Layer\SPA` folder in the model project as follows.
+
+```xml title="TS Service Contracts.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:cls="http://schemas.xomega.net/v10/xgen/classes">
+
+  <Generator Xsl="UI/TypeScript/services.xsl"
+             GeneratorGroup="presentation"
+             IndividualFiles="true"
+             IncludeInBuild="true"/>
+
+  <!--NOTE: output path is specified in the model's global config
+            under svc:services-config/@tsOutputPath
+            so that it's shared with other generators -->
+  <cls:Output TargetProject="../MySolution.Client.Spa/MySolution.Client.Spa.csproj"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|TS Service Contracts|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Presentation Layer\SPA|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Add To Project|../MySolution.Services.Spa /MySolution.Services.Spa.csproj|Relative path to the project file to add the generated files to. The project will be reloaded every time you run the generator. Leave it blank if you don't want generated files to be added to your project automatically.|
+|Xsl|UI/TypeScript/services.xsl|Relative path to the XSLT file used by the generator to generate the TypeScript service contracts.|
+|GeneratorGroup|presentation|The group to which this generator belongs based on the type of the generated files.|
+|IndividualFiles|true|Specifies whether this generator can be run on individual files.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**cls:Output**|
+|TargetProject|../MySolution.Client.Spa /MySolution.Client.Spa.csproj|Relative path to the project file to add the generated files to. The project will be reloaded every time you run the generator. Leave it blank if you don't want generated files to be added to your project automatically.|
 
 ### Model configuration
 
@@ -133,10 +151,6 @@ Note that this is different from most of the other generators, which specify the
 :::
 
 To be able to use the generated classes in other TypeScript files requires importing the file where the generated class is declared using a relative path to it, so the other generators that use services, such as Data Objects, also need to know the path to them.
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

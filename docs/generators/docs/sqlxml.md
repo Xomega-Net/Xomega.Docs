@@ -20,32 +20,83 @@ This generator creates a Microsoft Word document with the formatted data at the 
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Documentation` folder in the model project as follows.
+
+```xml title="Custom SqlXml Report.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:doc="http://schemas.xomega.net/v10/xgen/docx">
+
+  <Generator Xsl="Docs/docx_sqlxml.xsl"
+             DbConnectionNeeded="true"
+             DbTimeout="30"/>
+  
+  <doc:Output Path="../Docs/SqlXmlReport.docx"/>
+
+  <!-- a sample template for the custom report showing a list of database tables -->
+  <doc:Document Template=".Generators/Documentation/Templates/CustomReport.docx"
+                Title="SQL XML Report"
+                Subject="Custom report using SQL XML data"
+                Creator="[User]"
+                Company="[Company]"/>
+
+  <doc:DataSource>
+    <!-- a sample query for a list of DB tables and their columns -->
+    <doc:SqlXmlQuery>
+      select tbl.TABLE_SCHEMA + '.' + tbl.TABLE_NAME [@name],
+          (select value from fn_listextendedproperty('MS_Description', 'schema', tbl.TABLE_SCHEMA,
+          'table', tbl.TABLE_NAME, NULL, NULL)) [@description],
+          (select c.COLUMN_NAME [@name], c.DATA_TYPE + case
+              when (c.DATA_TYPE in ('decimal', 'numeric')
+              and (c.NUMERIC_PRECISION != 38 or c.NUMERIC_SCALE != 0))
+              then '(' + cast(c.NUMERIC_PRECISION as varchar)+ ',' + cast(c.NUMERIC_SCALE as varchar) + ')' 
+              when (c.DATA_TYPE = 'float' and c.NUMERIC_PRECISION != 53)
+              then '(' + cast(c.NUMERIC_PRECISION as varchar) + ')' 
+              when (c.DATA_TYPE like '%char%') then '(' + case when c.CHARACTER_MAXIMUM_LENGTH > 0
+                  then cast(c.CHARACTER_MAXIMUM_LENGTH as varchar) else 'max' end + ')' 
+              else '' end [@type],
+              kcu.ordinal_position [@key],
+              case c.IS_NULLABLE when 'NO' then 'true' else null end [@required],
+              (select value from fn_listextendedproperty('MS_Description', 'schema', tbl.TABLE_SCHEMA,
+              'table', tbl.TABLE_NAME, 'column', c.COLUMN_NAME)) [@description]
+          from INFORMATION_SCHEMA.COLUMNS c
+          left join INFORMATION_SCHEMA.TABLE_CONSTRAINTS pkc
+              on pkc.TABLE_SCHEMA = c.TABLE_SCHEMA and pkc.TABLE_NAME = c.TABLE_NAME
+              and pkc.CONSTRAINT_TYPE = 'PRIMARY KEY'
+          left join INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu
+              on kcu.TABLE_SCHEMA = c.TABLE_SCHEMA and kcu.TABLE_NAME = c.TABLE_NAME
+              and kcu.COLUMN_NAME = c.COLUMN_NAME and kcu.CONSTRAINT_NAME = pkc.CONSTRAINT_NAME
+          where c.TABLE_SCHEMA = tbl.TABLE_SCHEMA and c.TABLE_NAME = tbl.TABLE_NAME
+          order by c.ORDINAL_POSITION
+          for xml path('column'), type)
+      from INFORMATION_SCHEMA.TABLES tbl 
+      where TABLE_TYPE = 'BASE TABLE'
+      order by tbl.TABLE_SCHEMA, tbl.TABLE_NAME
+      for xml path('table'), type, root('schema')
+    </doc:SqlXmlQuery>
+  </doc:DataSource>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|SQLXML Report|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Documentation|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|False|A flag indicating whether or not running this generator should be included in building of the model project.|
-|Document Template|..\Templates\ReportTemplate.docx|Path to the MS Word document that will be used as a template for the generated document.|
-|**Output**|
-|Output Path|../Docs/SqlXmlReport.docx|Relative path where to output the generated document.|
-|**Database**|
-|Connection String|Use Project Setting|Database connection string for the source database. Edited via the standard VS *Connection Properties* dialog, which also sets the other *Database* parameters of the generator, and allows saving it for the entire project. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Data Provider|.NET Framework Data Provider for SQL Server|Name of the data provider selected for the connection string. Value '*Use Project Setting*' takes this value from the corresponding property of the model project. Option *Reset Connection Info* allows resetting the connection string.|
-|Database|SQL Server|Database type of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Database Version|16.0|The version of the source database. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Sql Query|SELECT ... FOR XML ..., TYPE, ROOT('root')|SQL query that returns rooted typed XML using syntax appropriate for the current database, e.g. `FOR XML`, `TYPE` and `ROOT` directives.|
-|**Parameters**|
-|Title|SQLXML Report|Title to use for the generated document.|
-|Subject|Custom report generated from SQL XML|Subject (subtitle) to use for the generated document.|
+|Xsl|Docs/docx_model.xsl|Relative path to the XSLT file used by the generator to generate the Word document.|
+|DbConnectionNeeded|true|Indicates that the generator needs a database connection to run. If `true`, then the generator will prompt you to select a connection string from the list of connections defined in the model project, or to create a new one.|
+|DbTimeout|30|Specifies the timeout in seconds for the database connection.|
+|**doc:Output**|
+|Path|../Docs/SqlXmlReport.docx|Relative path where to output the generated document.|
+|**doc:Document**|
+|Template|.Generators/Documentation /Templates/CustomReport.docx|Path to the MS Word document that will be used as a template for the generated document. The path is relative to the model project.|
+|Title|SQL XML Report|Title to use for the generated document.|
+|Subject|Custom report using SQL XML data|Subject (subtitle) to use for the generated document.|
 |Creator|[User]|Creator (author) of the generated document. Value `[User]` indicates the user of the current Xomega license.|
 |Company|[Company]|Company to use for the generated document. Value `[Company]` indicates the company of the current Xomega license.|
+|**doc:Datasource**|
+|`doc:SqlXmlQuery`|SELECT ... FOR XML ..., TYPE, ROOT('root')|SQL query that returns rooted typed XML using syntax appropriate for the current database, e.g. `FOR XML`, `TYPE` and `ROOT` directives.|
 
 ### Model configuration
 

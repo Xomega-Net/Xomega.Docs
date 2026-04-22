@@ -165,7 +165,20 @@ This generator creates a single `.resx` XML file with resource keys and values, 
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Presentation Layer\Common` folder in the model project as follows.
+
+```xml title="Label Resources.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:res="http://schemas.xomega.net/v10/xgen/resources">
+
+  <Generator Xsl="UI/Common/resources.xsl"
+             IncludeInBuild="true"/>
+
+  <res:Output Path="../MySolution.Client.Common/Labels.resx"
+              TargetProject="../MySolution.Client.Common/MySolution.Client.Common.csproj"/>
+  
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
@@ -173,20 +186,15 @@ The following table lists configuration parameters that are set as the generator
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|Label Resources|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Presentation Layer\Common|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Add To Project|../MySolution.Client.Common /MySolution.Client.Common.csproj|Relative path to the project file that the generated files will be added to. The project should have a `RootNamespace` set to allow retrieving of the resources in runtime.|
-|Output Path|../MySolution.Client.Common/Labels.resx|Relative path where to output generated resource files.|
+|Xsl|UI/Common/resources.xsl|Relative path to the XSLT file used by the generator to generate the Xomega Label Resources.|
+|IncludeInBuild|True|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**res:Output**|
+|Path|../MySolution.Client.Common/Labels.resx|Relative path where to output generated resource files.|
+|TargetProject|../MySolution.Client.Common /MySolution.Client.Common.csproj|Relative path to the project file that the generated files will be added to. The project should have a `RootNamespace` set to allow retrieving of the resources in runtime.|
 
 ### Model configuration
 
 The generator doesn't use any other configuration parameters from the model.
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

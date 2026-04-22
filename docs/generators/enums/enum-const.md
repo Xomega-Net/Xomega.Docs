@@ -148,19 +148,30 @@ This generator creates a single file with C# classes for all static and dynamic 
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Static Data` folder in the model project as follows.
+
+```xml title="Enumeration Constants.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:cls="http://schemas.xomega.net/v10/xgen/classes">
+
+  <Generator Xsl="Enums/constants.xsl"
+             IncludeInBuild="true"/>
+
+  <cls:Output Path="../MySolution.Services.Common/Enumerations/Enumerations.cs"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|Enumeration Constants|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Static Data|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Services.Common /Enumerations/Enumerations.cs|Relative path where to output generated file with enumeration constants.|
+|Xsl|Enums/constants.xsl|Relative path to the XSLT file used by the generator to generate the enumeration constants.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**cls:Output**|
+|Path|../MySolution.Services.Common /Enumerations/Enumerations.cs|Relative path where to output generated file with enumeration constants.|
 
 ### Model configuration
 
@@ -171,10 +182,6 @@ This is specified in the `xfk:enumerations-config` element under the top-level `
 ```xml title="global_config.xom"
 <xfk:enumerations-config namespace="MySolution.Enumerations"/>
 ```
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

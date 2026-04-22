@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # View Models
 
-Generates customizable view model classes for UI search or details views based on the type of their associated data object.
+Generates customizable [view model](../../../framework/common-ui/vm/view-models) classes for UI search or details views based on the type of their associated data object.
 
 The generated view models are C# classes based on Xomega Framework, which can be reused in different types of C# clients, such as Blazor, WPF, or ASP.NET WebForms.
 
@@ -33,7 +33,7 @@ The following snippet shows an example of a view model definition in the Xomega 
 
 ### Links to views
 
-Named links between views are defined on the data object of the view model, or on any of its child or descendant sub-objects.
+[Named links](../../../visual-studio/modeling/presentation#object-links-to-views) between views are defined on the data object of the view model, or on any of its child or descendant sub-objects.
 
 For each link, you can specify the target view, whether or not it should be opened as a child view, the field on which to display the link, as well as the input and output parameters for the view.
 
@@ -73,21 +73,38 @@ The customized classes will be nested under the corresponding generated view mod
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Presentation Layer\Common` folder in the model project as follows.
+
+```xml title="View Models.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:cls="http://schemas.xomega.net/v10/xgen/classes">
+
+  <Generator Xsl="UI/Common/view_models.xsl"
+             GeneratorGroup="presentation"
+             IndividualFiles="true"
+             IncludeInBuild="true"/>
+
+  <cls:Output Path="../MySolution.Client.Common/ViewModels/{Module/}{File}.cs"
+              CustomPath=""
+              RegistryFile="../MySolution.Client.Common/ViewModels/ViewModels.cs"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|View Models|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Presentation Layer\Common|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Client.Common /ViewModels/\{Module/\}\{File\}.cs|Relative path where to output files with generated View Models. The path may contain \{Module/\} and \{File\} placeholders to output files by module and view model respectively.|
-|Custom Path||Relative path where to output override classes for the generated View Models. If not set, then the *OutputPath* will be used. The path must contain a \{File\} placeholder to output files by view model.|
-|Registry File|../MySolution.Client.Common /ViewModels/ViewModels.cs|Relative path to the file for view models registration with the DI service container. The registration extension method will be derived from the file name.|
+|Xsl|UI/Common/view_models.xsl|Relative path to the XSLT file used by the generator to generate the Xomega View Models.|
+|GeneratorGroup|presentation|The group to which this generator belongs based on the type of the generated files.|
+|IndividualFiles|true|Specifies whether this generator can be run on individual files.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**cls:Output**|
+|Path|../MySolution.Client.Common /ViewModels/\{Module/\}\{File\}.cs|Relative path where to output files with generated View Models. The path may contain \{Module/\} and \{File\} placeholders to output files by module and view model respectively.|
+|CustomPath||Relative path where to output override classes for the generated View Models. If not set, then the `Path` will be used. The path must contain a \{File\} placeholder to output files by view model.|
+|RegistryFile|../MySolution.Client.Common /ViewModels/ViewModels.cs|Relative path to the file for view models registration with the DI service container. The registration extension method will be derived from the file name.|
 
 ### Model configuration
 
@@ -98,10 +115,6 @@ These parameters consist of the namespace for the generated view models. The sni
 ```xml title="global_config.xom"
 <ui:views-config modelsNamespace="MySolution.Client.Common.ViewModels"/>
 ```
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

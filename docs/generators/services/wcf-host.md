@@ -33,28 +33,40 @@ The generator takes all services defined in the model as the input, which transl
 
 ## Generator outputs
 
-The generator outputs `.svc` files for each service, possibly grouped by module, as specified by the *Output Path* parameter.
+The generator outputs `.svc` files for each service, possibly grouped by module, as specified by the `Path` parameter in the `wcfSvcHost:Output` element.
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Service Layer` folder in the model project as follows.
+
+```xml title="WCF Service Host Files.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:wcfSvcHost="http://schemas.xomega.net/v10/xgen/wcf-host">
+
+  <Generator Xsl="Services/WCF/svc_host_files.xsl"
+             IncludeInBuild="true"/>
+
+  <wcfSvcHost:Output Path="../MySolution.Services.Wcf/{Module/}{File}.svc"
+                     TargetProject="../MySolution.Services.Wcf/MySolution.Services.Wcf.csproj"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|WCF Service Host Files|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Service Layer|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Services.Wcf /\{Module/\}\{File\}.svc|Relative path where to output generated IIS service host files. The path must contain a \{File\} placeholder to output files by service, and may contain a \{Module/\} placeholder to also group the services by module.|
-|Add To Project|../MySolution.Services.Wcf /MySolution.Services.Wcf.csproj|Relative path to the project file to add the generated files to. The project will be reloaded every time you run the generator. Leave it blank if you don't want generated files to be added to your project automatically.|
+|Xsl|Services/WCF/svc_host_files.xsl|Relative path to the XSLT file used by the generator to generate the WCF service host files.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**wcfSvcHost:Output**|
+|Path|../MySolution.Services.Wcf /\{Module/\}\{File\}.svc|Relative path where to output generated IIS service host files. The path must contain a \{File\} placeholder to output files by service, and may contain a \{Module/\} placeholder to also group the services by module.|
+|TargetProject|../MySolution.Services.Wcf /MySolution.Services.Wcf.csproj|Relative path to the project file to add the generated files to. The project will be reloaded every time you run the generator. Leave it blank if you don't want generated files to be added to your project automatically.|
 
 ### Model configuration
 
-The generator itself doesn't use any configuration from the model, but the `baseRemoteAddress` on the endpoint configurations, which is used by the [WCF Configuration](wcf-config) generator, should be consistent with the *Output Path* parameter of the current generator, as illustrated below.
+The generator itself doesn't use any configuration from the model, but the `baseRemoteAddress` on the endpoint configurations, which is used by the [WCF Configuration](wcf-config) generator, should be consistent with the `Path` parameter of the current generator, as illustrated below.
 
 ```xml title="global_config.xom"
 <wcf:config xmlns:wcf="http://www.xomega.net/wcf">
@@ -65,10 +77,6 @@ The generator itself doesn't use any configuration from the model, but the `base
                        baseRemoteAddress="http://localhost:61436/\{Module/\}\{File\}.svc"/>
 </wcf:config>
 ```
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 
@@ -92,4 +100,4 @@ The generator doesn't support any additional customization beyond what can be sp
 
 This generator does not support cleaning generated service host files.
 
-You have to manually remove any generated `.svc` files if you change the *Output Path* or remove any services in the model.
+You have to manually remove any generated `.svc` files if you change the `Path` parameter in the `wcfSvcHost:Output` element or remove any services in the model.

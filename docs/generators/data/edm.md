@@ -145,7 +145,19 @@ This helps to hide the complexities and intricacies of different EDM models.
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Data Layer` folder in the model project as follows.
+
+```xml title="Entity Data Model.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:res="http://schemas.xomega.net/v10/xgen/resources">
+
+  <Generator Xsl="Database/edmx.xsl"
+             IncludeInBuild="true"/>
+
+  <res:Output Path="../MySolution.Model.Diagrams/EntityModel.edmx"/>
+  
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
@@ -153,25 +165,24 @@ The following table lists configuration parameters that are set as the generator
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|Entity Data Model|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Data Layer|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Services.Entities /Entities/EntityModel.edmx|Relative path where to output generated Entity Data Model file.|
-|**Database**|
-|Database|SQL Server|Database type for the Entity Data Model. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|Database Version|16.0|The version of the database for the Entity Data Model. Value '*Use Project Setting*' takes this value from the corresponding property of the model project.|
-|**Parameters**|
-|Model Name|MySolution|The base name to use when generating the Entity Data Model.|
+|Xsl|Database/edmx.xsl|Relative path to the XSLT file used by the generator to generate the Entity Data Model.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**res:Output**|
+|Path|../MySolution.Services.Entities /Entities/EntityModel.edmx|Relative path where to output generated Entity Data Model file.|
+
+### Model project parameters
+
+The generator will also use the following parameters from the model project settings, which are set automatically when you save database connection as the default connection for the model project, or you can set them manually in the model project properties.
+
+|Parameter|Value Example|Description|
+|-|-|-|
+|Database|SQL Server|Database type for the DDL script: `SQL Server` or `PostgreSQL`.|
+|Database Case|PascalCase|The database case for the database objects' names: `PascalCase`, `lower_snake` or `UPPER_SNAKE`.|
+|Database Version|16.0|The version of the database for the DDL script.|
 
 ### Model configuration
 
 The generator doesn't use any other configuration parameters from the model.
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

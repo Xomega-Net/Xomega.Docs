@@ -24,7 +24,7 @@ The generator uses view definitions in the Xomega model to generate the correspo
 
 The generator will create search or details views based on whether or not the data object is a list object, as specified by its `list` attribute.
 
-In addition to a unique view name, you can specify a title for the view, and a `child` attribute, which determines if the view should be added to the main menu.
+In addition to a unique view name, you can specify a title for the view, and a `child` attribute.
 
 To add custom logic to the generated view you need to set the `customize="true"` attribute on the `ui:view` element, which will create and use a subclass of the generated view model class with a *Customized* postfix.
 
@@ -121,9 +121,9 @@ Most of this setup for standard details and search views in the Xomega model can
 
 ## Generator outputs
 
-This generator creates SPA views with HTML markup and a TypeScript view model class and registers their paths with the RequireJS configuration in the specified *Registry File*.
+This generator creates SPA views with HTML markup and a TypeScript view model class and registers their paths with the RequireJS configuration in the specified `RegistryFile`.
 
-If the view is not marked with a `child` attribute, it will also be added to the specified *Menu File* with Durandal routes registration, so that it could be displayed in the main menu.
+If the view has [`ui:main-link`](../../../visual-studio/modeling/presentation#main-menu-links) elements, those will also be added to the specified `MenuFile` with Durandal routes registration, so that it could be displayed in the main menu.
 
 The generator also adds all the generated files to the specified SPA project as needed.
 
@@ -131,25 +131,47 @@ For views that are decorated with a `customize="true"` attribute, it also create
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Presentation Layer\SPA` folder in the model project as follows.
+
+```xml title="SPA Views.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:view="http://schemas.xomega.net/v10/xgen/views">
+
+  <Generator Xsl="UI/TypeScript/spa_views.xsl"
+             GeneratorGroup="presentation"
+             IncludeInBuild="true"
+             IndividualFiles="true"/>
+
+  <view:Output Path="../MySolution.Client.Spa/Views/{Module/}{File}"
+               CustomPath=""
+               NestCustomFile="true"
+               TargetProject="../MySolution.Client.Spa/MySolution.Client.Spa.csproj"
+               RegistryFile="../MySolution.Client.Spa/Views/ViewsConfig.ts"
+               MenuFile="../MySolution.Client.Spa/Views/MainMenu.ts"/>
+
+  <view:Selector View=""/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|SPA Views|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Presentation Layer\SPA|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Client.Spa /Views/\{Module/\}\{File\}|Relative path where to output files with generated Views. The path must contain a \{File\} placeholder to output files by view, and may contain a \{Module/\} placeholder to also group the views by module.|
-|Custom Path||Relative path where to output override classes for the generated views. If not set, then the *OutputPath* will be used. The path must contain a \{File\} placeholder to output files by view.|
-|Nest Custom File|True|Whether or not to nest custom code-behind file under the auto-generated base file in the project. Applies only if both files are output to the same directory.|
-|Add To Project|../MySolution.Client.Spa /MySolution.Client.Spa.csproj|Relative path to the project file to add the generated files to. The project will be reloaded every time you run the generator. Leave it blank if you don't want generated files to be added to your project automatically.|
-|Registry File|../MySolution.Client.Spa /Views/ViewsConfig.ts|Relative path to the file for view paths registration.|
-|Menu File|../MySolution.Client.Spa /Views/MainMenu.ts|Relative path to the file for view routes registration.|
-|**Selector**|
+|Xsl|UI/TypeScript/spa_views.xsl|Relative path to the XSLT file used by the generator to generate the SPA views.|
+|GeneratorGroup|presentation|The group to which this generator belongs based on the type of the generated files.|
+|IndividualFiles|true|Specifies whether this generator can be run on individual files.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**view:Output**|
+|Path|../MySolution.Client.Spa /Views/\{Module/\}\{File\}|Relative path where to output files with generated Views. The path must contain a \{File\} placeholder to output files by view, and may contain a \{Module/\} placeholder to also group the views by module.|
+|CustomPath||Relative path where to output override classes for the generated views. If not set, then the `Path` will be used. The path must contain a \{File\} placeholder to output files by view.|
+|NestCustomFile|true|Whether or not to nest custom code-behind file under the auto-generated base file in the project. Applies only if both files are output to the same directory.|
+|TargetProject|../MySolution.Client.Spa /MySolution.Client.Spa.csproj|Relative path to the project file to add the generated files to. The project will be reloaded every time you run the generator. Leave it blank if you don't want generated files to be added to your project automatically.|
+|RegistryFile|../MySolution.Client.Spa /Views/ViewsConfig.ts|Relative path to the file for view paths registration.|
+|MenuFile|../MySolution.Client.Spa /Views/MainMenu.ts|Relative path to the file for view routes registration.|
+|**view:Selector**|
 |View||The name of the view from the model to generate a view for. Can be used to set up a separate generator configuration for a single view.|
 
 ### Model configuration

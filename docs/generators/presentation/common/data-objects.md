@@ -4,9 +4,9 @@ sidebar_position: 1
 
 # Xomega Data Objects
 
-Generates customizable presentation layer data objects that are used as data models for UI View Models.
+Generates customizable presentation layer [data objects](../../../framework/common-ui/data-objects) that are used as data models for UI View Models.
 
-The generated data objects are C# classes based on Xomega Framework, which can be reused in different types of C# clients, such as WebForms or WPF.
+The generated data objects are C# classes based on Xomega Framework, which can be reused in different types of C# clients, such as Blazor, WPF or even legacy WebForms.
 
 You can add your customizations to a subclass of a generated data object, and implement any reusable platform-independent presentation logic there, such as custom validations, propagations, and updates based on property change events, custom invocation, and handling of service operations including serialization to/from data contracts, etc.
 
@@ -103,36 +103,49 @@ The customized classes will be nested under the corresponding generated data obj
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Presentation Layer\Common` folder in the model project as follows.
+
+```xml title="Xomega Data Objects.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:cls="http://schemas.xomega.net/v10/xgen/classes">
+
+  <Generator Xsl="UI/Common/data_objects.xsl"
+             GeneratorGroup="presentation"
+             IndividualFiles="true"
+             IncludeInBuild="true"/>
+
+  <cls:Output Path="../MySolution.Client.Common/DataObjects/{Module/}{File}.cs"
+              CustomPath=""
+              RegistryFile="../MySolution.Client.Common/DataObjects/DataObjects.cs"/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|Xomega Data Objects|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Presentation Layer\Common|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Client.Common /DataObjects/\{Module/\}\{File\}.cs|Relative path where to output files with generated Xomega Data Objects. The path may contain \{Module/\} and \{File\} placeholders to output files by module and data object respectively.|
-|Custom Path||Relative path where to output override classes for the generated Xomega Data Objects. If not set, then the *OutputPath* will be used. The path must contain a \{File\} placeholder to output files by data object.|
-|Registry File|../MySolution.Client.Common /DataObjects/DataObjects.cs|Relative path to the file for data object registration with the DI service container. The registration extension method will be derived from the file name.|
+|Xsl|UI/Common/data_objects.xsl|Relative path to the XSLT file used by the generator to generate the Xomega Data Objects.|
+|GeneratorGroup|presentation|The group to which this generator belongs based on the type of the generated files.|
+|IndividualFiles|true|Specifies whether this generator can be run on individual files.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**cls:Output**|
+|Path|../MySolution.Client.Common /DataObjects/\{Module/\}\{File\}.cs|Relative path where to output files with generated Xomega Data Objects. The path may contain \{Module/\} and \{File\} placeholders to output files by module and data object respectively.|
+|CustomPath||Relative path where to output override classes for the generated Xomega Data Objects. If not set, then the `Path` will be used. The path must contain a \{File\} placeholder to output files by data object.|
+|RegistryFile|../MySolution.Client.Common /DataObjects/DataObjects.cs|Relative path to the file for data object registration with the DI service container. The registration extension method will be derived from the file name.|
 
 ### Model configuration
 
 The generator's configuration parameters that need to be also accessible to other generators are specified in the Xomega model in the `xfk:data-objects-config` element under the top-level `config` element, which is conventionally placed in the `global_config.xom` file.
 
-These parameters include the `namespace` for the generated data objects, and their `assembly` based on the project name to that they will be added. The snippet below illustrates such a configuration.
+These parameters include the `namespace` for the generated data objects, and their `assembly` based on the project name to which they will be added. The snippet below illustrates such a configuration.
 
 ```xml title="global_config.xom"
 <xfk:data-objects-config namespace="MySolution.Client.Objects"
                          assembly="MySolution.Client.Common" />
 ```
-
-### Common configurations
-
-There is expected to be just one configuration of this generator in the model, with the parameter values as illustrated above.
 
 ## How to use the generator
 

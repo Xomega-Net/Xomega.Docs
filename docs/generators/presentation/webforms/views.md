@@ -20,7 +20,7 @@ The generator uses view definitions in the Xomega model to generate the correspo
 
 The generator will create search or details views based on whether or not the data object is a list object, as specified by its `list` attribute.
 
-In addition to a unique view name, you can specify a title for the view, and a `child` attribute, which determines if the view should be added to the main menu.
+In addition to a unique view name, you can specify a title for the view, and a `child` attribute.
 
 To add custom logic to the generated view you need to set the `customize="true"` attribute on the `ui:view` element, which will create and use a subclass of the generated code-behind class with a *Customized* postfix.
 
@@ -118,32 +118,55 @@ Most of this setup for standard details and search views in the Xomega model can
 
 This generator creates user controls for the views with ASCX markup and a C# code-behind class so that you could easily embed the view into another view. It also generates an ASPX page for the view to allow for showing the view as a standalone page.
 
-If the view is not marked with a `child` attribute, it will also be added to the specified `Web.sitemap` file, so that it could be displayed in the main menu. The generator also adds all the generated files to the specified web project as needed.
+If the view has [`ui:main-link`](../../../visual-studio/modeling/presentation#main-menu-links) elements, those will also be added to the specified `Web.sitemap` file to be displayed in the main menu. The generator also adds all the generated files to the specified web project as needed.
 
 For views that are decorated with a `customize="true"` attribute, it also creates a subclass of the generated code-behind class with a postfix *Customized* appended to the class name if one does not exist yet. It will use this subclass in the ASCX markup, and can also nest the customized class under the generated view in the project if so configured.
 
 ## Configuration
 
-The following sections describe the configuration parameters used by the generator.
+By default, the generator configuration is defined under the `.Generators\Presentation Layer\Web Forms` folder in the model project as follows.
+
+```xml title="ASP.NET Views.xgen"
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:view="http://schemas.xomega.net/v10/xgen/views">
+
+  <Generator Xsl="UI/WebForms/asp_views.xsl"
+             GeneratorGroup="presentation"
+             IndividualFiles="true"
+             IncludeInBuild="true"/>
+
+  <view:Output Path="../MySolution.Client.Web/Views/{Module/}{File}"
+               CustomPath=""
+               MenuFile="../MySolution.Client.Web/Web.sitemap"
+               TargetProject="../MySolution.Client.Web/MySolution.Client.Web.csproj"
+               NestCustomFile="true"/>
+
+  <view:Parameters Namespace="MySolution.Client.Web"/>
+
+  <view:Selector View=""/>
+
+</XomGeneratorConfig>
+```
 
 ### Generator parameters
 
-The following table lists configuration parameters that are set as the generator’s properties.
+The following table describes configuration parameters for the generator.
 
 |Parameter|Value Example|Description|
 |-|-|-|
-|Generator Name|ASP.NET Views|The name of the current configuration of the generator that will appear in the model project and the build output.|
-|Folder Name|Presentation Layer\Web Forms|Folder path to the generator inside the Model project. The folders are separated by a backslash (\\).|
-|Include In Build|True|A flag indicating whether or not running this generator should be included in building of the model project.|
-|**Output**|
-|Output Path|../MySolution.Client.Web /Views/\{Module/\}\{File\}|Relative path where to output files with generated Views. The path must contain a \{File\} placeholder to output files by view, and may contain a \{Module/\} placeholder to also group the views by module.|
-|Custom Path||Relative path where to output override classes for the generated code-behind. If not set, then the *OutputPath* will be used. The path must contain a \{File\} placeholder to output files by view.|
-|Nest Custom File|True|Whether or not to nest custom code-behind file under the auto-generated base file in the project. Applies only if both files are output to the same directory.|
-|Add To Project|../MySolution.Client.Web /MySolution.Client.Web.csproj|Relative path to the project file to add the generated files to. The project will be reloaded every time you run the generator. Leave it blank if you don't want generated files to be added to your project automatically.|
-|Menu File|../MySolution.Client.Web /Web.sitemap|Relative path to the sitemap file to add views to for the main menu.|
-|**Parameters**|
+|Xsl|UI/WebForms/asp_views.xsl|Relative path to the XSLT file used by the generator to generate the Web Forms views.|
+|GeneratorGroup|presentation|The group to which this generator belongs based on the type of the generated files.|
+|IndividualFiles|true|Specifies whether this generator can be run on individual files.|
+|IncludeInBuild|true|A flag indicating whether or not running this generator should be included in building of the model project.|
+|**view:Output**|
+|Path|../MySolution.Client.Web /Views/\{Module/\}\{File\}|Relative path where to output files with generated Views. The path must contain a \{File\} placeholder to output files by view, and may contain a \{Module/\} placeholder to also group the views by module.|
+|CustomPath||Relative path where to output override classes for the generated code-behind. If not set, then the `Path` will be used. The path must contain a \{File\} placeholder to output files by view.|
+|NestCustomFile|true|Whether or not to nest custom code-behind file under the auto-generated base file in the project. Applies only if both files are output to the same directory.|
+|TargetProject|../MySolution.Client.Web /MySolution.Client.Web.csproj|Relative path to the project file to add the generated files to. The project will be reloaded every time you run the generator. Leave it blank if you don't want generated files to be added to your project automatically.|
+|MenuFile|../MySolution.Client.Web /Web.sitemap|Relative path to the sitemap file to add views to for the main menu.|
+|**view:Parameters**|
 |Namespace|MySolution.Client.Web|Namespace for the generated pages and views.|
-|**Selector**|
+|**view:Selector**|
 |View||The name of the view from the model to generate a view for. Can be used to set up a separate generator configuration for a single view.|
 
 ### Model configuration
