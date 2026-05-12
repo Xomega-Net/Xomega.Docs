@@ -6,10 +6,6 @@ sidebar_position: 1
 
 Xomega.Net adds a new project template to Visual Studio that allows you to create and configure your solution for a specific architecture.
 
-:::danger
-This documentation applies only to the current version of Xomega.Net **for Visual Studio 2022**.
-:::
-
 ## Xomega project template
 
 :::warning
@@ -105,8 +101,8 @@ Below is the full list of parameters that you can configure for different soluti
 - **Shared Blazor Components** - components shared between Blazor Server and WebAssembly projects.
   - *Project* - the name of the project to use.
   - *Components* - Blazor component library to use, as follows.
-    - `Xomega Framework Blazor` - standard Bootstrap-styled Blazor components for Xomega Framework.
-    - `Xomega Syncfusion Blazor` - Syncfusion Blazor components adapted for Xomega Framework.
+    - `Xomega Framework` - standard Bootstrap-styled Blazor components for Xomega Framework.
+    - `Syncfusion` - Syncfusion Blazor components adapted for Xomega Framework.
 - **TypeScript SPA** - TypeScript-based web client that uses [XomegaJS](https://github.com/Xomega-Net/XomegaJS) and `knockout.js` frameworks.
   - *Project* - the name of the project to use.
 - **ASP.NET WebForms** - legacy ASP.NET web client.

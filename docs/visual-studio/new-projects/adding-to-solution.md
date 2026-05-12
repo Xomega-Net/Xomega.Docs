@@ -52,54 +52,51 @@ To make this process easier you should open another instance of Visual Studio an
 
 #### Adding WPF controls type configs
 
-Copy the `DemoSolution.Model\Framework\TypeConfigs\wpf_controls.xom` from the new template WPF solution that you created earlier to your existing solution. Then, in the existing solution, select the `DemoSolution.Model` project in *Solution Explorer*, click *Show All Files*, right-click on the `wpf_controls.xom` that you copied and select *Include In Project*.
+Copy the `DemoSolution.Model\Framework\TypeConfigs\wpf_controls.xom` from the new template WPF solution that you created earlier to your existing solution. This will add the necessary type configurations for generating WPF controls in your existing solution.
 
 #### Adding WPF Views generator
 
-To add any generators to the *Model* project, right-click on that project and select *Unload Project*. This will allow you to edit the `DemoSolution.Model.xomproj` file directly in Visual Studio.
+To add a *WPF Views* generator, copy the generator configuration file from the `.Generators\PresentationLayer\WPF\WPF Views.xgen` in your template WPF solution project to your existing project, and make sure the paths and namespaces match your existing solution, as illustrated below.
 
-To add a *WPF Views* generator, copy the generator configuration from the template WPF solution project to your existing project, as illustrated below.
+```xml title='.Generators\PresentationLayer\WPF\WPF Views.xgen'
+<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
+                    xmlns:view="http://schemas.xomega.net/v10/xgen/views">
+  ...
+  <Generator Xsl="UI/WPF/wpf_views.xsl"
+             GeneratorGroup="presentation"
+             IncludeInBuild="true"
+             IndividualFiles="true"/>
 
-```xml title='DemoSolution.Model.xomproj'
-...
-</XomGenerator>
-<!-- added-lines-start -->
-<XomGenerator Include="$(XomegaHome17)Xsl\wpf_views.xsl">
-  <Name>WPF Views</Name>
-  <Folder>Presentation Layer\WPF</Folder>
-  <CustomPath-param>
-  </CustomPath-param>
-  <CustomPath-desc>
-	Path where to output override classes for the generated Views.
-	If not set then the OutputPath will be used. The path must contain {File} placeholder to output files by view.
-  </CustomPath-desc>
-  <CustomPath-category>Output</CustomPath-category>
-  <OutputPath-param>../DemoSolution.Client.Wpf/Views/{Module/}{File}</OutputPath-param>
-  <OutputPath-desc>Path where to output files with generated WPF views. Path must contain {File} placeholder.</OutputPath-desc>
-  <OutputPath-category>Output</OutputPath-category>
-  <RegistryFile-param>../DemoSolution.Client.Wpf/Views/Views.cs</RegistryFile-param>
-  <RegistryFile-desc>A path to the file for views registration.</RegistryFile-desc>
-  <RegistryFile-category>Output</RegistryFile-category>
-  <MenuFile-param>../DemoSolution.Client.Wpf/Controls/MainMenu</MenuFile-param>
-  <MenuFile-desc>Path where to output generated menu resources without extension.</MenuFile-desc>
-  <MenuFile-category>Output</MenuFile-category>
-  <Namespace-param>DemoSolution.Client.Wpf</Namespace-param>
-  <Namespace-desc>Namespace for the generated views.</Namespace-desc>
-  <View-param></View-param>
-  <View-desc>The name of the view from the model to generate a view for.</View-desc>
-  <View-category>Selector</View-category>
-  <IncludeInBuild>true</IncludeInBuild>
-  <IndividualFiles>true</IndividualFiles>
-  <GeneratorGroup>presentation</GeneratorGroup>
-</XomGenerator>
-<!-- added-lines-end -->
-<XomGenerator Include="C:\Program Files\Xomega.Net\9.12\Xsl\enum_cache.xsl">
-...
+<!-- highlight-start -->
+  <view:Output Path="../DemoSolution.Client.Wpf/Views/{Module/}{File}"
+               RegistryFile="../DemoSolution.Client.Wpf/Views/Views.cs"
+               MenuFile="../DemoSolution.Client.Wpf/Controls/MainMenu"/>
+
+  <view:Parameters Namespace="DemoSolution.Client.Wpf"/>
+<!-- highlight-end -->
+
+</XomGeneratorConfig>
 ```
 
-Save the `DemoSolution.Model.xomproj` file, and then right-click on the `DemoSolution.Model` project in the *Solution Explorer* and select *Reload Project*. You should now be able to see the *WPF Views* generator under the *Generators > Presentation Layer > WPF* folder, as well as the `wpf_controls.xom` that you included earlier, as shown below.
+
+You should now be able to see the *WPF Views* generator under the *.Generators > Presentation Layer > WPF* folder, as well as the `wpf_controls.xom` that you included earlier, as shown below.
 
 ![WPF Views](img/wpf-views.png)
+
+#### Adding assembly config for data objects
+
+When generating WPF views, the generator needs to know the namespace and assembly where the data objects are located. Therefore, you need to update the `xfk:data-objects-config` element in the `global_config.xom` file to include the assembly name, as shown below.
+
+```xml title="global_config.xom"
+...
+  <!-- configuration for generation of UI data objects -->
+  <xfk:data-objects-config
+    namespace="DemoSolution.Client.Common.DataObjects"
+<!-- added-next-line -->
+    assembly="DemoSolution.Client.Common"
+  />
+...
+```
 
 Now you want to right-click on the `DemoSolution.Model` project and select *Build* to generate any additional artifacts for the new project.
 
