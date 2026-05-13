@@ -26,6 +26,8 @@ The *Members* pane on the right will display the fields of the currently selecte
 
 The details pane at the bottom shows a generated description of the selected element in the *Members* pane, as well as its documentation from the model. The generated description will contain navigation links to the related model elements within the *Object Browser*.
 
+You can [customize symbol browsing](../extend/editor#enhancing-symbol-browsing) in the *Object Browser* view for both existing and custom model entities.
+
 :::tip
 You can navigate directly to the corresponding XML definition of the currently selected element by double-clicking on it.
 

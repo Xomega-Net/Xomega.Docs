@@ -24,8 +24,8 @@ As a result, you can easily browse the structure of the XML model right in the e
 
 In fact, each Xomega model file is initially open being collapsed to definitions to allow you to quickly and easily get to the right part and expand the nodes you are interested in.
 
-:::info
-You can configure which elements are collapsed or expanded when you collapse to definitions in the underlying XSD schema.
+:::tip
+You can [configure which elements are collapsed or expanded](../extend/editor#configuring-collapse-to-definitions) when you collapse to definitions in the underlying XSD schema.
 :::
 
 :::note
@@ -41,5 +41,5 @@ This improves the document readability as compared to the standard XML outlining
 ![VS outlining](img/outlining-vs.png)
 
 :::info
-In fact, Xomega Editor is just doing the XML outlining the way it was done in Visual Studio 2005, which should be familiar to those, who have used Visual Studio long enough.
+In fact, Xomega Editor is just doing the XML outlining the way it was done in Visual Studio 2005, which may be familiar to the old timers, who have used Visual Studio long enough.
 :::

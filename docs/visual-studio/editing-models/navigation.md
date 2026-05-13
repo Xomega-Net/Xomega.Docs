@@ -22,21 +22,25 @@ You can then navigate back via the standard Visual Studio action *Navigate Backw
 
 ## Finding all references
 
-Finding all model references to the entity under the cursor is another standard Visual Studio action, which you can invoke using the *Find All References* context menu or the corresponding shortcut, e.g. `Shift+F12` or `Ctrl+K, R`. It displays the references in a concise and easy-to-read form in the standard *Find Symbol Results* window.
+Finding all model references to the entity under the cursor is another standard Visual Studio action, which you can invoke using the *Find All References* context menu or the corresponding shortcut, e.g. `Shift+F12`. It displays the references in a concise and easy-to-read form in the standard *Find Symbol Results* window.
 
 :::tip
 You don't necessarily need to be on the actual definition of the model entity to find all the references. You can also invoke it from any other place where it's referenced.
 :::
 
-For example, if you right-click on the `state province` type on the `state province id` field of the `address` object, and select the *Find All Reference* menu, then you'll see all the fields and keys that use that type in the *Find Symbol Results* window, including the one you just clicked on, as illustrated below.
+For example, if you right-click on the `state province` type of the `state province id` field of the `address` object, and select the *Find All References* menu, then you'll see all the fields and keys that use that type in the *Find Symbol Results* window, including the one you just clicked on, as illustrated below.
 
 ![Find references](img/references.png)
 
-This helps you better understand the structure of your model and dependencies between different model elements, as well as easily refactor your model, as you can see below.
+This helps you to better understand the structure of your model and dependencies between different model elements, as well as to easily refactor your model, as you can see below.
+
+:::tip
+You can [customize implementation of the *Find All References*](../extend/editor#implementing-find-all-references) action for both existing and custom model entities. 
+:::
 
 ## Renaming model entities
 
-Xomega Editor allows you to rename model entities and automatically update all the references using a standard Visual Studio action, which you can invoke by selecting *Rename* context menu or by using the `F2` shortcut. It will show all references that will be updated in the *Find Symbol Results* window and will pop up a *Rename* dialog, where you can supply a new name for the entity.
+Xomega Editor allows you to rename model entities and automatically update all the references using a standard Visual Studio action, which you can invoke by using the `Ctrl+R, R` shortcut. It will show all references that will be updated in the *Find Symbol Results* window and will pop up a *Rename* dialog, where you can supply a new name for the entity.
 
 This can help you build models that are easier to navigate and understand, which will result in improved productivity and fewer errors.
 
@@ -51,5 +55,5 @@ For example, most of the fields that represent some kind of a name in `Adventure
 :::warning
 If you don't explicitly specify a table name for a domain object, it will be derived from the object's fully qualified name. So, renaming an object would effectively result in renaming the underlying table, which may or may not be intended.
 
-If you also generate a DB change script after that, it may also result in some issues, where the original table will be dropped, and a new table will be added, instead of just renaming the original table.
+If you also generate a [DB change script](../../generators/data/migration) after that, it may also result in some issues, where the original table will be dropped, and a new table will be added, instead of just renaming the original table.
 :::

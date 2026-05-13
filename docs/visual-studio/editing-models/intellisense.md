@@ -48,8 +48,10 @@ For example, whenever you need to reference a Xomega type, you can press `Ctrl+S
 
 ![IntelliSense type](img/intellisense-type.png)
 
-:::note
 This should be also familiar to you, as it is similar to suggesting classes or properties when editing C# files in Visual Studio.
+
+:::tip
+You can [customize the model-based IntelliSense](../extend/editor#adding-intellisense-support) suggestions for both existing model elements and for custom elements that you may add to your model by extending the XSD schema.
 :::
 
 ### Model-based descriptions
