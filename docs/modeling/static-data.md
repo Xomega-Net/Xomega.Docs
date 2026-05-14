@@ -531,7 +531,7 @@ If, however, your generic dictionary tables store any enumerations that you don'
 
 Xomega model allows you to create a service operation that returns generic dictionary items for multiple enumerations, and for each item it would include a nested list of property values in a name/value format.
 
-To generate a cache loader for such an operation, which will allow you to load the lookup cache from the dictionary tables, you need to use the same `xfk:enum-cache` config element that you use for [standard dynamic enumerations](../modeling/services#dynamic-enumerations). However, instead of the `enum-name` attribute, you'd specify the `enum-param` attribute, which will indicate which output parameter contains the enumeration name for each item.
+To generate a cache loader for such an operation, which will allow you to load the lookup cache from the dictionary tables, you need to use the same `xfk:enum-cache` config element that you use for [standard dynamic enumerations](services#dynamic-enumerations). However, instead of the `enum-name` attribute, you'd specify the `enum-param` attribute, which will indicate which output parameter contains the enumeration name for each item.
 
 Also, to indicate which output parameter contains the list of additional properties for each item, you will need to add a nested config element `xfk:properties`, set that structure parameter in the `properties-struct` attribute, and indicate which parameters of that structure contain the name and value of the additional property using the `name-param` and `value-param` attributes respectively.
 

@@ -37,10 +37,10 @@ The following snippet shows an example of a search view definition in the Xomega
 </ui:view>
 ```
 
-To generate a [main menu item for the view](../../../visual-studio/modeling/presentation#main-menu-links), you need to add a `ui:main-link` element under the `ui:view` element.
+To generate a [main menu item for the view](../../../modeling/presentation#main-menu-links), you need to add a `ui:main-link` element under the `ui:view` element.
 
 :::tip
-If you need to [change the generated Razor markup](../../../visual-studio/modeling/presentation#custom-view-layout), you can set `custom="true"` attribute on the nested `ui:layout` element for the view after generating the view initially, and it won't be updated during subsequent runs of the generator to preserve your changes.
+If you need to [change the generated Razor markup](../../../modeling/presentation#custom-view-layout), you can set `custom="true"` attribute on the nested `ui:layout` element for the view after generating the view initially, and it won't be updated during subsequent runs of the generator to preserve your changes.
 :::
 
 ### Controls
@@ -170,7 +170,7 @@ For each list data object, you can specify custom settings for the generated gri
 
 ## Generator outputs
 
-This generator creates Razor files for the views with C# code-behind classes, and optionally a static class for the main menu structure based on the views that have [`ui:main-link`](../../../visual-studio/modeling/presentation#main-menu-links) elements.
+This generator creates Razor files for the views with C# code-behind classes, and optionally a static class for the main menu structure based on the views that have [`ui:main-link`](../../../modeling/presentation#main-menu-links) elements.
 
 For views that are decorated with a `customize="true"` attribute, it also creates a partial class for the generated view with a postfix *Customized* appended to the class name, if one does not exist yet. The customized classes will be nested under the corresponding generated view Razor file, according to the rules specified in the `.filenesting.json` file for the target client project.
 

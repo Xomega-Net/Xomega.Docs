@@ -25,7 +25,7 @@ Xomega platform consists of the following components.
 
 - [**Xomega solution wizard**](visual-studio/new-projects/new-solutions) helps you to pick and configure your system architecture and frameworks for each layer and then create the initial solution structure for your application to get started with no hassle.
 
-- [**Xomega modeling technology**](visual-studio/modeling/overview) allows you to model your application's logical types, business entities, services, UI objects, and other elements in a simple yet extensible, user-friendly XML format. You can specify the minimum information in the model, and Xomega will derive the rest from it.
+- [**Xomega modeling technology**](modeling/overview) allows you to model your application's logical types, business entities, services, UI objects, and other elements in a simple yet extensible, user-friendly XML format. You can specify the minimum information in the model, and Xomega will derive the rest from it.
 
 - [**Extensible Xomega generators**](generators/overview) allow you to transform your models into source code, database scripts, technical documentation, or other artifacts for all application layers. The generators are **rerunnable**, meaning that you can iteratively update the model and regenerate all the necessary artifacts.
 

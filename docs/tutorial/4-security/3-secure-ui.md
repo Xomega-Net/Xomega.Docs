@@ -52,7 +52,7 @@ If we want to keep our business services platform-independent, then we can't use
 
 ### Securing model views
 
-After we defined our security policy, we can set it on the appropriate top-level views in our Xomega model using the [`policy` attribute](../../visual-studio/modeling/presentation#security-policy). For example, the views in `sales_order.xom` will look as follows.
+After we defined our security policy, we can set it on the appropriate top-level views in our Xomega model using the [`policy` attribute](../../modeling/presentation#security-policy). For example, the views in `sales_order.xom` will look as follows.
 
 ```xml title="sales_order.xom"
 <ui:views>

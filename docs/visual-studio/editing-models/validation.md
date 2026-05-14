@@ -14,7 +14,7 @@ Generally, you will not be able to run any generators on a model that has valida
 
 The standard XML validations are available in Visual Studio for any XML file, even when using a standard XML editor. Xomega.Net editor performs the same validations of Xomega model files for well-formed XML, as well as against the defined XSD schemas that specify the allowed elements and attributes, the order of the elements, and allowed values, where appropriate.
 
-For example, in the main `Xomega.xsd` schema the [`types`](../modeling/types) element allows a sequence of either `type` or [`type-config`](../modeling/types#split-configurations) elements as its children, but not both. This is done to keep type configs for specific databases, frameworks or technologies in separate files that can be easily included or excluded from the model to add or remove support for specific technologies.  
+For example, in the main `Xomega.xsd` schema the [`types`](../../modeling/types) element allows a sequence of either `type` or [`type-config`](../../modeling/types#split-configurations) elements as its children, but not both. This is done to keep type configs for specific databases, frameworks or technologies in separate files that can be easily included or excluded from the model to add or remove support for specific technologies.  
 
 If you add a `type-config` element to the `types` element that already has a `type` element, or vice versa, you will get a schema validation error both in the tooltip of the underlined element and in the *Error List* window, as illustrated below.
 

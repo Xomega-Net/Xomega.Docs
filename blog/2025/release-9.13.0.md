@@ -31,7 +31,7 @@ The new release provides some automatic tools to handle this situation in a stan
 
 If you use client-side paging, as before, and run a query that returns a large data set, the generated service operation will automatically [limit the number of records](/docs/framework/services/querying#limiting-results) returned to 1000 by default.
 
-You can [configure the model to change this default limit](/docs/visual-studio/modeling/services#configuring-result-limiting) for a specific service operation, or you can add custom code to change it in the generated operation, or even remove it there by setting it to `null`.
+You can [configure the model to change this default limit](/docs/modeling/services#configuring-result-limiting) for a specific service operation, or you can add custom code to change it in the generated operation, or even remove it there by setting it to `null`.
 
 To let the users know that they are viewing a limited result set, the generated service operation will also return a warning message showing how many records were returned, **as well as the total number of records** matched, which will be displayed in the UI, as shown below.
 
@@ -49,7 +49,7 @@ Finally, the new release allows you to configure full-fledged [server-side pagin
 
 The operation will then return only the requested number of records for the current page, as well as the total number of records matched, which will be used to calculate the total number of pages.
 
-Client-side paging is still used by default, but you can [configure the model](/docs/visual-studio/modeling/services#paging-configuration) to use server-side paging for your operation, as shown below.
+Client-side paging is still used by default, but you can [configure the model](/docs/modeling/services#paging-configuration) to use server-side paging for your operation, as shown below.
 
 ```xml
 <operation name="read list" type="readlist">
@@ -113,12 +113,12 @@ This has been **significantly simplified** in the new release, such that all you
 ```
 
 :::note
-All criteria are not required by default. The only case when you need to set the [`required="true"`](/docs/visual-studio/modeling/services#filter-criteria) attribute is if the underlying field is required and uses a primitive data type. This is needed to make sure that the generated type for the criteria parameter matches the type of the field being filtered by.
+All criteria are not required by default. The only case when you need to set the [`required="true"`](/docs/modeling/services#filter-criteria) attribute is if the underlying field is required and uses a primitive data type. This is needed to make sure that the generated type for the criteria parameter matches the type of the field being filtered by.
 :::
 
 #### Configure criteria operators
 
-Even though you no longer get to specify separate operator parameters, you can still configure the operators for each field in the `ui:display/ui:fields` section of the [definition of the criteria data object](/docs/visual-studio/modeling/presentation#criteria-config).
+Even though you no longer get to specify separate operator parameters, you can still configure the operators for each field in the `ui:display/ui:fields` section of the [definition of the criteria data object](/docs/modeling/presentation#criteria-config).
 
 In that section you can configure a criteria field to have no operator, specify a different default operator, or use a custom logical type to display a custom set of operators for the field. This is done by using the `op-none`, `op-default`, and `op-type` attributes, respectively, as illustrated below.
 
@@ -170,7 +170,7 @@ You don't have to click the *Add* or *Update* buttons if you are ready to run yo
 
 By default all criteria in the new generated Blazor search screens are dynamic. However, you can still define some or all of them as static, so that they are always displayed in the criteria panel. This makes sense if your search screen has only a few criteria, or if you want to display a few most commonly used criteria statically, while allowing the users to add less common criteria dynamically.
 
-All you have to do is to [set the `static` attribute](/docs/visual-studio/modeling/presentation#criteria-config) on the parent `ui:fields` element and/or on the individual `ui:field` elements as needed, as shown below.
+All you have to do is to [set the `static` attribute](/docs/modeling/presentation#criteria-config) on the parent `ui:fields` element and/or on the individual `ui:field` elements as needed, as shown below.
 
 ```xml
 <xfk:data-object class="SalesOrderCriteria">
@@ -211,7 +211,7 @@ You can also click on the values in the Applied Criteria panel to easily open th
 
 Previously, the top-level navigation menu was generated for all views without the `child` attribute. To customize the main navigation menu, you had to add code in the `MainMenuCustomized.cs` file for the `MainMenu` class.
 
-To give you more control over the structure of the generated main menu, the new release allows you to explicitly configure the top-level views to be included in the main menu by adding the [`ui:main-link`](/docs/visual-studio/modeling/presentation#main-menu-links) element to the `ui:view` in the model.
+To give you more control over the structure of the generated main menu, the new release allows you to explicitly configure the top-level views to be included in the main menu by adding the [`ui:main-link`](/docs/modeling/presentation#main-menu-links) element to the `ui:view` in the model.
 
 By default it will be placed in a group menu derived from the view's module, and the menu text will be derived from the name of the link, but you can customize those values in the nested `ui:display` element, as shown below.
 
@@ -232,7 +232,7 @@ The generator of the [default CRUD operations and views](/docs/generators/model/
 
 ### Configure auto-search
 
-With the new `main-link` element, you can easily configure the main menu links to [auto-run the search](/docs/visual-studio/modeling/presentation#opening-views-with-auto-search) when opening the search view. This is done by adding the `ui:params` element with the `_action` parameter set to `search`, as shown below.
+With the new `main-link` element, you can easily configure the main menu links to [auto-run the search](/docs/modeling/presentation#opening-views-with-auto-search) when opening the search view. This is done by adding the `ui:params` element with the `_action` parameter set to `search`, as shown below.
 
 ```xml
 <ui:view name="SalesOrderListView" title="Sales Order List">

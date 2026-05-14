@@ -60,7 +60,7 @@ Unlike the default `ui:fields` element without a `group` attribute, which allows
 
 Once you group your fields this way, you can specify a particular field group for a given panel or tab when defining the view layout. If you add a panel without specifying a field group, it will include all fields not part of any group, unless they are explicitly listed in the default `ui:fields` element.
 
-For more information, see the [UI Field Groups documentation](/docs/visual-studio/modeling/presentation#ui-field-groups).
+For more information, see the [UI Field Groups documentation](/docs/modeling/presentation#ui-field-groups).
 
 ### Panel and tabs layout
 
@@ -121,7 +121,7 @@ If you generate the Blazor `EmployeeView` and run the application, you will see 
 
 The main panel with the employee name fields is displayed first, above the tabs, while the "Contact" and "Organization" tabs contain the remaining fields organized into their respective groups.
 
-The "email phone" and "position" panels with the `field-cols="3"` attribute have their fields laid out in three columns, while the "department" panel uses the default four columns. You can also display panels side by side instead of stacking them vertically by using the `panel-cols` attribute. To learn more about panel and tabs layouts, refer to the [Panel and Tab Layout documentation](/docs/visual-studio/modeling/presentation#panel-and-tab-layout).
+The "email phone" and "position" panels with the `field-cols="3"` attribute have their fields laid out in three columns, while the "department" panel uses the default four columns. You can also display panels side by side instead of stacking them vertically by using the `panel-cols` attribute. To learn more about panel and tabs layouts, refer to the [Panel and Tab Layout documentation](/docs/modeling/presentation#panel-and-tab-layout).
 
 ### Links in field groups
 
@@ -149,7 +149,7 @@ However, if employee address properties were directly on the `EmployeeObject` ra
 ```
 
 
-For more details on object links, refer to the [Object Links documentation](/docs/visual-studio/modeling/presentation#object-links-to-views).
+For more details on object links, refer to the [Object Links documentation](/docs/modeling/presentation#object-links-to-views).
 
 ## Security enhancements
 
@@ -209,7 +209,7 @@ public class EmployeeViewModelCustomized : EmployeeViewModel
 ```
 
 
-For more information, see the documentation on conditional panel visibility [here](/docs/visual-studio/modeling/presentation#conditional-panel-visibility).
+For more information, see the documentation on conditional panel visibility [here](/docs/modeling/presentation#conditional-panel-visibility).
 
 ### Auth policy on menu
 

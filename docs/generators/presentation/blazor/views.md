@@ -37,10 +37,10 @@ The following snippet shows an example of a search view definition in the Xomega
 </ui:view>
 ```
 
-To generate a [main menu item for the view](../../../visual-studio/modeling/presentation#main-menu-links), you need to add a `ui:main-link` element under the `ui:view` element.
+To generate a [main menu item for the view](../../../modeling/presentation#main-menu-links), you need to add a `ui:main-link` element under the `ui:view` element.
 
 :::tip
-If you need to [change the generated Razor markup](../../../visual-studio/modeling/presentation#custom-view-layout), you can set `custom="true"` attribute on the nested `ui:layout` element for the view after generating the view initially, and it won't be updated during subsequent runs of the generator to preserve your changes.
+If you need to [change the generated Razor markup](../../../modeling/presentation#custom-view-layout), you can set `custom="true"` attribute on the nested `ui:layout` element for the view after generating the view initially, and it won't be updated during subsequent runs of the generator to preserve your changes.
 :::
 
 ### Controls
@@ -70,7 +70,7 @@ The snippet below shows how to associate a Blazor component with a logical type 
 
 ### Layout
 
-To [customize the layout](../../../visual-studio/modeling/presentation#ui-field-config) of the data object's fields and child objects on the view, you can provide additional configurations in the model under the data object's `ui:display/ui:fields` element.
+To [customize the layout](../../../modeling/presentation#ui-field-config) of the data object's fields and child objects on the view, you can provide additional configurations in the model under the data object's `ui:display/ui:fields` element.
 
 You can set a custom title for the group of the object's immediate fields here, and also indicate how many columns to use for the layout of the fields within the panel using `field-cols` attribute. Similarly, you can also set the `panel-cols` attribute to indicate how many columns the parent panel uses to lay out the panel with the object's fields along with other panels for the child objects, which you can also configure separately in the `ui:child-panels` element.
 
@@ -165,7 +165,7 @@ For each list data object, you can specify custom settings for the generated gri
 
 ## Generator outputs
 
-This generator creates Razor files for the views with C# code-behind classes, and optionally a static class for the main menu structure based on the views that have [`ui:main-link`](../../../visual-studio/modeling/presentation#main-menu-links) elements.
+This generator creates Razor files for the views with C# code-behind classes, and optionally a static class for the main menu structure based on the views that have [`ui:main-link`](../../../modeling/presentation#main-menu-links) elements.
 
 For views that are decorated with a `customize="true"` attribute, it also creates a partial class for the generated view with a postfix *Customized* appended to the class name, if one does not exist yet. The customized classes will be nested under the corresponding generated view Razor file, according to the rules specified in the `.filenesting.json` file for the target client project.
 

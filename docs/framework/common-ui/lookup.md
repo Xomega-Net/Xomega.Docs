@@ -164,7 +164,7 @@ To add the localized text for a header representing a static item, you need to a
 </Tabs>
 
 :::tip
-If you define your enumerations in the [Xomega model for static data](../../visual-studio/modeling/static-data), then you can have the default resources generated from it by the [Label Resources generator](../../generators/presentation/common/resources#static-enumerations), which allows you to just hand those off to the translators for localization.
+If you define your enumerations in the [Xomega model for static data](../../modeling/static-data), then you can have the default resources generated from it by the [Label Resources generator](../../generators/presentation/common/resources#static-enumerations), which allows you to just hand those off to the translators for localization.
 :::
 
 When the `CurrentUICulture` in your application is set to the local culture, such as `de-DE`, the resource manager constructed from those resources will provide a localized text, which will be used instead of the default `Text` value, as illustrated below.
@@ -209,7 +209,7 @@ s = hdr.ToString(Header.FieldText, null); // "Neu" -> from the parent culture
 ```
 
 :::note
-If you define your enumerations in the [Xomega model for static data](../../visual-studio/modeling/static-data), then you can also provide localization texts for each item in the [additional properties](../../visual-studio/modeling/static-data#translations-in-item-properties) there instead of the application resources.
+If you define your enumerations in the [Xomega model for static data](../../modeling/static-data), then you can also provide localization texts for each item in the [additional properties](../../modeling/static-data#translations-in-item-properties) there instead of the application resources.
 :::
 
 ## Lookup table
@@ -653,7 +653,7 @@ protected override async Task LoadCacheAsync(string tableType, CacheUpdater upda
 
 If you have lookup data that is based on static enumerations and cannot be changed in runtime, then you can also put it into an XML file, e.g., `enumerations.resx`, and include it as an embedded resource with your code. Xomega Framework provides a class `XmlLookupCacheLoader` that will be able to load this data from your embedded resource file and put it into the global lookup cache.
 
-The format of the XML data is based on the [Xomega model for static data](../../visual-studio/modeling/static-data), where each lookup table is represented by an `enum` element, which has a list of `item` elements for the actual items, and each item may have some `prop` child elements for its named attributes, as illustrated in the following example.
+The format of the XML data is based on the [Xomega model for static data](../../modeling/static-data), where each lookup table is represented by an `enum` element, which has a list of `item` elements for the actual items, and each item may have some `prop` child elements for its named attributes, as illustrated in the following example.
 
 ```xml title="enumerations.resx"
 <enums xmlns="http://www.xomega.net/omodel">

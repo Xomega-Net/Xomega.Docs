@@ -672,7 +672,7 @@ To configure security access for a specific view, you can define an authorizatio
 <ui:view name="SalesOrderListView" title="Sales Order List" policy="Sales">[...]
 ```
 
-The [Blazor Views generator](../../generators/presentation/blazor/views) will use this policy to secure both the navigation [menu items](../../framework/blazor/components#menu-security) and the corresponding page using an `Authorize` attribute. You can also specify a different [policy for individual main menu links](../../visual-studio/modeling/presentation#security-policy-for-main-menu-links) within the view.
+The [Blazor Views generator](../../generators/presentation/blazor/views) will use this policy to secure both the navigation [menu items](../../framework/blazor/components#menu-security) and the corresponding page using an `Authorize` attribute. You can also specify a different [policy for individual main menu links](../../modeling/presentation#security-policy-for-main-menu-links) within the view.
 
 #### Conditional security policy
 

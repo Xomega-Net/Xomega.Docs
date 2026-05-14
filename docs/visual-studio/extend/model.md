@@ -24,7 +24,7 @@ This will create a new folder `.ModelStructure\Schemas` in your model project an
 
 ![Custom model schemas](./img/custom-model-schemas.png)
 
-Each `.xsd` file defines a schema that targets a specific namespace, which is used to describe a specific aspect of the model. For example, `Xomega.xsd` defines the core model structure with the default namespace, while `Xomega_Services.xsd` defines service layer configurations with a namespace prefix `svc:`. You can learn more about the standard set of schemas in the [Model Structure](../modeling/overview#schemas-and-namespaces) documentation.
+Each `.xsd` file defines a schema that targets a specific namespace, which is used to describe a specific aspect of the model. For example, `Xomega.xsd` defines the core model structure with the default namespace, while `Xomega_Services.xsd` defines service layer configurations with a namespace prefix `svc:`. You can learn more about the standard set of schemas in the [Model Structure](../../modeling/overview#schemas-and-namespaces) documentation.
 
 :::note
 The *Customize Model Schemas* menu will only copy the schemas that are currently used in your model. For example, the above screenshot does not include the `Xomega_WCF.xsd` for configuring legacy WCF services that are not used in the current solution. If you later add new elements from other Xomega schemas, you can select the *Customize Model Schemas* menu again to copy those new schemas to your custom directory.

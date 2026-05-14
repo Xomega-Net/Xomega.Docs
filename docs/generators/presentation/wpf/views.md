@@ -35,10 +35,10 @@ The following snippet shows an example of a search view definition in the Xomega
 </ui:view>
 ```
 
-To generate a [main menu item for the view](../../../visual-studio/modeling/presentation#main-menu-links), you need to add a `ui:main-link` element under the `ui:view` element.
+To generate a [main menu item for the view](../../../modeling/presentation#main-menu-links), you need to add a `ui:main-link` element under the `ui:view` element.
 
 :::tip
-If you need to [change the generated XAML](../../../visual-studio/modeling/presentation#custom-view-layout), you can set a `custom="true"` attribute on the nested `ui:layout` element for the view after generating the view initially, and it won't be updated during subsequent runs of the generator to preserve your changes.
+If you need to [change the generated XAML](../../../modeling/presentation#custom-view-layout), you can set a `custom="true"` attribute on the nested `ui:layout` element for the view after generating the view initially, and it won't be updated during subsequent runs of the generator to preserve your changes.
 :::
 
 ### Controls
@@ -111,7 +111,7 @@ Most of this setup for standard details and search views in the Xomega model can
 
 This generator creates XAML files for the views with C# code-behind classes, as well as a static class for registering these views for Dependency Injection (DI) with the service container.
 
-If configured, it also generates main menu XAML resources for the views that have [`ui:main-link`](../../../visual-studio/modeling/presentation#main-menu-links) elements, and a C# class with static handlers and other configurations for the menu resources.
+If configured, it also generates main menu XAML resources for the views that have [`ui:main-link`](../../../modeling/presentation#main-menu-links) elements, and a C# class with static handlers and other configurations for the menu resources.
 
 For views that are decorated with a `customize="true"` attribute, it also creates a subclass of the generated code-behind class with a postfix *Customized* appended to the class name, if one does not exist yet, and will use this subclass in the DI registration. The customized classes will be nested under the corresponding generated view XAML file, according to the rules specified in the `.filenesting.json` file for the target client project.
 

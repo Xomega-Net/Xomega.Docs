@@ -57,7 +57,7 @@ After you add the CRUD operations to an object, you can update their input and o
 
 ### Read List Operation
 
-If you set the `Generate` or `GenerateForSubobjects` parameters of the generator to `true` on the `mod:Operations/mod:ReadList` config, the generator will add [`read list` operations](../../visual-studio/modeling/services#read-list-with-criteria) to the selected objects and/or their subobjects.
+If you set the `Generate` or `GenerateForSubobjects` parameters of the generator to `true` on the `mod:Operations/mod:ReadList` config, the generator will add [`read list` operations](../../modeling/services#read-list-with-criteria) to the selected objects and/or their subobjects.
 
 The output of the operation will have a `list="true"` attribute and will contain all the object's fields. The input parameters for a `read list` operation on a subobject will contain just the parent object's key fields.
 
@@ -158,7 +158,7 @@ The following snippet illustrates such a view setup.
 </ui:views>
 ```
 
-For the [primary object (aka aggregate root)](../../visual-studio/modeling/domain#sub-objects-and-aggregates), the generator will also add a [`ui:main-link`](../../visual-studio/modeling/presentation#main-menu-links) main menu for the search view to browse objects, and a main menu for the details view to create new objects if you set the `ViewMenu` parameter. The `AutoRun` parameter on the `mod:Views/mod:SearchView` config can be set to `true` to auto-run the search view from the main menu.
+For the [primary object (aka aggregate root)](../../modeling/domain#sub-objects-and-aggregates), the generator will also add a [`ui:main-link`](../../modeling/presentation#main-menu-links) main menu for the search view to browse objects, and a main menu for the details view to create new objects if you set the `ViewMenu` parameter. The `AutoRun` parameter on the `mod:Views/mod:SearchView` config can be set to `true` to auto-run the search view from the main menu.
 
 ### Dynamic Enumeration
 

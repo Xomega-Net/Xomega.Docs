@@ -169,7 +169,7 @@ These parameters include whether the service operations are `async`, whether the
 You should make the service operations async and support cancellation tokens where possible unless you need to support legacy frameworks such as WCF or WebForms.
 :::
 
-The generated service interface and structures will be decorated with WCF attributes for service and data contracts only if WCF configuration is defined in the `wcf:config` element of the global model configuration under the top-level `config` element, as described [here](../../visual-studio/modeling/config#wcf-config).
+The generated service interface and structures will be decorated with WCF attributes for service and data contracts only if WCF configuration is defined in the `wcf:config` element of the global model configuration under the top-level `config` element, as described [here](../../modeling/config#wcf-config).
 
 ## How to use the generator
 
@@ -193,7 +193,7 @@ You should never edit generated service and data contracts directly. This allows
 
 #### WCF Attributes
 
-If you need to provide additional custom WCF attributes beyond the basic `ServiceContract` and `OperationContract` that will be generated if you have a `wcf:config` element in the model configuration, then you can add a `wcf:operation` element in the model to the `config` element of individual operations, or a `wcf:service` element to the `config` element of the object, as described [here](../../visual-studio/modeling/services#wcf-configuration).
+If you need to provide additional custom WCF attributes beyond the basic `ServiceContract` and `OperationContract` that will be generated if you have a `wcf:config` element in the model configuration, then you can add a `wcf:operation` element in the model to the `config` element of individual operations, or a `wcf:service` element to the `config` element of the object, as described [here](../../modeling/services#wcf-configuration).
 
 ### Cleaning the generator’s output
 

@@ -33,7 +33,7 @@ The following snippet shows an example of a view model definition in the Xomega 
 
 ### Links to views
 
-[Named links](../../../visual-studio/modeling/presentation#object-links-to-views) between views are defined on the data object of the view model, or on any of its child or descendant sub-objects.
+[Named links](../../../modeling/presentation#object-links-to-views) between views are defined on the data object of the view model, or on any of its child or descendant sub-objects.
 
 For each link, you can specify the target view, whether or not it should be opened as a child view, the field on which to display the link, as well as the input and output parameters for the view.
 
