@@ -1,4 +1,8 @@
 {
-    "label": "Xomega Modeling",
-    "position": 5
+    "label": "Xomega Models",
+    "position": 3,
+    "link": {
+        "type": "doc",
+        "id": "overview"
+    }
 }

@@ -64,7 +64,7 @@ The structure of the `module` element with descriptions is illustrated in the fo
   <doc>[...] <!-- allows you to provide some documentation for the module.
                   This would be typically in a dedicated file with no other elements. -->
 
-  <types>[...] <!-- definitions of logical types -->
+  <types>[...] <!-- definitions of logical types or type configs -->
   
   <fieldsets>[...] <!-- definitions of reusable field-sets -->  
 
@@ -74,12 +74,6 @@ The structure of the `module` element with descriptions is illustrated in the fo
   
   <objects>[...] <!-- definitions of domain objects and their operations -->
   
-<!--
-   The elements above should follow the order they are listed in, when present.
-   You cannot specify more than one element, but you can omit any element.
-   The elements below can be listed in any order at the end, if present.
--->
-
   <xfk:data-objects>[...] <!-- definitions of Xomega Framework data objects,
                                which are used by the view models -->
   
@@ -89,6 +83,10 @@ The structure of the `module` element with descriptions is illustrated in the fo
 ```
 
 You can read more details on the elements in each grouping in the following sections.
+
+:::tip
+You can also [define your own module entities](../visual-studio/extend/model#adding-new-entity-types) to extend the standard model structure, and use them in your custom generators.
+:::
 
 ## Element documentation
 
@@ -154,8 +152,8 @@ Similarly, an `address` object may be mapped to a specific database table using 
 </object>
 ```
 
-:::note
-The `config` nodes also serve as extension points where you can supply your own configuration for your custom generators.
+:::tip
+The `config` nodes also serve as extension points where you can [supply your own configuration](../visual-studio/extend/model#adding-element-extensions) for your [custom generators](../visual-studio/extend/generators).
 :::
 
 ## Global configuration

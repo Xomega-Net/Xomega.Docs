@@ -323,11 +323,8 @@ Finally, you need to make your text template file nested under your resource fil
   </ItemGroup>
 ```
 
-Now, whenever you add or update your message resources in the `Resources.resx`, you can just right-click on the nested `Messages.tt` file in Visual Studio, and select the *Run Custom Tool* menu to regenerate the message constants.
+Now, whenever you add or update your message resources in the `Resources.resx` file that is part of [Xomega solution](../../visual-studio/new-projects/solution-structure) with a [Xomega Model project](../../visual-studio/model-project/project-structure), the corresponding message constants will be automatically generated in the `Messages.cs` file.
 
-:::warning
-For Visual Studio 2022 you need to edit the downloaded `Message.t4` file and remove the following line.
-```
-<#@ assembly name="EnvDTE" #>
-```
+:::note
+If you use Xomega Framework without a Xomega Model project, or if you need to regenerate the message constants at any time, you can just right-click on the nested `Messages.tt` file in Visual Studio, and select the *Run Custom Tool* menu to regenerate the message constants.
 :::
