@@ -302,7 +302,7 @@ However, if you define a logical type that you want to associate with such an en
 ```
 
 :::note
-Alternatively, you can create a custom Xomega Framework [EnumProperty](../../framework/common-ui/properties/enum) associated with your enumeration as follows.
+Alternatively, you can create a custom Xomega Framework [EnumProperty](../framework/common-ui/properties/enum) associated with your enumeration as follows.
 
 ```cs
 public class ScheduleTypeProperty : EnumIntProperty
@@ -438,7 +438,7 @@ If a field in your object stores an array of values, then you can define a speci
 </type>
 ```
 
-You should also configure your `xfk:property` with the `multi-value="true"` attribute, as illustrated above. This will automatically configure the generated properties as [multi-valued](../../framework/common-ui/properties/base#multi-valued-properties).
+You should also configure your `xfk:property` with the `multi-value="true"` attribute, as illustrated above. This will automatically configure the generated properties as [multi-valued](../framework/common-ui/properties/base#multi-valued-properties).
 
 :::warning
 When using list types, **don't to set the `list="true"`** attribute on the corresponding [parameters](services#multi-value-parameters) of your operations. Otherwise, you'll get a list of lists for those parameters.

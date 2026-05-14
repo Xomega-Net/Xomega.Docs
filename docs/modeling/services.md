@@ -479,7 +479,7 @@ If you need to customize the code generated for your Web API controller method t
 ```
 
 This will allow you to modify the generated method and set custom headers or other HTTP-specific parameters for your REST endpoint.
-You can also check the generator docs for additional details on [customizing *Web API Controllers*](../../generators/services/web-api#customizing-the-output).
+You can also check the generator docs for additional details on [customizing *Web API Controllers*](../generators/services/web-api#customizing-the-output).
 
 
 #### REST client customization
@@ -503,11 +503,11 @@ If you need to create and use a custom REST client class, then you can add `rest
 </module>
 ```
 
-Check the generator docs for further details on [customizing *REST Service Clients*](../../generators/presentation/common/rest-clients#customizing-the-output).
+Check the generator docs for further details on [customizing *REST Service Clients*](../generators/presentation/common/rest-clients#customizing-the-output).
 
 ### WCF configuration
 
-If you need to expose your services via the legacy WCF framework, then you need to add a [global WCF configuration](config/#wcf-config), and the [generator of the service interfaces](../../generators/services/contracts) will add the standard WCF `ServiceContract`, `OperationContract`, and `DataContract` attributes to the generated classes.
+If you need to expose your services via the legacy WCF framework, then you need to add a [global WCF configuration](config/#wcf-config), and the [generator of the service interfaces](../generators/services/contracts) will add the standard WCF `ServiceContract`, `OperationContract`, and `DataContract` attributes to the generated classes.
 
 If you need to further customize the WCF attributes that are generated on a service method, then you can add them to the `config` elements of that operation under the `wcf:operation` element.
 
@@ -711,7 +711,7 @@ In the same [criteria object's config](presentation#criteria-config), you can al
 
 #### Paging configuration
 
-If your `read list` operation has [filter criteria](#filter-criteria), then it will have support for [server-side paging and sorting](../../framework/services/querying#sorting-limiting-and-paging) automatically enabled in the services, since the generated criteria structure will be a subclass of the base `SearchCriteria` class that supports it. However, the [paging mode](../../framework/common-ui/data-lists#paging-mode) in your generated data list object will be set to `Paging.Client` by default, unless you override it in a custom subclass.
+If your `read list` operation has [filter criteria](#filter-criteria), then it will have support for [server-side paging and sorting](../framework/services/querying#sorting-limiting-and-paging) automatically enabled in the services, since the generated criteria structure will be a subclass of the base `SearchCriteria` class that supports it. However, the [paging mode](../framework/common-ui/data-lists#paging-mode) in your generated data list object will be set to `Paging.Client` by default, unless you override it in a custom subclass.
 
 To enable server-side paging for your `read list` operation, regardless of whether it has criteria or not, you can add the `xfk:paging` element under the operation's `config` element, and set the `mode="server"` attribute, as shown below.
 
@@ -729,7 +729,7 @@ You can also configure additional paging options, such as `page-size` to be used
 
 #### Configuring result limiting
 
-If you don't use server-side paging, the generated service operation will still [limit the number of rows returned](../../framework/services/querying#limiting-results) to 1000 by default, in order to avoid performance issues caused by large result sets. You can override this limit either using custom code in the generated service class or by setting the `max-rows` attribute on the `xfk:paging` element, as shown below.
+If you don't use server-side paging, the generated service operation will still [limit the number of rows returned](../framework/services/querying#limiting-results) to 1000 by default, in order to avoid performance issues caused by large result sets. You can override this limit either using custom code in the generated service class or by setting the `max-rows` attribute on the `xfk:paging` element, as shown below.
 
 ```xml
 <operation name="read list" type="readlist">
@@ -786,7 +786,7 @@ In the following example, the `read enum` operation on the `sales person` object
 Once you configure an operation as a dynamic enumeration, you can [associate it with a logical type](types#dynamic-enumeration). The fields of that type will support selection, lookup, and validation from this enumeration.
 
 :::tip
-You can easily add such an operation to any object using a specially configured [Model CRUD generator](../../generators/model/crud#dynamic-enumeration).
+You can easily add such an operation to any object using a specially configured [Model CRUD generator](../generators/model/crud#dynamic-enumeration).
 :::
 
 ### Contextual enumerations

@@ -41,7 +41,7 @@ Xomega modules are **not hierarchical**, and you cannot nest them within each ot
 All modules do is provide a simple way for grouping related model elements.
 :::
 
-Modules can be used to output generated artifacts under separate folders for each module, which helps you better manage the generated code. In certain cases, modules can also be adapted to represent **microservices** so that the generated artifacts for each module would go into their own individual microservice. Here's where you can learn more about [using modules in output paths](../model-project/configuring-generators#output-paths).
+Modules can be used to output generated artifacts under separate folders for each module, which helps you better manage the generated code. In certain cases, modules can also be adapted to represent **microservices** so that the generated artifacts for each module would go into their own individual microservice. Here's where you can learn more about [using modules in output paths](../visual-studio/model-project/configuring-generators#output-paths).
 
 :::tip
 The best practice is to place model files for the same module into the same folder to keep your model project well organized.
@@ -163,5 +163,5 @@ Xomega model project allows a single top-level `config` node, where you can spec
 The global model configuration is used to provide a configuration that needs to be shared between multiple generators, as well as a complex configuration that cannot be easily specified by a generator parameter.
 
 :::tip
-To see how it is used by individual generators, you can check the [documentation on each specific generator](../../generators/overview).
+To see how it is used by individual generators, you can check the [documentation on each specific generator](../generators/overview).
 :::

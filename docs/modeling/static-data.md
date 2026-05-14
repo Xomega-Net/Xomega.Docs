@@ -305,7 +305,7 @@ For example, if you have a `SalesReason` table that contains static sales reason
 </object>
 ```
 
-Note that we import the `reason type` values as an additional property named `type`. Once you configure the object like that, you can run the [Enumerations from Database generator](../../generators/model/enums), and it will add a separate file under the configured *Output Path*, which will have the imported enumerations with the same names as the source object, as illustrated below.
+Note that we import the `reason type` values as an additional property named `type`. Once you configure the object like that, you can run the [Enumerations from Database generator](../generators/model/enums), and it will add a separate file under the configured *Output Path*, which will have the imported enumerations with the same names as the source object, as illustrated below.
 
 ```xml
 <!-- highlight-next-line -->
@@ -385,7 +385,7 @@ For example, the `sales reason` object has a `modified date` field, which is not
 </object>
 ```
 
-If you run the [Enumeration Reload SQL generator](../../generators/enums/enum-sql), then it will create a SQL script to reload static enumerations, as shown below.
+If you run the [Enumeration Reload SQL generator](../generators/enums/enum-sql), then it will create a SQL script to reload static enumerations, as shown below.
 
 ```sql title="reload_enumerations.sql"
 ...
@@ -523,7 +523,7 @@ Just like with the `dictionary` object, you can customize the `property` subobje
 
 ### Dictionary service
 
-If you define and maintain your static enumerations in your model, then you can provide access to the enumeration items and their properties from your application by generating [Enumeration Constants](../../generators/enums/enum-const) and an embedded resource with [Enumeration Data XML](../../generators/enums/enum-xml), which you then load into a Xomega Framework lookup cache using a built-in XML cache loader.
+If you define and maintain your static enumerations in your model, then you can provide access to the enumeration items and their properties from your application by generating [Enumeration Constants](../generators/enums/enum-const) and an embedded resource with [Enumeration Data XML](../generators/enums/enum-xml), which you then load into a Xomega Framework lookup cache using a built-in XML cache loader.
 
 For such enumerations, the only reason to store their items and properties in generic dictionary tables would be to provide access to them from any database layer logic, such as stored procedures or triggers.
 
@@ -535,7 +535,7 @@ To generate a cache loader for such an operation, which will allow you to load t
 
 Also, to indicate which output parameter contains the list of additional properties for each item, you will need to add a nested config element `xfk:properties`, set that structure parameter in the `properties-struct` attribute, and indicate which parameters of that structure contain the name and value of the additional property using the `name-param` and `value-param` attributes respectively.
 
-The following example illustrates this `read` operation on the `dictionary` object, which returns items for multiple enumerations and their additional properties as a child name/value list, and configures it for the [generation of a Lookup Cache Loader](../../generators/enums/cache-loaders).
+The following example illustrates this `read` operation on the `dictionary` object, which returns items for multiple enumerations and their additional properties as a child name/value list, and configures it for the [generation of a Lookup Cache Loader](../generators/enums/cache-loaders).
 
 ```xml
 <!-- highlight-next-line -->
@@ -616,7 +616,7 @@ When you have the items of your enumerations defined statically in the model, yo
 
 #### Translations in resources
 
-When you provide localized text in the standard resource files, you don't have to change anything in the Xomega model. Instead, for each enumeration item, you need to specify a resource entry with a key `Enum_<EnumName>.<ItemValue>` and the localized text as the value. Xomega Framework will use this key automatically to look up the localized text, as described [here](../../framework/common-ui/lookup#localizing-static-data).
+When you provide localized text in the standard resource files, you don't have to change anything in the Xomega model. Instead, for each enumeration item, you need to specify a resource entry with a key `Enum_<EnumName>.<ItemValue>` and the localized text as the value. Xomega Framework will use this key automatically to look up the localized text, as described [here](../framework/common-ui/lookup#localizing-static-data).
 
 The following examples illustrate a sample `error severity` enumeration, the corresponding default resource file, as well as ones for the German and Bulgarian languages.
 
@@ -662,12 +662,12 @@ The following examples illustrate a sample `error severity` enumeration, the cor
 </Tabs>
 
 :::tip
-The default resource file can be generated automatically from your enumerations using the [Labels Resources generator](../../generators/presentation/common/resources#static-enumerations), which you can then hand off for translation into additional languages.
+The default resource file can be generated automatically from your enumerations using the [Labels Resources generator](../generators/presentation/common/resources#static-enumerations), which you can then hand off for translation into additional languages.
 :::
 
 #### Translations in item properties
 
-Instead of supplying localized resource files, you can also specify localization text for each item in additional properties that are named `lang-<Culture Name>` for each supported language/culture. You can use either just a language ISO code there, such as `lang-en` for English, or country-specific overrides, e.g., `lang-en-US`, and Xomega Framework will automatically handle such [language properties](../../framework/common-ui/lookup#localizing-dynamic-data).
+Instead of supplying localized resource files, you can also specify localization text for each item in additional properties that are named `lang-<Culture Name>` for each supported language/culture. You can use either just a language ISO code there, such as `lang-en` for English, or country-specific overrides, e.g., `lang-en-US`, and Xomega Framework will automatically handle such [language properties](../framework/common-ui/lookup#localizing-dynamic-data).
 
 The following example demonstrates the same `error severity` enumeration with German and Bulgarian localization specified in the additional properties.
 

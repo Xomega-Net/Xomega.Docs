@@ -44,7 +44,7 @@ Xomega generator configurations are grouped under a special *.Generators* folder
 
 You are free to change the default folder structure for the generators to the one that makes more sense for your application, or delete irrelevant generators from the model project if you don't need them.
 
-You can also [add new generators](../new-projects/adding-to-solution#adding-wpf-views-generator) or [clone and update existing configurations](configuring-generators#creating-multiple-configurations).
+You can also [add new generators](../new-projects/adding-to-solution#adding-wpf-views-generator) or [clone and update existing configurations](configuring-generators#multiple-configurations).
 
 ### Customizing Generators node
 

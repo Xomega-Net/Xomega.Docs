@@ -8,7 +8,7 @@ Generators in Xomega model project are defined by specifying `.xgen` XML configu
 
 However, some configurations need to be shared between multiple generators, allowing them to generate consistent parts of the application that would work together, without you having to duplicate the same configuration in multiple generator configuration files. Following are the two common ways to specify such shared configuration.
 
-- [Global model configuration](../../modeling/config#global-configuration) in the `global_config.xom` file.
+- [Global model configuration](../../modeling/config) in the `global_config.xom` file.
 - Model project properties, such as database properties, which are passed to the generators as parameters.
 
 ## Generator configuration

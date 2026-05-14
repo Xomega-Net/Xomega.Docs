@@ -107,7 +107,7 @@ The specific class of each data property will be determined by the `xfk:property
 As mentioned before, you can add properties to a data object from multiple various structures that are defined in your service model. Parameters with the same name in different structures would correspond to the same property, which means that they should map to the same property class and must have consistent `list` attributes that indicate if this is a multi-value property.
 
 :::warning
-**You won't get model validation errors** if parameters with the same name in different structures are added to the same object but map to different property classes or have inconsistent `list` attributes. Instead, you will only get the errors when you run the [Xomega Data Objects generator](../../generators/presentation/common/data-objects).
+**You won't get model validation errors** if parameters with the same name in different structures are added to the same object but map to different property classes or have inconsistent `list` attributes. Instead, you will only get the errors when you run the [Xomega Data Objects generator](../generators/presentation/common/data-objects).
 :::
 
 ### Data object operations
@@ -420,8 +420,8 @@ The `ui:field` element allows you to specify the following configuration attribu
 
 #### Criteria config
 
-For [criteria objects](../../framework/common-ui/data-lists#criteria-object), you can also specify the following additional attributes in the `ui:field` element to customize the criteria fields.
-- `static` - specifies whether the field criteria are [statically displayed](../../framework/common-ui/data-lists#editing-criteria-statically) in the criteria panel, or can be added and [edited dynamically](../../framework/common-ui/data-lists#editing-criteria-dynamically). You can also set the `static` attribute on the parent `ui:fields` element to apply it to all fields in the criteria panel, and then override it for individual fields as needed.
+For [criteria objects](../framework/common-ui/data-lists#criteria-object), you can also specify the following additional attributes in the `ui:field` element to customize the criteria fields.
+- `static` - specifies whether the field criteria are [statically displayed](../framework/common-ui/data-lists#editing-criteria-statically) in the criteria panel, or can be added and [edited dynamically](../framework/common-ui/data-lists#editing-criteria-dynamically). You can also set the `static` attribute on the parent `ui:fields` element to apply it to all fields in the criteria panel, and then override it for individual fields as needed.
 - `op-none` - set to indicate that the field should have no operator selection. An appropriate default operator for the field will be used, e.g. `Equals` for scalar fields and `Is One Of` for multi-value fields. You can also set the `op-none` attribute on the parent `ui:fields` element to apply it to all fields in the criteria panel, and then override it for individual fields as needed.
 - `op-default` - a custom default operator for the field instead of the `Equals` and `Is One Of` operators for scalar and multi-value fields, respectively. If you add dynamic field criteria with an operator, the operator will be pre-populated with the default operator. If the field criteria has no operator, then the default operator will be used when passing that criteria to the service operation.
 - `op-type` - custom logical type to use for the operator. By default, the `operator` type is used for criteria operators, but you can create a new `enum` with your own set of operators and define a logical type for it, so that you can override it for individual fields.
@@ -629,7 +629,7 @@ The "Contact" tab also has a `visible-flag` attribute, which generates a flag th
 
 #### Conditional panel visibility
 
-Typically, you control the visibility of UI controls bound to data object properties by setting the [`Visible` flag](../../framework/common-ui/properties/base#property-visibility) of the underlying data property either directly or using an expression for [computed visibility](../../framework/common-ui/properties/base#computed-visibility).
+Typically, you control the visibility of UI controls bound to data object properties by setting the [`Visible` flag](../framework/common-ui/properties/base#property-visibility) of the underlying data property either directly or using an expression for [computed visibility](../framework/common-ui/properties/base#computed-visibility).
 
 However, panels and tabs don't have their visibility tied to any particular property in the view model, which makes it difficult to control their visibility based on security privileges, the state of the data object, or other criteria.
 
@@ -672,7 +672,7 @@ To configure security access for a specific view, you can define an authorizatio
 <ui:view name="SalesOrderListView" title="Sales Order List" policy="Sales">[...]
 ```
 
-The [Blazor Views generator](../../generators/presentation/blazor/views) will use this policy to secure both the navigation [menu items](../../framework/blazor/components#menu-security) and the corresponding page using an `Authorize` attribute. You can also specify a different [policy for individual main menu links](../../modeling/presentation#security-policy-for-main-menu-links) within the view.
+The [Blazor Views generator](../generators/presentation/blazor/views) will use this policy to secure both the navigation [menu items](../framework/blazor/components#menu-security) and the corresponding page using an `Authorize` attribute. You can also specify a different [policy for individual main menu links](../modeling/presentation#security-policy-for-main-menu-links) within the view.
 
 #### Conditional security policy
 
@@ -681,7 +681,7 @@ Sometimes the same view may require different security policies based on the par
 - `Employee_View` - when the `EmployeeId` parameter is for the currently logged-in user.
 - `Employee_View_Others` - when the `EmployeeId` parameter is for another user.
 
-The `EmployeeViewPage.razor` file generated by the [Blazor Views generator](../../generators/presentation/blazor/views) will include a field `AuthPolicy` set to the view's `policy` attribute, as well as a partial method `SetAuthPolicy()`. To implement conditional security policies, you can add a partial class `EmployeeViewPage` in the `EmployeeViewPage.razor.cs` file and override the `SetAuthPolicy()` method to set the `AuthPolicy` field based on the parameters passed to the view.
+The `EmployeeViewPage.razor` file generated by the [Blazor Views generator](../generators/presentation/blazor/views) will include a field `AuthPolicy` set to the view's `policy` attribute, as well as a partial method `SetAuthPolicy()`. To implement conditional security policies, you can add a partial class `EmployeeViewPage` in the `EmployeeViewPage.razor.cs` file and override the `SetAuthPolicy()` method to set the `AuthPolicy` field based on the parameters passed to the view.
 
 ### View model
 
