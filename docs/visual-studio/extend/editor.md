@@ -21,7 +21,11 @@ If you add a [new custom element](model#adding-new-entity-types) that represents
 
 ![Collapse To Definitions](./img/collapse-to-definitions.png)
 
-To enable collapsing for your custom element, you just need to add an `xom:outline-definition` annotation to its XSD schema definition using the `urn:xomega-net:language` namespace, and set its `collapse` attribute to `true`, as shown below. 
+To enable collapsing for your custom element, you just need to add an `xom:outline-definition` annotation to its XSD schema definition using the `urn:xomega-net:language` namespace, and set its `collapse` attribute to one of the following values:
+- `true` - the element will be always collapsed when you use the *Collapse To Definitions* command.
+- `service` - the element will be collapsed to definition only when the current file has an object with `operation` element. This allows expanding fieldsets, object fields and subobjects when working with the domain model initially, and then having them collapsed when working with service operations.
+
+The following example demonstrates how to configure the `my:entity` element to be collapsed when you use the *Collapse To Definitions* command.
 
 ```xml title="Xomega_xMy.xsd"
 <xs:schema targetNamespace="http://www.mydomain.net/xomega"

@@ -221,14 +221,14 @@ After that, it can be excluded from the build, and rerun manually whenever the s
 You should never edit the generated entity classes directly to avoid losing your changes when you rerun the generator.
 :::
 
-The generated entity classes are declared as partial, so you can add any fields to them by declaring your own partial classes in separate files. You can have such a partial class generated automatically for you if it doesn't exist yet if you add `edm:customize` element to the object's `config` element, and set the `extend="true"` attribute, as follows.
+The generated entity classes are declared as partial, so you can add any fields to them by declaring your own partial classes in separate files. You can have such a partial class generated automatically for you if it doesn't exist yet if you add [`edm:entity` element](../../modeling/domain#ef-entity-configuration) to the object's `config` element, and set the `extend="true"` attribute, as follows.
 
 ```xml
 <object name="person">
   <fields>[...]
   <config>
 <!-- highlight-next-line -->
-    <edm:customize extend="true"/>
+    <edm:entity extend="true"/>
   </config>
 </object>
 ```

@@ -318,7 +318,7 @@ Once we build the model, we will notice that there is a `SalesOrderServiceExtend
 
 Before we add custom code for the service implementation, let's also create a custom partial class for the `CurrencyRate` entity, in order to provide an easy way to get the rate as a display string.
 
-You can manually add a `CurrencyRateExtended.cs` class next to that entity, or simply set the `extend="true"` attribute on the `edm:customize` element of the `currency rate` object's configuration, as shown below.
+You can manually add a `CurrencyRateExtended.cs` class next to that entity, or simply set the `extend="true"` attribute on the `edm:entity` element of the `currency rate` object's configuration, as shown below.
 
 ```xml title="currency_rate.xom"
     <object name="currency rate">
@@ -326,7 +326,7 @@ You can manually add a `CurrencyRateExtended.cs` class next to that entity, or s
       <config>
         <sql:table name="Sales.CurrencyRate"/>
 <!-- added-next-line -->
-        <edm:customize extend="true"/>
+        <edm:entity extend="true"/>
       </config>
       ...
     </object>

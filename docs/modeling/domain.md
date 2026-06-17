@@ -42,9 +42,11 @@ In addition to the name, you can specify the logical type for the field and whet
 
 You can also supply a description and detailed documentation for the field in the standard nested `doc` element. In addition to the field's `doc`, Xomega may also use documentation on the field's type when generating documentation for the field.
 
-Any additional field configuration is specified under the nested `config` element in a separate namespace.
+Any additional field configuration is specified under the nested `config` element in a separate namespace, as described below.
 
-For example, you can configure some properties of the corresponding database column for any field by setting the following attributes on its `sql:column` element:
+### DB column configuration
+
+You can configure some properties of the corresponding database column for any field by setting the following attributes on the `sql:column` element nested under the field's `config` element.
 - `name` - the name of the database column for the field when not derived from the field's name.
 - `mode` - field persistence mode. Set to `none` to indicate the field is not persisted in the database.
 - `default` - the default value or expression for the database column for generating a DB script.
@@ -73,17 +75,31 @@ The snippet below demonstrates how to set the DB column configuration.
     ...
 ```
 
-Similarly, you can set an EDM concurrency mode for a field as follows.
+### Entity property configuration
+
+You can also configure the properties of the generated entity for any field by setting the following attributes on the `edm:property` element nested under the field's `config` element.
+- `name` - the name of the generated entity property to use for the field instead of deriving it from the field's name.
+- `inherited` - set to `true` to indicate that the property for this field is inherited from the parent class and should not be generated on the current entity.
+
+In the following example, the field `user id` is marked as inherited from the parent class (specifically the `IdentityUser` from ASP.NET Core Identity), where it's called `Id`, so we configure the generated entity to use the same property name `id` for this field.
 
 ```xml
-    <field name="rowguid" type="guid" required="true">
+<object name="app user">
+  <fields>
+    <field name="user id" type="app user" key="supplied" required="true">
       <config>
-        <sql:column name="rowguid" default="newid()"/>
 <!-- highlight-next-line -->
-        <edm:property ConcurrencyMode="Fixed"/>
+        <edm:property name="id" inherited="true"/>
+        <sql:column name="Id"/>
       </config>
     </field>
+  </fields>
+</object>
 ```
+
+Note that for a simple object, we could have just used the field name `id` instead of `user id` to make it match the inherited property name. However, in this case, this is a key field, which will be [implicitly included in the subobjects](#parent-keys) of this object, such as `role`, which also inherit from an ASP.NET Core Identity base class (such as `IdentityUserRole`), where that key field is called `UserId`.
+
+Instead of overriding the property name on each subobject, we opted to use a different field name on the main object and just override the property name there to match the base class, which allows all the subobjects to inherit that property name without any additional configuration.
 
 ## Domain objects
 
@@ -236,7 +252,7 @@ In the following example, we override the type of the included `modified date` f
     </object>
 ```
 
-### Object configuration
+### DB table configuration
 
 Additional object configurations are defined in separate namespaces and listed under their standard `config` element.
 
@@ -255,6 +271,8 @@ The following example illustrates this configuration.
   </config>
 </object>
 ```
+
+#### Trigger configuration
 
 If your table has triggers, you can list them under the `sql:trigger` elements nested under the `sql:table` element as follows.
 
@@ -276,19 +294,54 @@ If your table has triggers, you can list them under the `sql:trigger` elements n
 The `sql:trigger` specification helps configure generated *EF Core* entities for certain querying behavior.
 :::
 
-Another configuration allows you to customize generated EF entities in a separate partial class by adding `edm:customize` element, as follows.
+### EF entity configuration
+
+To configure the generated EF Core entity for your domain object, you can use the `edm:entity` element under the `config` element of the object.
+
+#### Custom base class
+
+You can specify a custom base class for the generated entity by adding a nested `edm:base-class` element to the `edm:entity` element, where you must set the `class` attribute to the name of the base class and the `namespace` attribute to the namespace of that class to allow generating the proper `using` statement for that namespace.
+
+If the base class is generic, then you can add `arg` elements for each generic argument with the `class` and `namespace` attributes as illustrated below.
 
 ```xml
-<object name="person">
+<object name="app user">
   <fields>[...]
   <config>
-    <sql:table name="Person.Person"/>
-<!-- highlight-next-line -->
-    <edm:customize extend="true"/>
+<!-- highlight-start -->
+    <edm:entity>
+      <edm:base-class class="IdentityUser" namespace="Microsoft.AspNetCore.Identity">
+        <arg class="string"/>
+      </edm:base-class>
+    </edm:entity>
+<!-- highlight-end -->
+    <sql:table name="AspNetUsers"/>
   </config>
 </object>
 ```
 
+:::note
+Since the generated entity class is a partial class, you can also specify a custom base class by just implementing the entity class in a separate file and setting the base class there. However, using the `edm:base-class` configuration can be more convenient if you don't need to extend the generated entity with any additional properties or methods, and can also allow other generators to use the base class information to determine specific types of objects, such as ASP.NET Identity entities.
+:::
+
+#### Extending generated entity
+
+Given that the generated entity class is a partial class, you can extend it with additional properties and methods in a separate file by manually adding that file to your project. However, Xomega model also allows you to automatically generate such an extension class with the standard suffix `*Extended.cs` by setting the `extend="true"` attribute on the `edm:entity` element, as illustrated below.
+
+```xml
+<object name="app user">
+  <fields>[...]
+  <config>
+<!-- highlight-next-line -->
+    <edm:entity extend="true">[...]
+    <sql:table name="AspNetUsers"/>
+  </config>
+</object>
+```
+
+:::tip
+The generated extension class will be automatically **nested under the generated entity** class in the Solution Explorer using the standard Xomega Solution file nesting convention.
+:::
 
 ## Associations and foreign keys
 
@@ -409,7 +462,7 @@ If you need to configure the properties of the underlying foreign key, you can d
   </object>
 ```
 
-#### Foreign key configuration
+#### Composite foreign key configuration
 
 The `sql:composite-foreign-key` element allows you to specify the following attributes.
 - `name` - custom foreign key name, if not derived from the names of the fields and related objects.
@@ -536,7 +589,7 @@ In this case, the `line item id` will be considered unique in and of its own and
 
 Similarly, the `option` subobject will automatically include only the `line item id` key field from its parent, but not the `sales order id` field from its grandparent, since the former already uniquely identifies the `line item`. Both `line item id` and `option code` will serve as a primary key for the `option` object since the supplied key `option code` will be considered to be not globally unique.
 
-### Parent associations
+### Parent association
 
 The presence of the `key` field(s) in subobjects indicates that the aggregate object can have a list of such subobjects, and Xomega will automatically define a one-to-many association between the parent object and the subobject.
 
@@ -546,7 +599,155 @@ If the subobject has no key fields, then it will be considered to allow no more 
 A subobject with no keys that has a zero-to-one association to its parent is useful if you want to define some extension fields for the parent object on the subobject, which you don't want to add directly to the parent object.
 :::
 
-If you need to configure specific properties of the implicit foreign key to the parent object, such as the name or update/delete actions, then you can do it in the `sql:parent-foreign-key` element nested under the `sql:table` config element, as follows.
+### Parent keys
+
+As mentioned above, the primary key fields of a parent object, which may also include key fields from its ancestors, are automatically included in its subobjects - whether as part of their primary key when the subobject's key is not globally unique (`serial`), or as regular non-key fields.
+
+The parent key fields are included in the subobjects using the same field names as in the parent object, which works well when the child table has the same column names as the parent table for those fields. However, if the column names are different, then you can override the field configuration in the subobject to specify the correct column name, as described in the following sections.
+
+#### Overriding parent key field
+
+To override a single parent key field configuration in the subobject, you just need to add that field to the subobject's fields using the same field name as in the parent object, set the `key="reference"` attribute on it, and then specify the proper configs for that field, such as the column name or a custom property name for the generated entity.
+
+For example, let's assume that we have an `employee` object that has primary key `business entity id` for its database column `BusinessEntityID`. If we define a `pay history` subobject under the `employee` object, then the `business entity id` field will be automatically included in the `pay history` subobject as a key field along with the subobject's own key field `rate change date`.
+
+Now, if the `pay history` table has a different column name for the `business entity id` field, e.g., `EmployeeID`, then we can override the field configuration in the `pay history` subobject to specify the correct column name, as well as the property name for the generated entity, as illustrated in the following snippet.
+
+```xml
+<object name="employee">
+  <fields>
+<!-- highlight-start -->
+    <field name="business entity id" type="employee" key="supplied" required="true">
+      <config>
+        <sql:column name="BusinessEntityID"/>
+      </config>
+    </field>
+<!-- highlight-end -->
+    ...
+  </fields>
+  <subobjects>
+    <object name="pay history">
+      <fields>
+<!-- added-lines-start -->
+        <field name="business entity id" type="employee" key="reference" required="true">
+          <config>
+            <sql:column name="EmployeeID"/>
+            <edm:property name="employee id"/>
+          </config>
+        </field>
+<!-- added-lines-end -->
+        <field name="rate change date" key="supplied" type="rate change date" required="true"/>
+        <field name="rate" type="money" required="true"/>
+        <field name="pay frequency" type="tiny int" required="true"/>
+      </fields>
+    </object>
+  </subobjects>
+</object>
+```
+
+#### Configuring parent association
+
+Each subobject has an implicit association with its parent object through the parent key fields that are automatically included in the subobject. Considering that subobjects cannot exist without their parent, the foreign key for that association assumes `cascade` delete and `no action` update actions by default.
+
+If you need to customize the foreign key configuration for the parent association, such as provide a specific name for the foreign key or change the update/delete actions, then you can do it in the [`sql:foreign-key` config element](#foreign-key-configuration) of the overridden parent key field in the subobject, as illustrated in the following snippet.
+
+```xml
+<subobjects>
+  <object name="pay history">
+    <fields>
+      <field name="business entity id" type="employee" key="reference" required="true">
+        <config>
+          <sql:column name="EmployeeID"/>
+<!-- added-lines-start -->
+          <sql:foreign-key name="FK_EmployeePayHistory_Employee_BusinessEntityID"
+                           delete="no action" update="no action"/>
+<!-- added-lines-end -->
+        </config>
+      </field>
+  </object>
+</subobjects>
+```
+
+#### Overriding parent key fieldset
+
+If the parent object has a composite key defined by a fieldset, then you all the fields of that fieldset will be automatically included in the subobject as is. If any of those fields have different column names in the subobject's table, then you can override their configuration in the subobject by adding the same fieldset to the subobject's fields with the `key="reference"` attribute and overriding the field configurations within that fieldset.
+
+In the following example, we have a `product vendor` object with a composite key defined by the `product vendor` fieldset, which includes the `product id` and `business entity id` fields. The `history` subobject of the `product vendor` object automatically includes both of those fields as part of its key, along with its own key field `update date`.
+
+If the `business entity id` field of the `history` table has a different column name, e.g., `VendorID` rather than `BusinessEntityID`, then we can add the `product vendor` fieldset to the `history` subobject's fields with the `key="reference"` attribute, and override the `business entity id` field configuration within that fieldset to specify the correct column name, as illustrated in the following snippet.
+
+```xml
+  <fieldsets>
+<!-- highlight-start -->
+    <fieldset name="product vendor">
+      <field name="product id" type="product" required="true">[...]
+      <field name="business entity id" type="vendor" required="true">
+        <config>
+          <sql:column name="BusinessEntityID"/>
+        </config>
+      </field>
+    </fieldset>
+<!-- highlight-end -->
+  </fieldsets>
+  <objects>
+    <object name="product vendor">
+      <fields>
+<!-- highlight-next-line -->
+        <fieldset ref="product vendor" key="supplied" required="true"/>
+        <field name="average lead time" type="integer" required="true"/>
+        <field name="standard price" type="money" required="true"/>
+        ...
+      </fields>
+    </object>
+      <subobjects>
+        <object name="history">
+          <fields>
+<!-- added-lines-start -->
+            <fieldset ref="product vendor" key="reference" required="true">
+              <field name="business entity id" type="vendor" required="true">
+                <config>
+                  <sql:column name="VendorID"/>
+                </config>
+              </field>
+            </fieldset>
+<!-- added-lines-end -->
+            <field name="update date" key="supplied" type="date time" required="true"/>
+            <field name="standard price" type="money" required="true"/>
+          </fields>
+        </object>
+      </subobjects>
+    </object>
+  </objects>
+```
+
+#### Configuring composite parent association
+
+Similar to the case of a single parent key field, subobjects with composite parent keys also have an implicit association with their parent object through the parent key fields that are automatically included in the subobject. The default delete and update actions for the foreign key of that association are also `cascade` and `no action`, respectively.
+
+If you need to customize the foreign key configuration for the parent association, such as provide a specific name for the foreign key or change the update/delete actions, then you can do it in the [`sql:composite-foreign-key` config element](#composite-foreign-key-configuration) of the overridden parent key fieldset in the subobject, as illustrated in the following snippet.
+
+```xml
+<subobjects>
+  <object name="history">
+    <fields>
+      <fieldset ref="product vendor" key="reference" required="true">
+        <field name="business entity id" type="vendor" required="true">[...]
+<!-- added-lines-start -->
+        <config>
+          <sql:composite-foreign-key delete="no action"/>
+        </config>
+<!-- added-lines-end -->
+      </fieldset>
+      <field name="update date" key="supplied" type="date time" required="true"/>
+      <field name="standard price" type="money" required="true"/>
+    </fields>
+  </object>
+</subobjects>
+```
+
+#### Configuring parent association without overriding parent keys
+
+If you don't override parent keys but need to configure specific properties of the implicit foreign key to the parent object, such as the name or update/delete actions, then you can also do it in the `sql:parent-foreign-key` element nested under the `sql:table` config element, as follows.
 
 ```xml
 <object name="line item">

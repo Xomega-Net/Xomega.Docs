@@ -184,7 +184,7 @@ Now that we have updated the model, let's provide a custom implementation for th
 
 To make writing custom service code easier, let's first create a custom partial class for the `Person` entity, to expose a `FullName` property to display a person as a string.
 
-As we did before, we can simply set the `extend="true"` attribute on the `edm:customize` element of the `person` object's configuration, as shown below.
+As we did before, we can simply set the `extend="true"` attribute on the `edm:entity` element of the `person` object's configuration, as shown below.
 
 ```xml title="person.xom"
     <object name="person">
@@ -192,7 +192,7 @@ As we did before, we can simply set the `extend="true"` attribute on the `edm:cu
       <config>
         <sql:table name="Person.Person">[...]
 <!-- added-next-line -->
-        <edm:customize extend="true"/>
+        <edm:entity extend="true"/>
       </config>
     </object>
 ```
