@@ -2,110 +2,84 @@
 sidebar_position: 3
 ---
 
-# Adding to Xomega Solutions
+# Updating Xomega Solutions
 
-If you selected some projects when creating a new Xomega solution but then decided to include additional supported technologies, then you can use the same Xomega solution wizard to select and add new projects to your solution.
+If you [created a Xomega solution](new-solutions) with a certain set of projects and configuration, then you can easily add new Xomega projects to that solution later on, as well as change some configuration on the existing projects by using the same Xomega solution wizard that you used to create the solution.
 
-:::warning
-The wizard will configure any new projects that you will add, but it **won't update any existing projects**, specifically the `.Model` project, like it would have, had you selected those projects during the initial solution creation.
+## Solution update wizard
 
-You will need to make any such updates to the existing projects manually.
-:::
+To launch the Xomega solution wizard for existing solutions, right-click on the *Solution* node and select *Add > New Project*, as follows.
 
-## Example: Adding WPF client to a Blazor app
+![Add to solution](img/solution-add-project.png)
 
-For example, let's imagine that you initially created a `DemoSolution` for Blazor Server + WebAssembly, but *with standalone REST API* that is not hosted by the Blazor project. Your solution structure would look as follows.
-
-![DemoSolution](img/blazor-auto.png)
-
-### Adding a new Xomega project
-
-Now you decided to also add a desktop WPF client to your solution, which would use the existing REST API as the backend. To add the relevant projects, you can right-click on the *Solution* node, select *Add > New Project*, and pick `Xomega` as the project type, as follows.
+Then, in the *Add a new project* dialog, select `Xomega` as the project type and *Xomega Solution* template, and click *Next*.
 
 ![Add new project](img/add-new-project.png)
 
-In the next screen, you can leave the project name to be the default value.
+In the next screen, you can **skip populating the *Project name* and *Location*** fields, since the wizard will use the names of the existing projects in the solution, as well as solution's current location, and just click *Create* to proceed to the next screen.
 
 ![New project name](img/new-project-name.png)
 
-This *Project name* won't matter since the wizard will use the existing solution name to generate a default name for the new project, which you can also update later.
+The next screen will be the same *Xomega Solution Configuration* dialog that you used to [create the solution](new-solutions#selecting-solution-components), but with the existing solution configuration options prepopulated and disabled, where the solution wizard doesn't allow changing such configuration options, as illustrated below.
 
-### Adding WPF desktop client
+![Existing project wizard](img/solution-existing-projects.png)
 
-The existing solution projects displayed in the Xomega solution configuration will not be editable, but you will be able to add a *WPF* desktop client to the selection and set the *API Tier* to `REST API`, as illustrated below.
+Existing projects in the solution will be selected and disabled in the wizard, since you can't remove any existing projects, but you can select additional projects to add to the solution and configure them as needed. Configuration options on the existing projects that cannot be changed in the wizard due to major solution updates required will be disabled as well. However, some existing configuration options can be changed, as described in the next sections.
+
+### Files overwrite warning
+
+Adding new projects to the existing solution, as well as changing some configuration options on the existing projects, may require not only adding new files to the solution, but also updating some existing files, which may **overwrite any custom changes** that you may have made to those files.
+
+Specifically, new projects may require updates to the global model configuration file `global_config.xom`, project files that will be used by the new projects, as well as some startup project files `Program.cs` for additional configuration.
+
+:::danger
+Before updating your solution using the Xomega solution wizard, make sure to **commit any changes** that you may have in your source control, so that you can easily review any changes made by the wizard and revert any unwanted changes if needed.
+:::
+
+## Adding new Xomega projects
+
+To add new Xomega projects to the existing solution, just select the desired project types in the wizard and configure them as needed. You can add any number of new projects of any type, and they will be properly configured with dependencies on any existing projects in the solution.
+
+### Adding entity diagrams
+
+If you want to be able to generate entity model diagrams for your model entities, then you can add a new [*Entity Model Diagrams*](solution-structure#solutionnamemodeldiagrams) project. In addition to the new project, this will also add [*Entity Data Model* generator](../../generators/data/edm) to the model project, as well as required EDM type mappings. The following screenshot illustrates the new project and the generated diagrams for the sample model.
+
+![Model diagrams](img/model-diagrams.png)
+
+### Adding modern projects
+
+Xomega solutions are architected in a way that allows multiple UI projects using different technologies to coexist in the same solution and share the same model, services and even common presentation logic. For example, if your existing solution has a Blazor Server and WebAssembly projects, you can easily add a WPF desktop client project to the same solution and share the same model and services with it, as shown below.
 
 ![Add WPF with rest](img/add-wpf-rest.png)
 
 :::note
-Notice how the default project names are automatically generated based on the solution name here, and disregard the project name that you supplied in the previous screen.
+Notice how the default project names are automatically generated based on the solution name here, and disregard the project name from the previous *Configure your new project* screen.
 :::
 
-After you hit *Preview* and then *Create*, you'll see the new project in your solution, preconfigured with proper dependencies on any existing projects, as shown below.
+Adding a WPF project will require updating the `global_config.xom` file to specify the assembly for the shared data objects, which may [overwrite any custom changes](#files-overwrite-warning) that you may have in that file.
 
-![WPF solution](img/wpf-solution.png)
+Similarly, if your initial Blazor project was hosting the REST API for the WebAssembly client, then adding a new WPF project with REST API will require updating the `.Services.Rest` project to allow running it separately and enable JWT authentication, which may also overwrite any changes that you may have in that project. The same applies to adding other client projects with REST API, such as MAUI or SPA projects.
 
-### Additional manual updates
+### Adding legacy projects
 
-Now you have to update and configure any existing projects to support the newly added projects. Normally, when creating a new solution from scratch, those projects are automatically configured for the selected technologies by the solution wizard. However, since we added a new project to an existing solution, we'll need to configure the existing projects manually.
+Xomega solution wizard also allows adding legacy projects that require .NET Framework, such as ASP.NET Web Forms or WCF. However, since those projects reuse the same presentation and/or service logic as the modern projects, you will need to update shared projects to enable multi-targeting for both .NET Framework and .NET to make this setup work.
 
-To make this process easier you should open another instance of Visual Studio and [create a new Xomega solution](new-solutions) for the WPF client with REST API in a separate folder, using the same solution name `DemoSolution`, which you'll use as a template. This will allow you to just copy any configuration from that folder into your existing solution.
+This multi-targeting setup is supported if you select both legacy and modern projects in the wizard when creating the solution, but not when adding legacy projects to an existing solution with modern projects, since this is not something you normally would want to do in practice, so you'll need to make some manual updates to the project files for the shared projects.
 
-#### Adding WPF controls type configs
+## Updating Xomega projects
 
-Copy the `DemoSolution.Model\Framework\TypeConfigs\wpf_controls.xom` from the new template WPF solution that you created earlier to your existing solution. This will add the necessary type configurations for generating WPF controls in your existing solution.
+In addition to adding new projects to the existing solution, Xomega solution wizard also allows limited updates to the existing projects, as described below.
 
-#### Adding WPF Views generator
+### Switching to Syncfusion components
 
-To add a *WPF Views* generator, copy the generator configuration file from the `.Generators\PresentationLayer\WPF\WPF Views.xgen` in your template WPF solution project to your existing project, and make sure the paths and namespaces match your existing solution, as illustrated below.
+If you initially created a Blazor project with `Xomega Framework` Blazor components, you can switch it to use Syncfusion Blazor components by changing the *Components* option on the *Shared Blazor Components* project to `Syncfusion` in the solution wizard, as shown below.
 
-```xml title='.Generators\PresentationLayer\WPF\WPF Views.xgen'
-<XomGeneratorConfig xmlns="http://schemas.xomega.net/v10/xgen"
-                    xmlns:view="http://schemas.xomega.net/v10/xgen/views">
-  ...
-  <Generator Xsl="UI/WPF/wpf_views.xsl"
-             GeneratorGroup="presentation"
-             IncludeInBuild="true"
-             IndividualFiles="true"/>
+![Switch to Syncfusion](img/blazor-config-change.png)
 
-<!-- highlight-start -->
-  <view:Output Path="../DemoSolution.Client.Wpf/Views/{Module/}{File}"
-               RegistryFile="../DemoSolution.Client.Wpf/Views/Views.cs"
-               MenuFile="../DemoSolution.Client.Wpf/Controls/MainMenu"/>
+This will add type configurations for Syncfusion components to the Model project under `Framework/TypeConfigs/blazor_xsf.xom`, as well as the [*Syncfusion Blazor Views* generator](../../generators/presentation/blazor/views-xsf), which will be included in the Model build.
 
-  <view:Parameters Namespace="DemoSolution.Client.Wpf"/>
-<!-- highlight-end -->
+:::danger
+This will also update the existing Blazor projects and their main files, such as `Program.cs`, `appsettings.json`, `_Imports.razor` and `App.razor` to switch to Syncfusion components, which may [**overwrite any custom changes**](#files-overwrite-warning) that you may have in those files.
+:::
 
-</XomGeneratorConfig>
-```
-
-
-You should now be able to see the *WPF Views* generator under the *.Generators > Presentation Layer > WPF* folder, as well as the `wpf_controls.xom` that you included earlier, as shown below.
-
-![WPF Views](img/wpf-views.png)
-
-#### Adding assembly config for data objects
-
-When generating WPF views, the generator needs to know the namespace and assembly where the data objects are located. Therefore, you need to update the `xfk:data-objects-config` element in the `global_config.xom` file to include the assembly name, as shown below.
-
-```xml title="global_config.xom"
-...
-  <!-- configuration for generation of UI data objects -->
-  <xfk:data-objects-config
-    namespace="DemoSolution.Client.Common.DataObjects"
-<!-- added-next-line -->
-    assembly="DemoSolution.Client.Common"
-  />
-...
-```
-
-Now you want to right-click on the `DemoSolution.Model` project and select *Build* to generate any additional artifacts for the new project.
-
-#### Other possible updates
-
-If you initially had the REST API hosted by the Blazor application rather than as a standalone service, then you would need to do some additional updates, as described below.
-
-- Copy the `DemoSolution.Services.Rest/Program.cs` file from the template solution to the existing REST API project to allow running it separately.
-- Update the `DemoSolution.Services.Rest/AuthController` class to enable JWT authentication using the corresponding code from the template solution.
-- Copy `DemoSolution.Client.Common/ServiceClients/Auth/JwtLoginServiceClient.cs` from the template solution to handle JWT authentication on the client.
-
-Any other initial configurations or a different configuration of the new project may require additional manual updates, as appropriate.
+Note that switching to Syncfusion components will not remove the existing `blazor.xom` type configuration file and the [*Blazor Views* generator](../../generators/presentation/blazor/views), which will be excluded from the Model build. This allows you to easily switch back to the original Xomega Framework Blazor components if so desired. Therefore, the option to select Blazor *Components* in the wizard will become disabled after that.
